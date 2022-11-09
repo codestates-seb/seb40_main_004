@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
-import static com.example.boilerplate.dto.DtoValidConstants.*;
+import static com.morakmorak.morak_back_end.dto.DtoValidConstants.*;
 
 
 public class AuthDto {

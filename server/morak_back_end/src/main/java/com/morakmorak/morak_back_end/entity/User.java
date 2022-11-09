@@ -28,6 +28,8 @@ public class User {
 
     private String password;
 
+    private String nickname;
+
     private String phone;
 
     private UserStatus userStatus;
@@ -36,7 +38,7 @@ public class User {
 
     private Integer point;
 
-    private String oauthProvider;
+    private String provider;
 
     private Boolean isJobSeeker;
 

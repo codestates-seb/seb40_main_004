@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.EnumType.*;
+
 @Entity
 @Getter
 @Builder
@@ -19,6 +21,7 @@ public class Role extends BaseTime{
     @Column(name = "role_id")
     private Long id;
 
+    @Enumerated(value = STRING)
     private RoleName roleName;
 
     @Builder.Default
