@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Optional;
+
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -50,5 +52,33 @@ public class UserRepositoryTest {
                     .findUserByEmail(EMAIL1)
                     .orElseThrow(() -> new IllegalArgumentException());
         }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 닉네임으로 유저를 조회할 경우 Optional.empty를 반환한다.")
+    public void findByUserNickname1() {
+        //given
+        //when
+        Optional<User> optional = userRepository.findUserByNickname(NICKNAME1);
+
+        //then
+        assertThat(optional).isEmpty();
+    }
+
+    @Test
+    @DisplayName("존재하는 닉네임으로 유저를 조회할 경우 같은 닉네임을 가진 유저를 반환한다.")
+    public void findByUserNickname2() {
+        //given
+        User user = User.builder()
+                .nickname(NICKNAME1)
+                .build();
+
+        userRepository.save(user);
+
+        //when
+        Optional<User> optional = userRepository.findUserByNickname(NICKNAME1);
+
+        //then
+        assertThat(optional.get().getNickname()).isEqualTo(NICKNAME1);
     }
 }

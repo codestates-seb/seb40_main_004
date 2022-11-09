@@ -350,4 +350,30 @@ public class AuthTest extends RedisContainerTest {
         perform.andExpect(status().isNotFound())
                 .andExpect(content().encoding(StandardCharsets.UTF_8));
     }
+
+    @Test
+    @DisplayName("가입 신청한 닉네임과 중복되는 닉네임이 데이터베이스에 존재할 경우 409 Confilct 반환")
+    public void requestJoin_failed() throws Exception {
+        //given
+        AuthDto.RequestJoin request = AuthDto.RequestJoin.builder()
+                .email(EMAIL1)
+                .password(PASSWORD1)
+                .nickname(NICKNAME1)
+                .authKey(AUTH_KEY)
+                .build();
+
+        User sameNicknameUser = User.builder().nickname(NICKNAME1).build();
+        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        userRepository.save(sameNicknameUser);
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isConflict())
+                .andExpect(content().encoding(StandardCharsets.UTF_8));
+    }
 }

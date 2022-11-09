@@ -61,6 +61,7 @@ public class AuthService {
         }
 
         checkDuplicateEmail(user.getEmail());
+        checkDuplicateNickname(user.getNickname());
         userPasswordManager.encryptUserPassword(user);
         saveUserAndBasicUserRole(user);
 
@@ -119,6 +120,11 @@ public class AuthService {
         String randomKey = generateRandomKey();
         mailAuthRedisRepository.saveData(randomKey, emailDetails.getEmail(), VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         return new AuthDto.ResponseAuthKey(randomKey);
+    }
+
+    public Boolean checkDuplicateNickname(String nickname) {
+        if (userRepository.findUserByNickname(nickname).isPresent()) throw new BusinessLogicException(NICKNAME_EXISTS);
+        return Boolean.TRUE;
     }
 
     private String generateRandomKey() {

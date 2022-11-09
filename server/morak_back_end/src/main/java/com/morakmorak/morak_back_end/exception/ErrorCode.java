@@ -28,7 +28,9 @@ public enum ErrorCode {
 
     UNABLE_TO_GENERATE_TOKEN(INTERNAL_SERVER_ERROR, "Unable to generate token. Contact your administrator."),
     AUTH_KEY_ALREADY_EXISTS(CONFLICT, "auth key already exists, you can only request once every 5 minutes"),
-    INVALID_AUTH_KEY(NOT_FOUND, "invalid auth key, check your email");
+    INVALID_AUTH_KEY(NOT_FOUND, "invalid auth key, check your email"),
+
+    NICKNAME_EXISTS(CONFLICT, "nickname exists");
 
     private final HttpStatus httpStatus;
     private final String message;

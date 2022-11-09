@@ -57,4 +57,10 @@ public class AuthController {
     public AuthDto.ResponseAuthKey requestVerifyEmailAuth(@RequestBody EmailDto.RequestVerifyAuthKey request) {
         return authService.authenticateEmail(request);
     }
+
+    @PostMapping("/nickname")
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean requestCheckNickname(@Valid @RequestBody AuthDto.RequestCheckNickname request) {
+        return authService.checkDuplicateNickname(request.getNickname());
+    }
 }

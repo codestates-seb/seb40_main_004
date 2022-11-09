@@ -588,4 +588,135 @@ public class AuthControllerTest {
                         )
                 );
     }
+
+    @Test
+    @DisplayName("중복 확인하는 닉네임이 이미 존재할 경우 409 Conflict를 반환한다.")
+    public void checkDuplicateNickname_failed1() throws Exception {
+        //given
+        AuthDto.RequestCheckNickname dto = AuthDto.RequestCheckNickname
+                .builder()
+                .nickname(NICKNAME1)
+                .build();
+
+        given(authService.checkDuplicateNickname(NICKNAME1)).willThrow(new BusinessLogicException(NICKNAME_EXISTS));
+
+        String json = objectMapper.writeValueAsString(dto);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/nickname")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isConflict())
+                .andDo(document(
+                        "닉네임_중복_체크_status_409",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("nickname").description("이미 존재하는 닉네임 요청")
+                )
+                )
+                );
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 확인 요청 시 dto 검증에 실패할 경우 400 BadRequest를 반환한다.")
+    public void checkDuplicateNickname_failed2() throws Exception {
+        //given
+        AuthDto.RequestCheckNickname dto = AuthDto.RequestCheckNickname
+                .builder()
+                .nickname(INVALID_NICKNAME)
+                .build();
+
+        String json = objectMapper.writeValueAsString(dto);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/nickname")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                                "닉네임_중복확인_유효하지_않은_요청값_400",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("nickname").description("유효성 검사 실패, 닉네임은 null이거나 공백일 수 없으며 닉네임 규정을 충족해야합니다.")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 확인 요청 시 중복 닉네임이 존재하지 않고 dto 유효성 검사에 성공할 경우 true와 200 OK를 반환한다.")
+    public void checkDuplicateNickname_success() throws Exception {
+        //given
+        AuthDto.RequestCheckNickname dto = AuthDto.RequestCheckNickname
+                .builder()
+                .nickname(NICKNAME1)
+                .build();
+
+        given(authService.checkDuplicateNickname(NICKNAME1)).willReturn(Boolean.TRUE);
+
+        String json = objectMapper.writeValueAsString(dto);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/nickname")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(content().string(Boolean.TRUE.toString()))
+                .andDo(document(
+                                "닉네임_중복확인_유효하지_않은_요청값_400",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("nickname").description("중복되지 않는 닉네임")
+                                ),
+                        responseBody()
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("회원가입 요청 시 동일한 닉네임이 데이터베이스에 존재한다면 409 Conflict를 반환한다.")
+    public void requestJoin_failed() throws Exception {
+        //given
+        AuthDto.RequestJoin request = AuthDto.RequestJoin
+                .builder()
+                .nickname(NICKNAME1)
+                .password(PASSWORD1)
+                .email(EMAIL1)
+                .authKey(AUTH_KEY)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+        given(authService.joinUser(any(User.class), anyString())).willThrow(new BusinessLogicException(NICKNAME_EXISTS));
+
+        //when
+        ResultActions perform = mockMvc
+                .perform(post("/auth")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        perform
+                .andExpect(status().isConflict())
+                .andDo(document(
+                                "join failed (duplicate email)",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("email").description("valid email"),
+                                        fieldWithPath("password").description("valid password"),
+                                        fieldWithPath("nickname").description("이미 존재하는 닉네임."),
+                                        fieldWithPath("authKey").description("auth Key")
+                                )
+                        )
+                );
+    }
 }
