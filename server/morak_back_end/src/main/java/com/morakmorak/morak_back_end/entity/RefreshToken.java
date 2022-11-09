@@ -17,4 +17,8 @@ public class RefreshToken {
     private Long id;
 
     private String value;
+
+    public RefreshToken(String value) {
+        this.value = value;
+    }
 }
