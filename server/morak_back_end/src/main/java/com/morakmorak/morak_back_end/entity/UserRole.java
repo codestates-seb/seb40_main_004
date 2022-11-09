@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,13 +17,13 @@ public class UserRole extends BaseTime{
     @Column(name = "user_role_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
-    private Role role;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference(value = "user")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
-
+    @JsonBackReference(value = "role")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
 }

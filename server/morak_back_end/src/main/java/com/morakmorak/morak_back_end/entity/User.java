@@ -1,12 +1,16 @@
 package com.morakmorak.morak_back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.UserStatus;
+import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -28,6 +32,8 @@ public class User {
 
     private String password;
 
+    private String nickname;
+
     private String phone;
 
     @Enumerated(EnumType.STRING)
@@ -37,7 +43,7 @@ public class User {
 
     private Integer point;
 
-    private String oauthProvider;
+    private String provider;
 
     private Boolean isJobSeeker;
 
@@ -76,6 +82,7 @@ public class User {
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference(value = "user")
     private List<UserRole> userRoles = new ArrayList<>();
 
     @Builder.Default
@@ -115,5 +122,22 @@ public class User {
     @Builder.Default
     private List<Review> reviews = new ArrayList<>();
 
+    public String encryptPassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+        return this.password;
+    }
 
+    public boolean comparePassword(PasswordEncoder passwordEncoder, User user) {
+        return passwordEncoder.matches(user.getPassword(), this.password);
+    }
+
+    public String injectUserInformationForToken(JwtTokenUtil jwtTokenUtil) {
+        List<String> roles = this.userRoles
+                .stream().map(e -> e.getRole().getRoleName().toString())
+                .collect(Collectors.toList());
+
+        if (roles.size() == 0) roles = List.of("Role_User");
+
+        return jwtTokenUtil.createAccessToken(this.getEmail(), this.getId(), roles);
+    }
 }

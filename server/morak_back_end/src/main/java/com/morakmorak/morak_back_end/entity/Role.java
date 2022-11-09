@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.EnumType.*;
+
 @Entity
 @Getter
 @Builder
@@ -23,6 +25,6 @@ public class Role extends BaseTime{
     private RoleName roleName;
 
     @Builder.Default
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", cascade = CascadeType.PERSIST)
     private List<UserRole> userRoles = new ArrayList<>();
 }
