@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.security.filter;
 
+import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.security.exception.InvalidJwtTokenException;
 import com.morakmorak.morak_back_end.security.token.JwtAuthenticationToken;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,9 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.Collections;
 
+import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.EMAIL;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -92,7 +96,7 @@ public class JwtAuthenticationFilterTest {
         JwtAuthenticationToken token = new JwtAuthenticationToken(ACCESS_TOKEN);
 
         // when
-        when(mockAuthenticationManager.authenticate(token)).thenThrow(new InvalidJwtTokenException(ErrorCode.EXPIRED_EXCEPTION));
+        when(mockAuthenticationManager.authenticate(token)).thenThrow(new InvalidJwtTokenException(EXPIRED_EXCEPTION));
 
         // then
         assertThatThrownBy(() ->

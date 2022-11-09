@@ -1,12 +1,12 @@
 package com.morakmorak.morak_back_end.security.oauth;
 
-import com.example.boilerplate.entity.Role;
-import com.example.boilerplate.entity.User;
-import com.example.boilerplate.entity.UserRole;
-import com.example.boilerplate.mapper.UserMapper;
-import com.example.boilerplate.repository.RoleRepository;
-import com.example.boilerplate.repository.UserRepository;
-import com.example.boilerplate.repository.UserRoleRepository;
+import com.morakmorak.morak_back_end.entity.Role;
+import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.entity.UserRole;
+import com.morakmorak.morak_back_end.mapper.UserMapper;
+import com.morakmorak.morak_back_end.repository.RoleRepository;
+import com.morakmorak.morak_back_end.repository.UserRepository;
+import com.morakmorak.morak_back_end.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 
-import static com.example.boilerplate.entity.enums.RoleName.*;
+import static com.morakmorak.morak_back_end.entity.enums.RoleName.ROLE_USER;
 
 @Component
 @Transactional

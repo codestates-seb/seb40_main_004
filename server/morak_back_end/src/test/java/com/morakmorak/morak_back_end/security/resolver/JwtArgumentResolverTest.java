@@ -1,7 +1,9 @@
 package com.morakmorak.morak_back_end.security.resolver;
 
+import com.morakmorak.morak_back_end.controller.TestController;
 import com.morakmorak.morak_back_end.security.exception.InvalidJwtTokenException;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
+import com.morakmorak.morak_back_end.util.SecurityTestConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.assertj.core.api.Assertions;
@@ -17,6 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.util.NestedServletException;
 
+import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.INVALID_BEARER_ACCESS_TOKEN;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
+import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
+import static com.morakmorak.morak_back_end.util.TestConstants.ID1;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

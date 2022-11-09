@@ -1,5 +1,10 @@
 package com.morakmorak.morak_back_end.security.oauth;
 
+import com.morakmorak.morak_back_end.entity.RefreshToken;
+import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.repository.RefreshTokenRepository;
+import com.morakmorak.morak_back_end.repository.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.morakmorak.morak_back_end.exception.ErrorCode.USER_NOT_FOUND;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
 
 @Component
 @RequiredArgsConstructor
