@@ -1,7 +1,7 @@
 package com.morakmorak.morak_back_end.security.util;
 
-import com.example.boilerplate.exception.ErrorCode;
-import com.example.boilerplate.security.exception.InvalidJwtTokenException;
+import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.security.exception.InvalidJwtTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +13,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.boilerplate.exception.ErrorCode.*;
-import static com.example.boilerplate.security.util.SecurityConstants.*;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
 
 @Component
 public final class JwtTokenUtil {

@@ -11,8 +11,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
-import static com.example.boilerplate.util.SecurityTestConstants.*;
-import static com.example.boilerplate.util.TestConstants.*;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.AUTH_KEY;
+import static com.morakmorak.morak_back_end.util.TestConstants.*;
 
 class AuthDtoTest {
     private static ValidatorFactory factory;

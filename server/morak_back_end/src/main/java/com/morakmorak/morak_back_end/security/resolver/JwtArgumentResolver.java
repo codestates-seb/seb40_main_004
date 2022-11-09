@@ -1,7 +1,7 @@
 package com.morakmorak.morak_back_end.security.resolver;
 
-import com.example.boilerplate.dto.UserDto;
-import com.example.boilerplate.security.util.JwtTokenUtil;
+import com.morakmorak.morak_back_end.dto.UserDto;
+import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import java.util.List;
 
-import static com.example.boilerplate.security.util.SecurityConstants.*;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
+
 
 @Slf4j
 @Component

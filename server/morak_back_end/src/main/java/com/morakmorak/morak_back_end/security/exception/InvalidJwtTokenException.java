@@ -1,6 +1,6 @@
 package com.morakmorak.morak_back_end.security.exception;
 
-import com.example.boilerplate.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.ErrorCode;
 import io.jsonwebtoken.JwtException;
 import lombok.Getter;
 

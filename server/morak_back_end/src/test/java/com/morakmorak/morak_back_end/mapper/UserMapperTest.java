@@ -1,12 +1,15 @@
 package com.morakmorak.morak_back_end.mapper;
 
-import com.example.boilerplate.dto.AuthDto;
-import com.example.boilerplate.entity.User;
+
+import com.morakmorak.morak_back_end.dto.AuthDto;
+import com.morakmorak.morak_back_end.entity.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.example.boilerplate.util.TestConstants.*;
+import static com.morakmorak.morak_back_end.util.TestConstants.*;
+import static org.assertj.core.api.Assertions.*;
 
 class UserMapperTest {
     UserMapper userMapper;

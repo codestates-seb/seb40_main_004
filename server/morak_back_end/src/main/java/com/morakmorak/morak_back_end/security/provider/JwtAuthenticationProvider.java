@@ -1,7 +1,7 @@
 package com.morakmorak.morak_back_end.security.provider;
 
-import com.example.boilerplate.security.token.JwtAuthenticationToken;
-import com.example.boilerplate.security.util.JwtTokenUtil;
+import com.morakmorak.morak_back_end.security.token.JwtAuthenticationToken;
+import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.boilerplate.security.util.SecurityConstants.*;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.ROLES;
 
 @Component
 @RequiredArgsConstructor
