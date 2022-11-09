@@ -61,6 +61,7 @@ public class AuthService {
         }
 
         checkDuplicateEmail(user.getEmail());
+        checkDuplicateNickname(user.getNickname());
         userPasswordManager.encryptUserPassword(user);
         saveUserAndBasicUserRole(user);
 

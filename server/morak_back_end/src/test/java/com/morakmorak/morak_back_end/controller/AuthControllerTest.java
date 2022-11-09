@@ -681,4 +681,42 @@ public class AuthControllerTest {
                         )
                 );
     }
+
+    @Test
+    @DisplayName("회원가입 요청 시 동일한 닉네임이 데이터베이스에 존재한다면 409 Conflict를 반환한다.")
+    public void requestJoin_failed() throws Exception {
+        //given
+        AuthDto.RequestJoin request = AuthDto.RequestJoin
+                .builder()
+                .nickname(NICKNAME1)
+                .password(PASSWORD1)
+                .email(EMAIL1)
+                .authKey(AUTH_KEY)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+        given(authService.joinUser(any(User.class), anyString())).willThrow(new BusinessLogicException(NICKNAME_EXISTS));
+
+        //when
+        ResultActions perform = mockMvc
+                .perform(post("/auth")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        perform
+                .andExpect(status().isConflict())
+                .andDo(document(
+                                "join failed (duplicate email)",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("email").description("valid email"),
+                                        fieldWithPath("password").description("valid password"),
+                                        fieldWithPath("nickname").description("이미 존재하는 닉네임."),
+                                        fieldWithPath("authKey").description("auth Key")
+                                )
+                        )
+                );
+    }
 }
