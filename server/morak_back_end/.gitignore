@@ -5,6 +5,12 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+### yml 파일 추가 ###
+application.yml
+application-local.yml
+application.properties
+application-server.yml
+
 ### STS ###
 .apt_generated
 .classpath
