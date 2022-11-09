@@ -20,6 +20,7 @@ public class Badge extends BaseTime{
     @Column(name = "badge_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private BadgeName badgeName;
 
     @Builder.Default

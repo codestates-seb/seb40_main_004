@@ -20,10 +20,6 @@ public class Comment extends BaseTime{
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "answer_id")
-    private Answer answer;
-
     @Builder.Default
     @OneToMany(mappedBy = "comment")
     private List<Report> reports = new ArrayList<>();
@@ -31,6 +27,10 @@ public class Comment extends BaseTime{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_id")
+    private Answer answer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

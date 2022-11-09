@@ -19,6 +19,7 @@ public class Tag extends BaseTime{
     @Column(name = "tag_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private TagName tagName;
 
     @Builder.Default

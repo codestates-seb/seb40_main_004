@@ -22,7 +22,6 @@ public class Review extends BaseTime {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "message")
     private String message;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "review")
@@ -31,4 +30,8 @@ public class Review extends BaseTime {
     @Builder.Default
     @OneToMany(mappedBy = "review")
     private List<ReviewBadge> reviewBadges = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id")
+    private Article article;
 }

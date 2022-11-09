@@ -22,10 +22,15 @@ public class User {
 
     private String email;
 
+    private String name;
+
+    private String nickname;
+
     private String password;
 
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
     private String infoMessage;
@@ -46,6 +51,7 @@ public class User {
 
     private Boolean receiveEmail;
 
+    @Enumerated(EnumType.STRING)
     private Grade grade;
 
     @OneToOne(fetch = FetchType.LAZY)
