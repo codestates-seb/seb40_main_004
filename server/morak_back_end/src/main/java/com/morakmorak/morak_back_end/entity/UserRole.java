@@ -18,14 +18,12 @@ public class UserRole extends BaseTime{
     private Long id;
 
     @JsonBackReference(value = "user")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
-    private Role role;
-
-    @JsonBackReference(value = "role")
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
-
+    @JsonBackReference(value = "role")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
+    private Role role;
 }
