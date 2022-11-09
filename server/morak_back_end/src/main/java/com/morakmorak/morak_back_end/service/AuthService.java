@@ -121,6 +121,11 @@ public class AuthService {
         return new AuthDto.ResponseAuthKey(randomKey);
     }
 
+    public Boolean checkDuplicateNickname(String nickname) {
+        if (userRepository.findUserByNickname(nickname).isPresent()) throw new BusinessLogicException(NICKNAME_EXISTS);
+        return Boolean.TRUE;
+    }
+
     private String generateRandomKey() {
         Random random = new Random();
         return String.valueOf(random.nextInt(88888888) + 11111111);
