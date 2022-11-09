@@ -27,6 +27,7 @@ public class Notification extends BaseTime {
 
     private String uri;
 
+    @Enumerated(EnumType.STRING)
     private DomainType domainType;
 
     @ManyToOne(fetch = FetchType.LAZY)

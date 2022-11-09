@@ -21,7 +21,7 @@ public class Role extends BaseTime{
     @Column(name = "role_id")
     private Long id;
 
-    @Enumerated(value = STRING)
+    @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
     @Builder.Default

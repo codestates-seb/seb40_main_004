@@ -16,6 +16,8 @@ public class BookMark extends BaseTime{
     @Column(name = "book_mark_id")
     private Long id;
 
+    private String memo;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

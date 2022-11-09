@@ -1,8 +1,10 @@
 package com.morakmorak.morak_back_end.entity;
 
+
 import lombok.*;
 
 import javax.persistence.*;
+
 
 @Entity
 @Getter
@@ -16,6 +18,8 @@ public class Vote extends BaseTime{
     @Column(name = "vote_id")
     private Long id;
 
+    private Integer count;
+
     @OneToOne(mappedBy = "vote")
     private Article article;
 
@@ -25,7 +29,5 @@ public class Vote extends BaseTime{
     @OneToOne(mappedBy = "vote")
     private User user;
 
-    @Column(name = "count")
-    private Integer count;
 
 }

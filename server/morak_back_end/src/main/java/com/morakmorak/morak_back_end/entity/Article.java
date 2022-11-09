@@ -32,6 +32,7 @@ public class Article extends BaseTime {
 
     private String mainFile;
 
+    @Enumerated(EnumType.STRING)
     private ArticleStatus articleStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -64,4 +65,8 @@ public class Article extends BaseTime {
     @Builder.Default
     @OneToMany(mappedBy = "article")
     private List<Report> reports = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "article")
+    private List<Review> reviews = new ArrayList<>();
 }

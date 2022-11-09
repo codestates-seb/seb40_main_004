@@ -39,6 +39,7 @@ public class Deposit extends BaseTime{
 
     private String depositContent;
 
+    @Enumerated(EnumType.STRING)
     private PayType payType;
 
     private String depositPG;
@@ -53,6 +54,7 @@ public class Deposit extends BaseTime{
 
     private LocalDateTime depositFinishedAt;
 
+    @Enumerated(EnumType.STRING)
     private DepositStatus depositStatus;
 
 

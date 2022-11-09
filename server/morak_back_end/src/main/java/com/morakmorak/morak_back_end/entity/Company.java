@@ -4,10 +4,7 @@ package com.morakmorak.morak_back_end.entity;
 import com.morakmorak.morak_back_end.entity.enums.JobPayType;
 import com.morakmorak.morak_back_end.entity.enums.JobType;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 public class Company extends BaseTime{
@@ -24,8 +21,10 @@ public class Company extends BaseTime{
 
     private String employeeNumber;
 
+    @Enumerated(EnumType.STRING)
     private JobType jobType;
 
+    @Enumerated(EnumType.STRING)
     private JobPayType jobPayType;
 
     private Integer maxCarer;

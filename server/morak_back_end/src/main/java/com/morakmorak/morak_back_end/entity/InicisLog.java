@@ -18,6 +18,7 @@ public class InicisLog extends BaseTime{
     @Column(name = "inicis_log_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private PilType pilType;
 
     private String PTid;
@@ -26,6 +27,7 @@ public class InicisLog extends BaseTime{
 
     private String pAuthDt;
 
+    @Enumerated(EnumType.STRING)
     private PStatus pStatus;
 
     private String pOid;

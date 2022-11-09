@@ -25,4 +25,5 @@ public class GuestBoard extends BaseTime {
     @JoinColumn(name = "user_id")
     private User user;
 
+
 }
