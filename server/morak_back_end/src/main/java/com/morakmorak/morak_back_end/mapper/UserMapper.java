@@ -13,7 +13,6 @@ public interface UserMapper {
 
     @Mapping(source = "email", target = "email")
     @Mapping(source = "name", target = "nickname")
-    @Mapping(source = "picture", target = "picture")
     @Mapping(source = "provider", target = "provider")
     User toOAuthEntity(Oauth2UserDto dto);
 }

@@ -5,7 +5,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-import static com.example.boilerplate.dto.DtoValidConstants.INVALID_EMAIL;
+import static com.morakmorak.morak_back_end.dto.DtoValidConstants.INVALID_EMAIL;
 
 public class EmailDto {
     
