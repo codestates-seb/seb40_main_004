@@ -7,7 +7,6 @@ import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.repository.RedisRepository;
 import com.morakmorak.morak_back_end.repository.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.security.util.SecurityConstants;
 import com.morakmorak.morak_back_end.service.AuthService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_HEADER;
@@ -449,5 +449,75 @@ public class AuthTest extends RedisContainerTest {
                 .andExpect(content().string(Boolean.TRUE.toString()));
 
         Assertions.assertThat(savedUser.comparePassword(passwordEncoder, dbUser)).isFalse();
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴시 요청한 회원의 아이디와 비밀번호가 매치되지 않는다면 409 코드 반환")
+    public void delete_account_failed_409() throws Exception {
+        //given
+        User dbUser = User.builder()
+                .email(EMAIL1)
+                .nickname(NICKNAME1)
+                .password(PASSWORD1)
+                .build();
+
+        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        authService.joinUser(dbUser, AUTH_KEY);
+        User savedUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
+
+        AuthDto.RequestWithdrawal request = AuthDto.RequestWithdrawal.builder()
+                .password(PASSWORD2)
+                .build();
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc.perform(delete("/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, accessToken));
+
+        //then
+        perform
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴시 요청한 회원의 아이디와 비밀번호가 매치된다면 해당 유저를 삭제하고 204 NO CONTENT 반환")
+    public void delete_account_success_204() throws Exception {
+        //given
+        User dbUser = User.builder()
+                .email(EMAIL1)
+                .nickname(NICKNAME1)
+                .password(PASSWORD1)
+                .build();
+
+        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        authService.joinUser(dbUser, AUTH_KEY);
+        User savedUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
+
+        AuthDto.RequestWithdrawal request = AuthDto.RequestWithdrawal.builder()
+                .password(PASSWORD1)
+                .build();
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc.perform(delete("/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, accessToken));
+
+        Optional<User> result = userRepository.findById(savedUser.getId());
+
+        //then
+        perform
+                .andExpect(status().isNoContent());
+
+        Assertions.assertThat(result).isEmpty();
     }
 }
