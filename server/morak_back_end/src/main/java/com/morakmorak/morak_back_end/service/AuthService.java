@@ -128,12 +128,22 @@ public class AuthService {
         User requestUser = User.builder().password(originalPassword).build();
 
         if (!userPasswordManager.compareUserPassword(dbUser, requestUser)) {
-            throw new BusinessLogicException(UNABLE_TO_CHANGE_PASSWORD);
+            throw new BusinessLogicException(MISMATCHED_PASSWORD);
         }
 
         dbUser.changePassword(newPassword);
         userPasswordManager.encryptUserPassword(dbUser);
 
+        return Boolean.TRUE;
+    }
+
+    public Boolean deleteAccount(String password, Long userId) {
+        User dbUser = userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
+        User requestUser = new User(password);
+
+        if (!userPasswordManager.compareUserPassword(dbUser, requestUser)) throw new BusinessLogicException(MISMATCHED_PASSWORD);
+
+        userRepository.delete(dbUser);
         return Boolean.TRUE;
     }
 

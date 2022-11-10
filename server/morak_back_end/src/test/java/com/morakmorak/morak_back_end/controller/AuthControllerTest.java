@@ -3,6 +3,7 @@ package com.morakmorak.morak_back_end.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.dto.AuthDto;
 import com.morakmorak.morak_back_end.dto.EmailDto;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
@@ -10,10 +11,8 @@ import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.exception.InvalidJwtTokenException;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.security.util.SecurityConstants;
 import com.morakmorak.morak_back_end.service.AuthService;
 import com.morakmorak.morak_back_end.util.SecurityTestConfig;
-import com.morakmorak.morak_back_end.util.SecurityTestConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_HEADER;
-import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_PREFIX;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
@@ -772,7 +770,7 @@ public class AuthControllerTest {
 
         String json = objectMapper.writeValueAsString(request);
 
-        given(authService.changePassword(anyString(), anyString(), any())).willThrow(new BusinessLogicException(UNABLE_TO_CHANGE_PASSWORD));
+        given(authService.changePassword(anyString(), anyString(), any())).willThrow(new BusinessLogicException(ErrorCode.MISMATCHED_PASSWORD));
 
         //when
         ResultActions perform = mockMvc.perform(post("/auth/password")
@@ -898,4 +896,93 @@ public class AuthControllerTest {
                 );
     }
 
+    @Test
+    @DisplayName("회원 탈퇴 요청 시 요청값이 유효성 검사에 실패하면 400 Bad Request를 반환한다.")
+    void requestWithdrawal_failed1() throws Exception {
+        //given
+        AuthDto.RequestWithdrawal request = AuthDto.RequestWithdrawal
+                .builder()
+                .password(PASSWORD1)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.deleteAccount(anyString(), any())).willThrow(new BusinessLogicException(ONLY_TEST_CODE));
+
+        //when
+        ResultActions perform = mockMvc.perform(delete("/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                        "request_withdrawal_failed_400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("password").description("패스워드 유효성 검사 실패 (null이거나 공백, 혹은 알 수 없는 문자열 오류)")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 요청 시 확인 비밀번호가 데이터베이스 비밀번화와 다른 경우 409 Conflict를 반환한다.")
+    void requestWithdrawal_failed2() throws Exception {
+        //given
+        AuthDto.RequestWithdrawal request = AuthDto.RequestWithdrawal
+                .builder()
+                .password(PASSWORD1)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.deleteAccount(anyString(), any())).willThrow(new BusinessLogicException(ONLY_TEST_CODE));
+
+        //when
+        ResultActions perform = mockMvc.perform(delete("/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                        "request_withdrawal_failed_409",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("password").description("올바르지 않은 (database 등록값과 다른) 패스워드")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 요청 시 확인 비밀번호가 데이터베이스 비밀번호와 같고 유효성 검사에 통과한 경우 회원 정보를 삭제하고 204 NoContent 반환")
+    void requestWithdrawal_success() throws Exception {
+        //given
+        AuthDto.RequestWithdrawal request = AuthDto.RequestWithdrawal
+                .builder()
+                .password(PASSWORD1)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.deleteAccount(anyString(), any())).willThrow(new BusinessLogicException(ONLY_TEST_CODE));
+
+        //when
+        ResultActions perform = mockMvc.perform(delete("/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                        "request_withdrawal_success_204",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("password").description("올바르지 않은 (database 등록값과 다른) 패스워드")
+                        )
+                ));
+    }
 }

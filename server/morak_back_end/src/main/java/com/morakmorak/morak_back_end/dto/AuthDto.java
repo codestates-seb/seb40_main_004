@@ -102,4 +102,13 @@ public class AuthDto {
         @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$", message = INVALID_PASSWORD) // 영문 + 숫자 + 특수문자 8자 이상 20자 이하
         private String newPassword;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class RequestWithdrawal {
+        @NotBlank
+        private String password;
+    }
 }
