@@ -10,8 +10,10 @@ import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.exception.InvalidJwtTokenException;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
+import com.morakmorak.morak_back_end.security.util.SecurityConstants;
 import com.morakmorak.morak_back_end.service.AuthService;
 import com.morakmorak.morak_back_end.util.SecurityTestConfig;
+import com.morakmorak.morak_back_end.util.SecurityTestConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,12 +30,14 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_HEADER;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_PREFIX;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -716,6 +720,119 @@ public class AuthControllerTest {
                                         fieldWithPath("nickname").description("이미 존재하는 닉네임."),
                                         fieldWithPath("authKey").description("auth Key")
                                 )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 요청 시 DTO 유효성 검증에 실패한다면 400 BadRequest 반환")
+    public void requestChangePassword_failed() throws Exception {
+        //given
+        AuthDto.RequestChangePassword request = AuthDto.RequestChangePassword.builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(INVALID_PASSWORD)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.changePassword(anyString(), anyString(), anyLong())).willThrow(new BusinessLogicException(ONLY_TEST_CODE));
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, ACCESS_TOKEN));
+
+        //then
+        perform
+                .andExpect(status().isBadRequest())
+                .andDo(
+                        document("changePassword_failed_400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        requestFields(
+                                fieldWithPath("originalPassword").description("변경 전 패스워드"),
+                                fieldWithPath("newPassword").description("유효성 검사 실패 패스워드")
+                        )
+                )
+                );
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 요청 시 originalPassword가 기존 패스워드와 다르다면 409 Conflict를 반환한다.")
+    public void requestChangePassword_failed2() throws Exception {
+        //given
+        AuthDto.RequestChangePassword request = AuthDto.RequestChangePassword.builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(PASSWORD2)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.changePassword(anyString(), anyString(), any())).willThrow(new BusinessLogicException(UNABLE_TO_CHANGE_PASSWORD));
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, ACCESS_TOKEN));
+
+        //then
+        perform
+                .andExpect(status().isConflict())
+                .andDo(
+                        document("changePassword_failed_409",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestHeaders(
+                                        headerWithName(JWT_HEADER).description("access token")
+                                ),
+                                requestFields(
+                                        fieldWithPath("originalPassword").description("기존 패스워드(잘못된 값 입력)"),
+                                        fieldWithPath("newPassword").description("변경 희망 패스워드")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 요청 시 DTO 유효성 검증에 성공하고 DB 패스워드와 originalPassword가 일치한다면 200 OK와 true 반환")
+    public void requestChangePassword_success() throws Exception {
+        //given
+        AuthDto.RequestChangePassword request = AuthDto.RequestChangePassword.builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(PASSWORD2)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.changePassword(anyString(), anyString(), any())).willReturn(Boolean.TRUE);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, ACCESS_TOKEN));
+
+        //then
+        perform
+                .andExpect(status().isOk())
+                .andExpect(content().string(Boolean.TRUE.toString()))
+                .andDo(
+                        document("changePassword_failed_400",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestHeaders(
+                                        headerWithName(JWT_HEADER).description("access token")
+                                ),
+                                requestFields(
+                                        fieldWithPath("originalPassword").description("변경 전 패스워드"),
+                                        fieldWithPath("newPassword").description("유효성 검사 실패 패스워드")
+                                ),
+                                responseBody()
                         )
                 );
     }

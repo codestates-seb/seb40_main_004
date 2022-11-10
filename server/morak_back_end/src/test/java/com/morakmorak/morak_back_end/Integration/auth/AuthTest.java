@@ -7,7 +7,9 @@ import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.repository.RedisRepository;
 import com.morakmorak.morak_back_end.repository.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
+import com.morakmorak.morak_back_end.security.util.SecurityConstants;
 import com.morakmorak.morak_back_end.service.AuthService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +26,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.AUTH_KEY;
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.INVALID_AUTH_KEY;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_HEADER;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -58,6 +61,9 @@ public class AuthTest extends RedisContainerTest {
 
     @Autowired
     RedisRepository<String> mailAuthRedisRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @BeforeEach
     public void init() {
@@ -375,5 +381,73 @@ public class AuthTest extends RedisContainerTest {
         //then
         perform.andExpect(status().isConflict())
                 .andExpect(content().encoding(StandardCharsets.UTF_8));
+    }
+
+    @Test
+    @DisplayName("패스워드 변경 시 입력된 패스워드와 db 유저의 패스워드가 일치하지 않으면 409 코드 반환")
+    public void changePassword_failed() throws Exception {
+        //given
+        User dbUser = User.builder()
+                .email(EMAIL1)
+                .nickname(NICKNAME1)
+                .password(PASSWORD1)
+                .build();
+
+        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        User savedUser = userRepository.save(dbUser);
+
+        AuthDto.RequestChangePassword request = AuthDto.RequestChangePassword.builder()
+                .newPassword(PASSWORD2)
+                .originalPassword(PASSWORD1)
+                .build();
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(JWT_HEADER, accessToken)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isConflict());
+    }
+
+    @Test
+    @DisplayName("패스워드 변경 시 입력된 패스워드와 db 유저의 패스워드가 일치한다면 200ok 반환하고 유저 패스워드 변경")
+    public void changePassword_success() throws Exception {
+        //given
+        User dbUser = User.builder()
+                .email(EMAIL1)
+                .nickname(NICKNAME1)
+                .password(PASSWORD1)
+                .build();
+
+        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        authService.joinUser(dbUser, AUTH_KEY);
+        User savedUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
+
+        AuthDto.RequestChangePassword request = AuthDto.RequestChangePassword.builder()
+                .newPassword(PASSWORD2)
+                .originalPassword(PASSWORD1)
+                .build();
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(JWT_HEADER, accessToken)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(content().string(Boolean.TRUE.toString()));
+
+        Assertions.assertThat(savedUser.comparePassword(passwordEncoder, dbUser)).isFalse();
     }
 }

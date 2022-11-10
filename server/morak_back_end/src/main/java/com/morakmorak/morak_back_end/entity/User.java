@@ -129,6 +129,10 @@ public class User {
         return passwordEncoder.matches(user.getPassword(), this.password);
     }
 
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
     public String injectUserInformationForToken(JwtTokenUtil jwtTokenUtil) {
         List<String> roles = this.userRoles
                 .stream().map(e -> e.getRole().getRoleName().toString())

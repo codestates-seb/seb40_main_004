@@ -8,6 +8,7 @@ import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.UserRole;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.RedisRepository;
 import com.morakmorak.morak_back_end.repository.RoleRepository;
 import com.morakmorak.morak_back_end.repository.UserRepository;
@@ -120,6 +121,20 @@ public class AuthService {
         String randomKey = generateRandomKey();
         mailAuthRedisRepository.saveData(randomKey, emailDetails.getEmail(), VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         return new AuthDto.ResponseAuthKey(randomKey);
+    }
+
+    public Boolean changePassword(String originalPassword, String newPassword, Long userId) {
+        User dbUser = userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
+        User requestUser = User.builder().password(originalPassword).build();
+
+        if (!userPasswordManager.compareUserPassword(dbUser, requestUser)) {
+            throw new BusinessLogicException(UNABLE_TO_CHANGE_PASSWORD);
+        }
+
+        dbUser.changePassword(newPassword);
+        userPasswordManager.encryptUserPassword(dbUser);
+
+        return Boolean.TRUE;
     }
 
     public Boolean checkDuplicateNickname(String nickname) {
