@@ -8,7 +8,6 @@ import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.UserRole;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.RedisRepository;
 import com.morakmorak.morak_back_end.repository.RoleRepository;
 import com.morakmorak.morak_back_end.repository.UserRepository;
@@ -23,6 +22,7 @@ import java.util.Random;
 import static com.morakmorak.morak_back_end.entity.enums.RoleName.ROLE_USER;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
+import static com.morakmorak.morak_back_end.service.MailSenderImpl.*;
 
 @Service
 @Transactional
@@ -35,7 +35,7 @@ public class AuthService {
     private final UserRoleRepository userRoleRepository;
     private final RedisRepository<User> refreshTokenRedisRepository;
     private final RedisRepository<String> mailAuthRedisRepository;
-    private final AuthMailSender authMailSenderImpl;
+    private final MailSender mailSenderImpl;
 
     public AuthDto.ResponseToken loginUser(User user) {
         User dbUser = findUserByEmailOrThrowException(user.getEmail());
@@ -108,7 +108,7 @@ public class AuthService {
 
         String randomKey = generateRandomKey();
 
-        authMailSenderImpl.sendEmail(emailDetails, randomKey);
+        mailSenderImpl.sendMail(emailDetails.getEmail(), randomKey, BASIC_AUTH_SUBJECT);
         return mailAuthRedisRepository.saveData(emailDetails.getEmail(), randomKey, AUTH_KEY_EXPIRATION_PERIOD);
     }
 
@@ -135,6 +135,12 @@ public class AuthService {
         userPasswordManager.encryptUserPassword(dbUser);
 
         return Boolean.TRUE;
+    }
+
+    public Boolean sendUserPasswordEmail(String email) {
+        User dbUser = findUserByEmailOrThrowException(email);
+        String temporaryPassword = userPasswordManager.encryptUserPassword(dbUser);
+        return mailSenderImpl.sendMail(dbUser.getEmail(), temporaryPassword, BASIC_PASSWORD_SUBJECT);
     }
 
     public Boolean checkDuplicateNickname(String nickname) {
