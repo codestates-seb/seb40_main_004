@@ -415,7 +415,7 @@ class AuthDtoTest {
     }
 
     @Test
-    @DisplayName("auth key 값이 존재하지 않으면 예외가 발생한다")
+    @DisplayName("RequestJoin Dto에 auth key 값이 존재하지 않으면 예외가 발생한다")
     void test21() {
         //given
         AuthDto.RequestJoin dto = AuthDto.RequestJoin
@@ -432,4 +432,105 @@ class AuthDtoTest {
         Assertions.assertThat(violations).isNotEmpty();
     }
 
+    @Test
+    @DisplayName("RequestChangePassword DTO의 originalPassword가 null이면 예외 발생한다.")
+    void requestChangePasswordDto_failed1() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(null)
+                .newPassword(PASSWORD2)
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        Assertions.assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("RequestChangePassword DTO의 newPassword가 null이면 예외 발생한다.")
+    void requestChangePasswordDto_failed2() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(null)
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        Assertions.assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("RequestChangePassword DTO의 originalPassword가 공백이면 예외 발생한다.")
+    void requestChangePasswordDto_failed3() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(" ")
+                .newPassword(PASSWORD2)
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        Assertions.assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("RequestChangePassword DTO의 newPassword가 공백이면 예외 발생한다.")
+    void requestChangePasswordDto_failed4() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(" ")
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        Assertions.assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("RequestChangePassword DTO의 newPassowrd가 비밀번호 규칙에 어긋난다면 예외가 발생한다.")
+    void requestChangePasswordDto_failed5() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(INVALID_PASSWORD)
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        Assertions.assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("RequestChangePassword DTO가 유효성 검사에 통과한다면 예외를 반환하지 않는다.")
+    void requestChangePasswordDto_success() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(PASSWORD1)
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        Assertions.assertThat(violations).isEmpty();
+    }
 }
