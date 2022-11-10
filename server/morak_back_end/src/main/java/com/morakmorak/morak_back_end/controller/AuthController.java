@@ -2,8 +2,10 @@ package com.morakmorak.morak_back_end.controller;
 
 import com.morakmorak.morak_back_end.dto.AuthDto;
 import com.morakmorak.morak_back_end.dto.EmailDto;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
+import com.morakmorak.morak_back_end.security.resolver.RequestUser;
 import com.morakmorak.morak_back_end.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -62,5 +64,11 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public Boolean requestCheckNickname(@Valid @RequestBody AuthDto.RequestCheckNickname request) {
         return authService.checkDuplicateNickname(request.getNickname());
+    }
+
+    @PostMapping("/password")
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean requestChangePassword(@Valid @RequestBody AuthDto.RequestChangePassword request, @RequestUser UserDto.UserInfo token) {
+        return authService.changePassword(request.getOriginalPassword(), request.getNewPassword(), token.getId());
     }
 }
