@@ -15,7 +15,7 @@ public class AuthMailSenderImpl implements AuthMailSender {
 
     private final String BASIC_SUBJECT = "모락모락의 이메일 인증 번호입니다.";
     @Override
-    public boolean sendEmail(EmailDto.RequestSendMail emailDto, String authKey) {
+    public boolean sendMail(EmailDto.RequestSendMail emailDto, String authKey) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(mailProperties.getUsername());
         simpleMailMessage.setTo(emailDto.getEmail());

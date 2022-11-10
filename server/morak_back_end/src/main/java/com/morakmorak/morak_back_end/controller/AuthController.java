@@ -71,4 +71,10 @@ public class AuthController {
     public Boolean requestChangePassword(@Valid @RequestBody AuthDto.RequestChangePassword request, @RequestUser UserDto.UserInfo token) {
         return authService.changePassword(request.getOriginalPassword(), request.getNewPassword(), token.getId());
     }
+
+    @PostMapping("/password/recovery")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Boolean requestFindPassword(@Valid @RequestBody EmailDto.RequestSendMail request) {
+        return authService.sendUserPasswordEmail(request.getEmail());
+    }
 }
