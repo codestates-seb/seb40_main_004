@@ -120,6 +120,10 @@ public class User {
     @Builder.Default
     private List<Review> reviews = new ArrayList<>();
 
+    public User(String password) {
+        this.password = password;
+    }
+
     public String encryptPassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);
         return this.password;
