@@ -77,4 +77,10 @@ public class AuthController {
     public Boolean requestFindPassword(@Valid @RequestBody EmailDto.RequestSendMail request) {
         return authService.sendUserPasswordEmail(request.getEmail());
     }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void requestDeleteAccount(@Valid @RequestBody AuthDto.RequestWithdrawal request, @RequestUser UserDto.UserInfo token) {
+        authService.deleteAccount(request.getPassword(), token.getId());
+    }
 }
