@@ -836,4 +836,66 @@ public class AuthControllerTest {
                         )
                 );
     }
+
+    @Test
+    @DisplayName("패스워드 찾기를 요청했을 때, 해당 이메일로 등록된 계정이 존재하지 않는다면 404 Not Found를 반환한다.")
+    void findPassword_failed() throws Exception {
+        //given
+        EmailDto.RequestSendMail request = EmailDto.RequestSendMail.builder()
+                .email(EMAIL1)
+                .build();
+
+        given(authService.sendUserPasswordEmail(EMAIL1)).willThrow(new BusinessLogicException(USER_NOT_FOUND));
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc
+                .perform(post("/auth/password/recovery")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json));
+
+        //then
+        perform.andExpect(status().isNotFound())
+                .andDo(document("findPassword_failed_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").description("존재하지 않는 유저 메일일 경우")
+                        ),
+                        responseBody())
+                );
+    }
+
+    @Test
+    @DisplayName("패스워드 찾기를 요청했을 때, 해당 이메일로 등록된 계정이 존재하고 로직이 정상적으로 수행되었다면 200 ok와 true를 반환한다.")
+    void findPassword_success() throws Exception {
+        //given
+        EmailDto.RequestSendMail request = EmailDto.RequestSendMail.builder()
+                .email(EMAIL1)
+                .build();
+
+        given(authService.sendUserPasswordEmail(EMAIL1)).willReturn(Boolean.TRUE);
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc
+                .perform(post("/auth/password/recovery")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json));
+
+        //then
+        perform.andExpect(status().isCreated())
+                .andExpect(content().string(Boolean.TRUE.toString()))
+                .andDo(document("findPassword_failed_400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").description("존재하지 않는 유저 메일일 경우")
+                        ),
+                        responseBody())
+                );
+    }
+
 }
