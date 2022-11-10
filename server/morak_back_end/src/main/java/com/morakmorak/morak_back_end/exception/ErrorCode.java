@@ -24,7 +24,7 @@ public enum ErrorCode {
     TOKEN_NOT_FOUND(NOT_FOUND, "TOKEN_NOT_FOUND"),
 
     NICKNAME_EXISTS(CONFLICT, "nickname exists"),
-    UNABLE_TO_CHANGE_PASSWORD(CONFLICT, "unable to change password, check your original password"),
+    MISMATCHED_PASSWORD(CONFLICT, "mismatched password, check your original password"),
 
     /*
     * The error code expresses the dto validation exception of spring framework in web mvc test.
