@@ -32,5 +32,7 @@ public class File extends BaseTime{
     @JoinColumn(name = "article_id")
     private Article article;
 
-
+    public void injectArticleForFile(Article article) {
+        this.article = article;
+    }
 }

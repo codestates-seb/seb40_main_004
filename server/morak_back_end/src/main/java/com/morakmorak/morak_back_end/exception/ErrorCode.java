@@ -10,6 +10,10 @@ import static org.springframework.http.HttpStatus.*;
 @AllArgsConstructor
 public enum ErrorCode {
     USER_NOT_FOUND(NOT_FOUND, "USER_NOT_FOUND"),
+    FILE_NOT_FOUND(NOT_FOUND, "FILE_NOT_FOUND"),
+    TAG_NOT_FOUND(NOT_FOUND, "TAG_NOT_FOUND"),
+    ARTICLE_NOT_FOUND(NOT_FOUND, "ARTICLE_NOT_FOUND"),
+    CATEGORY_NOT_FOUND(NOT_FOUND, "CATEGORY_NOT_FOUND"),
     INVALID_USER(UNAUTHORIZED, "INVALID_USER"),
     EMAIL_EXISTS(CONFLICT, "EMAIL_EXISTS"),
     ONLY_TEST_CODE(BAD_REQUEST, "BAD_REQUEST"),
@@ -28,7 +32,10 @@ public enum ErrorCode {
 
     UNABLE_TO_GENERATE_TOKEN(INTERNAL_SERVER_ERROR, "Unable to generate token. Contact your administrator."),
     AUTH_KEY_ALREADY_EXISTS(CONFLICT, "auth key already exists, you can only request once every 5 minutes"),
-    INVALID_AUTH_KEY(NOT_FOUND, "invalid auth key, check your email");
+    INVALID_AUTH_KEY(NOT_FOUND, "invalid auth key, check your email"),
+
+    ;
+
 
     private final HttpStatus httpStatus;
     private final String message;

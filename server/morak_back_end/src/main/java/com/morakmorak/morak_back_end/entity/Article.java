@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -20,26 +21,27 @@ public class Article extends BaseTime {
     @Column(name = "article_id")
     private Long id;
 
-    private Integer clicks;
+    @Builder.Default
+    private Integer clicks = 0;
 
     private String title;
 
     private String content;
 
-    private Boolean isClosed;
+    @Builder.Default
+    private Boolean isClosed = false;
 
-    private LocalDateTime expiredDate;
-
-    private String mainFile;
+    private Long thumbnail;
 
     @Enumerated(EnumType.STRING)
-    private ArticleStatus articleStatus;
+    @Builder.Default
+    private ArticleStatus articleStatus = ArticleStatus.POSTING;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -47,15 +49,15 @@ public class Article extends BaseTime {
     private BookMark bookMark;
 
     @Builder.Default
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST)
     private List<ArticleTag> articleTags = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,  CascadeType.REMOVE})
     @JoinColumn(name = "vote_id")
     private Vote vote;
 
     @Builder.Default
-    @OneToMany(mappedBy="article")
+    @OneToMany(mappedBy="article",cascade = {CascadeType.PERSIST})
     private List<File> files = new ArrayList<>();
 
     @Builder.Default
@@ -69,4 +71,34 @@ public class Article extends BaseTime {
     @Builder.Default
     @OneToMany(mappedBy = "article")
     private List<Review> reviews = new ArrayList<>();
+
+    public void injectUserForMapping(User user) {
+        this.user = user;
+        user.getArticles().add(this);
+    }
+
+    public void infectCategoryForMapping(Category category) {
+        this.category = category;
+        category.getArticleList().add(this);
+    }
+    public void infectVoteForMapping(Vote vote) {
+        this.vote = vote;
+    }
+
+    public void updateArticleElement(Article article) {
+        Optional.ofNullable(article.getTitle()).ifPresent(presentTitle -> {
+            this.title = presentTitle;
+        });
+        Optional.ofNullable(article.getContent()).ifPresent(presentContent -> {
+            this.content = presentContent;
+        });
+        Optional.ofNullable(article.getThumbnail()).ifPresent(presentThumbnail -> {
+            this.thumbnail = presentThumbnail;
+        });
+    }
+
+    public void changeArticleStatus(ArticleStatus articleStatus) {
+        this.articleStatus = articleStatus;
+    }
+
 }
