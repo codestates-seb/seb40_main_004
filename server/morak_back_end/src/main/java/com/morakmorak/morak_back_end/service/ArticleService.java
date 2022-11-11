@@ -89,7 +89,7 @@ public class ArticleService {
     }
 
     public Boolean fusionCategoryWIthArticle(Article article, Category category) {
-        Category dbCategory = categoryRepository.findByCategoryByName(category.getCategoryName())
+        Category dbCategory = categoryRepository.findCategoryByCategoryName(category.getCategoryName())
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.CATEGORY_NOT_FOUND));
         article.infectCategoryForMapping(dbCategory);
 

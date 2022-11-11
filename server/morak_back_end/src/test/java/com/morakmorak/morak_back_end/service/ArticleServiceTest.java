@@ -1,4 +1,4 @@
-공package com.morakmorak.morak_back_end.service;
+package com.morakmorak.morak_back_end.service;
 
 import com.morakmorak.morak_back_end.dto.ArticleDto;
 import com.morakmorak.morak_back_end.dto.FileDto;
@@ -62,7 +62,7 @@ public class ArticleServiceTest {
         given(userService.findVerifiedUserById(anyLong())).willReturn(User.builder().id(1L).build());
         given(fileRepository.findById(any())).willReturn(Optional.of(File.builder().build()));
         given(tagRepository.findById(any())).willReturn(Optional.of(Tag.builder().build()));
-        given(categoryRepository.findByCategoryByName(any())).willReturn(Optional.of(Category.builder().build()));
+        given(categoryRepository.findCategoryByCategoryName(any())).willReturn(Optional.of(Category.builder().build()));
         given(articleRepository.save(article)).willReturn(article);
         given(articleMapper.articleToResponseSimpleArticle(article.getId())).willReturn(responseSimpleArticle);
 
@@ -141,7 +141,7 @@ public class ArticleServiceTest {
          given(fileRepository.findById(any())).willReturn(Optional.of(File.builder().build()));
          given(tagRepository.findById(any()))
                  .willReturn(Optional.of(Tag.builder().id(1L).build()));
-         given(categoryRepository.findByCategoryByName(anyString())).willReturn(Optional.empty());
+         given(categoryRepository.findCategoryByCategoryName(anyString())).willReturn(Optional.empty());
          //when
 
          //then
