@@ -149,8 +149,10 @@ public class AuthService {
 
     public Boolean sendUserPasswordEmail(String email) {
         User dbUser = findUserByEmailOrThrowException(email);
-        String temporaryPassword = userPasswordManager.encryptUserPassword(dbUser);
-        return mailSenderImpl.sendMail(dbUser.getEmail(), temporaryPassword, BASIC_PASSWORD_SUBJECT);
+        String randomKey = generateRandomKey();
+        dbUser.changePassword(randomKey);
+        userPasswordManager.encryptUserPassword(dbUser);
+        return mailSenderImpl.sendMail(dbUser.getEmail(), randomKey, BASIC_PASSWORD_SUBJECT);
     }
 
     public Boolean checkDuplicateNickname(String nickname) {
