@@ -101,25 +101,25 @@ public class AuthService {
                 .build();
     }
 
-    public boolean sendAuthenticationMail(EmailDto.RequestSendMail emailDetails) {
-        if (mailAuthRedisRepository.getData(emailDetails.getEmail(), String.class).isPresent()) {
+    public Boolean sendAuthenticationMail(String emailAddress) {
+        if (mailAuthRedisRepository.getData(emailAddress, String.class).isPresent()) {
             throw new BusinessLogicException(AUTH_KEY_ALREADY_EXISTS);
         }
 
         String randomKey = generateRandomKey();
 
-        mailSenderImpl.sendMail(emailDetails.getEmail(), randomKey, BASIC_AUTH_SUBJECT);
-        return mailAuthRedisRepository.saveData(emailDetails.getEmail(), randomKey, AUTH_KEY_EXPIRATION_PERIOD);
+        mailSenderImpl.sendMail(emailAddress, randomKey, BASIC_AUTH_SUBJECT);
+        return mailAuthRedisRepository.saveData(emailAddress, randomKey, AUTH_KEY_EXPIRATION_PERIOD);
     }
 
-    public AuthDto.ResponseAuthKey authenticateEmail(EmailDto.RequestVerifyAuthKey emailDetails) {
-        Optional<String> optionalAuthKey = mailAuthRedisRepository.getDataAndDelete(emailDetails.getEmail(), String.class);
+    public AuthDto.ResponseAuthKey authenticateEmail(String emailAddress, String authKey) {
+        Optional<String> optionalAuthKey = mailAuthRedisRepository.getDataAndDelete(emailAddress, String.class);
         String savedAuthKey = optionalAuthKey.orElseThrow(() -> new BusinessLogicException(INVALID_AUTH_KEY));
 
-        if (!savedAuthKey.equals(emailDetails.getAuthKey())) throw new BusinessLogicException(INVALID_AUTH_KEY);
+        if (!savedAuthKey.equals(authKey)) throw new BusinessLogicException(INVALID_AUTH_KEY);
 
         String randomKey = generateRandomKey();
-        mailAuthRedisRepository.saveData(randomKey, emailDetails.getEmail(), VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepository.saveData(randomKey, emailAddress, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         return new AuthDto.ResponseAuthKey(randomKey);
     }
 

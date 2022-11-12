@@ -51,13 +51,13 @@ public class AuthController {
     @PostMapping("/mail")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean requestSendEmailAuth(@RequestBody EmailDto.RequestSendMail request) {
-        return authService.sendAuthenticationMail(request);
+        return authService.sendAuthenticationMail(request.getEmail());
     }
 
     @PutMapping("/mail")
     @ResponseStatus(HttpStatus.OK)
     public AuthDto.ResponseAuthKey requestVerifyEmailAuth(@RequestBody EmailDto.RequestVerifyAuthKey request) {
-        return authService.authenticateEmail(request);
+        return authService.authenticateEmail(request.getEmail(), request.getAuthKey());
     }
 
     @PostMapping("/nickname")
