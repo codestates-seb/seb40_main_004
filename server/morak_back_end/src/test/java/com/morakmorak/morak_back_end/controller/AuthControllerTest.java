@@ -421,7 +421,7 @@ public class AuthControllerTest {
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
-        given(authService.sendAuthenticationMail(any(EmailDto.RequestSendMail.class))).willThrow(new BusinessLogicException(AUTH_KEY_ALREADY_EXISTS));
+        given(authService.sendAuthenticationMail(anyString())).willThrow(new BusinessLogicException(AUTH_KEY_ALREADY_EXISTS));
 
         //when
         ResultActions perform = mockMvc
@@ -452,7 +452,7 @@ public class AuthControllerTest {
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
-        given(authService.sendAuthenticationMail(any(EmailDto.RequestSendMail.class))).willReturn(Boolean.TRUE);
+        given(authService.sendAuthenticationMail(anyString())).willReturn(Boolean.TRUE);
 
         //when
         ResultActions perform = mockMvc
@@ -486,7 +486,7 @@ public class AuthControllerTest {
                 .email(EMAIL1)
                 .build();
 
-        given(authService.authenticateEmail(any(EmailDto.RequestVerifyAuthKey.class))).willThrow(new BusinessLogicException(ErrorCode.INVALID_AUTH_KEY));
+        given(authService.authenticateEmail(anyString(), anyString())).willThrow(new BusinessLogicException(ErrorCode.INVALID_AUTH_KEY));
         String json = objectMapper.writeValueAsString(request);
 
         //when
@@ -527,7 +527,7 @@ public class AuthControllerTest {
                 .authKey(newAuthKey)
                 .build();
 
-        given(authService.authenticateEmail(any(EmailDto.RequestVerifyAuthKey.class))).willReturn(response);
+        given(authService.authenticateEmail(anyString(), anyString())).willReturn(response);
         String json = objectMapper.writeValueAsString(request);
 
         //when
