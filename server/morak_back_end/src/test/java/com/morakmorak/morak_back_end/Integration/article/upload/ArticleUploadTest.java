@@ -2,37 +2,28 @@ package com.morakmorak.morak_back_end.Integration.article.upload;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.dto.ArticleDto;
-import com.morakmorak.morak_back_end.dto.AuthDto;
 import com.morakmorak.morak_back_end.dto.FileDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.Tag;
-import com.morakmorak.morak_back_end.entity.enums.RoleName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.ArticleService;
-import com.morakmorak.morak_back_end.util.ArticleTestConstants;
-import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
-import org.junit.After;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import javax.persistence.EntityManager;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import static com.morakmorak.morak_back_end.security.util.SecurityConstants.VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -140,7 +131,7 @@ public class ArticleUploadTest {
     }
 
     @Test
-    @DisplayName("게시글 작성시 존재하지 않는 파일를 작성할 경우 TAG_NOT_FOUND 예외를 던지고 404 에러코드를 반환한다. ")
+    @DisplayName("게시글 작성시 존재하지 않는 파일를 작성할 경우 FILE_NOT_FOUND 예외를 던지고 404 에러코드를 반환한다. ")
     public void upload_fail2() throws Exception{
         //given
         Tag tag = tagRepository.findTagByTagName(TagName.JAVA).orElseThrow();
@@ -149,8 +140,8 @@ public class ArticleUploadTest {
         ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
                 .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
-                        .fileId(3L).build(), FileDto.RequestFileWithId.builder()
-                        .fileId(6L).build()))
+                        .fileId(100L).build(), FileDto.RequestFileWithId.builder()
+                        .fileId(111L).build()))
                 .tags(List.of(TagDto.RequestTagWithIdAndName.builder().tagId(tag.getId()).tagName("Java").build()))
                 .category("INFO")
                 .thumbnail(1L)
@@ -173,7 +164,7 @@ public class ArticleUploadTest {
         perform.andExpect(status().isNotFound());
     }
     @Test
-    @DisplayName("게시글 작성시 존재하지 않는 카테고리를 작성할 경우 TAG_NOT_FOUND 예외를 던지고 404 에러코를 반환한다. ")
+    @DisplayName("게시글 작성시 존재하지 않는 카테고리를 작성할 경우 CATEGORY_NOT_FOUND 예외를 던지고 404 에러코를 반환한다. ")
     public void upload_fail3() throws Exception{
         //given
         Tag tag = tagRepository.findTagByTagName(TagName.JAVA).orElseThrow();
