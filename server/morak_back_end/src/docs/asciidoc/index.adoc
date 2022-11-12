@@ -1,0 +1,433 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= 회원 정보/토큰 관련 API
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: Table of Contents
+:source-highlighter: prettify
+:app-name: morakmorak
+:author: YANGEUNCHAN
+
+본 REST API 문서에서 사용하는 HTTP 상태 코드는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
+|===
+| `200 OK`
+| 상태를 성공적으로 처리함.
+| `201 CREATED`
+| 새 리소스를 성공적으로 생성함.
+| `204 NO CONTENT`
+| 기존 리소스를 성공적으로 제거하여 반환할 자원이 존재하지 않음.
+| `400 BAD REQUEST`
+| 잘못된 요청이므로 서버에서 처리할 수 없음.
+| `401 UNAUTHORIZED`
+| 인증에 실패함.
+| `403 FORBIDDEN`
+| 권한이 부족하여 요청을 수행할 수 없음.
+| `404 NOT FOUND`
+| 요청한 자원이 존재하지 않음.
+| `409 CONFLICT`
+| 서버의 규칙에 의해 해당 요청을 수행할 수 없음.
+|===
+
+YangEunChan
+
+2022.11.11
+
+***
+== 회원가입
+=== 성공 201
+
+.http-request
+include::{snippets}/회원가입_성공_201/http-request.adoc[]
+
+.request-fields
+include::{snippets}/회원가입_성공_201//request-fields.adoc[]
+
+.http-response
+include::{snippets}/회원가입_성공_201//http-response.adoc[]
+
+.response-fields
+include::{snippets}/회원가입_성공_201//response-body.adoc[]
+
+
+
+=== 실패 400_유효성 검사
+
+.http-request
+include::{snippets}/회원가입_실패_400//http-request.adoc[]
+
+.request-fields
+include::{snippets}/회원가입_실패_400/request-fields.adoc[]
+
+.http-response
+include::{snippets}/회원가입_실패_400/http-response.adoc[]
+
+.response-fields
+include::{snippets}/회원가입_실패_400/response-body.adoc[]
+
+=== 실패 404_인증키
+
+.http-request
+include::{snippets}/회원가입_실패_404/http-request.adoc[]
+
+.request-fields
+include::{snippets}/회원가입_실패_404/request-fields.adoc[]
+
+.http-response
+include::{snippets}/회원가입_실패_404/http-response.adoc[]
+
+.response-fields
+include::{snippets}/회원가입_실패_404/response-body.adoc[]
+
+=== 실패 409_중복_이메일
+
+.http-request
+include::{snippets}/회원가입_실패_409/http-request.adoc[]
+
+.request-fields
+include::{snippets}/회원가입_실패_409/request-fields.adoc[]
+
+.http-response
+include::{snippets}/회원가입_실패_409/http-response.adoc[]
+
+.response-fields
+include::{snippets}/회원가입_실패_409/response-body.adoc[]
+
+=== 실패 409_중복_닉네임
+
+.http-request
+include::{snippets}/회원가입_실패_409_닉네임중복/http-request.adoc[]
+
+.request-fields
+include::{snippets}/회원가입_실패_409_닉네임중복/request-fields.adoc[]
+
+.http-response
+include::{snippets}/회원가입_실패_409_닉네임중복/http-response.adoc[]
+
+.response-fields
+include::{snippets}/회원가입_실패_409_닉네임중복/response-body.adoc[]
+
+***
+
+== 이메일 인증 메일 전송
+
+=== 성공 201
+
+.http-request
+include::{snippets}/이메일_인증_요청_성공_201/http-request.adoc[]
+
+.request-fields
+include::{snippets}/이메일_인증_요청_성공_201/request-fields.adoc[]
+
+.http-response
+include::{snippets}/이메일_인증_요청_성공_201/http-response.adoc[]
+
+.response-fields
+include::{snippets}/이메일_인증_요청_성공_201/response-body.adoc[]
+
+=== 실패 409_시간 제한
+
+.http-request
+include::{snippets}/이메일_인증_요청_실패_409/http-request.adoc[]
+
+.request-fields
+include::{snippets}/이메일_인증_요청_실패_409/request-fields.adoc[]
+
+.http-response
+include::{snippets}/이메일_인증_요청_실패_409/http-response.adoc[]
+
+.response-fields
+include::{snippets}/이메일_인증_요청_실패_409/response-body.adoc[]
+
+***
+
+== 이메일 인증
+
+=== 성공 200
+
+.http-request
+include::{snippets}/이메일_인증_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/이메일_인증_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/이메일_인증_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/이메일_인증_성공_200/response-body.adoc[]
+
+=== 실패 404_존재하지_않음
+
+.http-request
+include::{snippets}/이메일_인증키_전송_404/http-request.adoc[]
+
+.request-fields
+include::{snippets}/이메일_인증키_전송_404/request-fields.adoc[]
+
+.http-response
+include::{snippets}/이메일_인증키_전송_404/http-response.adoc[]
+
+.response-fields
+include::{snippets}/이메일_인증키_전송_404/response-body.adoc[]
+
+***
+
+== 닉네임 중복 확인
+
+=== 성공 200
+
+.http-request
+include::{snippets}/닉네임_중복확인_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/닉네임_중복확인_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/닉네임_중복확인_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/닉네임_중복확인_성공_200/response-body.adoc[]
+
+=== 실패 400_유효성 검사
+
+.http-request
+include::{snippets}/닉네임_중복확인_유효하지_않은_요청값_400/http-request.adoc[]
+
+.request-fields
+include::{snippets}/닉네임_중복확인_유효하지_않은_요청값_400/request-fields.adoc[]
+
+.http-response
+include::{snippets}/닉네임_중복확인_유효하지_않은_요청값_400/http-response.adoc[]
+
+.response-fields
+include::{snippets}/닉네임_중복확인_유효하지_않은_요청값_400/response-body.adoc[]
+
+=== 실패 409_닉네임 중복
+
+.http-request
+include::{snippets}/닉네임_중복_체크_실패_409/http-request.adoc[]
+
+.request-fields
+include::{snippets}/닉네임_중복_체크_실패_409/request-fields.adoc[]
+
+.http-response
+include::{snippets}/닉네임_중복_체크_실패_409/http-response.adoc[]
+
+.response-fields
+include::{snippets}/닉네임_중복_체크_실패_409/response-body.adoc[]
+
+== 로그인
+
+=== 성공 201
+
+.http-request
+include::{snippets}/로그인_성공_201/http-request.adoc[]
+
+.request-fields
+include::{snippets}/로그인_성공_201/request-fields.adoc[]
+
+.http-response
+include::{snippets}/로그인_성공_201/http-response.adoc[]
+
+.response-fields
+include::{snippets}/로그인_성공_201/response-body.adoc[]
+
+=== 실패 401 잘못된 입력값
+
+.http-request
+include::{snippets}/로그인_실패_401/http-request.adoc[]
+
+.request-fields
+include::{snippets}/로그인_실패_401/request-fields.adoc[]
+
+.http-response
+include::{snippets}/로그인_실패_401/http-response.adoc[]
+
+.response-fields
+include::{snippets}/로그인_실패_401/response-body.adoc[]
+
+***
+
+== 로그아웃
+
+=== 성공 204
+
+.http-request
+include::{snippets}/로그아웃_성공_204/http-request.adoc[]
+
+.http-response
+include::{snippets}/로그아웃_성공_204/http-response.adoc[]
+
+=== 실패 404
+
+.http-request
+include::{snippets}/로그아웃_실패_404/http-request.adoc[]
+
+.http-response
+include::{snippets}/로그아웃_실패_404/http-response.adoc[]
+
+.response-fields
+include::{snippets}/로그아웃_실패_404/response-body.adoc[]
+
+== 리프레시 토큰 갱신
+
+=== 성공 201
+
+.http-request
+include::{snippets}/리프레시_토큰_갱신_성공_201/http-request.adoc[]
+
+.http-response
+include::{snippets}/리프레시_토큰_갱신_성공_201//http-response.adoc[]
+
+.response-fields
+include::{snippets}/리프레시_토큰_갱신_성공_201/response-body.adoc[]
+
+=== 실패 401_유효하지 않은 토큰
+
+.http-request
+include::{snippets}/리프래시_토큰_갱신_실패_401/http-request.adoc[]
+
+.http-response
+include::{snippets}/리프래시_토큰_갱신_실패_401/http-response.adoc[]
+
+.response-fields
+include::{snippets}/리프래시_토큰_갱신_실패_401/response-body.adoc[]
+
+=== 실패 404_존재하지 않는 토큰
+
+.http-request
+include::{snippets}/리프레시_토큰_갱신_실패_404/http-request.adoc[]
+
+.http-response
+include::{snippets}/리프레시_토큰_갱신_실패_404/http-response.adoc[]
+
+.response-fields
+include::{snippets}/리프레시_토큰_갱신_실패_404/response-body.adoc[]
+
+***
+
+== 비밀번호 변경
+
+=== 성공 200
+
+.http-request
+include::{snippets}/비밀번호_변경_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/비밀번호_변경_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/비밀번호_변경_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/비밀번호_변경_성공_200/response-body.adoc[]
+
+=== 실패 409_잘못된 패스워드
+
+.http-request
+include::{snippets}/비밀번호_변경_실패_400/http-request.adoc[]
+
+.request-fields
+include::{snippets}/비밀번호_변경_실패_400/request-fields.adoc[]
+
+.http-response
+include::{snippets}/비밀번호_변경_실패_400/http-response.adoc[]
+
+.response-fields
+include::{snippets}/비밀번호_변경_실패_400/response-body.adoc[]
+
+=== 실패 409_잘못된 패스워드
+
+.http-request
+include::{snippets}/비밀번호_변경_실패_409/http-request.adoc[]
+
+.request-fields
+include::{snippets}/비밀번호_변경_실패_409/request-fields.adoc[]
+
+.http-response
+include::{snippets}/비밀번호_변경_실패_409/http-response.adoc[]
+
+.response-fields
+include::{snippets}/비밀번호_변경_실패_409/response-body.adoc[]
+
+***
+
+== 비밀번호 찾기
+
+=== 성공 200_이메일 전송
+
+.http-request
+include::{snippets}/비밀번호_찾기_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/비밀번호_찾기_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/비밀번호_찾기_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/비밀번호_찾기_성공_200/response-body.adoc[]
+
+=== 실패 404_존재하지 않는 이메일
+
+.http-request
+include::{snippets}/비밀번호_찾기_실패_404/http-request.adoc[]
+
+.request-fields
+include::{snippets}/비밀번호_찾기_실패_404/request-fields.adoc[]
+
+.http-response
+include::{snippets}/비밀번호_찾기_실패_404/http-response.adoc[]
+
+.response-fields
+include::{snippets}/비밀번호_찾기_실패_404/response-body.adoc[]
+
+***
+
+== 회원탈퇴
+
+=== 성공 204
+
+.http-request
+include::{snippets}/회원_탈퇴_성공_204/http-request.adoc[]
+
+.request-fields
+include::{snippets}/회원_탈퇴_성공_204/request-fields.adoc[]
+
+.http-response
+include::{snippets}/회원_탈퇴_성공_204/http-response.adoc[]
+
+.response-fields
+include::{snippets}/회원_탈퇴_성공_204/response-body.adoc[]
+
+=== 실패 400_유효성 검사
+
+.http-request
+include::{snippets}/회원_탈퇴_씰패_400/http-request.adoc[]
+
+.request-fields
+include::{snippets}/회원_탈퇴_씰패_400/request-fields.adoc[]
+
+.http-response
+include::{snippets}/회원_탈퇴_씰패_400/http-response.adoc[]
+
+.response-fields
+include::{snippets}/회원_탈퇴_씰패_400/response-body.adoc[]
+
+=== 실패 409_잘못된 패스워드
+
+.http-request
+include::{snippets}/회원_탈퇴_실패_409/http-request.adoc[]
+
+.request-fields
+include::{snippets}/회원_탈퇴_실패_409/request-fields.adoc[]
+
+.http-response
+include::{snippets}/회원_탈퇴_실패_409/http-response.adoc[]
+
+.response-fields
+include::{snippets}/회원_탈퇴_실패_409/response-body.adoc[]
+
