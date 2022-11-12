@@ -30,7 +30,9 @@ public enum ErrorCode {
     AUTH_KEY_ALREADY_EXISTS(CONFLICT, "auth key already exists, you can only request once every 5 minutes"),
     INVALID_AUTH_KEY(NOT_FOUND, "invalid auth key, check your email"),
 
-    NICKNAME_EXISTS(CONFLICT, "nickname exists");
+    NICKNAME_EXISTS(CONFLICT, "nickname exists"),
+
+    ARTICLE_NOT_FOUND(NOT_FOUND, "article doesn't exist");
 
     private final HttpStatus httpStatus;
     private final String message;
