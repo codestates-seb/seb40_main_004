@@ -72,11 +72,17 @@ public class AuthController {
         return authService.changePassword(request.getOriginalPassword(), request.getNewPassword(), token.getId());
     }
 
-    @PostMapping("/password/recovery")
+    @PostMapping("/password/support")
     @ResponseStatus(HttpStatus.CREATED)
-    public Boolean requestFindPassword(@Valid @RequestBody EmailDto.RequestSendMail request) {
-        return authService.sendUserPasswordEmail(request.getEmail());
+    public Boolean requestSendMailAuth(@Valid @RequestBody EmailDto.RequestSendMail request) {
+        return authService.sendAuthenticationMail(request.getEmail());
     }
+
+//    @PostMapping("/password/recovery")
+//    @ResponseStatus(HttpStatus.OK)
+//    public Boolean requestFindPassword(@Valid @RequestBody EmailDto.RequestSendMail request) {
+//        return authService.sendUserPasswordEmail(request.getEmail());
+//    }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)

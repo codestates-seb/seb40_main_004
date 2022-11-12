@@ -844,13 +844,13 @@ public class AuthControllerTest {
                 .email(EMAIL1)
                 .build();
 
-        given(authService.sendUserPasswordEmail(EMAIL1)).willThrow(new BusinessLogicException(USER_NOT_FOUND));
+        given(authService.sendAuthenticationMail(EMAIL1)).willThrow(new BusinessLogicException(USER_NOT_FOUND));
 
         String json = objectMapper.writeValueAsString(request);
 
         //when
         ResultActions perform = mockMvc
-                .perform(post("/auth/password/recovery")
+                .perform(post("/auth/password/support")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json));
 
@@ -867,27 +867,27 @@ public class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("패스워드 찾기를 요청했을 때, 해당 이메일로 등록된 계정이 존재하고 로직이 정상적으로 수행되었다면 200 ok와 true를 반환한다.")
+    @DisplayName("패스워드 찾기를 요청했을 때, 해당 이메일로 등록된 계정이 존재하고 로직이 정상적으로 수행되었다면 201 created와 true를 반환한다.")
     void findPassword_success() throws Exception {
         //given
         EmailDto.RequestSendMail request = EmailDto.RequestSendMail.builder()
                 .email(EMAIL1)
                 .build();
 
-        given(authService.sendUserPasswordEmail(EMAIL1)).willReturn(Boolean.TRUE);
+        given(authService.sendAuthenticationMail(EMAIL1)).willReturn(Boolean.TRUE);
 
         String json = objectMapper.writeValueAsString(request);
 
         //when
         ResultActions perform = mockMvc
-                .perform(post("/auth/password/recovery")
+                .perform(post("/auth/password/support")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json));
 
         //then
         perform.andExpect(status().isCreated())
                 .andExpect(content().string(Boolean.TRUE.toString()))
-                .andDo(document("비밀번호_찾기_성공_200",
+                .andDo(document("비밀번호_찾기_성공_201",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestFields(
