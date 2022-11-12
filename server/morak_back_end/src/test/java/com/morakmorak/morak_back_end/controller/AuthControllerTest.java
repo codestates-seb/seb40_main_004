@@ -3,7 +3,6 @@ package com.morakmorak.morak_back_end.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.dto.AuthDto;
 import com.morakmorak.morak_back_end.dto.EmailDto;
-import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
@@ -13,6 +12,7 @@ import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.AuthService;
 import com.morakmorak.morak_back_end.util.SecurityTestConfig;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,6 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -421,7 +420,7 @@ public class AuthControllerTest {
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
-        given(authService.sendAuthenticationMail(anyString())).willThrow(new BusinessLogicException(AUTH_KEY_ALREADY_EXISTS));
+        given(authService.sendAuthenticationMailForJoin(anyString())).willThrow(new BusinessLogicException(AUTH_KEY_ALREADY_EXISTS));
 
         //when
         ResultActions perform = mockMvc
@@ -452,7 +451,7 @@ public class AuthControllerTest {
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
-        given(authService.sendAuthenticationMail(anyString())).willReturn(Boolean.TRUE);
+        given(authService.sendAuthenticationMailForJoin(anyString())).willReturn(Boolean.TRUE);
 
         //when
         ResultActions perform = mockMvc
@@ -984,6 +983,33 @@ public class AuthControllerTest {
                         getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("password").description("올바르지 않은 (database 등록값과 다른) 패스워드")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("이메일 인증 요청 시 해당 이메일을 가진 유저가 이미 데이터베이스에 존재한다면 409를 반환한다.")
+    void requestSendAuthenticationEmail_failed_409() throws Exception {
+        //given
+        given(authService.sendAuthenticationMailForJoin(anyString())).willThrow(new BusinessLogicException(EMAIL_EXISTS));
+
+        EmailDto.RequestSendMail request = EmailDto.RequestSendMail.builder().email(EMAIL1).build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/mail")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isConflict())
+                .andDo(document(
+                        "이메일_인증_요청_실패_409_중복",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("email").description("이미 존재하는 이메일")
                         )
                 ));
     }

@@ -51,7 +51,7 @@ public class AuthController {
     @PostMapping("/mail")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean requestSendEmailAuth(@RequestBody EmailDto.RequestSendMail request) {
-        return authService.sendAuthenticationMail(request.getEmail());
+        return authService.sendAuthenticationMailForJoin(request.getEmail());
     }
 
     @PutMapping("/mail")

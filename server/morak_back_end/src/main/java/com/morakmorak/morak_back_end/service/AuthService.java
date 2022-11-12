@@ -3,7 +3,6 @@ package com.morakmorak.morak_back_end.service;
 import com.morakmorak.morak_back_end.adapter.TokenGenerator;
 import com.morakmorak.morak_back_end.adapter.UserPasswordManager;
 import com.morakmorak.morak_back_end.dto.AuthDto;
-import com.morakmorak.morak_back_end.dto.EmailDto;
 import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.UserRole;
@@ -99,6 +98,11 @@ public class AuthService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public Boolean sendAuthenticationMailForJoin(String emailAddress) {
+        checkDuplicateEmail(emailAddress);
+        return sendAuthenticationMail(emailAddress);
     }
 
     public Boolean sendAuthenticationMail(String emailAddress) {
