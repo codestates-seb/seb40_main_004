@@ -274,7 +274,7 @@ class ArticleControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                delete("/article/1")
+                delete("/articles/1")
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
