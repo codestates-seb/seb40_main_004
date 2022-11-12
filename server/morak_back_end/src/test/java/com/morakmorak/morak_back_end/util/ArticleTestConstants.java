@@ -12,8 +12,8 @@ public class ArticleTestConstants {
     public final static List<TagDto.RequestTagWithIdAndName> REQUEST_TAG_WITH_ID_AND_NAMES = List.of(TagDto.RequestTagWithIdAndName.builder()
             .tagId(1L).tagName("Java").build());
     public final static List<FileDto.RequestFileWithId> REQUEST_FILE_WITH_IDS = List.of(FileDto.RequestFileWithId.builder()
-            .FileId(1L).build(), FileDto.RequestFileWithId.builder()
-            .FileId(2L).build());
+            .fileId(1L).build(), FileDto.RequestFileWithId.builder()
+            .fileId(2L).build());
 
     public final static Category REQUEST_STRING_CATEGORY = Category.builder()
             .categoryName("INFO").build();

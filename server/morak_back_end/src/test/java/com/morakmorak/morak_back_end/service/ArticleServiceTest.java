@@ -169,7 +169,7 @@ public class ArticleServiceTest {
        @DisplayName("파일과 게시글의 연관관계를 맺는 메서드 통과 테스트")
        public void fusionFileDtoWithArticle_suc() throws Exception{
            //given
-           List<FileDto.RequestFileWithId> fileDto = List.of(FileDto.RequestFileWithId.builder().FileId(1L).build());
+           List<FileDto.RequestFileWithId> fileDto = List.of(FileDto.RequestFileWithId.builder().fileId(1L).build());
            Article article = Article.builder().files(List.of(File.builder().id(1L).build())).build();
 
            given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().build()));

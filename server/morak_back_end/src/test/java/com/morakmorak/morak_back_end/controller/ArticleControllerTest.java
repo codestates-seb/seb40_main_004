@@ -31,14 +31,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.util.ArticleTestConstants.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import static org.mockito.BDDMockito.will;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -47,7 +45,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -187,7 +184,7 @@ class ArticleControllerTest {
         //given
         ArticleDto.RequestUpdateArticle request = ArticleDto.RequestUpdateArticle.builder()
                 .title("타이틀입니다. 잘부탁드립니다. 부탁드립니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .fileId(List.of(FileDto.RequestFileWithId.builder().FileId(1L).build()))
+                .fileId(List.of(FileDto.RequestFileWithId.builder().fileId(1L).build()))
                 .tags(List.of(TagDto.RequestTagWithIdAndName.builder().tagName("Java").tagId(1L).build()))
                 .thumbnail(1L)
                 .build();
