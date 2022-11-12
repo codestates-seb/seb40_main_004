@@ -1,5 +1,6 @@
-package com.morakmorak.morak_back_end.dto;
+package com.morakmorak.morak_back_end.dto.email_dto;
 
+import com.morakmorak.morak_back_end.dto.AuthDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
