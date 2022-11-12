@@ -193,7 +193,7 @@ class ArticleControllerTest {
                 .build();
         ArticleDto.ResponseSimpleArticle response = ArticleDto.ResponseSimpleArticle.builder().articleId(1L).build();
 
-        given(articleMapper.requestUpdateArticleToEntity(request, UserDto.UserInfo.builder().id(1L).build()))
+        given(articleMapper.requestUpdateArticleToEntity(request, 1L))
                 .willReturn(Article.builder().build());
         given(tagMapper.requestTagWithIdAndNameToTagDto(request))
                 .willReturn(List.of(TagDto.RequestTagWithIdAndName.builder().build()));
@@ -274,7 +274,7 @@ class ArticleControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                delete("/article/1")
+                delete("/articles/1")
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 

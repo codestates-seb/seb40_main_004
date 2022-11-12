@@ -47,7 +47,7 @@ public class ArticleController {
                                         @RequestUser UserDto.UserInfo userInfo,
                                         @PathVariable("article-id") Long articleId) {
 
-        Article article = articleMapper.requestUpdateArticleToEntity(requestUpdateArticle, userInfo);
+        Article article = articleMapper.requestUpdateArticleToEntity(requestUpdateArticle, articleId);
         List<TagDto.RequestTagWithIdAndName> tags = tagMapper.requestTagWithIdAndNameToTagDto(requestUpdateArticle);
         List<FileDto.RequestFileWithId> files = fileMapper.RequestFileWithIdToFile(requestUpdateArticle);
         ArticleDto.ResponseSimpleArticle update = articleService.update(article, userInfo,tags,files);
