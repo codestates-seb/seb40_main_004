@@ -50,7 +50,7 @@ public class AuthController {
 
     @PostMapping("/mail")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean requestSendEmailAuth(@RequestBody EmailDto.RequestSendMail request) {
+    public Boolean requestSendEmailAuth(@RequestBody EmailDto.RequestSendMail request) {
         return authService.sendAuthenticationMail(request);
     }
 
@@ -66,7 +66,7 @@ public class AuthController {
         return authService.checkDuplicateNickname(request.getNickname());
     }
 
-    @PostMapping("/password")
+    @PatchMapping("/password")
     @ResponseStatus(HttpStatus.OK)
     public Boolean requestChangePassword(@Valid @RequestBody AuthDto.RequestChangePassword request, @RequestUser UserDto.UserInfo token) {
         return authService.changePassword(request.getOriginalPassword(), request.getNewPassword(), token.getId());

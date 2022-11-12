@@ -30,8 +30,7 @@ import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
@@ -406,7 +405,7 @@ public class AuthTest extends RedisContainerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //when
-        ResultActions perform = mockMvc.perform(post("/auth/password")
+        ResultActions perform = mockMvc.perform(patch("/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(JWT_HEADER, accessToken)
                 .content(json));
@@ -439,7 +438,7 @@ public class AuthTest extends RedisContainerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //when
-        ResultActions perform = mockMvc.perform(post("/auth/password")
+        ResultActions perform = mockMvc.perform(patch("/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(JWT_HEADER, accessToken)
                 .content(json));
