@@ -23,13 +23,12 @@ class ArticleMapperTest {
 
     @Test
     @DisplayName("requestUpdateArticleToEntity 매퍼 작동 테스트")
-    public void requestUpdateArticle함ToEntityTest() throws Exception{
+    public void requestUpdateArticleToEntityTest() throws Exception{
         //given
         ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleTestConstants.REQUEST_UPDATE_ARTICLE;
-        UserDto.UserInfo userInfo = UserDto.UserInfo.builder()
-                .id(1L).email("tldjs@naver.com").roles(List.of("ROLE_USER")).build();
+
         //when
-        Article article = articleMapper.requestUpdateArticleToEntity(requestUpdateArticle, userInfo);
+        Article article = articleMapper.requestUpdateArticleToEntity(requestUpdateArticle, 1L);
         //then
         assertThat(article.getId()).isEqualTo(1L);
         assertThat(article.getContent()).isEqualTo(requestUpdateArticle.getContent());
