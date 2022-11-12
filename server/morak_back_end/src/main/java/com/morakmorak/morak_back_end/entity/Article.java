@@ -43,8 +43,9 @@ public class Article extends BaseTime {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToOne(mappedBy = "article")
-    private BookMark bookMark;
+    @Builder.Default
+    @OneToMany(mappedBy = "article")
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "article")
