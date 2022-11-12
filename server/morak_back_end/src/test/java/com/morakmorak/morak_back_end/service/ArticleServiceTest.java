@@ -178,5 +178,4 @@ public class ArticleServiceTest {
            //then
            assertThat(aBoolean).isTrue();
         }
-
 }

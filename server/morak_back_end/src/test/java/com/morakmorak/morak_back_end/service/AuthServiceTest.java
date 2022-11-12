@@ -474,4 +474,14 @@ public class AuthServiceTest {
         //then
         assertThat(result).isTrue();
     }
+
+    @Test
+    @DisplayName("이메일 인증 요청 시, 해당 이메일을 가진 유저가 이미 존재한다면 BusinessLogicException이 발생한다")
+    public void sendAuthenticationEmailForJoin_failed() {
+        //given
+        given(userRepository.findUserByEmail(EMAIL1)).willReturn(Optional.of(new User(PASSWORD1)));
+
+        //when then
+        assertThatThrownBy(() -> authService.sendAuthenticationMailForJoin(EMAIL1)).isInstanceOf(BusinessLogicException.class);
+    }
 }
