@@ -19,8 +19,14 @@ public class ArticleTag extends BaseTime{
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
+    public void injectMappingForArticleAndTag(Article article, Tag tag) {
+        this.article = article;
+        this.tag = tag;
+        article.getArticleTags().add(this);
+        tag.getArticleTags().add(this);
+    }
 }
