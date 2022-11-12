@@ -27,4 +27,8 @@ public class Role extends BaseTime{
     @Builder.Default
     @OneToMany(mappedBy = "role", cascade = CascadeType.PERSIST)
     private List<UserRole> userRoles = new ArrayList<>();
+
+    public Role(RoleName rolename) {
+        this.roleName = rolename;
+    }
 }
