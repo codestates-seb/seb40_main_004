@@ -13,6 +13,7 @@ import java.util.Set;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.AUTH_KEY;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
+import static org.assertj.core.api.Assertions.*;
 
 class AuthDtoTest {
     private static ValidatorFactory factory;
@@ -40,7 +41,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -59,7 +60,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -78,7 +79,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -97,7 +98,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -116,7 +117,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -135,7 +136,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -154,7 +155,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -173,7 +174,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isEmpty();
+        assertThat(violations).isEmpty();
     }
 
     @Test
@@ -193,7 +194,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -213,7 +214,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -233,7 +234,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -253,7 +254,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -273,7 +274,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -293,7 +294,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -313,7 +314,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -333,7 +334,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -353,7 +354,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -373,7 +374,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -392,7 +393,7 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
     @Test
@@ -411,11 +412,11 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isEmpty();
+        assertThat(violations).isEmpty();
     }
 
     @Test
-    @DisplayName("auth key 값이 존재하지 않으면 예외가 발생한다")
+    @DisplayName("RequestJoin Dto에 auth key 값이 존재하지 않으면 예외가 발생한다")
     void test21() {
         //given
         AuthDto.RequestJoin dto = AuthDto.RequestJoin
@@ -429,7 +430,156 @@ class AuthDtoTest {
         Set<ConstraintViolation<AuthDto.RequestJoin>> violations = validator.validate(dto);
 
         //then
-        Assertions.assertThat(violations).isNotEmpty();
+        assertThat(violations).isNotEmpty();
     }
 
+    @Test
+    @DisplayName("RequestChangePassword DTO의 originalPassword가 null이면 예외 발생한다.")
+    void requestChangePasswordDto_failed1() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(null)
+                .newPassword(PASSWORD2)
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("RequestChangePassword DTO의 newPassword가 null이면 예외 발생한다.")
+    void requestChangePasswordDto_failed2() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(null)
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("RequestChangePassword DTO의 originalPassword가 공백이면 예외 발생한다.")
+    void requestChangePasswordDto_failed3() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(" ")
+                .newPassword(PASSWORD2)
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("RequestChangePassword DTO의 newPassword가 공백이면 예외 발생한다.")
+    void requestChangePasswordDto_failed4() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(" ")
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("RequestChangePassword DTO의 newPassowrd가 비밀번호 규칙에 어긋난다면 예외가 발생한다.")
+    void requestChangePasswordDto_failed5() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(INVALID_PASSWORD)
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        assertThat(violations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("RequestChangePassword DTO가 유효성 검사에 통과한다면 예외를 반환하지 않는다.")
+    void requestChangePasswordDto_success() {
+        //given
+        AuthDto.RequestChangePassword dto = AuthDto.RequestChangePassword
+                .builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(PASSWORD1)
+                .build();
+
+        //when
+        Set<ConstraintViolation<AuthDto.RequestChangePassword>> violations = validator.validate(dto);
+
+        //then
+        assertThat(violations).isEmpty();
+    }
+
+    @Test
+    @DisplayName("withdrawlDto가 null일 경우 예외를 반환한다.")
+    void requestWithdrawalDto_failed1() {
+        // given
+        AuthDto.RequestWithdrawal dto = AuthDto.RequestWithdrawal
+                .builder()
+                .password(null)
+                .build();
+
+        // when
+        Set<ConstraintViolation<AuthDto.RequestWithdrawal>> validations = validator.validate(dto);
+
+        // then
+        assertThat(validations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("withdrawlDto가 공백일 경우 예외를 반환한다.")
+    void requestWithdrawalDto_failed2() {
+        // given
+        AuthDto.RequestWithdrawal dto = AuthDto.RequestWithdrawal
+                .builder()
+                .password(" ")
+                .build();
+
+        // when
+        Set<ConstraintViolation<AuthDto.RequestWithdrawal>> validations = validator.validate(dto);
+
+        // then
+        assertThat(validations).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("withdrawlDto가 null && 공백이 아닐 경우 예외를 반환한다.")
+    void requestWithdrawalDto_success() {
+        // given
+        AuthDto.RequestWithdrawal dto = AuthDto.RequestWithdrawal
+                .builder()
+                .password(PASSWORD1)
+                .build();
+
+        // when
+        Set<ConstraintViolation<AuthDto.RequestWithdrawal>> validations = validator.validate(dto);
+
+        // then
+        assertThat(validations).isEmpty();
+    }
 }

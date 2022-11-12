@@ -3,6 +3,7 @@ package com.morakmorak.morak_back_end.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.dto.AuthDto;
 import com.morakmorak.morak_back_end.dto.EmailDto;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
@@ -28,12 +29,13 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -587,5 +589,400 @@ public class AuthControllerTest {
                                 )
                         )
                 );
+    }
+
+    @Test
+    @DisplayName("중복 확인하는 닉네임이 이미 존재할 경우 409 Conflict를 반환한다.")
+    public void checkDuplicateNickname_failed1() throws Exception {
+        //given
+        AuthDto.RequestCheckNickname dto = AuthDto.RequestCheckNickname
+                .builder()
+                .nickname(NICKNAME1)
+                .build();
+
+        given(authService.checkDuplicateNickname(NICKNAME1)).willThrow(new BusinessLogicException(NICKNAME_EXISTS));
+
+        String json = objectMapper.writeValueAsString(dto);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/nickname")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isConflict())
+                .andDo(document(
+                        "닉네임_중복_체크_status_409",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("nickname").description("이미 존재하는 닉네임 요청")
+                )
+                )
+                );
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 확인 요청 시 dto 검증에 실패할 경우 400 BadRequest를 반환한다.")
+    public void checkDuplicateNickname_failed2() throws Exception {
+        //given
+        AuthDto.RequestCheckNickname dto = AuthDto.RequestCheckNickname
+                .builder()
+                .nickname(INVALID_NICKNAME)
+                .build();
+
+        String json = objectMapper.writeValueAsString(dto);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/nickname")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                                "닉네임_중복확인_유효하지_않은_요청값_400",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("nickname").description("유효성 검사 실패, 닉네임은 null이거나 공백일 수 없으며 닉네임 규정을 충족해야합니다.")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 확인 요청 시 중복 닉네임이 존재하지 않고 dto 유효성 검사에 성공할 경우 true와 200 OK를 반환한다.")
+    public void checkDuplicateNickname_success() throws Exception {
+        //given
+        AuthDto.RequestCheckNickname dto = AuthDto.RequestCheckNickname
+                .builder()
+                .nickname(NICKNAME1)
+                .build();
+
+        given(authService.checkDuplicateNickname(NICKNAME1)).willReturn(Boolean.TRUE);
+
+        String json = objectMapper.writeValueAsString(dto);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/nickname")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(content().string(Boolean.TRUE.toString()))
+                .andDo(document(
+                                "닉네임_중복확인_유효하지_않은_요청값_400",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("nickname").description("중복되지 않는 닉네임")
+                                ),
+                        responseBody()
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("회원가입 요청 시 동일한 닉네임이 데이터베이스에 존재한다면 409 Conflict를 반환한다.")
+    public void requestJoin_failed() throws Exception {
+        //given
+        AuthDto.RequestJoin request = AuthDto.RequestJoin
+                .builder()
+                .nickname(NICKNAME1)
+                .password(PASSWORD1)
+                .email(EMAIL1)
+                .authKey(AUTH_KEY)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+        given(authService.joinUser(any(User.class), anyString())).willThrow(new BusinessLogicException(NICKNAME_EXISTS));
+
+        //when
+        ResultActions perform = mockMvc
+                .perform(post("/auth")
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        perform
+                .andExpect(status().isConflict())
+                .andDo(document(
+                                "join failed (duplicate email)",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestFields(
+                                        fieldWithPath("email").description("valid email"),
+                                        fieldWithPath("password").description("valid password"),
+                                        fieldWithPath("nickname").description("이미 존재하는 닉네임."),
+                                        fieldWithPath("authKey").description("auth Key")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 요청 시 DTO 유효성 검증에 실패한다면 400 BadRequest 반환")
+    public void requestChangePassword_failed() throws Exception {
+        //given
+        AuthDto.RequestChangePassword request = AuthDto.RequestChangePassword.builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(INVALID_PASSWORD)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.changePassword(anyString(), anyString(), anyLong())).willThrow(new BusinessLogicException(ONLY_TEST_CODE));
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, ACCESS_TOKEN));
+
+        //then
+        perform
+                .andExpect(status().isBadRequest())
+                .andDo(
+                        document("changePassword_failed_400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        requestFields(
+                                fieldWithPath("originalPassword").description("변경 전 패스워드"),
+                                fieldWithPath("newPassword").description("유효성 검사 실패 패스워드")
+                        )
+                )
+                );
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 요청 시 originalPassword가 기존 패스워드와 다르다면 409 Conflict를 반환한다.")
+    public void requestChangePassword_failed2() throws Exception {
+        //given
+        AuthDto.RequestChangePassword request = AuthDto.RequestChangePassword.builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(PASSWORD2)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.changePassword(anyString(), anyString(), any())).willThrow(new BusinessLogicException(ErrorCode.MISMATCHED_PASSWORD));
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, ACCESS_TOKEN));
+
+        //then
+        perform
+                .andExpect(status().isConflict())
+                .andDo(
+                        document("changePassword_failed_409",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestHeaders(
+                                        headerWithName(JWT_HEADER).description("access token")
+                                ),
+                                requestFields(
+                                        fieldWithPath("originalPassword").description("기존 패스워드(잘못된 값 입력)"),
+                                        fieldWithPath("newPassword").description("변경 희망 패스워드")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경 요청 시 DTO 유효성 검증에 성공하고 DB 패스워드와 originalPassword가 일치한다면 200 OK와 true 반환")
+    public void requestChangePassword_success() throws Exception {
+        //given
+        AuthDto.RequestChangePassword request = AuthDto.RequestChangePassword.builder()
+                .originalPassword(PASSWORD1)
+                .newPassword(PASSWORD2)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.changePassword(anyString(), anyString(), any())).willReturn(Boolean.TRUE);
+
+        //when
+        ResultActions perform = mockMvc.perform(post("/auth/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, ACCESS_TOKEN));
+
+        //then
+        perform
+                .andExpect(status().isOk())
+                .andExpect(content().string(Boolean.TRUE.toString()))
+                .andDo(
+                        document("changePassword_failed_400",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestHeaders(
+                                        headerWithName(JWT_HEADER).description("access token")
+                                ),
+                                requestFields(
+                                        fieldWithPath("originalPassword").description("변경 전 패스워드"),
+                                        fieldWithPath("newPassword").description("유효성 검사 실패 패스워드")
+                                ),
+                                responseBody()
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("패스워드 찾기를 요청했을 때, 해당 이메일로 등록된 계정이 존재하지 않는다면 404 Not Found를 반환한다.")
+    void findPassword_failed() throws Exception {
+        //given
+        EmailDto.RequestSendMail request = EmailDto.RequestSendMail.builder()
+                .email(EMAIL1)
+                .build();
+
+        given(authService.sendUserPasswordEmail(EMAIL1)).willThrow(new BusinessLogicException(USER_NOT_FOUND));
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc
+                .perform(post("/auth/password/recovery")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json));
+
+        //then
+        perform.andExpect(status().isNotFound())
+                .andDo(document("findPassword_failed_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").description("존재하지 않는 유저 메일일 경우")
+                        ),
+                        responseBody())
+                );
+    }
+
+    @Test
+    @DisplayName("패스워드 찾기를 요청했을 때, 해당 이메일로 등록된 계정이 존재하고 로직이 정상적으로 수행되었다면 200 ok와 true를 반환한다.")
+    void findPassword_success() throws Exception {
+        //given
+        EmailDto.RequestSendMail request = EmailDto.RequestSendMail.builder()
+                .email(EMAIL1)
+                .build();
+
+        given(authService.sendUserPasswordEmail(EMAIL1)).willReturn(Boolean.TRUE);
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc
+                .perform(post("/auth/password/recovery")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json));
+
+        //then
+        perform.andExpect(status().isCreated())
+                .andExpect(content().string(Boolean.TRUE.toString()))
+                .andDo(document("findPassword_failed_400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").description("존재하지 않는 유저 메일일 경우")
+                        ),
+                        responseBody())
+                );
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 요청 시 요청값이 유효성 검사에 실패하면 400 Bad Request를 반환한다.")
+    void requestWithdrawal_failed1() throws Exception {
+        //given
+        AuthDto.RequestWithdrawal request = AuthDto.RequestWithdrawal
+                .builder()
+                .password(PASSWORD1)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.deleteAccount(anyString(), any())).willThrow(new BusinessLogicException(ONLY_TEST_CODE));
+
+        //when
+        ResultActions perform = mockMvc.perform(delete("/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                        "request_withdrawal_failed_400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("password").description("패스워드 유효성 검사 실패 (null이거나 공백, 혹은 알 수 없는 문자열 오류)")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 요청 시 확인 비밀번호가 데이터베이스 비밀번화와 다른 경우 409 Conflict를 반환한다.")
+    void requestWithdrawal_failed2() throws Exception {
+        //given
+        AuthDto.RequestWithdrawal request = AuthDto.RequestWithdrawal
+                .builder()
+                .password(PASSWORD1)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.deleteAccount(anyString(), any())).willThrow(new BusinessLogicException(ONLY_TEST_CODE));
+
+        //when
+        ResultActions perform = mockMvc.perform(delete("/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                        "request_withdrawal_failed_409",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("password").description("올바르지 않은 (database 등록값과 다른) 패스워드")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 요청 시 확인 비밀번호가 데이터베이스 비밀번호와 같고 유효성 검사에 통과한 경우 회원 정보를 삭제하고 204 NoContent 반환")
+    void requestWithdrawal_success() throws Exception {
+        //given
+        AuthDto.RequestWithdrawal request = AuthDto.RequestWithdrawal
+                .builder()
+                .password(PASSWORD1)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        given(authService.deleteAccount(anyString(), any())).willThrow(new BusinessLogicException(ONLY_TEST_CODE));
+
+        //when
+        ResultActions perform = mockMvc.perform(delete("/auth")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                        "request_withdrawal_success_204",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("password").description("올바르지 않은 (database 등록값과 다른) 패스워드")
+                        )
+                ));
     }
 }

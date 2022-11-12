@@ -2,8 +2,10 @@ package com.morakmorak.morak_back_end.controller;
 
 import com.morakmorak.morak_back_end.dto.AuthDto;
 import com.morakmorak.morak_back_end.dto.EmailDto;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
+import com.morakmorak.morak_back_end.security.resolver.RequestUser;
 import com.morakmorak.morak_back_end.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -56,5 +58,29 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public AuthDto.ResponseAuthKey requestVerifyEmailAuth(@RequestBody EmailDto.RequestVerifyAuthKey request) {
         return authService.authenticateEmail(request);
+    }
+
+    @PostMapping("/nickname")
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean requestCheckNickname(@Valid @RequestBody AuthDto.RequestCheckNickname request) {
+        return authService.checkDuplicateNickname(request.getNickname());
+    }
+
+    @PostMapping("/password")
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean requestChangePassword(@Valid @RequestBody AuthDto.RequestChangePassword request, @RequestUser UserDto.UserInfo token) {
+        return authService.changePassword(request.getOriginalPassword(), request.getNewPassword(), token.getId());
+    }
+
+    @PostMapping("/password/recovery")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Boolean requestFindPassword(@Valid @RequestBody EmailDto.RequestSendMail request) {
+        return authService.sendUserPasswordEmail(request.getEmail());
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void requestDeleteAccount(@Valid @RequestBody AuthDto.RequestWithdrawal request, @RequestUser UserDto.UserInfo token) {
+        authService.deleteAccount(request.getPassword(), token.getId());
     }
 }

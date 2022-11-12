@@ -74,6 +74,8 @@ public class AuthDto {
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     public static class RequestCheckNickname {
+        @NotBlank
+        @Pattern(regexp = "^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{2,16}$", message = INVALID_NICKNAME) // 영문, 숫자, 한글 2자 이상 16자 이하(공백 및 초성, 자음 불가능)
         private String nickname;
     }
 
@@ -86,5 +88,27 @@ public class AuthDto {
         public ResponseAuthKey(String authKey) {
             this.authKey = authKey;
         }
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class RequestChangePassword {
+        @NotBlank
+        private String originalPassword;
+
+        @NotBlank
+        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{8,16}$", message = INVALID_PASSWORD) // 영문 + 숫자 + 특수문자 8자 이상 20자 이하
+        private String newPassword;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class RequestWithdrawal {
+        @NotBlank
+        private String password;
     }
 }

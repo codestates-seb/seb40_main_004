@@ -22,6 +22,7 @@ import java.util.Random;
 import static com.morakmorak.morak_back_end.entity.enums.RoleName.ROLE_USER;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
+import static com.morakmorak.morak_back_end.service.MailSenderImpl.*;
 
 @Service
 @Transactional
@@ -34,7 +35,7 @@ public class AuthService {
     private final UserRoleRepository userRoleRepository;
     private final RedisRepository<User> refreshTokenRedisRepository;
     private final RedisRepository<String> mailAuthRedisRepository;
-    private final AuthMailSender authMailSenderImpl;
+    private final MailSender mailSenderImpl;
 
     public AuthDto.ResponseToken loginUser(User user) {
         User dbUser = findUserByEmailOrThrowException(user.getEmail());
@@ -61,6 +62,7 @@ public class AuthService {
         }
 
         checkDuplicateEmail(user.getEmail());
+        checkDuplicateNickname(user.getNickname());
         userPasswordManager.encryptUserPassword(user);
         saveUserAndBasicUserRole(user);
 
@@ -106,7 +108,7 @@ public class AuthService {
 
         String randomKey = generateRandomKey();
 
-        authMailSenderImpl.sendEmail(emailDetails, randomKey);
+        mailSenderImpl.sendMail(emailDetails.getEmail(), randomKey, BASIC_AUTH_SUBJECT);
         return mailAuthRedisRepository.saveData(emailDetails.getEmail(), randomKey, AUTH_KEY_EXPIRATION_PERIOD);
     }
 
@@ -119,6 +121,43 @@ public class AuthService {
         String randomKey = generateRandomKey();
         mailAuthRedisRepository.saveData(randomKey, emailDetails.getEmail(), VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         return new AuthDto.ResponseAuthKey(randomKey);
+    }
+
+    public Boolean changePassword(String originalPassword, String newPassword, Long userId) {
+        User dbUser = userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
+        User requestUser = User.builder().password(originalPassword).build();
+
+        if (!userPasswordManager.compareUserPassword(dbUser, requestUser)) {
+            throw new BusinessLogicException(MISMATCHED_PASSWORD);
+        }
+
+        dbUser.changePassword(newPassword);
+        userPasswordManager.encryptUserPassword(dbUser);
+
+        return Boolean.TRUE;
+    }
+
+    public Boolean deleteAccount(String password, Long userId) {
+        User dbUser = userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
+        User requestUser = new User(password);
+
+        if (!userPasswordManager.compareUserPassword(dbUser, requestUser)) throw new BusinessLogicException(MISMATCHED_PASSWORD);
+
+        userRepository.delete(dbUser);
+        return Boolean.TRUE;
+    }
+
+    public Boolean sendUserPasswordEmail(String email) {
+        User dbUser = findUserByEmailOrThrowException(email);
+        String randomKey = generateRandomKey();
+        dbUser.changePassword(randomKey);
+        userPasswordManager.encryptUserPassword(dbUser);
+        return mailSenderImpl.sendMail(dbUser.getEmail(), randomKey, BASIC_PASSWORD_SUBJECT);
+    }
+
+    public Boolean checkDuplicateNickname(String nickname) {
+        if (userRepository.findUserByNickname(nickname).isPresent()) throw new BusinessLogicException(NICKNAME_EXISTS);
+        return Boolean.TRUE;
     }
 
     private String generateRandomKey() {

@@ -2,9 +2,11 @@ package com.morakmorak.morak_back_end.service;
 
 import com.morakmorak.morak_back_end.adapter.TokenGenerator;
 import com.morakmorak.morak_back_end.adapter.UserPasswordManager;
+import com.morakmorak.morak_back_end.dto.AuthDto;
 import com.morakmorak.morak_back_end.entity.RefreshToken;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.RedisRepository;
 import com.morakmorak.morak_back_end.repository.RoleRepository;
 import com.morakmorak.morak_back_end.repository.UserRepository;
@@ -23,7 +25,9 @@ import java.util.Optional;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.BEARER_REFRESH_TOKEN;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.INVALID_BEARER_REFRESH_TOKEN;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,7 +60,7 @@ public class AuthServiceTest {
     RedisRepository<String> authKeyRedisRepository;
 
     @Mock
-    AuthMailSenderImpl authMailSenderImpl;
+    MailSenderImpl authMailSenderImpl;
 
     @Test
     @DisplayName("유저 로그인 / 조회한 유저의 패스워드를 복호화하여 인자와 비교했을 때 " +
@@ -327,4 +331,147 @@ public class AuthServiceTest {
 //        assertThat(result).isTrue();
 //    }
 
+    @Test
+    @DisplayName("닉네임 중복 검사 시 해당 닉네임이 존재할 경우 BusinessLogicException 발생")
+    public void checkDuplicateNickname_failed() {
+        //given
+        given(userRepository.findUserByNickname(NICKNAME1)).willReturn(Optional.of(User.builder().build()));
+
+        //when //then
+        assertThatThrownBy(() -> authService.checkDuplicateNickname(NICKNAME1)).isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    @DisplayName("닉네임 중복 검사 시 해당 닉네임이 존재하지 않을 경우 true 반환")
+    public void checkDuplicateNickname_success() {
+        //given
+        given(userRepository.findUserByNickname(NICKNAME1)).willReturn(Optional.empty());
+
+        //when
+        Boolean result = authService.checkDuplicateNickname(NICKNAME1);
+
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("패스워드 변경 요청 시, 해당 유저 DB 패스워드와 입력받은 originalPassword가 일치하지 않는다면 BusinessLogicException 발생")
+    public void changePassword_failed() {
+        //given
+        User dbUser = User.builder()
+                .id(ID1)
+                .password(PASSWORD1)
+                .build();
+
+        given(userRepository.findById(ID1)).willReturn(Optional.of(dbUser));
+        given(userPasswordManager.compareUserPassword(any(User.class), any(User.class))).willReturn(Boolean.FALSE);
+
+        //when then
+        assertThatThrownBy(() -> authService.changePassword(INVALID_PASSWORD, PASSWORD2, ID1))
+                .isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    @DisplayName("패스워드 변경 요청 시, 해당 유저 DB 패스워드와 입력받은 originalPassword가 일치한다면 유저의 패스워드를 newPassword로 변경")
+    public void changePassword_success() {
+        //given
+        User dbUser = User.builder()
+                .id(ID1)
+                .password(PASSWORD1)
+                .build();
+
+        given(userRepository.findById(ID1)).willReturn(Optional.of(dbUser));
+        given(userPasswordManager.compareUserPassword(any(User.class), any(User.class))).willReturn(Boolean.TRUE);
+
+        //when
+        Boolean result = authService.changePassword(PASSWORD1, PASSWORD2, ID1);
+
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("패스워드 찾기 요청 시, 요청받은 이메일을 가진 유저가 존재하지 않는다면 BusinessLogicException이 발생한다.")
+    public void sendUserPasswordMail_failed() {
+        //given
+        given(userRepository.findUserByEmail(EMAIL1)).willReturn(Optional.empty());
+
+        //when then
+        assertThatThrownBy(() -> authService.sendUserPasswordEmail(EMAIL1))
+                .isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    @DisplayName("패스워드 찾기 요청 시, 요청받은 이메일을 가진 유저가 존재한다면 비밀번호를 변경한다.")
+    public void sendUserPasswordMail_success() {
+        //given
+        User dbUser = User.builder()
+                .email(EMAIL1)
+                .password(PASSWORD1)
+                .build();
+
+        given(userRepository.findUserByEmail(EMAIL1)).willReturn(Optional.of(dbUser));
+        given(userPasswordManager.encryptUserPassword(dbUser)).willReturn(PASSWORD2);
+        given(authMailSenderImpl.sendMail(anyString(), anyString(), anyString())).willReturn(Boolean.TRUE);
+
+        //when
+        authService.sendUserPasswordEmail(EMAIL1);
+
+        //then
+        assertThat(dbUser.getPassword()).isNotEqualTo(PASSWORD2);
+    }
+
+    @Test
+    @DisplayName("패스워드 찾기 요청 시, 요청받은 이메일을 가진 유저가 존재한다면 true를 반환한다.")
+    public void sendUserPasswordMail_success2() {
+        //given
+        User dbUser = User.builder()
+                .email(EMAIL1)
+                .password(PASSWORD1)
+                .build();
+
+        given(userRepository.findUserByEmail(EMAIL1)).willReturn(Optional.of(dbUser));
+        given(userPasswordManager.encryptUserPassword(dbUser)).willReturn(PASSWORD2);
+        given(authMailSenderImpl.sendMail(anyString(), anyString(), anyString())).willReturn(Boolean.TRUE);
+
+        //when
+        Boolean result = authService.sendUserPasswordEmail(EMAIL1);
+
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 요청 시, 입력받은 패스워드가 데이터베이스의 패스워드와 일치하지 않는다면 BusinessLogicException이 발생한다")
+    public void deleteAccount_failed() {
+        //given
+        User user = User.builder()
+                .password(PASSWORD1)
+                .build();
+
+        given(userRepository.findById(ID1)).willReturn(Optional.of(user));
+        given(userPasswordManager.compareUserPassword(any(User.class), any(User.class))).willThrow(new BusinessLogicException(ErrorCode.MISMATCHED_PASSWORD));
+
+        //when then
+        assertThatThrownBy(() -> authService.deleteAccount(anyString(), ID1))
+                .isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    @DisplayName("회원 탈퇴 요청 시, 입력받은 패스워드가 데이터베이스의 패스워드와 일치한다면 회원을 삭제하고 true를 반환한다.")
+    public void deleteAccount_success() {
+        //given
+        User user = User.builder()
+                .password(PASSWORD1)
+                .build();
+
+        given(userRepository.findById(ID1)).willReturn(Optional.of(user));
+        given(userPasswordManager.compareUserPassword(any(User.class), any(User.class))).willReturn(Boolean.TRUE);
+
+        //when
+        boolean result =authService.deleteAccount(anyString(), ID1);
+
+        //then
+        assertThat(result).isTrue();
+    }
 }
