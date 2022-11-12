@@ -110,7 +110,7 @@ public class User {
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
-    private List<BookMark> bookMarks = new ArrayList<>();
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
