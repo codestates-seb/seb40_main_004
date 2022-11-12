@@ -15,7 +15,7 @@ import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.repository.ArticleRepository;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.ArticleService;
-import com.morakmorak.morak_back_end.util.SecurityTestConfig;
+import com.morakmorak.morak_back_end.config.SecurityTestConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.util.ArticleTestConstants.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import static org.mockito.BDDMockito.will;
 import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -47,7 +45,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 

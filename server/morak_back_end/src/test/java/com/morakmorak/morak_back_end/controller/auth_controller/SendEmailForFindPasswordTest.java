@@ -7,17 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.morakmorak.morak_back_end.exception.ErrorCode.USER_NOT_FOUND;
-import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentRequest;
-import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentResponse;
+import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
+import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseBody;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class SendEmailForFindPasswordTest extends AuthControllerTest {
     @Test
@@ -28,7 +25,7 @@ public class SendEmailForFindPasswordTest extends AuthControllerTest {
                 .email(EMAIL1)
                 .build();
 
-        given(authService.sendAuthenticationMail(EMAIL1)).willThrow(new BusinessLogicException(USER_NOT_FOUND));
+        given(authService.sendAuthenticationMailForFindPwd(EMAIL1)).willThrow(new BusinessLogicException(USER_NOT_FOUND));
 
         String json = objectMapper.writeValueAsString(request);
 
@@ -58,7 +55,7 @@ public class SendEmailForFindPasswordTest extends AuthControllerTest {
                 .email(EMAIL1)
                 .build();
 
-        given(authService.sendAuthenticationMail(EMAIL1)).willReturn(Boolean.TRUE);
+        given(authService.sendAuthenticationMailForFindPwd(EMAIL1)).willReturn(Boolean.TRUE);
 
         String json = objectMapper.writeValueAsString(request);
 
@@ -76,6 +73,36 @@ public class SendEmailForFindPasswordTest extends AuthControllerTest {
                         getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("email").description("user email")
+                        ),
+                        responseBody())
+                );
+    }
+
+    @Test
+    @DisplayName("패스워드 찾기를 요청했을 때, 5분 이내에 해당 메일로 인증키를 요청한 기록이 있다면 409 반환")
+    void findPassword_failed2() throws Exception {
+        //given
+        EmailDto.RequestSendMail request = EmailDto.RequestSendMail.builder()
+                .email(EMAIL1)
+                .build();
+
+        given(authService.sendAuthenticationMailForFindPwd(EMAIL1)).willThrow(new BusinessLogicException(AUTH_KEY_ALREADY_EXISTS));
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc
+                .perform(post("/auth/password/support")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json));
+
+        //then
+        perform.andExpect(status().isConflict())
+                .andDo(document("비밀번호_찾기_실패_409",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestFields(
+                                fieldWithPath("email").description("5분 내에 해당 이메일로 인증키를 요청한 이력이 있을 경우")
                         ),
                         responseBody())
                 );

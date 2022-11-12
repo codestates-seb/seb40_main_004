@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.util;
+package com.morakmorak.morak_back_end.config;
 
 import org.springframework.restdocs.operation.preprocess.OperationRequestPreprocessor;
 import org.springframework.restdocs.operation.preprocess.OperationResponsePreprocessor;

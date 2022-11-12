@@ -10,8 +10,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static com.morakmorak.morak_back_end.exception.ErrorCode.ONLY_TEST_CODE;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_HEADER;
-import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentRequest;
-import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentResponse;
+import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentRequest;
+import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentResponse;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.mockito.ArgumentMatchers.*;

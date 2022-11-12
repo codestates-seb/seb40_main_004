@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentRequest;
-import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentResponse;
+import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentRequest;
+import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentResponse;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.AUTH_KEY;
 import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
 import static org.mockito.ArgumentMatchers.anyString;

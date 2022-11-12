@@ -3,7 +3,7 @@ package com.morakmorak.morak_back_end.security.resolver;
 import com.morakmorak.morak_back_end.controller.TestController;
 import com.morakmorak.morak_back_end.security.exception.InvalidJwtTokenException;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.util.SecurityTestConfig;
+import com.morakmorak.morak_back_end.config.SecurityTestConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.assertj.core.api.Assertions;
