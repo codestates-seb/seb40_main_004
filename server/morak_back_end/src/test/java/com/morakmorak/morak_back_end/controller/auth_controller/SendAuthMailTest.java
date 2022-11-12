@@ -1,45 +1,22 @@
 package com.morakmorak.morak_back_end.controller.auth_controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.morakmorak.morak_back_end.controller.AuthController;
-import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.EmailDto;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.exception.ErrorCode;
-import com.morakmorak.morak_back_end.mapper.UserMapper;
-import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
-import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.service.AuthService;
-import com.morakmorak.morak_back_end.util.SecurityTestConfig;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.morakmorak.morak_back_end.exception.ErrorCode.AUTH_KEY_ALREADY_EXISTS;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.EMAIL_EXISTS;
-import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentRequest;
-import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentResponse;
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
+import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class SendAuthMailTest extends AuthControllerTest {
     @Test

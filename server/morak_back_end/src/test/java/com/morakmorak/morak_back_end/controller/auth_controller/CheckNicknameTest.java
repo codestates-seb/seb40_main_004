@@ -8,8 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.morakmorak.morak_back_end.exception.ErrorCode.NICKNAME_EXISTS;
-import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentRequest;
-import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentResponse;
+import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentRequest;
+import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentResponse;
 import static com.morakmorak.morak_back_end.util.TestConstants.INVALID_NICKNAME;
 import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME1;
 import static org.mockito.BDDMockito.given;

@@ -7,7 +7,7 @@ import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.AuthService;
-import com.morakmorak.morak_back_end.util.SecurityTestConfig;
+import com.morakmorak.morak_back_end.config.SecurityTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

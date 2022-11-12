@@ -75,7 +75,7 @@ public class AuthController {
     @PostMapping("/password/support")
     @ResponseStatus(HttpStatus.CREATED)
     public Boolean requestSendMailAuth(@Valid @RequestBody EmailDto.RequestSendMail request) {
-        return authService.sendAuthenticationMail(request.getEmail());
+        return authService.sendAuthenticationMailForFindPwd(request.getEmail());
     }
 
 //    @PostMapping("/password/recovery")
