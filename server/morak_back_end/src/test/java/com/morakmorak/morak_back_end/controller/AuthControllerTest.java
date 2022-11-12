@@ -30,6 +30,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_HEADER;
+import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentRequest;
+import static com.morakmorak.morak_back_end.util.ApiDocumentUtils.getDocumentResponse;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
@@ -48,7 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityTestConfig.class)
 @WebMvcTest({AuthController.class, UserMapper.class, ExceptionController.class})
 @MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "docs.api.com")
 public class AuthControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -95,9 +97,9 @@ public class AuthControllerTest {
 
         // then
         perform.andExpect(status().isUnauthorized())
-                .andDo(document("Login Failed (unmatched password or not found Email)",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(document("로그인_실패_401",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("email").description("Invalid email or not found email"),
                                 fieldWithPath("password").description("Invalid password or not found email")
@@ -136,9 +138,9 @@ public class AuthControllerTest {
         perform.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.accessToken").value(BEARER_ACCESS_TOKEN))
                 .andExpect(jsonPath("$.refreshToken").value(BEARER_REFRESH_TOKEN))
-                .andDo(document("login success",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                .andDo(document("로그인_성공_201",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("email").description("valid user email"),
                                         fieldWithPath("password").description("valid user password")
@@ -177,9 +179,9 @@ public class AuthControllerTest {
         perform
                 .andExpect(status().isBadRequest())
                 .andDo(document(
-                        "join failed (invalid input value)",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        "회원가입_실패_400",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("email").description("invalid email"),
                                 fieldWithPath("password").description("password"),
@@ -215,9 +217,9 @@ public class AuthControllerTest {
         perform
                 .andExpect(status().isConflict())
                 .andDo(document(
-                                "join failed (duplicate email)",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                                "회원가입_실패_409",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("email").description("exist email"),
                                         fieldWithPath("password").description("valid password"),
@@ -261,9 +263,9 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.accessToken").value(BEARER_ACCESS_TOKEN))
                 .andExpect(jsonPath("$.refreshToken").value(BEARER_REFRESH_TOKEN))
                 .andDo(document(
-                                "join success",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                                "회원가입_성공_201",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("email").description("valid email"),
                                         fieldWithPath("password").description("valid password"),
@@ -293,9 +295,9 @@ public class AuthControllerTest {
         perform
                 .andExpect(status().isNotFound())
                 .andDo(document(
-                        "logout failed (not found token)",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        "로그아웃_실패_404",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestHeaders(
                                 headerWithName(REFRESH_HEADER).description("Not Found RefreshToken")
                         )
@@ -318,9 +320,9 @@ public class AuthControllerTest {
         perform
                 .andExpect(status().isNoContent())
                 .andDo(document(
-                                "logout success",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                                "로그아웃_성공_204",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestHeaders(
                                         headerWithName(REFRESH_HEADER).description("valid refreshToken")
                                 )
@@ -342,9 +344,9 @@ public class AuthControllerTest {
         //then
         perform.andExpect(status().isNotFound())
                 .andDo(
-                        document("token reissue failed(NotFoundToken)",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                        document("리프레시_토큰_갱신_실패_404",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestHeaders(
                                         headerWithName(REFRESH_HEADER).description("that token dose not exist in the database")
                                 ))
@@ -365,9 +367,9 @@ public class AuthControllerTest {
         //then
         perform.andExpect(status().isUnauthorized())
                 .andDo(document(
-                        "token reissue failed(InvalidToken)",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        "리프래시_토큰_갱신_실패_401",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestHeaders(
                                 headerWithName(REFRESH_HEADER).description("invalid token(expired, malformed, unsupported, signature, illegalArgument..)")
                         ))
@@ -396,9 +398,9 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.accessToken").value(BEARER_ACCESS_TOKEN))
                 .andExpect(jsonPath("$.refreshToken").value(BEARER_REFRESH_TOKEN))
                 .andDo(document(
-                        "token reissuance success",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        "리프레시_토큰_갱신_성공_201",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestHeaders(
                                 headerWithName(REFRESH_HEADER).description("valid token")
                         ),
@@ -431,9 +433,9 @@ public class AuthControllerTest {
         perform
                 .andExpect(status().isConflict())
                 .andDo(document(
-                        "auth key that already exists",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        "이메일_인증_요청_실패_409",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("email").description("the same email can only be verified once every 5 minutes.")
                         )
@@ -463,9 +465,9 @@ public class AuthControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string(Boolean.TRUE.toString()))
                 .andDo(document(
-                                "auth key that already exists",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                                "이메일_인증_요청_성공_201",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("email").description("the same email can only be verified once every 5 minutes.")
                                 ),
@@ -497,9 +499,9 @@ public class AuthControllerTest {
         perform
                 .andExpect(status().isNotFound())
                 .andDo(document(
-                        "auth key that already exists",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        "이메일_인증키_전송_404",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("authKey").description("invalid authKey"),
                                 fieldWithPath("email").description("user email")
@@ -539,9 +541,9 @@ public class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.authKey").value(newAuthKey))
                 .andDo(document(
-                                "request email verification request",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                                "이메일_인증_성공_200",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("authKey").description("user authKey"),
                                         fieldWithPath("email").description("user email")
@@ -578,9 +580,9 @@ public class AuthControllerTest {
         perform
                 .andExpect(status().isNotFound())
                 .andDo(document(
-                                "join success",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                                "회원가입_실패_404",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("email").description("valid email"),
                                         fieldWithPath("password").description("valid password"),
@@ -612,9 +614,9 @@ public class AuthControllerTest {
         //then
         perform.andExpect(status().isConflict())
                 .andDo(document(
-                        "닉네임_중복_체크_status_409",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        "닉네임_중복_체크_실패_409",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("nickname").description("이미 존재하는 닉네임 요청")
                 )
@@ -642,8 +644,8 @@ public class AuthControllerTest {
         perform.andExpect(status().isBadRequest())
                 .andDo(document(
                                 "닉네임_중복확인_유효하지_않은_요청값_400",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("nickname").description("유효성 검사 실패, 닉네임은 null이거나 공백일 수 없으며 닉네임 규정을 충족해야합니다.")
                                 )
@@ -673,9 +675,9 @@ public class AuthControllerTest {
         perform.andExpect(status().isOk())
                 .andExpect(content().string(Boolean.TRUE.toString()))
                 .andDo(document(
-                                "닉네임_중복확인_유효하지_않은_요청값_400",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                                "닉네임_중복확인_성공_200",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("nickname").description("중복되지 않는 닉네임")
                                 ),
@@ -709,9 +711,9 @@ public class AuthControllerTest {
         perform
                 .andExpect(status().isConflict())
                 .andDo(document(
-                                "join failed (duplicate email)",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                                "회원가입_실패_409_닉네임중복",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestFields(
                                         fieldWithPath("email").description("valid email"),
                                         fieldWithPath("password").description("valid password"),
@@ -736,7 +738,7 @@ public class AuthControllerTest {
         given(authService.changePassword(anyString(), anyString(), anyLong())).willThrow(new BusinessLogicException(ONLY_TEST_CODE));
 
         //when
-        ResultActions perform = mockMvc.perform(post("/auth/password")
+        ResultActions perform = mockMvc.perform(patch("/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .header(JWT_HEADER, ACCESS_TOKEN));
@@ -745,9 +747,9 @@ public class AuthControllerTest {
         perform
                 .andExpect(status().isBadRequest())
                 .andDo(
-                        document("changePassword_failed_400",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        document("비밀번호_변경_실패_400",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("access token")
                         ),
@@ -773,7 +775,7 @@ public class AuthControllerTest {
         given(authService.changePassword(anyString(), anyString(), any())).willThrow(new BusinessLogicException(ErrorCode.MISMATCHED_PASSWORD));
 
         //when
-        ResultActions perform = mockMvc.perform(post("/auth/password")
+        ResultActions perform = mockMvc.perform(patch("/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .header(JWT_HEADER, ACCESS_TOKEN));
@@ -782,9 +784,9 @@ public class AuthControllerTest {
         perform
                 .andExpect(status().isConflict())
                 .andDo(
-                        document("changePassword_failed_409",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                        document("비밀번호_변경_실패_409",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestHeaders(
                                         headerWithName(JWT_HEADER).description("access token")
                                 ),
@@ -810,7 +812,7 @@ public class AuthControllerTest {
         given(authService.changePassword(anyString(), anyString(), any())).willReturn(Boolean.TRUE);
 
         //when
-        ResultActions perform = mockMvc.perform(post("/auth/password")
+        ResultActions perform = mockMvc.perform(patch("/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .header(JWT_HEADER, ACCESS_TOKEN));
@@ -820,9 +822,9 @@ public class AuthControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(Boolean.TRUE.toString()))
                 .andDo(
-                        document("changePassword_failed_400",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                        document("비밀번호_변경_성공_200",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
                                 requestHeaders(
                                         headerWithName(JWT_HEADER).description("access token")
                                 ),
@@ -855,9 +857,9 @@ public class AuthControllerTest {
 
         //then
         perform.andExpect(status().isNotFound())
-                .andDo(document("findPassword_failed_404",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(document("비밀번호_찾기_실패_404",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("email").description("존재하지 않는 유저 메일일 경우")
                         ),
@@ -886,11 +888,11 @@ public class AuthControllerTest {
         //then
         perform.andExpect(status().isCreated())
                 .andExpect(content().string(Boolean.TRUE.toString()))
-                .andDo(document("findPassword_failed_400",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(document("비밀번호_찾기_성공_200",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
-                                fieldWithPath("email").description("존재하지 않는 유저 메일일 경우")
+                                fieldWithPath("email").description("user email")
                         ),
                         responseBody())
                 );
@@ -917,9 +919,9 @@ public class AuthControllerTest {
         //then
         perform.andExpect(status().isBadRequest())
                 .andDo(document(
-                        "request_withdrawal_failed_400",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        "회원_탈퇴_씰패_400",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("password").description("패스워드 유효성 검사 실패 (null이거나 공백, 혹은 알 수 없는 문자열 오류)")
                         )
@@ -947,9 +949,9 @@ public class AuthControllerTest {
         //then
         perform.andExpect(status().isBadRequest())
                 .andDo(document(
-                        "request_withdrawal_failed_409",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        "회원_탈퇴_실패_409",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("password").description("올바르지 않은 (database 등록값과 다른) 패스워드")
                         )
@@ -977,9 +979,9 @@ public class AuthControllerTest {
         //then
         perform.andExpect(status().isBadRequest())
                 .andDo(document(
-                        "request_withdrawal_success_204",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                        "회원_탈퇴_성공_204",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("password").description("올바르지 않은 (database 등록값과 다른) 패스워드")
                         )
