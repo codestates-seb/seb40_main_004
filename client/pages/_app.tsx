@@ -1,11 +1,13 @@
 import '../styles/globals.css';
-import type { AppProps } from 'next/app';
+import { AppProps } from 'next/app';
 import { RecoilRoot } from 'recoil';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
-      <Component {...pageProps} />
+      <div className="bg-background-gray text-font-gray min-h-screen">
+        <Component {...pageProps} />
+      </div>
     </RecoilRoot>
   );
 }
