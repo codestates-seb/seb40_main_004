@@ -14,7 +14,16 @@ public class UserPasswordManager {
         return user.encryptPassword(passwordEncoder);
     }
 
-    public boolean compareUserPassword(User entityUser, User requestUser) {
-        return entityUser.comparePassword(passwordEncoder, requestUser);
+    public Boolean comparePasswordWithUser(User entityUser, User requestUser) {
+        return entityUser.comparePassword(passwordEncoder, requestUser.getPassword());
+    }
+
+    public Boolean comparePasswordWithPlainPassword(User entityUser, String plainPassword) {
+        return entityUser.comparePassword(passwordEncoder, plainPassword);
+    }
+
+    public String changeUserPassword(User user, String newPassword) {
+        user.changePassword(newPassword);
+        return encryptUserPassword(user);
     }
 }

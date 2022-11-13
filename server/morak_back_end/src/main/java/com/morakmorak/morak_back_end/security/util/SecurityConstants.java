@@ -15,4 +15,7 @@ public class SecurityConstants {
 
     public final static Long AUTH_KEY_EXPIRATION_PERIOD = 300000L;
     public final static Long VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY = 3_600_000L; // 1시간
+
+    public final static Integer TEMPORARY_PASSWORD_LENGTH = 15;
+    public final static Integer EMAIL_AUTH_KEY_LENGTH = 8;
 }

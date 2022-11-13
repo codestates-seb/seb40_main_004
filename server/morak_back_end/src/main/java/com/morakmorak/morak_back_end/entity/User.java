@@ -129,8 +129,8 @@ public class User {
         return this.password;
     }
 
-    public boolean comparePassword(PasswordEncoder passwordEncoder, User user) {
-        return passwordEncoder.matches(user.getPassword(), this.password);
+    public boolean comparePassword(PasswordEncoder passwordEncoder, String otherPassword) {
+        return passwordEncoder.matches(otherPassword, this.password);
     }
 
     public void changePassword(String newPassword) {
