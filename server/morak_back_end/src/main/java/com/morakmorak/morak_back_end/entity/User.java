@@ -96,7 +96,7 @@ public class User {
     private List<Article> articles = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Deposit> deposits = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
