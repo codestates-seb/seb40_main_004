@@ -45,4 +45,7 @@ public class Answer extends BaseTime{
     @OneToMany(mappedBy = "answer")
     private List<File> files = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "answer")
+    private List<AnswerLike> answerLike = new ArrayList<>();
 }
