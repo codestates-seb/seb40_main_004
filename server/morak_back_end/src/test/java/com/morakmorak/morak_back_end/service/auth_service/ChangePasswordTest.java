@@ -11,6 +11,7 @@ import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 public class ChangePasswordTest extends AuthServiceTest {
@@ -24,7 +25,7 @@ public class ChangePasswordTest extends AuthServiceTest {
                 .build();
 
         given(userRepository.findById(ID1)).willReturn(Optional.of(dbUser));
-        given(userPasswordManager.compareUserPassword(any(User.class), any(User.class))).willReturn(Boolean.FALSE);
+        given(userPasswordManager.comparePasswordWithPlainPassword(any(User.class), anyString())).willReturn(Boolean.FALSE);
 
         //when then
         assertThatThrownBy(() -> authService.changePassword(INVALID_PASSWORD, PASSWORD2, ID1))
@@ -41,7 +42,7 @@ public class ChangePasswordTest extends AuthServiceTest {
                 .build();
 
         given(userRepository.findById(ID1)).willReturn(Optional.of(dbUser));
-        given(userPasswordManager.compareUserPassword(any(User.class), any(User.class))).willReturn(Boolean.TRUE);
+        given(userPasswordManager.comparePasswordWithPlainPassword(any(User.class), anyString())).willReturn(Boolean.TRUE);
 
         //when
         Boolean result = authService.changePassword(PASSWORD1, PASSWORD2, ID1);
