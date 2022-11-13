@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum TagName {
-    JAVA("Java"),;
+    JAVA("Java"),
+    C("C");
 
     private String name;
 
