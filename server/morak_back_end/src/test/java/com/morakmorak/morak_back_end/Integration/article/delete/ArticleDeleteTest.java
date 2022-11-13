@@ -1,29 +1,22 @@
 package com.morakmorak.morak_back_end.Integration.article.delete;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.service.ArticleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ROLE_USER_LIST;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,9 +51,6 @@ public class ArticleDeleteTest {
                 .build();
 
         articleRepository.save(article);
-
-
-
 
     }
     @Test
