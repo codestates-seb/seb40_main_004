@@ -4,7 +4,6 @@ import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +28,7 @@ public class Article extends BaseTime {
     private String content;
 
     @Builder.Default
-    private Boolean isClosed = false;
+    private Boolean isClosed = Boolean.FALSE;
 
     private Long thumbnail;
 
@@ -71,6 +70,10 @@ public class Article extends BaseTime {
     @Builder.Default
     @OneToMany(mappedBy = "article")
     private List<Review> reviews = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "article")
+    private List<ArticleLike> articleLikes = new ArrayList<>();
 
     public void injectUserForMapping(User user) {
         this.user = user;
