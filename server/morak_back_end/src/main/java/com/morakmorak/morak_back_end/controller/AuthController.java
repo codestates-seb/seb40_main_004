@@ -78,11 +78,11 @@ public class AuthController {
         return authService.sendAuthenticationMailForFindPwd(request.getEmail());
     }
 
-//    @PostMapping("/password/recovery")
-//    @ResponseStatus(HttpStatus.OK)
-//    public Boolean requestFindPassword(@Valid @RequestBody EmailDto.RequestSendMail request) {
-//        return authService.sendUserPasswordEmail(request.getEmail());
-//    }
+    @PostMapping("/password/recovery")
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean requestTemporaryPassword(@Valid @RequestBody EmailDto.RequestVerifyAuthKey request) {
+        return authService.sendUserPasswordEmail(request.getEmail(), request.getAuthKey());
+    }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
