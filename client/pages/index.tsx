@@ -1,9 +1,11 @@
 import type { NextPage } from 'next';
+import Editor from '../components/haseung/Editor';
+
 const Home: NextPage = () => {
   return (
-    <h1 className="text-3xl text-orange-400">
-      {false ? true : true ? 'Hello World!' : false}
-    </h1>
+    <form>
+      <Editor />
+    </form>
   );
 };
 
