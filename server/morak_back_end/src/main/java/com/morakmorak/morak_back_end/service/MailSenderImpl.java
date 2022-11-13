@@ -1,10 +1,15 @@
 package com.morakmorak.morak_back_end.service;
 
+import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+
+import static com.morakmorak.morak_back_end.exception.ErrorCode.AUTH_KEY_ALREADY_EXISTS;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.AUTH_KEY_EXPIRATION_PERIOD;
+import static com.morakmorak.morak_back_end.security.util.SecurityConstants.EMAIL_AUTH_KEY_LENGTH;
 
 @Service
 @RequiredArgsConstructor

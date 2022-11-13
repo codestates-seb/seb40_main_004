@@ -3,12 +3,15 @@ package com.morakmorak.morak_back_end.service.auth_service;
 import com.morakmorak.morak_back_end.dto.EmailDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.service.MailSenderImpl;
 import com.morakmorak.morak_back_end.util.SecurityTestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static com.morakmorak.morak_back_end.service.MailSenderImpl.*;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
 import static com.morakmorak.morak_back_end.util.TestConstants.PASSWORD1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,13 +35,8 @@ public class SendAuthenticationEmailForJoinTest extends AuthServiceTest {
     @DisplayName("레디스에 이메일 인증 전송을 요청받은 내역이 이미 존재한다면 BusinessLogicException이 발생한다.")
     public void test13() {
         // given
-        EmailDto.RequestSendMail request = EmailDto.RequestSendMail
-                .builder()
-                .email(EMAIL1)
-                .build();
-
         // when then
-        assertThatThrownBy(() -> authService.sendAuthenticationMail(SecurityTestConstants.REDIS_EMAIL_NOT_EMPTY))
+        assertThatThrownBy(() -> authService.sendAuthenticationMail(REDIS_EMAIL_NOT_EMPTY))
                 .isInstanceOf(BusinessLogicException.class);
     }
 
@@ -46,10 +44,10 @@ public class SendAuthenticationEmailForJoinTest extends AuthServiceTest {
     @DisplayName("레디스에 이메일 인증 전송을 요청받은 내역이 존재하지 않는다면 실행을 완료하고 true를 반환한다.")
     public void test14() {
         // given
-        given(authMailSenderImpl.sendMail(anyString(), anyString(), anyString())).willReturn(Boolean.TRUE);
+        given(authMailSenderImpl.sendMail(REDIS_EMAIL_EMPTY, null, BASIC_AUTH_SUBJECT)).willReturn(Boolean.TRUE);
 
         // when
-        boolean result = authService.sendAuthenticationMail(SecurityTestConstants.REDIS_EMAIL_EMPTY);
+        boolean result = authService.sendAuthenticationMail(REDIS_EMAIL_EMPTY);
 
         // then
         assertThat(result).isTrue();

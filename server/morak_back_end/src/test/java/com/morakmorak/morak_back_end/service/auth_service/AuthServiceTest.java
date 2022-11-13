@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.service.auth_service;
 
+import com.morakmorak.morak_back_end.adapter.RandomKeyGenerator;
 import com.morakmorak.morak_back_end.adapter.TokenGenerator;
 import com.morakmorak.morak_back_end.adapter.UserPasswordManager;
 import com.morakmorak.morak_back_end.config.RedisRepositoryTestImpl;
@@ -40,6 +41,9 @@ public class AuthServiceTest {
 
     @Mock
     MailSenderImpl authMailSenderImpl;
+
+    @Mock
+    RandomKeyGenerator randomKeyGenerator;
 
     @BeforeEach
     void init() {

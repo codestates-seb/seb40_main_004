@@ -26,7 +26,7 @@ public class DeleteAccountTest extends AuthServiceTest {
                 .build();
 
         given(userRepository.findById(ID1)).willReturn(Optional.of(user));
-        given(userPasswordManager.compareUserPassword(any(User.class), any(User.class))).willThrow(new BusinessLogicException(ErrorCode.MISMATCHED_PASSWORD));
+        given(userPasswordManager.comparePasswordWithUser(any(User.class), any(User.class))).willThrow(new BusinessLogicException(ErrorCode.MISMATCHED_PASSWORD));
 
         //when then
         assertThatThrownBy(() -> authService.deleteAccount(anyString(), ID1))
@@ -42,7 +42,7 @@ public class DeleteAccountTest extends AuthServiceTest {
                 .build();
 
         given(userRepository.findById(ID1)).willReturn(Optional.of(user));
-        given(userPasswordManager.compareUserPassword(any(User.class), any(User.class))).willReturn(Boolean.TRUE);
+        given(userPasswordManager.comparePasswordWithUser(any(User.class), any(User.class))).willReturn(Boolean.TRUE);
 
         //when
         boolean result =authService.deleteAccount(anyString(), ID1);

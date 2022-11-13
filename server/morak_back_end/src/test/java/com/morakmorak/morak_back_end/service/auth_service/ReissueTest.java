@@ -19,7 +19,7 @@ public class ReissueTest extends AuthServiceTest {
     @Test
     @DisplayName("토큰 재발행/ 데이터베이스에 존재하지 않는 RefreshToken을 전달 받은 경우 BusinessLogicException이 발생한다.")
     public void test9() {
-        assertThatThrownBy(() -> authService.reissueToken(REDIS_TOKEN_EMPTY))
+        assertThatThrownBy(() -> authService.reissueToken(BEARER_REDIS_TOKEN_EMPTY))
                 .isInstanceOf(BusinessLogicException.class);
     }
 

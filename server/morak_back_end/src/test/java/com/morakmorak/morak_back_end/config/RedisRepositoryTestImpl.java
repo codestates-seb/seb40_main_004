@@ -6,6 +6,7 @@ import com.morakmorak.morak_back_end.repository.RedisRepository;
 import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
+import static com.morakmorak.morak_back_end.util.TestConstants.*;
 
 public class RedisRepositoryTestImpl<T> implements RedisRepository<T> {
     @Override
@@ -28,8 +29,9 @@ public class RedisRepositoryTestImpl<T> implements RedisRepository<T> {
         return getValue(key, classType);
     }
 
-    private Optional<T> value(Class<T> classType) {
-        if (classType.equals(String.class)) return (Optional<T>) Optional.of("EMAIL");
+    private Optional<T> value(String key, Class<T> classType) {
+        if (classType.equals(String.class) && key.equals(REDIS_AUTH_KEY_NOT_EMPTY)) return (Optional<T>) Optional.of(EMAIL1);
+        if (classType.equals(String.class) && key.equals(REDIS_EMAIL_NOT_EMPTY)) return (Optional<T>) Optional.of(AUTH_KEY);
         if (classType.equals(User.class)) return (Optional<T>) Optional.of(User.builder().build());
 
         return Optional.empty();
@@ -42,6 +44,6 @@ public class RedisRepositoryTestImpl<T> implements RedisRepository<T> {
 
         if (key.equals(REDIS_TOKEN_EMPTY)) return Optional.empty();
 
-        return value(classType);
+        return value(key, classType);
     }
 }

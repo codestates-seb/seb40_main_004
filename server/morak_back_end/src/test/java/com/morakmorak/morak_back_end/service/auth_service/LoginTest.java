@@ -34,7 +34,7 @@ public class LoginTest extends AuthServiceTest{
                 .build();
 
         given(userRepository.findUserByEmail(requestUser.getEmail())).willReturn(Optional.of(dbUser));
-        given(userPasswordManager.compareUserPassword(dbUser, requestUser)).willReturn(Boolean.FALSE);
+        given(userPasswordManager.comparePasswordWithUser(dbUser, requestUser)).willReturn(Boolean.FALSE);
 
         //when then
         assertThatThrownBy(() -> authService.loginUser(requestUser)).isInstanceOf(BusinessLogicException.class);
@@ -59,7 +59,7 @@ public class LoginTest extends AuthServiceTest{
                 .build();
 
         given(userRepository.findUserByEmail(requestUser.getEmail())).willReturn(Optional.of(dbUser));
-        given(userPasswordManager.compareUserPassword(dbUser, requestUser)).willReturn(Boolean.TRUE);
+        given(userPasswordManager.comparePasswordWithUser(dbUser, requestUser)).willReturn(Boolean.TRUE);
         given(tokenGenerator.generateAccessToken(dbUser)).willReturn(BEARER_ACCESS_TOKEN);
         given(tokenGenerator.generateRefreshToken(dbUser)).willReturn(BEARER_REFRESH_TOKEN);
 
