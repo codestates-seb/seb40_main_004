@@ -61,7 +61,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("comparePassword/ 다른 유저의 패스워드와 비교했을 때, 패스워드가 다르다면 false를 반환한다.")
+    @DisplayName("comparePassword/ 평문의 패스워드와 비교했을 때, 패스워드가 다르다면 false를 반환한다.")
     public void test3() {
         //given
         User user = User
@@ -69,22 +69,17 @@ class UserTest {
                 .password(PASSWORD1)
                 .build();
 
-        User user2 = User
-                .builder()
-                .password(PASSWORD2)
-                .build();
-
         given(passwordEncoder.matches(PASSWORD2, PASSWORD1)).willReturn(Boolean.FALSE);
 
         //when
-        boolean result = user.comparePassword(passwordEncoder, user2);
+        boolean result = user.comparePassword(passwordEncoder, PASSWORD2);
 
         //then
         assertThat(result).isFalse();
     }
 
     @Test
-    @DisplayName("comparePassword/ 다른 유저의 패스워드와 비교했을 때, 패스워드가 같다면 true를 반환한다.")
+    @DisplayName("comparePassword/ 평문의 패스워드와 비교했을 때, 패스워드가 같다면 true를 반환한다.")
     public void test4() {
         //given
         User user = User
@@ -92,15 +87,10 @@ class UserTest {
                 .password(PASSWORD1)
                 .build();
 
-        User user2 = User
-                .builder()
-                .password(PASSWORD1)
-                .build();
-
         given(passwordEncoder.matches(PASSWORD1, PASSWORD1)).willReturn(Boolean.TRUE);
 
         //when
-        boolean result = user.comparePassword(passwordEncoder, user2);
+        boolean result = user.comparePassword(passwordEncoder, PASSWORD1);
 
         //then
         assertThat(result).isTrue();

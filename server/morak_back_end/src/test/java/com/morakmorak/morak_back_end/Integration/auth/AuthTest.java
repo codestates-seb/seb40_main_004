@@ -447,7 +447,7 @@ public class AuthTest extends RedisContainerTest {
         perform.andExpect(status().isOk())
                 .andExpect(content().string(Boolean.TRUE.toString()));
 
-        Assertions.assertThat(savedUser.comparePassword(passwordEncoder, dbUser)).isFalse();
+        Assertions.assertThat(savedUser.comparePassword(passwordEncoder, dbUser.getPassword())).isFalse();
     }
 
     @Test
