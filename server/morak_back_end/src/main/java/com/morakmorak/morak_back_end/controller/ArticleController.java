@@ -55,7 +55,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{article-id}")
-    public ResponseEntity updateArticle(@PathVariable("article-id") Long articleId,
+    public ResponseEntity deleteArticle(@PathVariable("article-id") Long articleId,
                                         @RequestUser UserDto.UserInfo userInfo) {
         articleService.deleteArticle(articleId, userInfo);
         return new ResponseEntity<>( HttpStatus.NO_CONTENT);

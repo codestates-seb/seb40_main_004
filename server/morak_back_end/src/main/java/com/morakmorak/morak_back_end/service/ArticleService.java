@@ -6,10 +6,7 @@ import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
-import com.morakmorak.morak_back_end.repository.ArticleRepository;
-import com.morakmorak.morak_back_end.repository.CategoryRepository;
-import com.morakmorak.morak_back_end.repository.FileRepository;
-import com.morakmorak.morak_back_end.repository.TagRepository;
+import com.morakmorak.morak_back_end.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +23,6 @@ public class ArticleService {
     private final FileRepository fileRepository;
     private final TagRepository tagRepository;
     private final UserService userService;
-
     private final CategoryRepository categoryRepository;
 
     public ArticleDto.ResponseSimpleArticle upload(
@@ -50,11 +46,11 @@ public class ArticleService {
 
     public ArticleDto.ResponseSimpleArticle update(Article article, UserDto.UserInfo userInfo, List<TagDto.RequestTagWithIdAndName> tags,
                                                    List<FileDto.RequestFileWithId> files) {
-
-        checkArticlePerMission(article, userInfo);
-
         Article dbArticle = findVerifiedArticle(article.getId());
+
         dbArticle.updateArticleElement(article);
+
+        checkArticlePerMission(dbArticle, userInfo);
 
         fusionFileDtoWithArticle(dbArticle, files);
 
@@ -65,7 +61,7 @@ public class ArticleService {
 
     public Boolean deleteArticle(Long articleId, UserDto.UserInfo userInfo) {
         Article dbArticle = findVerifiedArticle(articleId);
-        checkArticlePerMission(dbArticle,userInfo);
+        checkArticlePerMission(dbArticle, userInfo);
         dbArticle.changeArticleStatus(ArticleStatus.REMOVED);
         return true;
     }
@@ -75,7 +71,7 @@ public class ArticleService {
     }
 
     public Boolean checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
-        if (article.getUser().getId() != userInfo.getId()) {
+        if (!article.getUser().getId().equals(userInfo.getId()) ) {
             throw new BusinessLogicException(ErrorCode.INVALID_USER);
         }
         return true;
@@ -97,11 +93,15 @@ public class ArticleService {
     }
 
     public Boolean fusionTagDtoWithArticle(Article article, List<TagDto.RequestTagWithIdAndName> tags) {
-         tags.stream().forEach(tag -> {
+        for (int i = article.getArticleTags().size() -1; i >= 0; i--) {
+                article.getArticleTags().remove(i);
+            }
+        tags.stream().forEach(tag -> {
             Tag dbTag = tagRepository.findById(tag.getTagId())
                     .orElseThrow(() -> new BusinessLogicException(ErrorCode.TAG_NOT_FOUND));
-            ArticleTag.builder().build().injectMappingForArticleAndTag(article, dbTag);
-
+            ArticleTag newArticleTag = ArticleTag.builder().article(article).tag(dbTag).build();
+            article.getArticleTags().add(newArticleTag);
+            dbTag.getArticleTags().add(newArticleTag);
         });
         return true;
     }

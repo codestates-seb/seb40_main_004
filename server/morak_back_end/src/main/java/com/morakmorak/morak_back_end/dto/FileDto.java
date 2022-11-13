@@ -10,7 +10,7 @@ public class FileDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor (access = AccessLevel.PROTECTED)
     public static class RequestFileWithId {
-        private Long FileId;
+        private Long fileId;
     }
 
 }

@@ -107,16 +107,21 @@ public class ArticleServiceTest {
     @Test
     @DisplayName("게시글 등록시 존재하지 않는 태그를 적용할 경우")
     public void upload_fail4() throws Exception{
+        Article ARTICLE =
+                Article.builder().title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.")
+                        .content("콘텐트입니다. 잘부탁드립니다.")
+                        .thumbnail(1L)
+                        .build();
         //given
         TagDto.RequestTagWithIdAndName java = TagDto.RequestTagWithIdAndName.builder().tagId(1L).tagName("java").build();
         given(userService.findVerifiedUserById(any())).willReturn(User.builder().build());
-        given(fileRepository.findById(any())).willReturn(Optional.of(File.builder().build()));
+        given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().article(Article.builder().build()).build()));
         given(tagRepository.findById(any())).willReturn(Optional.empty());
         //when          //무슨 값이 들어가야하는건지 모르겠다....
 
 
         //then
-        assertThatThrownBy(() -> articleService.upload(ArticleTestConstants.ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
+        assertThatThrownBy(() -> articleService.upload(ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
                 ArticleTestConstants.REQUEST_TAG_WITH_ID_AND_NAMES,
                 ArticleTestConstants.REQUEST_FILE_WITH_IDS,
                 ArticleTestConstants.REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
@@ -129,11 +134,6 @@ public class ArticleServiceTest {
                  Article.builder().title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.")
                          .content("콘텐트입니다. 잘부탁드립니다.")
                          .thumbnail(1L)
-                         .files(List.of(File.builder().id(1L).article(Article.builder().id(1L).build()).build(),
-                                 File.builder().id(2L).article(Article.builder().id(1L).build()).build()))
-                         .category(Category.builder().categoryName("Info").build())
-                         .user(User.builder().id(1L).build())
-                         .files(List.of(File.builder().article(Article.builder().id(1L).build()).build()))
                          .build();
 
 
@@ -169,8 +169,8 @@ public class ArticleServiceTest {
        @DisplayName("파일과 게시글의 연관관계를 맺는 메서드 통과 테스트")
        public void fusionFileDtoWithArticle_suc() throws Exception{
            //given
-           List<FileDto.RequestFileWithId> fileDto = List.of(FileDto.RequestFileWithId.builder().FileId(1L).build());
-           Article article = Article.builder().files(List.of(File.builder().id(1L).build())).build();
+           List<FileDto.RequestFileWithId> fileDto = List.of(FileDto.RequestFileWithId.builder().fileId(1L).build());
+           Article article = Article.builder().build();
 
            given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().build()));
            //when

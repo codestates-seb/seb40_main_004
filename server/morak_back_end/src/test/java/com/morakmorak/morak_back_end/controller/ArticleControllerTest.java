@@ -184,7 +184,7 @@ class ArticleControllerTest {
         //given
         ArticleDto.RequestUpdateArticle request = ArticleDto.RequestUpdateArticle.builder()
                 .title("타이틀입니다. 잘부탁드립니다. 부탁드립니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .fileId(List.of(FileDto.RequestFileWithId.builder().FileId(1L).build()))
+                .fileId(List.of(FileDto.RequestFileWithId.builder().fileId(1L).build()))
                 .tags(List.of(TagDto.RequestTagWithIdAndName.builder().tagName("Java").tagId(1L).build()))
                 .thumbnail(1L)
                 .build();

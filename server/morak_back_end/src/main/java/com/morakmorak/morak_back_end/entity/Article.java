@@ -48,15 +48,15 @@ public class Article extends BaseTime {
     private BookMark bookMark;
 
     @Builder.Default
-    @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<ArticleTag> articleTags = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,  CascadeType.REMOVE})
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "vote_id")
     private Vote vote;
 
     @Builder.Default
-    @OneToMany(mappedBy="article",cascade = {CascadeType.PERSIST})
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<File> files = new ArrayList<>();
 
     @Builder.Default
@@ -82,8 +82,11 @@ public class Article extends BaseTime {
 
     public void infectCategoryForMapping(Category category) {
         this.category = category;
-        category.getArticleList().add(this);
+        if (!category.getArticleList().contains(this)) {
+            category.getArticleList().add(this);
+        }
     }
+
     public void infectVoteForMapping(Vote vote) {
         this.vote = vote;
     }
