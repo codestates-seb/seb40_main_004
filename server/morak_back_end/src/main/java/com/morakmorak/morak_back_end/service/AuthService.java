@@ -1,23 +1,19 @@
 package com.morakmorak.morak_back_end.service;
 
+import com.morakmorak.morak_back_end.adapter.RandomKeyGenerator;
 import com.morakmorak.morak_back_end.adapter.TokenGenerator;
 import com.morakmorak.morak_back_end.adapter.UserPasswordManager;
 import com.morakmorak.morak_back_end.dto.AuthDto;
-import com.morakmorak.morak_back_end.dto.EmailDto;
 import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.UserRole;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.repository.RedisRepository;
-import com.morakmorak.morak_back_end.repository.RoleRepository;
-import com.morakmorak.morak_back_end.repository.UserRepository;
-import com.morakmorak.morak_back_end.repository.UserRoleRepository;
+import com.morakmorak.morak_back_end.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.Random;
 
 import static com.morakmorak.morak_back_end.entity.enums.RoleName.ROLE_USER;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
@@ -33,14 +29,15 @@ public class AuthService {
     private final TokenGenerator tokenGenerator;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
-    private final RedisRepository<User> refreshTokenRedisRepository;
-    private final RedisRepository<String> mailAuthRedisRepository;
+    private final RedisRepository<User> refreshTokenStore;
+    private final RedisRepository<String> mailAuthKeyStore;
     private final MailSender mailSenderImpl;
+    private final RandomKeyGenerator randomKeyGenerator;
 
     public AuthDto.ResponseToken loginUser(User user) {
         User dbUser = findUserByEmailOrThrowException(user.getEmail());
 
-        if (!userPasswordManager.compareUserPassword(dbUser, user)) {
+        if (!userPasswordManager.comparePasswordWithUser(dbUser, user)) {
             throw new BusinessLogicException(INVALID_USER);
         }
 
@@ -57,7 +54,7 @@ public class AuthService {
     }
 
     public AuthDto.ResponseToken joinUser(User user, String authKey) {
-        if (mailAuthRedisRepository.getDataAndDelete(authKey, String.class).isEmpty()) {
+        if (mailAuthKeyStore.getDataAndDelete(authKey, String.class).isEmpty()) {
             throw new BusinessLogicException(INVALID_AUTH_KEY);
         }
 
@@ -101,38 +98,46 @@ public class AuthService {
                 .build();
     }
 
-    public boolean sendAuthenticationMail(EmailDto.RequestSendMail emailDetails) {
-        if (mailAuthRedisRepository.getData(emailDetails.getEmail(), String.class).isPresent()) {
+    public Boolean sendAuthenticationMailForJoin(String emailAddress) {
+        checkDuplicateEmail(emailAddress);
+        return sendAuthenticationMail(emailAddress);
+    }
+
+    public Boolean sendAuthenticationMailForFindPwd(String emailAddress) {
+        findUserByEmailOrThrowException(emailAddress);
+        return sendAuthenticationMail(emailAddress);
+    }
+
+    public Boolean sendAuthenticationMail(String emailAddress) {
+        if (mailAuthKeyStore.getData(emailAddress, String.class).isPresent()) {
             throw new BusinessLogicException(AUTH_KEY_ALREADY_EXISTS);
         }
 
-        String randomKey = generateRandomKey();
+        String randomKey = randomKeyGenerator.generateMailAuthKey();
 
-        mailSenderImpl.sendMail(emailDetails.getEmail(), randomKey, BASIC_AUTH_SUBJECT);
-        return mailAuthRedisRepository.saveData(emailDetails.getEmail(), randomKey, AUTH_KEY_EXPIRATION_PERIOD);
+        mailSenderImpl.sendMail(emailAddress, randomKey, BASIC_AUTH_SUBJECT);
+        return mailAuthKeyStore.saveData(emailAddress, randomKey, AUTH_KEY_EXPIRATION_PERIOD);
     }
 
-    public AuthDto.ResponseAuthKey authenticateEmail(EmailDto.RequestVerifyAuthKey emailDetails) {
-        Optional<String> optionalAuthKey = mailAuthRedisRepository.getDataAndDelete(emailDetails.getEmail(), String.class);
+    public AuthDto.ResponseAuthKey authenticateEmail(String emailAddress, String authKey) {
+        Optional<String> optionalAuthKey = mailAuthKeyStore.getDataAndDelete(emailAddress, String.class);
         String savedAuthKey = optionalAuthKey.orElseThrow(() -> new BusinessLogicException(INVALID_AUTH_KEY));
 
-        if (!savedAuthKey.equals(emailDetails.getAuthKey())) throw new BusinessLogicException(INVALID_AUTH_KEY);
+        if (!savedAuthKey.equals(authKey)) throw new BusinessLogicException(INVALID_AUTH_KEY);
 
-        String randomKey = generateRandomKey();
-        mailAuthRedisRepository.saveData(randomKey, emailDetails.getEmail(), VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        String randomKey = randomKeyGenerator.generateMailAuthKey();
+        mailAuthKeyStore.saveData(randomKey, emailAddress, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         return new AuthDto.ResponseAuthKey(randomKey);
     }
 
     public Boolean changePassword(String originalPassword, String newPassword, Long userId) {
         User dbUser = userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
-        User requestUser = User.builder().password(originalPassword).build();
 
-        if (!userPasswordManager.compareUserPassword(dbUser, requestUser)) {
+        if (!userPasswordManager.comparePasswordWithPlainPassword(dbUser, originalPassword)) {
             throw new BusinessLogicException(MISMATCHED_PASSWORD);
         }
 
-        dbUser.changePassword(newPassword);
-        userPasswordManager.encryptUserPassword(dbUser);
+        userPasswordManager.changeUserPassword(dbUser, newPassword);
 
         return Boolean.TRUE;
     }
@@ -141,15 +146,18 @@ public class AuthService {
         User dbUser = userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
         User requestUser = new User(password);
 
-        if (!userPasswordManager.compareUserPassword(dbUser, requestUser)) throw new BusinessLogicException(MISMATCHED_PASSWORD);
+        if (!userPasswordManager.comparePasswordWithUser(dbUser, requestUser)) throw new BusinessLogicException(MISMATCHED_PASSWORD);
 
         userRepository.delete(dbUser);
         return Boolean.TRUE;
     }
 
-    public Boolean sendUserPasswordEmail(String email) {
-        User dbUser = findUserByEmailOrThrowException(email);
-        String randomKey = generateRandomKey();
+    public Boolean sendUserPasswordEmail(String emailAddress, String authKey) {
+        String storedKey = mailAuthKeyStore.getDataAndDelete(emailAddress, String.class).orElseThrow(() -> new BusinessLogicException(INVALID_AUTH_KEY));
+        if (!authKey.equals(storedKey)) throw new BusinessLogicException(INVALID_AUTH_KEY);
+
+        User dbUser = findUserByEmailOrThrowException(emailAddress);
+        String randomKey = randomKeyGenerator.generateTemporaryPassword();
         dbUser.changePassword(randomKey);
         userPasswordManager.encryptUserPassword(dbUser);
         return mailSenderImpl.sendMail(dbUser.getEmail(), randomKey, BASIC_PASSWORD_SUBJECT);
@@ -160,11 +168,6 @@ public class AuthService {
         return Boolean.TRUE;
     }
 
-    private String generateRandomKey() {
-        Random random = new Random();
-        return String.valueOf(random.nextInt(88888888) + 11111111);
-    }
-
     private String getTokenValue(String bearerToken) {
         String[] splitToken = bearerToken.split(" ");
         String token = splitToken[1];
@@ -173,13 +176,13 @@ public class AuthService {
 
     private void saveRefreshToken(String refreshToken, User user) {
         String tokenValue = getTokenValue(refreshToken);
-        if (!refreshTokenRedisRepository.saveData(tokenValue, user, REFRESH_TOKEN_EXPIRE_COUNT)) {
+        if (!refreshTokenStore.saveData(tokenValue, user, REFRESH_TOKEN_EXPIRE_COUNT)) {
             throw new BusinessLogicException(UNABLE_TO_GENERATE_TOKEN);
         }
     }
 
     private User findAndDeleteRefreshTokenOrThrowException(String token) {
-        return refreshTokenRedisRepository.getDataAndDelete(token, User.class).orElseThrow(() -> new BusinessLogicException(TOKEN_NOT_FOUND));
+        return refreshTokenStore.getDataAndDelete(token, User.class).orElseThrow(() -> new BusinessLogicException(TOKEN_NOT_FOUND));
     }
 
     private User findUserByEmailOrThrowException(String email) {

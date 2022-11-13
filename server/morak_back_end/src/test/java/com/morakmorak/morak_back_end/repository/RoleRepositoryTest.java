@@ -3,6 +3,7 @@ package com.morakmorak.morak_back_end.repository;
 import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.enums.RoleName;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,13 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 public class RoleRepositoryTest {
     @Autowired
     RoleRepository roleRepository;
+
+    @BeforeEach
+    public void init() {
+        roleRepository.save(new Role(RoleName.ROLE_USER));
+        roleRepository.save(new Role(RoleName.ROLE_MANAGER));
+        roleRepository.save(new Role(RoleName.ROLE_ADMIN));
+    }
 
     @Test
     @DisplayName("RoleName 반환 테스트 ROLE_USER (enum으로 탐색하기 때문에 실패 테스트 적용하지 않음)")

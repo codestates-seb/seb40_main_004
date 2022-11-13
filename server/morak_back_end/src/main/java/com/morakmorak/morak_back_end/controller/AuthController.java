@@ -50,14 +50,14 @@ public class AuthController {
 
     @PostMapping("/mail")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean requestSendEmailAuth(@RequestBody EmailDto.RequestSendMail request) {
-        return authService.sendAuthenticationMail(request);
+    public Boolean requestSendEmailAuth(@RequestBody EmailDto.RequestSendMail request) {
+        return authService.sendAuthenticationMailForJoin(request.getEmail());
     }
 
     @PutMapping("/mail")
     @ResponseStatus(HttpStatus.OK)
     public AuthDto.ResponseAuthKey requestVerifyEmailAuth(@RequestBody EmailDto.RequestVerifyAuthKey request) {
-        return authService.authenticateEmail(request);
+        return authService.authenticateEmail(request.getEmail(), request.getAuthKey());
     }
 
     @PostMapping("/nickname")
@@ -66,16 +66,22 @@ public class AuthController {
         return authService.checkDuplicateNickname(request.getNickname());
     }
 
-    @PostMapping("/password")
+    @PatchMapping("/password")
     @ResponseStatus(HttpStatus.OK)
     public Boolean requestChangePassword(@Valid @RequestBody AuthDto.RequestChangePassword request, @RequestUser UserDto.UserInfo token) {
         return authService.changePassword(request.getOriginalPassword(), request.getNewPassword(), token.getId());
     }
 
-    @PostMapping("/password/recovery")
+    @PostMapping("/password/support")
     @ResponseStatus(HttpStatus.CREATED)
-    public Boolean requestFindPassword(@Valid @RequestBody EmailDto.RequestSendMail request) {
-        return authService.sendUserPasswordEmail(request.getEmail());
+    public Boolean requestSendMailAuth(@Valid @RequestBody EmailDto.RequestSendMail request) {
+        return authService.sendAuthenticationMailForFindPwd(request.getEmail());
+    }
+
+    @PostMapping("/password/recovery")
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean requestTemporaryPassword(@Valid @RequestBody EmailDto.RequestVerifyAuthKey request) {
+        return authService.sendUserPasswordEmail(request.getEmail(), request.getAuthKey());
     }
 
     @DeleteMapping

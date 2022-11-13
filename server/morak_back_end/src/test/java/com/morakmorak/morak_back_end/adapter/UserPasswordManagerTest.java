@@ -43,7 +43,7 @@ class UserPasswordManagerTest {
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
         //when
-        userPasswordManager.compareUserPassword(user1, user2);
+        userPasswordManager.comparePasswordWithUser(user1, user2);
 
         //then
         verify(passwordEncoder, times(ONE)).matches(anyString(), anyString());

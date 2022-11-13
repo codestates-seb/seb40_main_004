@@ -18,7 +18,8 @@ public class Vote extends BaseTime{
     @Column(name = "vote_id")
     private Long id;
 
-    private Integer count;
+    @Builder.Default
+    private Integer count= 0;
 
     @OneToOne(mappedBy = "vote")
     private Article article;

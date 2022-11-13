@@ -15,15 +15,15 @@ import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class RedisRepositoryTest extends RedisContainerTest {
+class RedisRepositoryImplTest extends RedisContainerTest {
     @Autowired
-    RedisRepository<User> redisRepository;
+    RedisRepositoryImpl<User> redisRepositoryImpl;
 
     private final String KEY = "TEST_DATA";
 
     @BeforeEach
     public void deleteData() {
-        redisRepository.deleteData(KEY);
+        redisRepositoryImpl.deleteData(KEY);
     }
 
     @Test
@@ -36,7 +36,7 @@ class RedisRepositoryTest extends RedisContainerTest {
                 .build();
 
         //when
-        boolean result = redisRepository.saveData(KEY, user, REFRESH_TOKEN_EXPIRE_COUNT);
+        boolean result = redisRepositoryImpl.saveData(KEY, user, REFRESH_TOKEN_EXPIRE_COUNT);
 
         //then
         assertThat(result).isTrue();
@@ -47,7 +47,7 @@ class RedisRepositoryTest extends RedisContainerTest {
     public void test2() {
         //given
         //when
-        Optional<User> data = redisRepository.getData(KEY, User.class);
+        Optional<User> data = redisRepositoryImpl.getData(KEY, User.class);
 
         //then
         assertThat(data).isEmpty();
@@ -62,10 +62,10 @@ class RedisRepositoryTest extends RedisContainerTest {
                 .nickname(NICKNAME1)
                 .build();
 
-        boolean bool = redisRepository.saveData(KEY, user, REFRESH_TOKEN_EXPIRE_COUNT);
+        boolean bool = redisRepositoryImpl.saveData(KEY, user, REFRESH_TOKEN_EXPIRE_COUNT);
 
         //when
-        Optional<User> data = (Optional<User>) redisRepository.getData(KEY, User.class);
+        Optional<User> data = (Optional<User>) redisRepositoryImpl.getData(KEY, User.class);
 
         //then
         assertThat(bool).isTrue();
@@ -81,9 +81,9 @@ class RedisRepositoryTest extends RedisContainerTest {
                 .nickname(NICKNAME1)
                 .build();
 
-        boolean bool = redisRepository.saveData(KEY, user, REFRESH_TOKEN_EXPIRE_COUNT);
+        boolean bool = redisRepositoryImpl.saveData(KEY, user, REFRESH_TOKEN_EXPIRE_COUNT);
         //when
-        boolean result = redisRepository.deleteData(KEY);
+        boolean result = redisRepositoryImpl.deleteData(KEY);
 
         //then
         assertThat(bool).isTrue();
@@ -95,7 +95,7 @@ class RedisRepositoryTest extends RedisContainerTest {
     public void test5() {
         //given
         //when
-        boolean result = redisRepository.deleteData(KEY);
+        boolean result = redisRepositoryImpl.deleteData(KEY);
 
         //then
         assertThat(result).isFalse();
@@ -110,11 +110,11 @@ class RedisRepositoryTest extends RedisContainerTest {
                 .nickname(NICKNAME1)
                 .build();
 
-        boolean saveBool = redisRepository.saveData(KEY, user, REFRESH_TOKEN_EXPIRE_COUNT);
+        boolean saveBool = redisRepositoryImpl.saveData(KEY, user, REFRESH_TOKEN_EXPIRE_COUNT);
 
         //when
-        Optional<User> findData = redisRepository.getDataAndDelete(KEY, User.class);
-        Optional<User> result = redisRepository.getData(KEY, User.class);
+        Optional<User> findData = redisRepositoryImpl.getDataAndDelete(KEY, User.class);
+        Optional<User> result = redisRepositoryImpl.getData(KEY, User.class);
 
         //then
         assertThat(saveBool).isTrue();
@@ -133,11 +133,11 @@ class RedisRepositoryTest extends RedisContainerTest {
 
         Long expire = 1L;
 
-        boolean saveBool = redisRepository.saveData(KEY, user, expire);
+        boolean saveBool = redisRepositoryImpl.saveData(KEY, user, expire);
         Thread.sleep(500);
 
         //when
-        Optional data = redisRepository.getData(KEY, User.class);
+        Optional data = redisRepositoryImpl.getData(KEY, User.class);
 
         //then
         assertThat(data).isEmpty();

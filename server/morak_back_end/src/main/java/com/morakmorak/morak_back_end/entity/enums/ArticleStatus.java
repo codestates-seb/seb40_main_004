@@ -4,4 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum ArticleStatus {
+    POSTING,
+    REMOVED;
 }
