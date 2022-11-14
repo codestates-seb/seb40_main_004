@@ -81,7 +81,7 @@ public class ArticleUploadTest {
 
         Category category = categoryRepository.save(Category.builder().categoryName("INFO").build());
 
-        Tag tag = tagRepository.save(Tag.builder().tagName(TagName.JAVA).build());
+        Tag tag = tagRepository.save(Tag.builder().name(TagName.JAVA).build());
 
     }
 
@@ -91,7 +91,7 @@ public class ArticleUploadTest {
     @DisplayName("게시글 작성시 title이 15자 이상이고 content가 5자 이상이며, 정보글을 작성할때 성공하면 201코드와 DB 시퀀스를 반환한다.")
     public void upload_suc() throws Exception {
         //given
-        Tag tag = tagRepository.findTagByTagName(TagName.JAVA).orElseThrow();
+        Tag tag = tagRepository.findTagByName(TagName.JAVA).orElseThrow();
         Category category = categoryRepository.findCategoryByCategoryName("INFO").orElseThrow();
         File file1 = fileRepository.findFileByLocalPath("1").orElseThrow();
         File file2 = fileRepository.findFileByLocalPath("2").orElseThrow();
@@ -134,7 +134,7 @@ public class ArticleUploadTest {
     @DisplayName("게시글 작성시 존재하지 않는 파일를 작성할 경우 FILE_NOT_FOUND 예외를 던지고 404 에러코드를 반환한다. ")
     public void upload_fail2() throws Exception{
         //given
-        Tag tag = tagRepository.findTagByTagName(TagName.JAVA).orElseThrow();
+        Tag tag = tagRepository.findTagByName(TagName.JAVA).orElseThrow();
 
 
         ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
@@ -167,7 +167,7 @@ public class ArticleUploadTest {
     @DisplayName("게시글 작성시 존재하지 않는 카테고리를 작성할 경우 CATEGORY_NOT_FOUND 예외를 던지고 404 에러코를 반환한다. ")
     public void upload_fail3() throws Exception{
         //given
-        Tag tag = tagRepository.findTagByTagName(TagName.JAVA).orElseThrow();
+        Tag tag = tagRepository.findTagByName(TagName.JAVA).orElseThrow();
         File file1 = fileRepository.findFileByLocalPath("1").orElseThrow();
         File file2 = fileRepository.findFileByLocalPath("2").orElseThrow();
 

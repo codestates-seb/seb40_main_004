@@ -38,7 +38,7 @@ public class ArticleTestConstants {
                     .thumbnail(1L)
                     .files(List.of(File.builder().id(1L).article(Article.builder().id(1L).build()).build(),
                             File.builder().id(2L).article(Article.builder().id(1L).build()).build()))
-                    .articleTags(List.of(ArticleTag.builder().tag(Tag.builder().tagName(TagName.JAVA).build()).build()))
+                    .articleTags(List.of(ArticleTag.builder().tag(Tag.builder().name(TagName.JAVA).build()).build()))
                     .category(Category.builder().categoryName("Info").build())
                     .user(User.builder().id(1L).build())
                     .files(List.of(File.builder().article(Article.builder().id(1L).build()).build()))

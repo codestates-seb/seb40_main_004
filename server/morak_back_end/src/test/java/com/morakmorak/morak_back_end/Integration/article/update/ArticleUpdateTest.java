@@ -94,9 +94,9 @@ public class ArticleUpdateTest {
 
         Category category = categoryRepository.save(Category.builder().categoryName("INFO").build());
 
-        tagRepository.save(Tag.builder().tagName(TagName.C).build());
+        tagRepository.save(Tag.builder().name(TagName.C).build());
 
-        Tag tag = tagRepository.save(Tag.builder().tagName(TagName.JAVA).build());
+        Tag tag = tagRepository.save(Tag.builder().name(TagName.JAVA).build());
 
         ArrayList<File> files = new ArrayList<>();
         files.add(file3);
@@ -122,7 +122,7 @@ public class ArticleUpdateTest {
     @DisplayName("게시글 수정시 유효성 검증에 통과하고 json을 올바르게 작성했을 경우 200코드를 반환한다.")
     public void update_suc() throws Exception {
         //given
-        Tag tag = tagRepository.findTagByTagName(TagName.C).orElseThrow();
+        Tag tag = tagRepository.findTagByName(TagName.C).orElseThrow();
         File dbFile1 = fileRepository.findFileByLocalPath("11").orElseThrow();
         File dbFile2 = fileRepository.findFileByLocalPath("22").orElseThrow();
         Article article = articleRepository.findArticleByContent("콘텐트입니다. 잘부탁드립니다.").orElseThrow(() -> new RuntimeException("뭐지?"));
@@ -163,7 +163,7 @@ public class ArticleUpdateTest {
     @DisplayName("게시글 수정시 존재하지 않는 파일을 작성할 경우 FILE_NOT_FOUND 예외를 던지고 404 에러코드를 반환한다. ")
     public void update_fail1() throws Exception{
         //given
-        Tag tag = tagRepository.findTagByTagName(TagName.C).orElseThrow();
+        Tag tag = tagRepository.findTagByName(TagName.C).orElseThrow();
         Article article = articleRepository.findArticleByContent("콘텐트입니다. 잘부탁드립니다.").orElseThrow(() -> new RuntimeException("뭐지?"));
 
         ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
