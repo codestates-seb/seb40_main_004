@@ -113,7 +113,7 @@ public class ArticleServiceTest {
                         .thumbnail(1L)
                         .build();
         //given
-        TagDto.RequestTagWithIdAndName java = TagDto.RequestTagWithIdAndName.builder().tagId(1L).tagName("java").build();
+        TagDto.SimpleTag java = TagDto.SimpleTag.builder().tagId(1L).name("java").build();
         given(userService.findVerifiedUserById(any())).willReturn(User.builder().build());
         given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().article(Article.builder().build()).build()));
         given(tagRepository.findById(any())).willReturn(Optional.empty());

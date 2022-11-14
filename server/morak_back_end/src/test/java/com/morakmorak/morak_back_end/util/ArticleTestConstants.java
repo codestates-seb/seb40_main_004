@@ -9,8 +9,8 @@ import com.morakmorak.morak_back_end.entity.enums.TagName;
 import java.util.List;
 
 public class ArticleTestConstants {
-    public final static List<TagDto.RequestTagWithIdAndName> REQUEST_TAG_WITH_ID_AND_NAMES = List.of(TagDto.RequestTagWithIdAndName.builder()
-            .tagId(1L).tagName("Java").build());
+    public final static List<TagDto.SimpleTag> REQUEST_TAG_WITH_ID_AND_NAMES = List.of(TagDto.SimpleTag.builder()
+            .tagId(1L).name("Java").build());
     public final static List<FileDto.RequestFileWithId> REQUEST_FILE_WITH_IDS = List.of(FileDto.RequestFileWithId.builder()
             .fileId(1L).build(), FileDto.RequestFileWithId.builder()
             .fileId(2L).build());

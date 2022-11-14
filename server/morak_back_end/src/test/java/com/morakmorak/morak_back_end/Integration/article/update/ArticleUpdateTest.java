@@ -129,8 +129,8 @@ public class ArticleUpdateTest {
 
         ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
                 .title("안녕하세요 새로운 타이틀입니다. 수정부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder()
-                        .tagId(tag.getId()).tagName("C").build()))
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(tag.getId()).name("C").build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(dbFile1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(dbFile2.getId()).build()))
@@ -168,8 +168,8 @@ public class ArticleUpdateTest {
 
         ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
                 .title("안녕하세요 새로운 타이틀입니다. 수정부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder()
-                        .tagId(tag.getId()).tagName("C").build()))
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(tag.getId()).name("C").build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(1212L).build(), FileDto.RequestFileWithId.builder()
                         .fileId(12312L).build()))
@@ -205,8 +205,8 @@ public class ArticleUpdateTest {
 
         ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
                 .title("안녕하세요 새로운 타이틀입니다. 수정부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder()
-                        .tagId(555L).tagName("ADAS").build()))
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(555L).name("ADAS").build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(dbFile1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(dbFile2.getId()).build()))

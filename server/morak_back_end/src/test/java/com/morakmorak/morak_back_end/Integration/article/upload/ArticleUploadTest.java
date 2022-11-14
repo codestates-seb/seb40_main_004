@@ -99,8 +99,8 @@ public class ArticleUploadTest {
 
         ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
                 .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder()
-                        .tagId(tag.getId()).tagName("Java").build()))
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(tag.getId()).name("Java").build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(file2.getId()).build()))
@@ -142,7 +142,7 @@ public class ArticleUploadTest {
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(100L).build(), FileDto.RequestFileWithId.builder()
                         .fileId(111L).build()))
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder().tagId(tag.getId()).tagName("Java").build()))
+                .tags(List.of(TagDto.SimpleTag.builder().tagId(tag.getId()).name("Java").build()))
                 .category("INFO")
                 .thumbnail(1L)
                 .build();
@@ -176,7 +176,7 @@ public class ArticleUploadTest {
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(file2.getId()).build()))
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder().tagId(tag.getId()).tagName("Java").build()))
+                .tags(List.of(TagDto.SimpleTag.builder().tagId(tag.getId()).name("Java").build()))
                 .category("NULL")
                 .thumbnail(1L)
                 .build();
@@ -207,8 +207,8 @@ public class ArticleUploadTest {
 
         ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
                 .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder()
-                        .tagId(2L).tagName("NULL").build()))
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(2L).name("NULL").build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(file2.getId()).build()))
