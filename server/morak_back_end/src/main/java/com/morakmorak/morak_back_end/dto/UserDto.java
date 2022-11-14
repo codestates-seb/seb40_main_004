@@ -28,7 +28,7 @@ public class UserDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class User {
+    public static class ResponseSimpleUserDto {
         private Long userId;
         private String nickname;
         private Grade grade;
