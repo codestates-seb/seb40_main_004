@@ -87,7 +87,7 @@ export const Editor = () => {
           value="등록"
         />
         <input
-          className="justify-center mx-2 my-20 bg-[#F2F2F2]  px-4 py-2 rounded-full cursor-pointer hover:bg-main-gray"
+          className="justify-center mx-2 my-20 bg-background-gray  px-4 py-2 rounded-full cursor-pointer hover:bg-main-gray"
           type="submit"
           onClick={handleSubmit(onValid)}
           value="취소"
