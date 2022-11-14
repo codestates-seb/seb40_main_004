@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.Matchers.any;
 import static org.mockito.BDDMockito.given;
 
-public class JoinUserTest extends AuthServiceTest {
+public class JoinResponseSimpleUserTestDto extends AuthServiceTest {
     @Test
     @DisplayName("유저 회원가입 / 요청값과 동일한 메일을 가진 유저가 이미 존재하다면 BusinessLogicException이 발생한다")
     public void test4() {

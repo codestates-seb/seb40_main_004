@@ -51,6 +51,10 @@ public class ArticleDto {
         private Long articleId;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ResponseListTypeArticle {
         private Long articleId;
         private String category;
