@@ -1,5 +1,6 @@
 import '../styles/globals.css';
-import { AppProps } from 'next/app';
+import type { AppProps } from 'next/app';
+import 'react-quill/dist/quill.snow.css';
 import { RecoilRoot } from 'recoil';
 
 function MyApp({ Component, pageProps }: AppProps) {

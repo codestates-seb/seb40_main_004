@@ -1,15 +1,8 @@
-import { NextPage } from 'next';
-import { Header } from '../components/common/Header';
+import type { NextPage } from 'next';
+import Editor from '../components/haseung/Editor';
 
 const Home: NextPage = () => {
-  return (
-    <>
-      <main className="max-w-[1280px] mx-auto">
-        <Header />
-        <h1>Main</h1>
-      </main>
-    </>
-  );
+  return <Editor />;
 };
 
 export default Home;
