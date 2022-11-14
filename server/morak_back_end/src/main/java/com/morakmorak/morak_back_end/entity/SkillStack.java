@@ -16,5 +16,5 @@ public class SkillStack extends BaseTime {
     @Column(name = "technology_stack_id")
     private Long id;
 
-    private String stackName;
+    private String name;
 }
