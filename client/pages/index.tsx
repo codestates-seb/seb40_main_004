@@ -5,7 +5,7 @@ import { Header } from '../components/common/Header';
 const Home: NextPage = () => {
   return (
     <>
-      <main className="max-w-[1280px] mx-auto">
+      <main className="max-w-[1280px] mx-auto min-h-screen">
         <Header />
         <h1>Main</h1>
       </main>
