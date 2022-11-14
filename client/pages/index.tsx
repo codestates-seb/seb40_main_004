@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import { Footer } from '../components/common/Footer';
 import { Header } from '../components/common/Header';
 
 const Home: NextPage = () => {
@@ -8,6 +9,7 @@ const Home: NextPage = () => {
         <Header />
         <h1>Main</h1>
       </main>
+      <Footer />
     </>
   );
 };
