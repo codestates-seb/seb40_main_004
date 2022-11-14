@@ -1,5 +1,5 @@
-import { NextPage } from 'next';
-import { Header } from '../components/common/Header';
+import type { NextPage } from 'next';
+import { Editor } from '../components/common/Editor';
 
 const Home: NextPage = () => {
   return (

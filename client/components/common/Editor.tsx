@@ -53,7 +53,7 @@ interface Content {
   content: string;
 }
 
-const Editor = () => {
+export const Editor = () => {
   const { register, handleSubmit, watch, setValue } = useForm<Content>();
 
   useEffect(() => {
@@ -96,5 +96,3 @@ const Editor = () => {
     </section>
   );
 };
-
-export default Editor;
