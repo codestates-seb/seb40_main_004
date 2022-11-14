@@ -19,7 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class UserPasswordManagerTest {
+class ResponseSimpleUserDtoPasswordManagerTest {
     UserPasswordManager userPasswordManager;
 
     @Mock

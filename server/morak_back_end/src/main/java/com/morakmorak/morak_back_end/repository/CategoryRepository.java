@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
+
     Optional<Category> findCategoryByName(String category);
+
+    @Query("select c from Category c where c.name = :category ")
+    Optional<Category> findCategoryByCategoryName(String category);
 
 }

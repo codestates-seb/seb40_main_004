@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-public class SendUserPasswordMailTest extends AuthServiceTest {
+public class SendResponseSimpleUserPasswordMailTestDto extends AuthServiceTest {
     @Test
     @DisplayName("패스워드 찾기 요청 시, 요청받은 이메일을 가진 유저가 존재하지 않는다면 BusinessLogicException이 발생한다.")
     public void sendUserPasswordMail_failed() {
