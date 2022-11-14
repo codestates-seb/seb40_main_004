@@ -92,11 +92,11 @@ public class ArticleUpdateTest {
 
         File file4 = fileRepository.save(File.builder().localPath("22").build());
 
-        Category category = categoryRepository.save(Category.builder().categoryName("INFO").build());
+        Category category = categoryRepository.save(Category.builder().name("INFO").build());
 
-        tagRepository.save(Tag.builder().tagName(TagName.C).build());
+        tagRepository.save(Tag.builder().name(TagName.C).build());
 
-        Tag tag = tagRepository.save(Tag.builder().tagName(TagName.JAVA).build());
+        Tag tag = tagRepository.save(Tag.builder().name(TagName.JAVA).build());
 
         ArrayList<File> files = new ArrayList<>();
         files.add(file3);
@@ -122,15 +122,15 @@ public class ArticleUpdateTest {
     @DisplayName("게시글 수정시 유효성 검증에 통과하고 json을 올바르게 작성했을 경우 200코드를 반환한다.")
     public void update_suc() throws Exception {
         //given
-        Tag tag = tagRepository.findTagByTagName(TagName.C).orElseThrow();
+        Tag tag = tagRepository.findTagByName(TagName.C).orElseThrow();
         File dbFile1 = fileRepository.findFileByLocalPath("11").orElseThrow();
         File dbFile2 = fileRepository.findFileByLocalPath("22").orElseThrow();
         Article article = articleRepository.findArticleByContent("콘텐트입니다. 잘부탁드립니다.").orElseThrow(() -> new RuntimeException("뭐지?"));
 
         ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
                 .title("안녕하세요 새로운 타이틀입니다. 수정부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder()
-                        .tagId(tag.getId()).tagName("C").build()))
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(tag.getId()).name("C").build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(dbFile1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(dbFile2.getId()).build()))
@@ -163,13 +163,13 @@ public class ArticleUpdateTest {
     @DisplayName("게시글 수정시 존재하지 않는 파일을 작성할 경우 FILE_NOT_FOUND 예외를 던지고 404 에러코드를 반환한다. ")
     public void update_fail1() throws Exception{
         //given
-        Tag tag = tagRepository.findTagByTagName(TagName.C).orElseThrow();
+        Tag tag = tagRepository.findTagByName(TagName.C).orElseThrow();
         Article article = articleRepository.findArticleByContent("콘텐트입니다. 잘부탁드립니다.").orElseThrow(() -> new RuntimeException("뭐지?"));
 
         ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
                 .title("안녕하세요 새로운 타이틀입니다. 수정부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder()
-                        .tagId(tag.getId()).tagName("C").build()))
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(tag.getId()).name("C").build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(1212L).build(), FileDto.RequestFileWithId.builder()
                         .fileId(12312L).build()))
@@ -205,8 +205,8 @@ public class ArticleUpdateTest {
 
         ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
                 .title("안녕하세요 새로운 타이틀입니다. 수정부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder()
-                        .tagId(555L).tagName("ADAS").build()))
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(555L).name("ADAS").build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(dbFile1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(dbFile2.getId()).build()))

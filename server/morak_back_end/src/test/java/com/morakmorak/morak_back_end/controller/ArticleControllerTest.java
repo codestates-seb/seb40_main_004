@@ -124,7 +124,7 @@ class ArticleControllerTest {
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("글의 제목입니다."),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("글의 본문입니다."),
                                         fieldWithPath("tags[].tagId").type(JsonFieldType.NUMBER).description("태그 아이디 입니다."),
-                                        fieldWithPath("tags[].tagName").type(JsonFieldType.STRING).description("태그 이름입니다."),
+                                        fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("태그 이름입니다."),
                                         fieldWithPath("category").type(JsonFieldType.STRING).description("글의 카테고리입니다."),
                                         fieldWithPath("fileId[].fileId").type(JsonFieldType.NUMBER).description("파일 아이디 입니다."),
                                         fieldWithPath("thumbnail").type(JsonFieldType.NUMBER).description("글의 썸네일 아이디 입니다.")
@@ -185,7 +185,7 @@ class ArticleControllerTest {
         ArticleDto.RequestUpdateArticle request = ArticleDto.RequestUpdateArticle.builder()
                 .title("타이틀입니다. 잘부탁드립니다. 부탁드립니다.").content("콘텐트입니다. 잘부탁드립니다.")
                 .fileId(List.of(FileDto.RequestFileWithId.builder().fileId(1L).build()))
-                .tags(List.of(TagDto.RequestTagWithIdAndName.builder().tagName("Java").tagId(1L).build()))
+                .tags(List.of(TagDto.SimpleTag.builder().name("Java").tagId(1L).build()))
                 .thumbnail(1L)
                 .build();
         ArticleDto.ResponseSimpleArticle response = ArticleDto.ResponseSimpleArticle.builder().articleId(1L).build();
@@ -193,7 +193,7 @@ class ArticleControllerTest {
         given(articleMapper.requestUpdateArticleToEntity(request, 1L))
                 .willReturn(Article.builder().build());
         given(tagMapper.requestTagWithIdAndNameToTagDto(request))
-                .willReturn(List.of(TagDto.RequestTagWithIdAndName.builder().build()));
+                .willReturn(List.of(TagDto.SimpleTag.builder().build()));
         given(fileMapper.RequestFileWithIdToFile(request))
                 .willReturn(List.of(FileDto.RequestFileWithId.builder().build()));
         given(articleService.update(any(), any(), any(), any()))
@@ -222,7 +222,7 @@ class ArticleControllerTest {
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("글의 제목입니다."),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("글의 본문입니다."),
                                         fieldWithPath("tags[].tagId").type(JsonFieldType.NUMBER).description("태그 아이디 입니다."),
-                                        fieldWithPath("tags[].tagName").type(JsonFieldType.STRING).description("태그 이름입니다."),
+                                        fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("태그 이름입니다."),
                                         fieldWithPath("fileId[].fileId").type(JsonFieldType.NUMBER).description("파일 아이디 입니다."),
                                         fieldWithPath("thumbnail").type(JsonFieldType.NUMBER).description("글의 썸네일 아이디 입니다.")
                                 )

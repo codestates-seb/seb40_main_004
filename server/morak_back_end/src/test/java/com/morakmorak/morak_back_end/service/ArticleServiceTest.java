@@ -62,7 +62,7 @@ public class ArticleServiceTest {
         given(userService.findVerifiedUserById(anyLong())).willReturn(User.builder().id(1L).build());
         given(fileRepository.findById(any())).willReturn(Optional.of(File.builder().build()));
         given(tagRepository.findById(any())).willReturn(Optional.of(Tag.builder().build()));
-        given(categoryRepository.findCategoryByCategoryName(any())).willReturn(Optional.of(Category.builder().build()));
+        given(categoryRepository.findCategoryByName(any())).willReturn(Optional.of(Category.builder().build()));
         given(articleRepository.save(article)).willReturn(article);
         given(articleMapper.articleToResponseSimpleArticle(article.getId())).willReturn(responseSimpleArticle);
 
@@ -113,7 +113,7 @@ public class ArticleServiceTest {
                         .thumbnail(1L)
                         .build();
         //given
-        TagDto.RequestTagWithIdAndName java = TagDto.RequestTagWithIdAndName.builder().tagId(1L).tagName("java").build();
+        TagDto.SimpleTag java = TagDto.SimpleTag.builder().tagId(1L).name("java").build();
         given(userService.findVerifiedUserById(any())).willReturn(User.builder().build());
         given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().article(Article.builder().build()).build()));
         given(tagRepository.findById(any())).willReturn(Optional.empty());
@@ -141,7 +141,7 @@ public class ArticleServiceTest {
          given(fileRepository.findById(any())).willReturn(Optional.of(File.builder().build()));
          given(tagRepository.findById(any()))
                  .willReturn(Optional.of(Tag.builder().id(1L).build()));
-         given(categoryRepository.findCategoryByCategoryName(anyString())).willReturn(Optional.empty());
+         given(categoryRepository.findCategoryByName(anyString())).willReturn(Optional.empty());
          //when
 
          //then

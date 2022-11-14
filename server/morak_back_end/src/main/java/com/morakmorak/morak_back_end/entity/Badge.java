@@ -21,7 +21,7 @@ public class Badge extends BaseTime{
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private BadgeName badgeName;
+    private BadgeName name;
 
     @Builder.Default
     @OneToMany(mappedBy = "badge")

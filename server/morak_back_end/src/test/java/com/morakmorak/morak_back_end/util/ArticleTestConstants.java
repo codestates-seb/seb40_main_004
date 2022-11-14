@@ -9,20 +9,20 @@ import com.morakmorak.morak_back_end.entity.enums.TagName;
 import java.util.List;
 
 public class ArticleTestConstants {
-    public final static List<TagDto.RequestTagWithIdAndName> REQUEST_TAG_WITH_ID_AND_NAMES = List.of(TagDto.RequestTagWithIdAndName.builder()
-            .tagId(1L).tagName("Java").build());
+    public final static List<TagDto.SimpleTag> REQUEST_TAG_WITH_ID_AND_NAMES = List.of(TagDto.SimpleTag.builder()
+            .tagId(1L).name("Java").build());
     public final static List<FileDto.RequestFileWithId> REQUEST_FILE_WITH_IDS = List.of(FileDto.RequestFileWithId.builder()
             .fileId(1L).build(), FileDto.RequestFileWithId.builder()
             .fileId(2L).build());
 
     public final static Category REQUEST_STRING_CATEGORY = Category.builder()
-            .categoryName("INFO").build();
+            .name("INFO").build();
     public final static ArticleDto.RequestUploadArticle REQUEST_UPLOAD_ARTICLE
             = ArticleDto.RequestUploadArticle.builder()
             .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
             .tags(REQUEST_TAG_WITH_ID_AND_NAMES)
             .fileId(REQUEST_FILE_WITH_IDS)
-            .category(REQUEST_STRING_CATEGORY.getCategoryName())
+            .category(REQUEST_STRING_CATEGORY.getName())
             .thumbnail(1L)
             .build();
     public final static ArticleDto.RequestUpdateArticle REQUEST_UPDATE_ARTICLE =
@@ -38,8 +38,8 @@ public class ArticleTestConstants {
                     .thumbnail(1L)
                     .files(List.of(File.builder().id(1L).article(Article.builder().id(1L).build()).build(),
                             File.builder().id(2L).article(Article.builder().id(1L).build()).build()))
-                    .articleTags(List.of(ArticleTag.builder().tag(Tag.builder().tagName(TagName.JAVA).build()).build()))
-                    .category(Category.builder().categoryName("Info").build())
+                    .articleTags(List.of(ArticleTag.builder().tag(Tag.builder().name(TagName.JAVA).build()).build()))
+                    .category(Category.builder().name("Info").build())
                     .user(User.builder().id(1L).build())
                     .files(List.of(File.builder().article(Article.builder().id(1L).build()).build()))
                     .build();
