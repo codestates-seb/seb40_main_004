@@ -18,7 +18,7 @@ public class Category extends BaseTime {
     @Column(name = "category_id")
     private Long id;
 
-    private String categoryName;
+    private String name;
 
     @OneToMany(mappedBy = "category")
     @Builder.Default

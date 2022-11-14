@@ -13,7 +13,7 @@ public interface CategoryMapper {
 //    @Mapping(target = "id", ignore = true)
 //    @Mapping(target = "articleList", ignore = true)
     default Category RequestUploadArticleToCategory(ArticleDto.RequestUploadArticle uploadArticle) {
-        return Category.builder().categoryName(uploadArticle.getCategory()).build();
+        return Category.builder().name(uploadArticle.getCategory()).build();
     }
 
 }

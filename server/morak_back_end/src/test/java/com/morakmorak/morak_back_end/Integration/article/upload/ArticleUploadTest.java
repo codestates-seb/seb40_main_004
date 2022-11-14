@@ -79,7 +79,7 @@ public class ArticleUploadTest {
 
         File file2 = fileRepository.save(File.builder().localPath("2").build());
 
-        Category category = categoryRepository.save(Category.builder().categoryName("INFO").build());
+        Category category = categoryRepository.save(Category.builder().name("INFO").build());
 
         Tag tag = tagRepository.save(Tag.builder().name(TagName.JAVA).build());
 
@@ -92,7 +92,7 @@ public class ArticleUploadTest {
     public void upload_suc() throws Exception {
         //given
         Tag tag = tagRepository.findTagByName(TagName.JAVA).orElseThrow();
-        Category category = categoryRepository.findCategoryByCategoryName("INFO").orElseThrow();
+        Category category = categoryRepository.findCategoryByName("INFO").orElseThrow();
         File file1 = fileRepository.findFileByLocalPath("1").orElseThrow();
         File file2 = fileRepository.findFileByLocalPath("2").orElseThrow();
 
@@ -104,7 +104,7 @@ public class ArticleUploadTest {
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(file2.getId()).build()))
-                .category(category.getCategoryName())
+                .category(category.getName())
                 .thumbnail(1L)
                 .build();
 
@@ -237,7 +237,7 @@ public class ArticleUploadTest {
     @DisplayName("Article Service fusionCategoryWIthArticle 메서드 통과 테스트")
     public void articleServiceFusionCategoryWIthArticle() throws Exception{
         //given
-        Category category = Category.builder().categoryName("INFO").build();
+        Category category = Category.builder().name("INFO").build();
         Article build = Article.builder().build();
         //when
         Boolean aBoolean = articleService.fusionCategoryWIthArticle(build, category);

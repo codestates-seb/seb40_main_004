@@ -92,7 +92,7 @@ public class ArticleUpdateTest {
 
         File file4 = fileRepository.save(File.builder().localPath("22").build());
 
-        Category category = categoryRepository.save(Category.builder().categoryName("INFO").build());
+        Category category = categoryRepository.save(Category.builder().name("INFO").build());
 
         tagRepository.save(Tag.builder().name(TagName.C).build());
 
