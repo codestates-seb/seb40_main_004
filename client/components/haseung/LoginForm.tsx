@@ -9,12 +9,12 @@ import { useForm } from 'react-hook-form';
 type LoginProps = {
   email: string;
   password: string;
-  newPassword: string;
+  confirmPassword: string;
 };
 
 export const LoginForm = () => {
-  const onValid = ({ email, password, newPassword }: LoginProps) => {
-    console.log(email, password, newPassword);
+  const onValid = ({ email, password, confirmPassword }: LoginProps) => {
+    console.log(email, password, confirmPassword);
   };
   const { register, handleSubmit } = useForm<LoginProps>();
   return (
@@ -38,7 +38,7 @@ export const LoginForm = () => {
       />
       <label>비밀번호 확인</label>
       <input
-        {...register('newPassword', { required: true })}
+        {...register('confirmPassword', { required: true })}
         className="rounded-full border w-96 h-10 border-font-gray"
         type="password"
         autoComplete="off"
