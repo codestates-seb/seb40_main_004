@@ -1,3 +1,9 @@
+/*
+ * 책임 작성자: 정하승
+ * 최초 작성일: 2022-11-14
+ * 최근 수정일: 2022-11-14
+ */
+
 import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -12,7 +18,12 @@ const modules = {
     [{ header: '1' }, { header: '2' }, { font: [] }],
     [{ size: [] }],
     ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+    [
+      { list: 'ordered' },
+      { list: 'bullet' },
+      { indent: '-1' },
+      { indent: '+1' },
+    ],
     ['link', 'image', 'video'],
     ['clean'],
   ],
