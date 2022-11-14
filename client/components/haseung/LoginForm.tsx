@@ -6,17 +6,17 @@
 
 import { useForm } from 'react-hook-form';
 
-type LoginForm = {
+type LoginProps = {
   email: string;
   password: string;
   newPassword: string;
 };
 
-const LoginInput = () => {
-  const onValid = ({ email, password, newPassword }: LoginForm) => {
+export const LoginForm = () => {
+  const onValid = ({ email, password, newPassword }: LoginProps) => {
     console.log(email, password, newPassword);
   };
-  const { register, handleSubmit } = useForm<LoginForm>();
+  const { register, handleSubmit } = useForm<LoginProps>();
   return (
     <form
       className="flex flex-col mx-auto justify-center items-start mt-10"
@@ -52,5 +52,3 @@ const LoginInput = () => {
     </form>
   );
 };
-
-export default LoginInput;

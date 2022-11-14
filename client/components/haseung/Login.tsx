@@ -4,7 +4,7 @@
  * 최근 수정일: 2022-11-14
  */
 
-import LoginInput from './LoginInput';
+import { LoginForm } from './LoginForm';
 
 export const Login = () => {
   return (
@@ -12,7 +12,7 @@ export const Login = () => {
       <article className="text-center">
         <h3 className="font-bold">로그인</h3>
         <h3 className="mt-5">다시 오셨군요! 환영합니다.</h3>
-        <LoginInput />
+        <LoginForm />
       </article>
     </main>
   );
