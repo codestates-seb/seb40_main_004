@@ -1,0 +1,19 @@
+/*
+ * 책임 작성자: 정하승
+ * 최초 작성일: 2022-11-14
+ * 최근 수정일: 2022-11-14
+ */
+
+import LoginInput from './LoginInput';
+
+export const Login = () => {
+  return (
+    <main className="flex justify-center text-lg">
+      <article className="text-center">
+        <h3 className="font-bold">로그인</h3>
+        <h3 className="mt-5">다시 오셨군요! 환영합니다.</h3>
+        <LoginInput />
+      </article>
+    </main>
+  );
+};
