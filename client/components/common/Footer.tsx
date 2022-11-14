@@ -17,7 +17,7 @@ const developers: Developer[] = [
   {
     name: '박연우',
     github: 'https://github.com/HyeonWooGa',
-    blog: 'https://friedegg556.tistory.com/',
+    blog: 'https://velog.io/@hyeonwooga',
   },
   {
     name: '박혜정',
@@ -27,28 +27,28 @@ const developers: Developer[] = [
   {
     name: '정하승',
     github: 'https://github.com/HA-SEUNG-JEONG',
-    blog: 'https://friedegg556.tistory.com/',
+    blog: 'https://haseungdev-3fhsrdzzv-ha-seung-jeong.vercel.app/',
   },
   {
     name: '백시온',
     github: 'https://github.com/Shawn9948',
-    blog: 'https://friedegg556.tistory.com/',
+    blog: 'https://velog.io/@zion9948',
   },
   {
     name: '양은찬',
     github: 'https://github.com/yangddoddi',
-    blog: 'https://friedegg556.tistory.com/',
+    blog: 'https://7357.tistory.com/',
   },
   {
     name: '정희윤',
     github: 'https://github.com/Tldkt',
-    blog: 'https://friedegg556.tistory.com/',
+    blog: 'https://kindspoon.tistory.com/',
   },
 ];
 
 export const Footer = () => {
   return (
-    <footer className="flex bg-background-gray h-[130px] justify-center w-full fixed bottom-0 border-t items-center mx-auto">
+    <footer className="flex bg-background-gray h-[130px] justify-center w-full border-t items-center mx-auto">
       <div className="flex max-w-[1280px] justify-between w-full">
         <div className="flex w-full flex-col space-y-2">
           <MorakLogo />
@@ -56,7 +56,7 @@ export const Footer = () => {
         </div>
         <div className="flex w-full space-x-3">
           {developers.map((dev) => (
-            <DeveloperLink github={dev.github} blog={dev.blog}>
+            <DeveloperLink github={dev.github} blog={dev.blog} key={dev.name}>
               {dev.name}
             </DeveloperLink>
           ))}

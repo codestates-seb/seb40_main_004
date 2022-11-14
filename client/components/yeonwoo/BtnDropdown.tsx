@@ -4,7 +4,12 @@
  * 최근 수정일: 2022-11-14
  */
 
-import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
+import {
+  faArrowRightFromBracket,
+  faChevronDown,
+  faChevronUp,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -24,35 +29,43 @@ export const BtnDropdown = () => {
       {dropdown ? (
         <div className="">
           <button onClick={() => setDropdown((prev) => !prev)}>
-            <FontAwesomeIcon icon={faChevronUp} />
+            <FontAwesomeIcon icon={faChevronUp} size="lg" />
           </button>
-          <ul className="border border-solid border-black border-spacing-1 fixed top-14 right-[5%] w-28 rounded-xl">
+          <ul className="border border-solid border-black border-opacity-10 border-spacing-1 fixed top-14 right-[5%] w-[200px] rounded-xl">
+            <li className="pt-4 pb-1 mx-4 flex justify-between items-center border-b border-solid">
+              <span className="text-xs">나의 모락</span>
+              <span className="text-lg font-semibold">✨ 260 모락</span>
+            </li>
             <Link href="/dashboard">
-              <li className="hover:bg-main-yellow hover:cursor-pointer py-1 pl-3 rounded-xl">
-                대시보드
+              <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer mt-2 py-1 px-4 rounded-xl text-[15px]">
+                <FontAwesomeIcon icon={faUser} size="sm" />
+                <span className="ml-2">대시보드</span>
               </li>
             </Link>
             <Link href="/edit-profile">
-              <li className="hover:bg-main-yellow hover:cursor-pointer py-1 pl-3 rounded-xl">
-                정보 수정
+              <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer py-1 px-4 rounded-xl text-[15px]">
+                <FontAwesomeIcon icon={faUser} size="sm" />
+                <span className="ml-2">개인정보 수정</span>
               </li>
             </Link>
             <Link href="/edit-password">
-              <li className="hover:bg-main-yellow hover:cursor-pointer py-1 pl-3 rounded-xl">
-                비밀번호 변경
+              <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer py-1 mb-2 px-4 rounded-xl text-[15px]">
+                <FontAwesomeIcon icon={faUser} size="sm" />
+                <span className="ml-2">비밀번호 변경</span>
               </li>
             </Link>
             <li
-              className="hover:bg-main-yellow hover:cursor-pointer py-1 pl-3 rounded-xl"
+              className="hover:cursor-pointer py-4 px-4 text-[15px] border-t"
               onClick={onClickLogout}
             >
-              로그아웃
+              <FontAwesomeIcon icon={faArrowRightFromBracket} size="sm" />
+              <span className="ml-2">로그아웃</span>
             </li>
           </ul>
         </div>
       ) : (
         <button onClick={() => setDropdown((prev) => !prev)}>
-          <FontAwesomeIcon icon={faChevronDown} />
+          <FontAwesomeIcon icon={faChevronDown} size="lg" />
         </button>
       )}
     </>
