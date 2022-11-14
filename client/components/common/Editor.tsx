@@ -49,9 +49,9 @@ const formats = [
   'video',
 ];
 
-interface Content {
+type Content = {
   content: string;
-}
+};
 
 export const Editor = () => {
   const { register, handleSubmit, watch, setValue } = useForm<Content>();
@@ -79,15 +79,15 @@ export const Editor = () => {
         formats={formats}
         onChange={editorChange}
       />
-      <article className="flex justify-center ">
+      <article className="flex justify-center">
         <input
-          className="justify-center mx-2 my-20 bg-[#FFDF6B] px-4 py-2 rounded-full cursor-pointer hover:bg-[#faca1e]"
+          className="justify-center mx-2 my-20 bg-background-gray px-4 py-2 rounded-full cursor-pointer hover:bg-main-orange"
           type="submit"
           onClick={handleSubmit(onValid)}
           value="등록"
         />
         <input
-          className="justify-center mx-2 my-20 bg-[#b8b4a7] px-4 py-2 rounded-full cursor-pointer hover:opacity-50"
+          className="justify-center mx-2 my-20 bg-[#F2F2F2]  px-4 py-2 rounded-full cursor-pointer hover:bg-main-gray"
           type="submit"
           onClick={handleSubmit(onValid)}
           value="취소"
