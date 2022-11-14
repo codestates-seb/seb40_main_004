@@ -26,7 +26,7 @@ public class ArticleService {
     private final CategoryRepository categoryRepository;
 
     public ArticleDto.ResponseSimpleArticle upload(
-            Article article, UserDto.UserInfo userInfo, List<TagDto.RequestTagWithIdAndName> tags,
+            Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
             List<FileDto.RequestFileWithId> files, Category category
     ) {
         article.injectUserForMapping(userService.findVerifiedUserById(userInfo.getId()));
@@ -44,7 +44,7 @@ public class ArticleService {
         return articleMapper.articleToResponseSimpleArticle(dbArticle.getId());
     }
 
-    public ArticleDto.ResponseSimpleArticle update(Article article, UserDto.UserInfo userInfo, List<TagDto.RequestTagWithIdAndName> tags,
+    public ArticleDto.ResponseSimpleArticle update(Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
                                                    List<FileDto.RequestFileWithId> files) {
         Article dbArticle = findVerifiedArticle(article.getId());
 
@@ -92,7 +92,7 @@ public class ArticleService {
         return true;
     }
 
-    public Boolean fusionTagDtoWithArticle(Article article, List<TagDto.RequestTagWithIdAndName> tags) {
+    public Boolean fusionTagDtoWithArticle(Article article, List<TagDto.SimpleTag> tags) {
         for (int i = article.getArticleTags().size() -1; i >= 0; i--) {
                 article.getArticleTags().remove(i);
             }

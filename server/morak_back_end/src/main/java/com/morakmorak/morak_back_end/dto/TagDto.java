@@ -10,9 +10,9 @@ public class TagDto {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class RequestTagWithIdAndName {
+    public static class SimpleTag {
         @NotBlank
         private Long tagId;
-        private String tagName;
+        private String name;
     }
 }
