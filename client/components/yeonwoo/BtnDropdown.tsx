@@ -27,23 +27,26 @@ export const BtnDropdown = () => {
             <FontAwesomeIcon icon={faChevronUp} />
           </button>
           <ul className="border border-solid border-black border-spacing-1 fixed top-14 right-[5%] w-28 rounded-xl">
-            <li className="hover:bg-main-yellow py-1 pl-3 rounded-xl">
-              <Link href="/dashboard">
-                <button>대시보드</button>
-              </Link>
-            </li>
-            <li className="hover:bg-main-yellow py-1 pl-3 rounded-xl">
-              <Link href="/edit-profile">
-                <button>정보 수정</button>
-              </Link>
-            </li>
-            <li className="hover:bg-main-yellow py-1 pl-3 rounded-xl">
-              <Link href="/edit-password">
-                <button>비밀번호 변경</button>
-              </Link>
-            </li>
-            <li className="hover:bg-main-yellow py-1 pl-3 rounded-xl">
-              <button onClick={onClickLogout}>로그아웃</button>
+            <Link href="/dashboard">
+              <li className="hover:bg-main-yellow hover:cursor-pointer py-1 pl-3 rounded-xl">
+                대시보드
+              </li>
+            </Link>
+            <Link href="/edit-profile">
+              <li className="hover:bg-main-yellow hover:cursor-pointer py-1 pl-3 rounded-xl">
+                정보 수정
+              </li>
+            </Link>
+            <Link href="/edit-password">
+              <li className="hover:bg-main-yellow hover:cursor-pointer py-1 pl-3 rounded-xl">
+                비밀번호 변경
+              </li>
+            </Link>
+            <li
+              className="hover:bg-main-yellow hover:cursor-pointer py-1 pl-3 rounded-xl"
+              onClick={onClickLogout}
+            >
+              로그아웃
             </li>
           </ul>
         </div>
