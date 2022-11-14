@@ -1,3 +1,10 @@
+/*
+ * 책임 작성자: 정하승
+ * 최초 작성일: 2022-11-14
+ * 최근 수정일: 2022-11-14
+ * 개요: 구분선을 표시합니다.
+ */
+
 export const Divider = () => {
   return (
     <section className="relative flex py-5 items-center w-full">
