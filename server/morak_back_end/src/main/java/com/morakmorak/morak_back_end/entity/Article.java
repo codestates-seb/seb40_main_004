@@ -4,7 +4,6 @@ import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,7 @@ public class Article extends BaseTime {
     private Category category;
 
     @OneToOne(mappedBy = "article")
-    private BookMark bookMark;
+    private Bookmark bookmark;
 
     @Builder.Default
     @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST)
