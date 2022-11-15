@@ -63,9 +63,9 @@ public class UserDto {
         private String nickname;
 //        private AvatarDto.SimpleResponse avatar;(추가 여부 논의 필요)
         //mapper 변경 가능 부분, 재사용성을 높이려면 ?? comment가 삭제됐을 경우 상태관리 how??
-        public static ResponseForCommentUserInfo of(User userFromComment) {
+        public static ResponseForCommentUserInfo of(com.morakmorak.morak_back_end.entity.User userFromComment) {
             return ResponseForCommentUserInfo.builder()
-                    .userId(userFromComment.getUserId())
+                    .userId(userFromComment.getId())
                     .nickname(userFromComment.getNickname())
                     .build();
         }
