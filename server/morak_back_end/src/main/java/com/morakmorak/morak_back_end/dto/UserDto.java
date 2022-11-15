@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.dto;
 
 
+import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.JobType;
 import lombok.*;
@@ -65,4 +66,22 @@ public class UserDto {
         private List<ActivityDto> activities;
         private List<ReviewDto> reviews;
     }
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponseForCommentUserInfo {
+        private Long userId;
+        private String nickname;
+//        private AvatarDto.SimpleResponse avatar;(추가 여부 논의 필요)
+        //mapper 변경 가능 부분, 재사용성을 높이려면 ?? comment가 삭제됐을 경우 상태관리 how??
+        public static ResponseForCommentUserInfo of(com.morakmorak.morak_back_end.entity.User userFromComment) {
+            return ResponseForCommentUserInfo.builder()
+                    .userId(userFromComment.getId())
+                    .nickname(userFromComment.getNickname())
+                    .build();
+        }
+
+    }
+
 }

@@ -1,15 +1,12 @@
 package com.morakmorak.morak_back_end.service;
 
 import com.morakmorak.morak_back_end.dto.CommentDto;
-import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.Comment;
+import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
-import com.morakmorak.morak_back_end.repository.ArticleRepository;
-import com.morakmorak.morak_back_end.repository.CategoryRepository;
 import com.morakmorak.morak_back_end.repository.CommentRepository;
-import com.morakmorak.morak_back_end.util.ArticleTestConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,12 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.inject.Inject;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
@@ -41,15 +36,30 @@ class CommentServiceTest {
     Long ARTICLEID =1L;
     @Test
     @DisplayName("존재하지 않는 유저가 등록하려고 할 때 예외")
-    void makeComment_v1_failed() {
+    void makeComment_failed_1() {
         //given
         Comment comment = Comment.builder().content(VALID_CONTENT).build();
 
         given(userService.findVerifiedUserById(any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
         //when
         //then
-        Assertions.assertThatThrownBy(() -> commentService.makeComment_v2(USERID,ARTICLEID,comment))
+        Assertions.assertThatThrownBy(() -> commentService.makeComment(USERID,ARTICLEID,comment))
                 .isInstanceOf(BusinessLogicException.class);
+    }
+    @Test
+    @DisplayName("올바른 댓글 등록요청일 시 commentRepository의 save가 실행되며, 결과 comment의 id가 ")
+    void makeComment_success_1() {
+        //given
+        Comment comment = Comment.builder().content(VALID_CONTENT).build();
+
+        given(userService.findVerifiedUserById(any())).willReturn(User.builder().id(1L).build());
+        given(articleService.findVerifiedArticle(any())).willReturn(Article.builder().id(1L).build());
+        given(commentRepository.save(comment)).willReturn(comment);
+
+        //when
+        CommentDto.ReponsePost target = commentService.makeComment(1L, 1L, comment);
+        //then
+        verify(commentRepository, times(1)).save(comment);
     }
 
 

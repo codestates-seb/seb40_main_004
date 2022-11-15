@@ -45,7 +45,7 @@ public class Article extends BaseTime {
     private Category category;
 
     @OneToOne(mappedBy = "article")
-    private BookMark bookMark;
+    private Bookmark bookmark;
 
     @Builder.Default
     @OneToMany(mappedBy = "article", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})

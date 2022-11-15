@@ -17,12 +17,11 @@ public class CommentDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Reponse {
-        private Long userId;
-        private String nickname;
+    public static class ReponsePost {
+        private UserDto.ResponseForCommentUserInfo userInfo;
+        private AvatarDto.SimpleResponse avatar;
         private Long commentId;
         private Long articleId;
         private String content;
-
     }
 }
