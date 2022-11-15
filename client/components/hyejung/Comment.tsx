@@ -4,18 +4,16 @@
  * 최근 수정일: 2022-11-14
  */
 
-import { UserNickname } from './UserNickname';
-import { CreatedDate } from './CreatedDate';
-import Image from 'next/image';
+import { UserNickname } from './QuestionContent/UserNickname';
+import { CreatedDate } from './QuestionContent/CreatedDate';
+import { ProfileImage } from './ProfileImage';
 
 export const Comment = () => {
   return (
     <section className="flex w-full">
-      <div className="">
-        <Image src="/favicon.ico" width="40px" height="40px" />
-      </div>
-      <section className="flex w-full flex-col pl-3">
-        <article className="w-full flex justify-between">
+      <ProfileImage />
+      <section className="flex w-full flex-col pl-4 space-y-3">
+        <article className="w-full flex justify-between items-center">
           <UserNickname />
           <CreatedDate />
         </article>
@@ -25,6 +23,10 @@ export const Comment = () => {
           amet, consectetur adipiscing elit. Proin purus eros, mattis et pretium
           at, sagittis vel purus.
         </p>
+        <article className="space-x-2 text-xs ml-auto">
+          <button>수정</button>
+          <button>삭제</button>
+        </article>
       </section>
     </section>
   );
