@@ -2,7 +2,6 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import 'react-quill/dist/quill.snow.css';
 import { RecoilRoot } from 'recoil';
-import 'quilljs-markdown/dist/quilljs-markdown-common-style.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
