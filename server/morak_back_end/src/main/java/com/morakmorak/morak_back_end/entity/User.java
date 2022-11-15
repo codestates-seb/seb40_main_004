@@ -113,7 +113,7 @@ public class User {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder.Default
