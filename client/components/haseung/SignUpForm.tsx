@@ -6,16 +6,20 @@
 
 import { useForm } from 'react-hook-form';
 
-type LoginProps = {
+import { Divider } from './Divider';
+import { SocialLoginBtn } from './SocialLoginBtn';
+
+type SignUpProps = {
   email: string;
   password: string;
+  confirmPassword: string;
 };
 
-export const LoginForm = () => {
-  const onValid = ({ email, password }: LoginProps) => {
-    console.log(email, password);
+export const SignUpForm = () => {
+  const onValid = ({ email, password, confirmPassword }: SignUpProps) => {
+    console.log(email, password, confirmPassword);
   };
-  const { register, handleSubmit } = useForm<LoginProps>();
+  const { register, handleSubmit } = useForm<SignUpProps>();
   return (
     <form
       className="flex flex-col mx-auto justify-center items-start mt-10"
@@ -35,12 +39,21 @@ export const LoginForm = () => {
         type="password"
         autoComplete="off"
       />
+      <label>비밀번호 확인</label>
+      <input
+        {...register('confirmPassword', { required: true })}
+        className="rounded-full border w-96 h-10 border-font-gray"
+        type="password"
+        autoComplete="off"
+      />
       <button
         className="mx-auto mt-4 bg-main-yellow rounded-full w-96 h-10 hover:bg-main-orange"
         type="submit"
       >
-        로그인
+        가입하기
       </button>
+      <Divider />
+      <SocialLoginBtn />
     </form>
   );
 };
