@@ -3,11 +3,10 @@ package com.morakmorak.morak_back_end.dto;
 
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.entity.enums.JobType;
 import lombok.*;
 
-import java.util.ArrayList;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class UserDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class User {
+    public static class ResponseSimpleUserDto {
         private Long userId;
         private String nickname;
         private Grade grade;
@@ -52,7 +51,20 @@ public class UserDto {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ResponseDashBoard {
+        private Long userId;
+        private String email;
         private String nickname;
+        private JobType jobType;
+        private Grade grade;
+        private Integer point;
+        private String github;
+        private String blog;
+
+        private AvatarDto.Request avatar;
+        private List<TagDto.SimpleTag> tags;
+//        private List<ArticleDto.ResponseArticleList> articles;
+        private List<ActivityDto> activities;
+        private List<ReviewDto> reviews;
     }
     @Builder
     @Getter

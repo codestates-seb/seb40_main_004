@@ -20,7 +20,7 @@ public class Tag extends BaseTime{
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private TagName tagName;
+    private TagName name;
 
     @Builder.Default
     @OneToMany(mappedBy = "tag")

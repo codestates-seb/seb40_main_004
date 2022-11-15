@@ -11,21 +11,21 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", typeConversionPolicy = ReportingPolicy.IGNORE)
 public interface TagMapper {
 
-    default List<TagDto.RequestTagWithIdAndName> requestTagWithIdAndNameToTagDto(ArticleDto.RequestUploadArticle requestTagWithIdAndNames) {
-        List<TagDto.RequestTagWithIdAndName> tagWithIdAndName = requestTagWithIdAndNames.getTags().stream()
-                .map(request -> TagDto.RequestTagWithIdAndName.builder()
+    default List<TagDto.SimpleTag> requestTagWithIdAndNameToTagDto(ArticleDto.RequestUploadArticle requestTagWithIdAndNames) {
+        List<TagDto.SimpleTag> tagWithIdAndName = requestTagWithIdAndNames.getTags().stream()
+                .map(request -> TagDto.SimpleTag.builder()
                         .tagId(request.getTagId())
-                        .tagName(request.getTagName())
+                        .name(request.getName())
                         .build()
         ).collect(Collectors.toList());
 
         return tagWithIdAndName;
     }
-    default List<TagDto.RequestTagWithIdAndName> requestTagWithIdAndNameToTagDto(ArticleDto.RequestUpdateArticle requestTagWithIdAndNames) {
-        List<TagDto.RequestTagWithIdAndName> tagWithIdAndName = requestTagWithIdAndNames.getTags().stream()
-                .map(request -> TagDto.RequestTagWithIdAndName.builder()
+    default List<TagDto.SimpleTag> requestTagWithIdAndNameToTagDto(ArticleDto.RequestUpdateArticle requestTagWithIdAndNames) {
+        List<TagDto.SimpleTag> tagWithIdAndName = requestTagWithIdAndNames.getTags().stream()
+                .map(request -> TagDto.SimpleTag.builder()
                         .tagId(request.getTagId())
-                        .tagName(request.getTagName())
+                        .name(request.getName())
                         .build()
                 ).collect(Collectors.toList());
 

@@ -34,7 +34,7 @@ public class ArticleController {
     public ResponseEntity uploadArticle(@Valid @RequestBody ArticleDto.RequestUploadArticle requestUploadArticle,
                                         @RequestUser UserDto.UserInfo userInfo ) {
         Article article = articleMapper.requestUploadArticleToEntity(requestUploadArticle);
-        List<TagDto.RequestTagWithIdAndName> tags = tagMapper.requestTagWithIdAndNameToTagDto(requestUploadArticle);
+        List<TagDto.SimpleTag> tags = tagMapper.requestTagWithIdAndNameToTagDto(requestUploadArticle);
         List<FileDto.RequestFileWithId> files = fileMapper.RequestFileWithIdToFile(requestUploadArticle);
         Category category = categoryMapper.RequestUploadArticleToCategory(requestUploadArticle);
         ArticleDto.ResponseSimpleArticle upload = articleService.upload(article, userInfo,tags,files,category);
@@ -48,14 +48,14 @@ public class ArticleController {
                                         @PathVariable("article-id") Long articleId) {
 
         Article article = articleMapper.requestUpdateArticleToEntity(requestUpdateArticle, articleId);
-        List<TagDto.RequestTagWithIdAndName> tags = tagMapper.requestTagWithIdAndNameToTagDto(requestUpdateArticle);
+        List<TagDto.SimpleTag> tags = tagMapper.requestTagWithIdAndNameToTagDto(requestUpdateArticle);
         List<FileDto.RequestFileWithId> files = fileMapper.RequestFileWithIdToFile(requestUpdateArticle);
         ArticleDto.ResponseSimpleArticle update = articleService.update(article, userInfo,tags,files);
         return new ResponseEntity<>(update, HttpStatus.OK);
     }
 
     @DeleteMapping("/{article-id}")
-    public ResponseEntity updateArticle(@PathVariable("article-id") Long articleId,
+    public ResponseEntity deleteArticle(@PathVariable("article-id") Long articleId,
                                         @RequestUser UserDto.UserInfo userInfo) {
         articleService.deleteArticle(articleId, userInfo);
         return new ResponseEntity<>( HttpStatus.NO_CONTENT);

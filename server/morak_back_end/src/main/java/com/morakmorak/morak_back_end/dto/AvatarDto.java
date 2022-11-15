@@ -27,5 +27,10 @@ public class AvatarDto {
                             .remotePath(avatar.getRemotePath())
                             .build();
         }
+        
+    public static class Request {
+        private Long avatarId;
+        private String remotePath;
+        private String filename;
     }
 }

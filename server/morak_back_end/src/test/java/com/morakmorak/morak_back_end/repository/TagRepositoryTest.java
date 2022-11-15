@@ -25,11 +25,11 @@ class TagRepositoryTest {
     @DisplayName("태그아이디 검색시 정확하게 값을 가져올때")
     public void Tag_suc1() throws Exception{
         //given
-        Tag build = Tag.builder().tagName(TagName.JAVA).build();
-        tagRepository.save(build);
+        Tag saved = Tag.builder().name(TagName.JAVA).build();
+        tagRepository.save(saved);
         //when
-        Tag tag = tagRepository.findById(1L).orElseThrow(() -> new RuntimeException("dsf"));
+        Tag tag = tagRepository.findById(saved.getId()).orElseThrow(() -> new RuntimeException("dsf"));
         //then
-        Assertions.assertThat(tag.getTagName()).isEqualTo(build.getTagName());
+        Assertions.assertThat(tag.getName()).isEqualTo(saved.getName());
      }
 }

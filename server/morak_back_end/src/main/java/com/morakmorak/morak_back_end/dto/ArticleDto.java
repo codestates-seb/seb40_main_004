@@ -1,12 +1,9 @@
 package com.morakmorak.morak_back_end.dto;
 
-import com.morakmorak.morak_back_end.entity.Category;
 import lombok.*;
-import net.bytebuddy.asm.Advice;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +20,7 @@ public class ArticleDto {
         private String title;
         @Size(min = 5)
         private String content;
-        private List<TagDto.RequestTagWithIdAndName> tags = new ArrayList<>();
+        private List<TagDto.SimpleTag> tags = new ArrayList<>();
         private String category;
         private List<FileDto.RequestFileWithId> fileId = new ArrayList<>();
         private Long thumbnail;
@@ -40,7 +37,7 @@ public class ArticleDto {
         @Size(min = 5)
         private String content;
         @Builder.Default
-        private List<TagDto.RequestTagWithIdAndName> tags = new ArrayList<>();
+        private List<TagDto.SimpleTag> tags = new ArrayList<>();
         @Builder.Default
         private List<FileDto.RequestFileWithId> fileId = new ArrayList<>();
         private Long thumbnail;
@@ -53,4 +50,28 @@ public class ArticleDto {
     public static class ResponseSimpleArticle {
         private Long articleId;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponseListTypeArticle {
+        private Long articleId;
+        private String category;
+        private String title;
+        private Integer clicks;
+        private Integer likes;
+        private Boolean isClosed;
+
+        private List<TagDto.SimpleTag> tags;
+
+        private Integer commentCount;
+        private Integer answerCount;
+        private LocalDateTime createdAt;
+        private LocalDateTime lastModifiedAt;
+
+        private UserDto.UserInfo userInfo;
+
+    }
+
 }

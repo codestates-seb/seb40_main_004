@@ -28,11 +28,12 @@ public class File extends BaseTime{
     @JoinColumn(name = "answer_id")
     private Answer answer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "article_id")
     private Article article;
 
     public void injectArticleForFile(Article article) {
         this.article = article;
+        article.getFiles().add(this);
     }
 }

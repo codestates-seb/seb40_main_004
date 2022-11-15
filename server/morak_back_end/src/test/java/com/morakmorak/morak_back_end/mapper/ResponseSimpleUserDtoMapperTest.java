@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.assertj.core.api.Assertions.*;
 
-class UserMapperTest {
+class ResponseSimpleUserDtoMapperTest {
     UserMapper userMapper;
 
     @BeforeEach

@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.entity.enums.JobType;
 import com.morakmorak.morak_back_end.entity.enums.UserStatus;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import lombok.*;
@@ -45,7 +46,7 @@ public class User {
 
     private Boolean isJobSeeker;
 
-    private Boolean isDeveloper;
+    private JobType jobType;
 
     private Boolean gender;
 
@@ -54,6 +55,10 @@ public class User {
     private String address;
 
     private Boolean receiveEmail;
+
+    private String github;
+
+    private String blog;
 
     @Enumerated(EnumType.STRING)
     private Grade grade;
@@ -92,11 +97,11 @@ public class User {
     private List<Notification> notifications = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Article> articles = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Deposit> deposits = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -106,7 +111,6 @@ public class User {
     @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
-
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
@@ -119,6 +123,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    private List<ArticleLike> articleLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @Builder.Default
+    private List<AnswerLike> answerLikes = new ArrayList<>();
 
     public User(String password) {
         this.password = password;
