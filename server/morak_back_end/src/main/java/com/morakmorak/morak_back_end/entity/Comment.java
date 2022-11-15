@@ -35,4 +35,13 @@ public class Comment extends BaseTime{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void injectArticle(Article verifiedArticle) {
+        this.article = verifiedArticle;
+        article.getComments().add(this);
+    }
+    public void injectUser(User verifiedUSer) {
+        this.user = verifiedUSer;
+        verifiedUSer.getComments().add(this);
+    }
 }
