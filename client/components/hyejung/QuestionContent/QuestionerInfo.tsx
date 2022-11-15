@@ -1,5 +1,5 @@
-import { UserNickname } from '../UserNickname';
-import { CreatedDate } from '../CreatedDate';
+import { UserNickname } from './UserNickname';
+import { CreatedDate } from './CreatedDate';
 
 export const QuestionerInfo = () => {
   return (

@@ -9,33 +9,30 @@
  */
 import { QuestionTitle } from './QuestionTitle';
 import { QuestionerInfo } from './QuestionerInfo';
-import { BtnLike } from './BtnLike';
-import { BtnBookmark } from './BtnBookmark';
 import { QuestionMainText } from './QuestionMainText';
 import { CommentList } from '../CommentList';
 import { TagList } from './TagList';
-import { QuestionWriterBtns } from './QuestionWriterBtns';
+import { LikeBookmarkBtns } from '../LikeBookmarkBtns';
 
 export const QuestionContent = () => {
   return (
-    <main className="flex flex-col w-full p-[60px]">
+    <main className="flex flex-col w-full pb-6 mb-16 border-b">
       <section className="flex flex-col space-y-4 border-b pb-3">
         <QuestionTitle />
         <div className="flex justify-between items-center">
           <QuestionerInfo />
-          <div className="flex space-x-1">
-            <BtnLike />
-            <span className="text-xl pr-3">14</span>
-            <BtnBookmark />
-          </div>
+          <LikeBookmarkBtns />
         </div>
       </section>
 
-      <section className="p-3">
+      <section className="p-6">
         <QuestionMainText />
-        <div className="flex justify-between items-end py-4">
+        <div className="flex justify-between items-end space-y-3 sm:space-y-0 py-4 flex-col sm:flex-row">
           <TagList />
-          <QuestionWriterBtns />
+          <article className="space-x-2 text-sm w-[80px] flex justify-end">
+            <button>수정</button>
+            <button>삭제</button>
+          </article>
         </div>
       </section>
 
