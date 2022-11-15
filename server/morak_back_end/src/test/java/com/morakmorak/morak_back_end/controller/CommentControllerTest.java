@@ -2,8 +2,9 @@ package com.morakmorak.morak_back_end.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.config.SecurityTestConfig;
+import com.morakmorak.morak_back_end.dto.AvatarDto;
 import com.morakmorak.morak_back_end.dto.CommentDto;
-import com.morakmorak.morak_back_end.entity.Comment;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
@@ -24,17 +25,13 @@ import java.util.List;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
-import static org.assertj.core.api.BDDAssumptions.given;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -95,15 +92,22 @@ class CommentControllerTest {
         //given
         CommentDto.RequestPost request = CommentDto.RequestPost.builder()
             .content(VALID_CONTENT).build();
-        CommentDto.Reponse response = CommentDto.Reponse.builder()
-                .userId(1L)
-                .nickname("냥냐냥냐냥")
+        CommentDto.ReponsePost response = CommentDto.ReponsePost.builder()
+                .userInfo(UserDto.ResponseForCommentUserInfo.builder()
+                        .userId(1L)
+                        .nickname("NICKNAME")
+                        .build())
+                .avatar(AvatarDto.SimpleResponse.builder()
+                        .avatarId(1L)
+                        .fileName("FILENAME")
+                        .remotePath("FILEPATH")
+                        .build())
                 .commentId(1L)
                 .articleId(1L)
                 .content("냥냐냥냐").build();
         //when 적절한 json 인입
         String json = objectMapper.writeValueAsString(request);
-        BDDMockito.given(commentService.makeComment_v2(any(),any(),any())).willReturn(response);
+        BDDMockito.given(commentService.makeComment(any(),any(),any())).willReturn(response);
         ResultActions perform =
                 mockMvc.perform(
                         post("/articles/{article-id}/comments", 1L)
@@ -125,8 +129,11 @@ class CommentControllerTest {
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용")                     ),
                         responseFields(
                                 List.of(
-                                        fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저 식별자"),
-                                        fieldWithPath("nickname").type(JsonFieldType.STRING).description("유저 닉네임"),
+                                        fieldWithPath("userInfo.userId").type(JsonFieldType.NUMBER).description("유저식별자"),
+                                        fieldWithPath("userInfo.nickname").type(JsonFieldType.STRING).description("유저 닉네임"),
+                                        fieldWithPath("avatar.avatarId").type(JsonFieldType.NUMBER).description("유저 닉네임"),
+                                        fieldWithPath("avatar.fileName").type(JsonFieldType.STRING).description("유저 닉네임"),
+                                        fieldWithPath("avatar.remotePath").type(JsonFieldType.STRING).description("유저 닉네임"),
                                         fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("글 식별자"),
                                         fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용"),
                                         fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("댓글 식별자")
