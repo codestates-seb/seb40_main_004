@@ -1,0 +1,126 @@
+package com.morakmorak.morak_back_end.Integration.comment;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.morakmorak.morak_back_end.dto.CommentDto;
+import com.morakmorak.morak_back_end.entity.Article;
+import com.morakmorak.morak_back_end.entity.Avatar;
+import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.repository.ArticleRepository;
+import com.morakmorak.morak_back_end.repository.AvatarRepository;
+import com.morakmorak.morak_back_end.repository.CommentRepository;
+import com.morakmorak.morak_back_end.repository.UserRepository;
+import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.morakmorak.morak_back_end.util.CommentTestConstants.VALID_COMMENT;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
+import static com.morakmorak.morak_back_end.util.TestConstants.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@Transactional
+@SpringBootTest(value = {
+        "jwt.secretKey=only_test_secret_Key_value_gn..rlfdlrkqnwhrgkekspdy",
+        "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
+})
+@AutoConfigureMockMvc
+public class CommentTest {
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    MockMvc mockMvc;
+    @Autowired
+    ObjectMapper objectMapper;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    ArticleRepository articleRepository;
+    @Autowired
+    CommentRepository commentRepository;
+    @Autowired
+    AvatarRepository avatarRepository;
+
+    User savedUser;
+    Article savedArticle;
+    String accessToken;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        Avatar dbAvatar = Avatar.builder()
+                .originalFileName("randomfilename")
+                .remotePath("randomremotepath")
+                .build();
+
+        User dbUser = User.builder()
+                .email(EMAIL1)
+                .nickname(NICKNAME1)
+                .password(PASSWORD1)
+                .avatar(dbAvatar)
+                .build();
+        userRepository.save(dbUser);
+        this.savedUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
+        this.accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+
+        avatarRepository.save(dbAvatar);
+        Avatar savedAvatar = avatarRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
+
+        Article dbArticle = Article.builder().user(savedUser).build();
+        articleRepository.save(dbArticle);
+        this.savedArticle = articleRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
+    }
+
+    @Test
+    @DisplayName("댓글 작성 시 DTO검증에 실패하면 400 예외를 반환한다.")
+    void postComment_failed_1() throws Exception {
+        //given blank인 댓글 dto 준비
+        CommentDto.RequestPost request = CommentDto.RequestPost.builder()
+                .content(null).build();
+        String json = objectMapper.writeValueAsString(request);
+        //when blank인 댓글 인입 시
+        ResultActions perform = mockMvc.perform(post("/articles/{article-id}/comments", savedArticle.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, ACCESS_TOKEN)
+        );
+        //then bad request 반환
+        perform.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("댓글 작성 시 유효한 데이터가 인입되었다면 201을 반환한다.")
+    void postComment_success_1() throws Exception {
+        //given 유효한 댓글
+        CommentDto.RequestPost request = CommentDto.RequestPost.builder()
+                .content(VALID_COMMENT).build();
+
+        String json = objectMapper.writeValueAsString(request);
+        //when 유효한 input
+        ResultActions perform = mockMvc.perform(post("/articles/{article-id}/comments", savedArticle.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, accessToken)
+        );
+        //then 201 created 반환
+        perform.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.userInfo.userId").exists())
+                .andExpect(jsonPath("$.userInfo.nickname").exists())
+                .andExpect(jsonPath("$.avatar.avatarId").exists())
+                .andExpect(jsonPath("$.avatar.fileName").exists())
+                .andExpect(jsonPath("$.avatar.remotePath").exists())
+                .andExpect(jsonPath("$.articleId").exists())
+                .andExpect(jsonPath("$.content").exists())
+                .andExpect(jsonPath("$.commentId").exists());
+    }
+
+}

@@ -24,7 +24,7 @@ public class Avatar extends BaseTime{
 
     private String remotePath;
 
-    @OneToOne(mappedBy = "avatar")
+    @OneToOne(mappedBy = "avatar", cascade = CascadeType.PERSIST)
     private User user;
 
 }

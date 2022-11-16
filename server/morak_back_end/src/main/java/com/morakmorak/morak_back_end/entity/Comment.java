@@ -47,4 +47,14 @@ public class Comment extends BaseTime{
             this.user.getComments().add(this);
         }
     }
+
+    public void injectArticle(Article verifiedArticle) {
+        this.article = verifiedArticle;
+        article.getComments().add(this);
+    }
+    
+    public void injectUser(User verifiedUSer) {
+        this.user = verifiedUSer;
+        verifiedUSer.getComments().add(this);
+    }
 }

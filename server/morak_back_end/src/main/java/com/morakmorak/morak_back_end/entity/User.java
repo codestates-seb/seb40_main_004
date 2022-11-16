@@ -113,8 +113,8 @@ public class User {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
-    private List<BookMark> bookMarks = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
@@ -161,5 +161,10 @@ public class User {
         if (roles.size() == 0) roles = List.of("Role_User");
 
         return jwtTokenUtil.createAccessToken(this.getEmail(), this.getId(), roles);
+    }
+
+    public void injectAvatar(Avatar avatar) {
+        this.avatar = avatar;
+
     }
 }
