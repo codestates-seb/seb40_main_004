@@ -1,6 +1,8 @@
 package com.morakmorak.morak_back_end.entity;
 
 import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
+import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.exception.ErrorCode;
 import lombok.*;
 
 import javax.persistence.*;
@@ -61,7 +63,7 @@ public class Article extends BaseTime {
 
     @Builder.Default
     @OneToMany(mappedBy = "article")
-    private List<Comment> Comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "article")
@@ -75,7 +77,15 @@ public class Article extends BaseTime {
     @OneToMany(mappedBy = "article")
     private List<ArticleLike> articleLikes = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "article")
+    private List<Answer> answers = new ArrayList<>();
+
     public void injectUserForMapping(User user) {
+        if (this.user != null) {
+            this.user.getArticles().remove(this);
+        }
+
         this.user = user;
         user.getArticles().add(this);
     }
@@ -107,4 +117,13 @@ public class Article extends BaseTime {
         this.articleStatus = articleStatus;
     }
 
+    public void closeThisArticle() {
+        this.isClosed = true;
+    }
+
+    public void addAnswer(Answer answer) {
+        if (answer.getArticle() != null) throw new BusinessLogicException(ErrorCode.BAD_REQUEST);
+        this.answers.add(answer);
+        answer.isMappedWith(this);
+    }
 }
