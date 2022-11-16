@@ -7,10 +7,10 @@
    - 질문 본문 && 태그 컴포넌트
    - 코멘트 컴포넌트
  */
-import { LikeBookmarkBtns } from './LikeBookmarkBtns';
-import { QuestionMainText } from './QuestionContent/QuestionMainText';
-import { CommentList } from './CommentList';
-import { ProfileImage } from './ProfileImage';
+import { LikeBookmarkBtns } from '../LikeBookmarkBtns';
+import { QuestionMainText } from '../QuestionContent/QuestionMainText';
+import { CommentList } from '../Comment/CommentList';
+import { ProfileImage } from '../ProfileImage';
 
 export const QusetionAnswer = () => {
   return (

@@ -4,9 +4,9 @@
  * 최근 수정일: 2022-11-14
  */
 
-import { UserNickname } from './QuestionContent/UserNickname';
-import { CreatedDate } from './QuestionContent/CreatedDate';
-import { ProfileImage } from './ProfileImage';
+import { UserNickname } from '../QuestionContent/UserNickname';
+import { CreatedDate } from '../QuestionContent/CreatedDate';
+import { ProfileImage } from '../ProfileImage';
 
 export const Comment = () => {
   return (

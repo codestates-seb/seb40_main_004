@@ -8,7 +8,10 @@ type ButtonText = { children: string };
 
 export const Button = ({ children }: ButtonText) => {
   return (
-    <button className="bg-main-yellow text-[16px] px-5 py-[6px] rounded-full">
+    <button
+      className="bg-main-yellow text-[16px] px-5 py-[6px] rounded-full"
+      type="submit"
+    >
       {children}
     </button>
   );

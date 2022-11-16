@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Comment } from './Comment';
-import { TextArea } from './TextArea';
+import { TextArea } from '../TextArea';
 
 export const CommentList = () => {
   const [isOpen, setIsOpen] = useState(false);
