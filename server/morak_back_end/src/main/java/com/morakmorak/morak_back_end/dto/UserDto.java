@@ -1,8 +1,10 @@
 package com.morakmorak.morak_back_end.dto;
 
 
+import com.morakmorak.morak_back_end.entity.ReviewBadge;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.JobType;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -61,8 +63,21 @@ public class UserDto {
 
         private AvatarDto.Request avatar;
         private List<TagDto.SimpleTag> tags;
-//        private List<ArticleDto.ResponseArticleList> articles;
+        private List<ReviewBadgeDto.SimpleReviewBadgeDto> reviewBadges;
+        private List<ArticleDto.ResponseListTypeArticle> articles;
         private List<ActivityDto> activities;
-        private List<ReviewDto> reviews;
+        private List<ReviewDto.Response> reviews;
+
+        @QueryProjection
+        public ResponseDashBoard(Long userId, String email, String nickname, JobType jobType, Grade grade, Integer point, String github, String blog) {
+            this.userId = userId;
+            this.email = email;
+            this.nickname = nickname;
+            this.jobType = jobType;
+            this.grade = grade;
+            this.point = point;
+            this.github = github;
+            this.blog = blog;
+        }
     }
 }
