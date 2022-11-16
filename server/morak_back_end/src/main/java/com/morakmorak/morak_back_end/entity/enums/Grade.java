@@ -4,5 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum Grade {
+    BRONZE,
+    GOLD,
+    SILVER,
     VIP
+    ;
 }

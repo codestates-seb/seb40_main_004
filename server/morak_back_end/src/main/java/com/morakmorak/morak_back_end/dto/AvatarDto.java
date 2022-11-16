@@ -28,12 +28,11 @@ public class AvatarDto {
                             .remotePath(avatar.getRemotePath())
                             .build();
         }
-        
+    }
 
     @Getter
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Request {
         private Long avatarId;
         private String remotePath;

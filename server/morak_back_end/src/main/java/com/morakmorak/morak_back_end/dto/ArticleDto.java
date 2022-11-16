@@ -70,8 +70,9 @@ public class ArticleDto {
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
 
-        private UserDto.ResponseSimpleUserDto userInfo;
-
+        private UserDto.ResponseSimpleUserDto  userInfo;
+        private AvatarDto.SimpleResponse avatarInfo;
     }
+
 
 }

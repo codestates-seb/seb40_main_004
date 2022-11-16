@@ -8,10 +8,13 @@ import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -71,7 +74,7 @@ public class ArticleService {
     }
 
     public Boolean checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
-        if (!article.getUser().getId().equals(userInfo.getId()) ) {
+        if (!article.getUser().getId().equals(userInfo.getId())) {
             throw new BusinessLogicException(ErrorCode.INVALID_USER);
         }
         return true;
@@ -93,9 +96,9 @@ public class ArticleService {
     }
 
     public Boolean fusionTagDtoWithArticle(Article article, List<TagDto.SimpleTag> tags) {
-        for (int i = article.getArticleTags().size() -1; i >= 0; i--) {
-                article.getArticleTags().remove(i);
-            }
+        for (int i = article.getArticleTags().size() - 1; i >= 0; i--) {
+            article.getArticleTags().remove(i);
+        }
         tags.stream().forEach(tag -> {
             Tag dbTag = tagRepository.findById(tag.getTagId())
                     .orElseThrow(() -> new BusinessLogicException(ErrorCode.TAG_NOT_FOUND));
@@ -115,5 +118,28 @@ public class ArticleService {
 
                 });
         return true;
+    }
+
+    public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticleAsPaging(String category, String keyword, String target, String sort, Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page-1, size);
+
+        Page<Article> articles;
+
+        if (target.equals("tag")) {
+             articles = articleRepository.tagSearch(category, keyword, target, sort, pageRequest);
+
+        } else {
+            articles = articleRepository.search(category, keyword, target, sort, pageRequest);
+        }
+
+        List<ArticleDto.ResponseListTypeArticle> mapper = articles.getContent().stream().map(article -> {
+            Integer commentCount = article.getComments().size();
+            Integer answerCount = article.getAnswers().size();
+            List<Tag> tags = article.getArticleTags().stream()
+                    .map(articleTag -> articleTag.getTag()).collect(Collectors.toList());
+            return articleMapper.articleToResponseSearchResultArticle(article, commentCount, answerCount, tags);
+        }).collect(Collectors.toList());
+
+        return new ResponseMultiplePaging<>(mapper, articles);
     }
 }
