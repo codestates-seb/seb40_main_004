@@ -1,10 +1,13 @@
 package com.morakmorak.morak_back_end.entity;
 
+import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 
 @Entity
 @Getter
@@ -25,7 +28,11 @@ public class Answer extends BaseTime{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id")
+    private Article article;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "review_id")
     private Review review;
 
@@ -48,4 +55,15 @@ public class Answer extends BaseTime{
     @Builder.Default
     @OneToMany(mappedBy = "answer")
     private List<AnswerLike> answerLike = new ArrayList<>();
+
+    void isMappedWith(Article article) {
+        this.article = article;
+    }
+
+    void isAcceptedWith(Review review) {
+        if (this.isPicked) throw new BusinessLogicException(BAD_REQUEST);
+        this.review = review;
+        this.isPicked = true;
+        this.article.closeThisArticle();
+    }
 }
