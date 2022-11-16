@@ -16,7 +16,7 @@ import java.util.List;
 import static com.morakmorak.morak_back_end.entity.QAnswer.answer;
 import static com.morakmorak.morak_back_end.entity.QArticle.article;
 import static com.morakmorak.morak_back_end.entity.QArticleTag.articleTag;
-import static com.morakmorak.morak_back_end.entity.QBookMark.bookMark;
+import static com.morakmorak.morak_back_end.entity.QBookmark.bookmark;
 import static com.morakmorak.morak_back_end.entity.QComment.comment;
 import static com.morakmorak.morak_back_end.entity.QFile.file;
 import static com.morakmorak.morak_back_end.entity.QReview.review;
@@ -51,7 +51,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .leftJoin(article.user.comments, comment)
                 .leftJoin(article.vote, vote)
                 .fetchJoin()
-                .leftJoin(article.bookMark, bookMark)
+                .leftJoin(article.bookmark, bookmark)
                 .fetchJoin()
                 .leftJoin(article.answers, answer)
                 .leftJoin(article.reviews, review)
@@ -85,8 +85,8 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .leftJoin(articleTag.article.category, QCategory.category)
                 .leftJoin(articleTag.article.user, user)
                 .leftJoin(articleTag.article.answers, answer)
-                .leftJoin(articleTag.article.bookMark, bookMark)
-                .leftJoin(articleTag.article.Comments, comment)
+                .leftJoin(articleTag.article.bookmark, bookmark)
+                .leftJoin(articleTag.article.comments, comment)
                 .leftJoin(articleTag.article.reviews, review)
                 .leftJoin(articleTag.article.vote, vote)
                 .leftJoin(articleTag.article.files, file)
@@ -104,8 +104,8 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .leftJoin(articleTag.article.category, QCategory.category)
                 .leftJoin(articleTag.article.user, user)
                 .leftJoin(articleTag.article.answers, answer)
-                .leftJoin(articleTag.article.bookMark, bookMark)
-                .leftJoin(articleTag.article.Comments, comment)
+                .leftJoin(articleTag.article.bookmark, bookmark)
+                .leftJoin(articleTag.article.comments, comment)
                 .leftJoin(articleTag.article.reviews, review)
                 .leftJoin(articleTag.article.vote, vote)
                 .leftJoin(articleTag.article.files, file)
@@ -137,7 +137,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
             case "tag":
                 return articleTag.tag.name.in(TagName.valueOf(keyword));
             case "bookmark":
-                return article.bookMark.user.id.eq(Long.parseLong(keyword));
+                return article.bookmark.user.id.eq(Long.parseLong(keyword));
             case "titleAndContent":
                 return article.title.contains(keyword).or(article.content.contains(keyword));
             default:
@@ -155,9 +155,9 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
             case "asc":
                 article.id.asc();
             case "comment-desc":
-                return article.Comments.size().desc();
+                return article.comments.size().desc();
             case "comment-asc":
-                return article.Comments.size().asc();
+                return article.comments.size().asc();
             case "like-desc":
                 return article.vote.count.desc();
             case "like-asc":

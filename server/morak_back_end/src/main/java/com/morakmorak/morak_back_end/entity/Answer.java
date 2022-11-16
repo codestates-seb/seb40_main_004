@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
+import static com.morakmorak.morak_back_end.exception.ErrorCode.BAD_REQUEST;
 
 @Entity
 @Getter

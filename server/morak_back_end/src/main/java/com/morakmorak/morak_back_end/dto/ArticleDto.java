@@ -71,7 +71,7 @@ public class ArticleDto {
         private LocalDateTime lastModifiedAt;
 
         private UserDto.ResponseSimpleUserDto  userInfo;
-        private AvatarDto.ResponseAvatarInfo avatarInfo;
+        private AvatarDto.SimpleResponse avatarInfo;
     }
 
 

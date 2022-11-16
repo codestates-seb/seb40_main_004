@@ -28,22 +28,21 @@ public class AvatarDto {
                             .remotePath(avatar.getRemotePath())
                             .build();
         }
+    }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class Request {
+        private Long avatarId;
+        private String remotePath;
+        private String filename;
 
-        @Getter
-        @Builder
-        @NoArgsConstructor(access = AccessLevel.PROTECTED)
-        @AllArgsConstructor(access = AccessLevel.PROTECTED)
-        public static class Request {
-            private Long avatarId;
-            private String remotePath;
-            private String filename;
-
-            @QueryProjection
-            public Request(Long avatarId, String remotePath, String filename) {
-                this.avatarId = avatarId;
-                this.remotePath = remotePath;
-                this.filename = filename;
-            }
+        @QueryProjection
+        public Request(Long avatarId, String remotePath, String filename) {
+            this.avatarId = avatarId;
+            this.remotePath = remotePath;
+            this.filename = filename;
         }
     }
+}

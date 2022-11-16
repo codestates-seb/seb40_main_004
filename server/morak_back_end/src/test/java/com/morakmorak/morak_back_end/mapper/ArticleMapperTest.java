@@ -70,7 +70,7 @@ class ArticleMapperTest {
                 .articleTags(List.of(articleTagJava))
                 .category(info)
                 .vote(Vote.builder().count(10).build())
-                .Comments(comments)
+                .comments(comments)
                 .answers(answers)
                 .user(user)
                 .build();
