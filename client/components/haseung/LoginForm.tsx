@@ -1,11 +1,13 @@
 /*
  * 책임 작성자: 정하승
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-15
+ * 최근 수정일: 2022-11-16
  */
 
+import axios from 'axios';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
+import { Button } from '../common/Button';
 
 type LoginProps = {
   email: string;
@@ -14,7 +16,18 @@ type LoginProps = {
 
 export const LoginForm = () => {
   const onValid = ({ email, password }: LoginProps) => {
-    console.log(email, password);
+    /* Sending a post request to the server. */
+    // console.log(email, password);
+    // fetch('http://localhost:3000/users', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ email, password }),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => console.log('data', data.user));
+    axios
+      .post('http://localhost:3000/users', { email, password })
+      .then((res) => console.log('res', res.data));
   };
   const { register, handleSubmit } = useForm<LoginProps>();
   return (
@@ -47,12 +60,9 @@ export const LoginForm = () => {
           <span className="text-blue-500 hover:text-blue-400">가입</span>
         </Link>
       </span>
-      <button
-        className="mx-auto mt-4 bg-main-yellow rounded-full w-96 h-10 hover:bg-main-orange"
-        type="submit"
-      >
-        로그인
-      </button>
+      <div className="mx-auto mt-4 rounded-full w-96 h-10 ">
+        <Button>로그인</Button>
+      </div>
     </form>
   );
 };
