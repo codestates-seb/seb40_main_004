@@ -10,7 +10,7 @@
 import { QuestionTitle } from './QuestionTitle';
 import { QuestionerInfo } from './QuestionerInfo';
 import { QuestionMainText } from './QuestionMainText';
-import { CommentList } from '../CommentList';
+import { CommentList } from '../Comment/CommentList';
 import { TagList } from './TagList';
 import { LikeBookmarkBtns } from '../LikeBookmarkBtns';
 

@@ -8,7 +8,8 @@ import { NextPage } from 'next';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
 import { QuestionContent } from '../../components/hyejung/QuestionContent/QuestionContent';
-import { QusetionAnswer } from '../../components/hyejung/QuestionAnswer';
+import { QusetionAnswer } from '../../components/hyejung/QuestionAnswer/QuestionAnswer';
+import { AnswerEditor } from '../../components/hyejung/QuestionAnswer/AnswerEditor';
 
 const QuestionDetail: NextPage = () => {
   return (
@@ -23,6 +24,10 @@ const QuestionDetail: NextPage = () => {
           <h1>1개의 답변이 달렸습니다.</h1>
         </section>
         <QusetionAnswer />
+        <article className="flex justify-center mt-5">
+          <button>더보기</button>
+        </article>
+        <AnswerEditor />
       </main>
       <Footer />
     </>
