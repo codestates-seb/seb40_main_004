@@ -43,12 +43,18 @@ class ArticleQueryRepositoryImplTest {
         em.persist(qna);
 
         for (int i = 0; i < 10; i++) {
+            Category category;
+            if (i % 2 == 0) {
+                category = info;
+            } else {
+                category = qna;
+            }
 
             ArticleTag articleTagJava = ArticleTag.builder().tag(JAVA).build();
             Article article = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~" + i)
                     .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
                     .articleTags(List.of(articleTagJava))
-                    .category(info)
+                    .category(category)
                     .vote(Vote.builder().build())
                     .build();
             info.getArticleList().add(article);
@@ -59,10 +65,17 @@ class ArticleQueryRepositoryImplTest {
 
         for (int i = 0; i < 10; i++) {
 
+            Category category;
+            if (i % 2 == 0) {
+                category = info;
+            } else {
+                category = qna;
+            }
+
             ArticleTag articleTagC = ArticleTag.builder().tag(C).build();
             Article article = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~" + i)
                     .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
-                    .category(qna)
+                    .category(category)
                     .articleTags(List.of(articleTagC))
                     .vote(Vote.builder().build())
                     .build();
@@ -103,7 +116,7 @@ class ArticleQueryRepositoryImplTest {
         //given
         PageRequest pageRequest = PageRequest.of(0, 10);
         //when
-        Page<Article> articles = articleRepository.tagSearch("qna", "C", "tag", null, pageRequest);
+        Page<Article> articles = articleRepository.tagSearch(null, "C", "tag", null, pageRequest);
 
         for (Article article : articles) {
             System.out.println("확인용");
@@ -141,14 +154,35 @@ class ArticleQueryRepositoryImplTest {
 
     @Test
     @DisplayName("컨텐트로 조회하기")
-    public void contentSortingPagingTest() throws Exception{
+    public void contentSortingPagingTest() throws Exception {
         //given
-        PageRequest pageRequest = PageRequest.of(0, 5);
+        PageRequest pageRequest = PageRequest.of(0, 10);
         //when
-        Page<Article> articles = articleRepository.search(null, "콘탠트입니다.", "content", null, pageRequest);
+        Page<Article> articles = articleRepository.search(null, "제발", "content", "like-desc", pageRequest);
         //then
-        assertThat(articles.getTotalPages()).isEqualTo(4);
+        assertThat(articles.getTotalPages()).isEqualTo(2);
         assertThat(articles.getTotalElements()).isEqualTo(20);
+
+        for (Article article : articles) {
+            System.out.println("확인용");
+            System.out.println(articles.getTotalElements());
+            String title = article.getTitle();
+            System.out.println("title = " + title);
+            String content = article.getContent();
+            System.out.println("content = " + content);
+            String categoryName = article.getCategory().getName();
+            System.out.println("categoryName = " + categoryName);
+            Integer likes = article.getVote().getCount();
+            System.out.println("likes = " + likes);
+            article.getArticleTags().stream().forEach(articleTag ->
+                    {
+                        TagName name = articleTag.getTag().getName();
+                        System.out.println("name = " + name);
+                    }
+            );
+            System.out.println("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
+
+        }
     }
 
     @Test
@@ -163,4 +197,5 @@ class ArticleQueryRepositoryImplTest {
         assertThat(articles.getSize()).isSameAs(10);
         assertThat(articles.getTotalPages()).isSameAs(1);
     }
+
 }
