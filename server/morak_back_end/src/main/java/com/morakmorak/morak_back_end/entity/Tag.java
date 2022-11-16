@@ -25,4 +25,9 @@ public class Tag extends BaseTime{
     @Builder.Default
     @OneToMany(mappedBy = "tag")
     private List<ArticleTag> articleTags = new ArrayList<>();
+
+    public Tag(TagName name) {
+        this.name = name;
+        this.articleTags = new ArrayList<>();
+    }
 }
