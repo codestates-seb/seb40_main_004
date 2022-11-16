@@ -1,12 +1,14 @@
 /*
  * 책임 작성자: 정하승
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-15
+ * 최근 수정일: 2022-11-16
  * 개요: 가입하기 버튼에 인증번호 발송 페이지로 가는 링크 추가
  */
 
+import axios from 'axios';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
+import { Button } from '../common/Button';
 
 import { Divider } from './Divider';
 import { SocialLoginBtn } from './SocialLoginBtn';
@@ -19,7 +21,10 @@ type SignUpProps = {
 
 export const SignUpForm = () => {
   const onValid = ({ email, password, confirmPassword }: SignUpProps) => {
-    console.log(email, password, confirmPassword);
+    // console.log(email, password, confirmPassword);
+    axios
+      .post('http://localhost:3000/users', { email, password, confirmPassword })
+      .then((res) => console.log('res', res.data));
   };
   const { register, handleSubmit } = useForm<SignUpProps>();
   return (
@@ -49,12 +54,9 @@ export const SignUpForm = () => {
         autoComplete="off"
       />
       <Link href="/authenticationNumber">
-        <button
-          className="mx-auto mt-4 bg-main-yellow rounded-full w-96 h-10 hover:bg-main-orange"
-          type="submit"
-        >
-          가입하기
-        </button>
+        <div className="mx-auto mt-4 rounded-full w-96 h-10 ">
+          <Button>가입하기</Button>
+        </div>
       </Link>
       <span className="mt-3 text-main-gray">
         이미 계정이 있으신가요?{' '}
