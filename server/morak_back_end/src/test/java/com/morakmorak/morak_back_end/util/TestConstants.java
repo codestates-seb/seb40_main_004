@@ -1,5 +1,7 @@
 package com.morakmorak.morak_back_end.util;
 
+import java.time.LocalDateTime;
+
 public class TestConstants {
     public final static String EMAIL1 = "user@test.com";
     public final static String EMAIL2 = "user2@test.com";
@@ -21,4 +23,18 @@ public class TestConstants {
     public final static String ROLE_USER = "ROLE_USER";
     public final static String ROLE_MANAGER = "ROLE_MANAGER";
     public final static String ROLE_ADMIN = "ROLE_ADMIN";
+
+    public final static String TITLE1 = "아무 제목이나 지어야지~";
+    public final static String TITLE2 = "아무 제목이나 지어야지~2";
+
+    public final static String CONTENT1 = "아무말이나 적어야지~";
+    public final static String CONTENT2 = "아무말이나 적어야지~2";
+
+    public final static LocalDateTime NOW_TIME = LocalDateTime.now();
+
+    public final static String GITHUB_URL = "https://github.com/";
+    public final static String TISTORY_URL = "https://7357.tistory.com/";
+
+    public final static String QNA = "qna";
+    public final static String INFO = "info";
 }

@@ -72,7 +72,7 @@ public class User {
     private List<UserSkillStack> userSkillStacks = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Answer> answers = new ArrayList<>();
 
     @Builder.Default
@@ -120,15 +120,19 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Report> reports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "questioner", cascade = CascadeType.PERSIST)
     @Builder.Default
-    private List<Review> reviews = new ArrayList<>();
+    private List<Review> writtenReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "answerer", cascade = CascadeType.PERSIST)
+    @Builder.Default
+    private List<Review> receivedReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     @Builder.Default
     private List<ArticleLike> articleLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     @Builder.Default
     private List<AnswerLike> answerLikes = new ArrayList<>();
 

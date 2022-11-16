@@ -23,4 +23,8 @@ public class Category extends BaseTime {
     @OneToMany(mappedBy = "category")
     @Builder.Default
     private List<Article> articleList = new ArrayList<>();
+
+    public Category(String name) {
+        this.name = name;
+    }
 }

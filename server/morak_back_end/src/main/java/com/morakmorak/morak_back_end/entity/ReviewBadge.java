@@ -16,11 +16,16 @@ public class ReviewBadge extends BaseTime{
     @Column(name = "review_badge_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "review_id")
     private Review review;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "badge_id")
     private Badge badge;
+
+    public void mapBadgeAndReview() {
+        this.review.getReviewBadges().add(this);
+        this.badge.getReviewBadges().add(this);
+    }
 }

@@ -26,4 +26,9 @@ public class Badge extends BaseTime{
     @Builder.Default
     @OneToMany(mappedBy = "badge")
     private List<ReviewBadge> reviewBadges = new ArrayList<>();
+
+    public Badge(BadgeName name) {
+        this.name = name;
+        this.reviewBadges = new ArrayList<>();
+    }
 }

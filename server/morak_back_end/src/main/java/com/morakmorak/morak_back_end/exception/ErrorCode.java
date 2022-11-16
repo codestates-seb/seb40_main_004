@@ -30,12 +30,13 @@ public enum ErrorCode {
 
     NICKNAME_EXISTS(CONFLICT, "nickname exists"),
     MISMATCHED_PASSWORD(CONFLICT, "mismatched password, check your original password"),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "This request requires admin confirmation."),
 
     /*
     * The error code expresses the dto validation exception of spring framework in web mvc test.
     * @author : YangEunChan
     * */
-    ONLY_TEST_CODE(BAD_REQUEST, "BAD_REQUEST"),
+    ONLY_TEST_CODE(HttpStatus.BAD_REQUEST, "BAD_REQUEST"),
 
     /*
     * It is a constant for JWT Exception only.
