@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.config.RedisContainerTest;
 import com.morakmorak.morak_back_end.dto.AuthDto;
 import com.morakmorak.morak_back_end.entity.User;
-import com.morakmorak.morak_back_end.repository.RedisRepository;
+import com.morakmorak.morak_back_end.repository.RedisRepositoryImpl;
 import com.morakmorak.morak_back_end.repository.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.AuthService;
@@ -30,8 +30,7 @@ import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
@@ -54,21 +53,21 @@ public class AuthTest extends RedisContainerTest {
     AuthService authService;
 
     @Autowired
-    RedisRepository<User> redisRepository;
+    RedisRepositoryImpl<User> redisRepositoryImpl;
 
     @Autowired
     UserRepository userRepository;
 
     @Autowired
-    RedisRepository<String> mailAuthRedisRepository;
+    RedisRepositoryImpl<String> mailAuthRedisRepositoryImpl;
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
     @BeforeEach
     public void init() {
-        redisRepository.deleteData(AUTH_KEY);
-        redisRepository.deleteData(INVALID_AUTH_KEY);
+        redisRepositoryImpl.deleteData(AUTH_KEY);
+        redisRepositoryImpl.deleteData(INVALID_AUTH_KEY);
     }
 
     @Test
@@ -100,9 +99,9 @@ public class AuthTest extends RedisContainerTest {
                 .password(PASSWORD1)
                 .build();
 
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         authService.joinUser(dbUser, AUTH_KEY);
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
 
         AuthDto.RequestJoin request = AuthDto.RequestJoin.builder()
                 .email(EMAIL1)
@@ -132,7 +131,7 @@ public class AuthTest extends RedisContainerTest {
                 .authKey(AUTH_KEY)
                 .build();
 
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         String json = objectMapper.writeValueAsString(request);
         //when
         ResultActions perform = mockMvc.perform(post("/auth")
@@ -176,7 +175,7 @@ public class AuthTest extends RedisContainerTest {
                 .password(PASSWORD2)
                 .build();
 
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         authService.joinUser(dbUser, AUTH_KEY);
 
         AuthDto.RequestLogin request = AuthDto
@@ -207,7 +206,7 @@ public class AuthTest extends RedisContainerTest {
                 .password(PASSWORD1)
                 .build();
 
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         authService.joinUser(dbUser, AUTH_KEY);
 
         AuthDto.RequestLogin request = AuthDto
@@ -251,7 +250,7 @@ public class AuthTest extends RedisContainerTest {
         //given
         String bearerToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, List.of(ROLE_USER));
         String tokenValue = bearerToken.split(" ")[1];
-        redisRepository.saveData(tokenValue, User.builder().build(), REFRESH_TOKEN_EXPIRE_COUNT);
+        redisRepositoryImpl.saveData(tokenValue, User.builder().build(), REFRESH_TOKEN_EXPIRE_COUNT);
 
         //when
         ResultActions perform = mockMvc
@@ -283,7 +282,7 @@ public class AuthTest extends RedisContainerTest {
         //given
         String invalid_bearer_token = jwtTokenUtil.createRefreshToken(null, ID1, List.of(ROLE_USER));
         String invalid_token = invalid_bearer_token.split(" ")[1];
-        redisRepository.saveData(invalid_token, User.builder().build(), REFRESH_TOKEN_EXPIRE_COUNT);
+        redisRepositoryImpl.saveData(invalid_token, User.builder().build(), REFRESH_TOKEN_EXPIRE_COUNT);
         //when
         ResultActions perform = mockMvc.perform(put("/auth/token")
                 .header(REFRESH_HEADER, invalid_bearer_token));
@@ -304,7 +303,7 @@ public class AuthTest extends RedisContainerTest {
 
         String bearerToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, List.of(ROLE_USER));
         String tokenValue = bearerToken.split(" ")[1];
-        redisRepository.saveData(tokenValue, user, REFRESH_TOKEN_EXPIRE_COUNT);
+        redisRepositoryImpl.saveData(tokenValue, user, REFRESH_TOKEN_EXPIRE_COUNT);
 
         //when
         ResultActions perform = mockMvc.perform(put("/auth/token")
@@ -343,7 +342,7 @@ public class AuthTest extends RedisContainerTest {
                 .build();
         Long expiration = 1L;
 
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, expiration);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, expiration);
         Thread.sleep(10);
         String json = objectMapper.writeValueAsString(request);
 
@@ -369,7 +368,7 @@ public class AuthTest extends RedisContainerTest {
                 .build();
 
         User sameNicknameUser = User.builder().nickname(NICKNAME1).build();
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         userRepository.save(sameNicknameUser);
         String json = objectMapper.writeValueAsString(request);
 
@@ -393,7 +392,7 @@ public class AuthTest extends RedisContainerTest {
                 .password(PASSWORD1)
                 .build();
 
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         User savedUser = userRepository.save(dbUser);
 
         AuthDto.RequestChangePassword request = AuthDto.RequestChangePassword.builder()
@@ -406,7 +405,7 @@ public class AuthTest extends RedisContainerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //when
-        ResultActions perform = mockMvc.perform(post("/auth/password")
+        ResultActions perform = mockMvc.perform(patch("/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(JWT_HEADER, accessToken)
                 .content(json));
@@ -425,7 +424,7 @@ public class AuthTest extends RedisContainerTest {
                 .password(PASSWORD1)
                 .build();
 
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         authService.joinUser(dbUser, AUTH_KEY);
         User savedUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
 
@@ -439,7 +438,7 @@ public class AuthTest extends RedisContainerTest {
         String json = objectMapper.writeValueAsString(request);
 
         //when
-        ResultActions perform = mockMvc.perform(post("/auth/password")
+        ResultActions perform = mockMvc.perform(patch("/auth/password")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(JWT_HEADER, accessToken)
                 .content(json));
@@ -448,7 +447,7 @@ public class AuthTest extends RedisContainerTest {
         perform.andExpect(status().isOk())
                 .andExpect(content().string(Boolean.TRUE.toString()));
 
-        Assertions.assertThat(savedUser.comparePassword(passwordEncoder, dbUser)).isFalse();
+        Assertions.assertThat(savedUser.comparePassword(passwordEncoder, dbUser.getPassword())).isFalse();
     }
 
     @Test
@@ -461,7 +460,7 @@ public class AuthTest extends RedisContainerTest {
                 .password(PASSWORD1)
                 .build();
 
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         authService.joinUser(dbUser, AUTH_KEY);
         User savedUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
 
@@ -494,7 +493,7 @@ public class AuthTest extends RedisContainerTest {
                 .password(PASSWORD1)
                 .build();
 
-        mailAuthRedisRepository.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
+        mailAuthRedisRepositoryImpl.saveData(AUTH_KEY, EMAIL1, VALIDITY_PERIOD_OF_THE_AUTHENTICATION_KEY);
         authService.joinUser(dbUser, AUTH_KEY);
         User savedUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
 

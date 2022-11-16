@@ -18,20 +18,30 @@ public class Review extends BaseTime {
     @Column(name = "review_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "questioner_id")
+    private User questioner;
 
-    private String message;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name ="answerer_id")
+    private User answerer;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "review")
+    private String content;
+
+    @OneToOne(mappedBy = "review", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Answer answer;
 
     @Builder.Default
-    @OneToMany(mappedBy = "review")
+    @OneToMany(mappedBy = "review", cascade = CascadeType.PERSIST)
     private List<ReviewBadge> reviewBadges = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
+
+    public void mapArticleAndUsers() {
+        this.questioner.getWrittenReviews().add(this);
+        this.answerer.getReceivedReviews().add(this);
+        this.answer.isAcceptedWith(this);
+    }
 }

@@ -141,6 +141,20 @@ include::{snippets}/이메일_인증_요청_실패_409/http-response.adoc[]
 .response-fields
 include::{snippets}/이메일_인증_요청_실패_409/response-body.adoc[]
 
+=== 실패 409_이미 존재하는 이메일
+
+.http-request
+include::{snippets}/이메일_인증_요청_실패_409_중복/http-request.adoc[]
+
+.request-fields
+include::{snippets}/이메일_인증_요청_실패_409_중복/request-fields.adoc[]
+
+.http-response
+include::{snippets}/이메일_인증_요청_실패_409_중복/http-response.adoc[]
+
+.response-fields
+include::{snippets}/이메일_인증_요청_실패_409_중복/response-body.adoc[]
+
 ***
 
 == 이메일 인증
@@ -355,21 +369,21 @@ include::{snippets}/비밀번호_변경_실패_409/response-body.adoc[]
 
 ***
 
-== 비밀번호 찾기
+== 비밀번호 찾기_이메일 인증
 
-=== 성공 200_이메일 전송
+=== 성공 201_이메일 전송
 
 .http-request
-include::{snippets}/비밀번호_찾기_성공_200/http-request.adoc[]
+include::{snippets}/비밀번호_찾기_성공_201/http-request.adoc[]
 
 .request-fields
-include::{snippets}/비밀번호_찾기_성공_200/request-fields.adoc[]
+include::{snippets}/비밀번호_찾기_성공_201/request-fields.adoc[]
 
 .http-response
-include::{snippets}/비밀번호_찾기_성공_200/http-response.adoc[]
+include::{snippets}/비밀번호_찾기_성공_201/http-response.adoc[]
 
 .response-fields
-include::{snippets}/비밀번호_찾기_성공_200/response-body.adoc[]
+include::{snippets}/비밀번호_찾기_성공_201/response-body.adoc[]
 
 === 실패 404_존재하지 않는 이메일
 
@@ -384,6 +398,67 @@ include::{snippets}/비밀번호_찾기_실패_404/http-response.adoc[]
 
 .response-fields
 include::{snippets}/비밀번호_찾기_실패_404/response-body.adoc[]
+
+=== 실패 409_5분내_요청_이력
+
+.http-request
+include::{snippets}/비밀번호_찾기_실패_409/http-request.adoc[]
+
+.request-fields
+include::{snippets}/비밀번호_찾기_실패_409/request-fields.adoc[]
+
+.http-response
+include::{snippets}/비밀번호_찾기_실패_409/http-response.adoc[]
+
+.response-fields
+include::{snippets}/비밀번호_찾기_실패_409/response-body.adoc[]
+
+
+***
+
+== 비밀번호 찾기_임시패스워드 발급
+
+=== 성공 200_이메일 전송
+
+.http-request
+include::{snippets}/임시_패스워드_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/임시_패스워드_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/임시_패스워드_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/임시_패스워드_성공_200/response-body.adoc[]
+
+=== 실패 400_유효성 검사
+
+.http-request
+include::{snippets}/임시_패스워드_실패_400/http-request.adoc[]
+
+.request-fields
+include::{snippets}/임시_패스워드_실패_400/request-fields.adoc[]
+
+.http-response
+include::{snippets}/임시_패스워드_실패_400/http-response.adoc[]
+
+.response-fields
+include::{snippets}/임시_패스워드_실패_400/response-body.adoc[]
+
+=== 실패 404_존재하지 않는 인증키
+
+.http-request
+include::{snippets}/임시_패스워드_실패_404/http-request.adoc[]
+
+.request-fields
+include::{snippets}/임시_패스워드_실패_404/request-fields.adoc[]
+
+.http-response
+include::{snippets}/임시_패스워드_실패_404/http-response.adoc[]
+
+.response-fields
+include::{snippets}/임시_패스워드_실패_404/response-body.adoc[]
 
 ***
 

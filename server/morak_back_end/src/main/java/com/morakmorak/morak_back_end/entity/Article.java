@@ -1,10 +1,11 @@
 package com.morakmorak.morak_back_end.entity;
 
 import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
+import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.exception.ErrorCode;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class Article extends BaseTime {
     private String content;
 
     @Builder.Default
-    private Boolean isClosed = false;
+    private Boolean isClosed = Boolean.FALSE;
 
     private Long thumbnail;
 
@@ -46,7 +47,7 @@ public class Article extends BaseTime {
     private Category category;
 
     @OneToOne(mappedBy = "article")
-    private BookMark bookMark;
+    private Bookmark bookmark;
 
     @Builder.Default
     @OneToMany(mappedBy = "article", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -62,7 +63,7 @@ public class Article extends BaseTime {
 
     @Builder.Default
     @OneToMany(mappedBy = "article")
-    private List<Comment> Comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "article")
@@ -72,7 +73,19 @@ public class Article extends BaseTime {
     @OneToMany(mappedBy = "article")
     private List<Review> reviews = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "article")
+    private List<ArticleLike> articleLikes = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "article")
+    private List<Answer> answers = new ArrayList<>();
+
     public void injectUserForMapping(User user) {
+        if (this.user != null) {
+            this.user.getArticles().remove(this);
+        }
+
         this.user = user;
         user.getArticles().add(this);
     }
@@ -104,4 +117,13 @@ public class Article extends BaseTime {
         this.articleStatus = articleStatus;
     }
 
+    public void closeThisArticle() {
+        this.isClosed = true;
+    }
+
+    public void addAnswer(Answer answer) {
+        if (answer.getArticle() != null) throw new BusinessLogicException(ErrorCode.BAD_REQUEST);
+        this.answers.add(answer);
+        answer.isMappedWith(this);
+    }
 }

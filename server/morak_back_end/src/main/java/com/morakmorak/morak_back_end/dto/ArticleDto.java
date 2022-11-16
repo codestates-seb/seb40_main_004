@@ -74,4 +74,5 @@ public class ArticleDto {
         private AvatarDto.ResponseAvatarInfo avatarInfo;
     }
 
+
 }

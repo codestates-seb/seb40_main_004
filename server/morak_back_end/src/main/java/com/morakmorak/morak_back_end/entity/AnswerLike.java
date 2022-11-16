@@ -7,23 +7,20 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Builder
+@Table(name = "answer_like")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BookMark extends BaseTime{
-
+public class AnswerLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "book_mark_id")
+    @Column(name = "answer_like_id")
     private Long id;
 
-    private String memo;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
-    private Article article;
-
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "answer_id")
+    private Answer answer;
 }

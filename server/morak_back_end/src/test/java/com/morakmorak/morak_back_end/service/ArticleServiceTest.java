@@ -58,8 +58,6 @@ public class ArticleServiceTest {
     ArticleRepository articleRepository;
 
 
-
-
     @Test
     @DisplayName("게시글 등록 서비스로직 성공 테스트")
     public void upload_suc() throws Exception {

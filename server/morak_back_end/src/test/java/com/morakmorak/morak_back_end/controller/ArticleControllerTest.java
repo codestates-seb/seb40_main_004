@@ -15,7 +15,7 @@ import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.repository.ArticleRepository;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.ArticleService;
-import com.morakmorak.morak_back_end.util.SecurityTestConfig;
+import com.morakmorak.morak_back_end.config.SecurityTestConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

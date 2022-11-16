@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.entity.enums.JobType;
 import com.morakmorak.morak_back_end.entity.enums.UserStatus;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import lombok.*;
@@ -45,7 +46,7 @@ public class User {
 
     private Boolean isJobSeeker;
 
-    private Boolean isDeveloper;
+    private JobType jobType;
 
     private Boolean gender;
 
@@ -55,10 +56,14 @@ public class User {
 
     private Boolean receiveEmail;
 
+    private String github;
+
+    private String blog;
+
     @Enumerated(EnumType.STRING)
     private Grade grade;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "avartar_id")
     private Avatar avatar;
 
@@ -67,7 +72,7 @@ public class User {
     private List<UserSkillStack> userSkillStacks = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Answer> answers = new ArrayList<>();
 
     @Builder.Default
@@ -107,18 +112,29 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
 
-
     @Builder.Default
-    @OneToMany(mappedBy = "user")
-    private List<BookMark> bookMarks = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Report> reports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "questioner", cascade = CascadeType.PERSIST)
     @Builder.Default
-    private List<Review> reviews = new ArrayList<>();
+    private List<Review> writtenReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "answerer", cascade = CascadeType.PERSIST)
+    @Builder.Default
+    private List<Review> receivedReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    @Builder.Default
+    private List<ArticleLike> articleLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    @Builder.Default
+    private List<AnswerLike> answerLikes = new ArrayList<>();
 
     public User(String password) {
         this.password = password;
@@ -129,8 +145,8 @@ public class User {
         return this.password;
     }
 
-    public boolean comparePassword(PasswordEncoder passwordEncoder, User user) {
-        return passwordEncoder.matches(user.getPassword(), this.password);
+    public boolean comparePassword(PasswordEncoder passwordEncoder, String otherPassword) {
+        return passwordEncoder.matches(otherPassword, this.password);
     }
 
     public void changePassword(String newPassword) {
@@ -145,5 +161,10 @@ public class User {
         if (roles.size() == 0) roles = List.of("Role_User");
 
         return jwtTokenUtil.createAccessToken(this.getEmail(), this.getId(), roles);
+    }
+
+    public void injectAvatar(Avatar avatar) {
+        this.avatar = avatar;
+
     }
 }

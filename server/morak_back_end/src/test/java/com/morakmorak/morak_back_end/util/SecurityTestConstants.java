@@ -38,4 +38,16 @@ public class SecurityTestConstants {
 
     public final static String AUTH_KEY = "11111111";
     public final static String INVALID_AUTH_KEY = "22222222";
+
+    public final static String REDIS_AUTH_KEY_EMPTY = "emtpy key";
+    public final static String REDIS_AUTH_KEY_NOT_EMPTY = "not empty key";
+
+    public final static String REDIS_EMAIL_EMPTY = "empty email";
+    public final static String REDIS_EMAIL_NOT_EMPTY = "not empty email";
+
+    public final static String BEARER_REDIS_TOKEN_EMPTY = "Bearer emptyToken";
+    public final static String BEARER_REDIS_TOKEN_NOT_EMPTY = "Bearer notEmptyToken";
+
+    public final static String REDIS_TOKEN_EMPTY = "emptyToken";
+    public final static String REDIS_TOKEN_NOT_EMPTY = "notEmptyToken";
 }
