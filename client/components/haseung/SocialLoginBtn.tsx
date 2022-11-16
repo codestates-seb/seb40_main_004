@@ -4,14 +4,24 @@ import Image from 'next/image';
 import KaKao from '../../public/kakao.png';
 
 export const SocialLoginBtn = () => {
+  const handleKaKaoClick = () => {
+    // console.log('clicked');
+  };
   return (
-    <section className="flex justify-start w-full">
-      <button className="bg-main-gray rounded-full mr-3 w-2/4 h-11 mx-2">
-        <FontAwesomeIcon icon={faGithub} className="fa-lg cursor-pointer" />
+    <section className="flex justify-around w-full">
+      <button className="bg-main-gray rounded-full">
+        <FontAwesomeIcon
+          icon={faGithub}
+          className="cursor-pointer w-44 h-8 mr-3 mx-2"
+        />
       </button>
-      <button>
-        <Image src={KaKao} alt="kakaologin" />
-      </button>
+      <Image
+        onClick={handleKaKaoClick}
+        src={KaKao}
+        alt="kakaologin"
+        className="cursor-pointer"
+        priority
+      />
     </section>
   );
 };
