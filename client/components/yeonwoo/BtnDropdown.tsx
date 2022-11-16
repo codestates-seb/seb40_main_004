@@ -27,11 +27,11 @@ export const BtnDropdown = () => {
   return (
     <>
       {dropdown ? (
-        <div className="">
+        <div className="relative">
           <button onClick={() => setDropdown((prev) => !prev)}>
             <FontAwesomeIcon icon={faChevronUp} size="lg" />
           </button>
-          <ul className="border border-solid border-black border-opacity-10 border-spacing-1 fixed top-14 right-[5%] w-[200px] rounded-xl">
+          <ul className="border border-solid border-black border-opacity-10 border-spacing-1 right-[5%] w-[200px] rounded-xl absolute top-8">
             <li className="pt-4 pb-1 mx-4 flex justify-between items-center border-b border-solid">
               <span className="text-xs">나의 모락</span>
               <span className="text-lg font-semibold">✨ 260 모락</span>
@@ -43,15 +43,9 @@ export const BtnDropdown = () => {
               </li>
             </Link>
             <Link href="/edit-profile">
-              <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer py-1 px-4 rounded-xl text-[15px]">
-                <FontAwesomeIcon icon={faUser} size="sm" />
-                <span className="ml-2">개인정보 수정</span>
-              </li>
-            </Link>
-            <Link href="/edit-password">
               <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer py-1 mb-2 px-4 rounded-xl text-[15px]">
                 <FontAwesomeIcon icon={faUser} size="sm" />
-                <span className="ml-2">비밀번호 변경</span>
+                <span className="ml-2">개인정보 수정</span>
               </li>
             </Link>
             <li
