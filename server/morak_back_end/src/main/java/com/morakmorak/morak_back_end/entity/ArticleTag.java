@@ -23,8 +23,7 @@ public class ArticleTag extends BaseTime{
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    public void injectMappingForArticleAndTag(Article article, Tag tag) {
+    public void injectMappingForArticleAndTagForTesting(Article article) {
         this.article = article;
-        this.tag = tag;
     }
 }

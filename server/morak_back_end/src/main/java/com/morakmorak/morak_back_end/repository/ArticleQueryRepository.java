@@ -10,5 +10,5 @@ public interface ArticleQueryRepository {
 
     public Page<Article> search(String category, String keyword, String target, String sort, Pageable pageable);
 
-//    public Page<Article> tagSearch(String category, String keyword, String target, String sort, Pageable pageable);
+    public Page<Article> tagSearch(String category, String keyword, String target, String sort, Pageable pageable);
 }
