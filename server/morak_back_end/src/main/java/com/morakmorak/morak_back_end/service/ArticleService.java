@@ -6,6 +6,8 @@ import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
+import com.morakmorak.morak_back_end.mapper.CommentMapper;
+import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +29,12 @@ public class ArticleService {
     private final TagRepository tagRepository;
     private final UserService userService;
     private final CategoryRepository categoryRepository;
+    private final ArticleLikeRepository articleLikeRepository;
+    private final BookmarkRepository bookmarkRepository;
 
+    private final CommentMapper commentMapper;
+
+    private final TagMapper tagMapper;
     public ArticleDto.ResponseSimpleArticle upload(
             Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
             List<FileDto.RequestFileWithId> files, Category category
@@ -143,4 +150,36 @@ public class ArticleService {
 
         return new ResponseMultiplePaging<>(mapper, articles);
     }
+
+    public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
+        Article dbArticle = findVerifiedArticle(articleId);
+        Long userId = userInfo.getId();
+
+        Boolean isLiked = Boolean.FALSE;
+        Boolean isBookmarked = Boolean.FALSE;
+
+        if (articleLikeRepository.checkUserLiked(userId, dbArticle.getId()).isPresent()) {
+            isLiked = Boolean.TRUE;
+        }
+        if (bookmarkRepository.checkUserBookmarked(userId, dbArticle.getId()).isPresent()) {
+            isBookmarked = Boolean.TRUE;
+        }
+
+        Integer likes = dbArticle.getArticleLikes().size();
+
+        List<TagDto.SimpleTag> tags = dbArticle.getArticleTags().stream().map(articleTag -> {
+            TagDto.SimpleTag simpleTag = tagMapper.tagEntityToTagDto(articleTag.getTag());
+            return simpleTag;
+        }).collect(Collectors.toList());
+
+        List<CommentDto.Response> comments = dbArticle.getComments().stream()
+                .map(commentMapper::commentToCommentDto).collect(Collectors.toList());
+
+        ArticleDto.ResponseDetailArticle responseDetailArticle =
+                articleMapper.articleToResponseDetailArticle(dbArticle, isLiked, isBookmarked,
+                        tags, comments, likes);
+
+        return responseDetailArticle;
+    }
+
 }
