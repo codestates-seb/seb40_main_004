@@ -33,7 +33,6 @@ public interface ArticleMapper {
 
 
     @Mapping(source = "article.id", target = "articleId")
-    @Mapping(source = "article.vote.count", target = "likes")
     @Mapping(source = "article.category.name", target = "category")
     @Mapping(source = "article.user.id", target = "userInfo.userId")
     @Mapping(source = "article.user.nickname", target = "userInfo.nickname")
@@ -44,5 +43,6 @@ public interface ArticleMapper {
     ArticleDto.ResponseListTypeArticle articleToResponseSearchResultArticle(Article article,
                                                                             Integer commentCount,
                                                                             Integer answerCount,
-                                                                            List<Tag> tags);
+                                                                            List<Tag> tags,
+                                                                            Integer likes);
 }
