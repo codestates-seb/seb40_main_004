@@ -104,13 +104,16 @@ public class searchArticleTest {
         }
 
         ArticleTag articleTagJava = ArticleTag.builder().id(1L).tag(JAVA).build();
+
+        List<ArticleLike> articleLikes = new ArrayList<>();
+
         Article article
                 = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                 .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
                 .articleTags(List.of(articleTagJava))
                 .category(info)
                 .clicks(10)
-                .vote(Vote.builder().count(10).build())
+                .articleLikes(articleLikes)
                 .comments(comments)
                 .answers(answers)
                 .user(user)
@@ -121,6 +124,7 @@ public class searchArticleTest {
         List<Article> articles = new ArrayList<>();
         articles.add(article);
 
+        articleLikes.add(ArticleLike.builder().article(article).user(user).build());
 
         //given
 
@@ -148,7 +152,7 @@ public class searchArticleTest {
                             .category("info")
                             .title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                             .clicks(10)
-                            .likes(10)
+                            .likes(1)
                             .answerCount(1)
                             .commentCount(1)
                             .isClosed(false)
@@ -187,7 +191,7 @@ public class searchArticleTest {
                 .andExpect(jsonPath("$.data[0:1].category").value("info"))
                 .andExpect(jsonPath("$.data[0:1].title").value("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~"))
                 .andExpect(jsonPath("$.data[0:1].clicks").value(10))
-                .andExpect(jsonPath("$.data[0:1].likes").value(10))
+                .andExpect(jsonPath("$.data[0:1].likes").value(1))
                 .andExpect(jsonPath("$.data[0:1].isClosed").value(false))
                 .andExpect(jsonPath("$.data[0:1].commentCount").value(1))
                 .andExpect(jsonPath("$.data[0:1].answerCount").value(1))
@@ -267,13 +271,16 @@ public class searchArticleTest {
         }
 
         ArticleTag articleTagJava = ArticleTag.builder().id(1L).tag(JAVA).build();
+
+        List<ArticleLike> articleLikes = new ArrayList<>();
+
         Article article
                 = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                 .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
                 .articleTags(List.of(articleTagJava))
                 .category(info)
                 .clicks(10)
-                .vote(Vote.builder().count(10).build())
+                .articleLikes(articleLikes)
                 .comments(comments)
                 .answers(answers)
                 .user(user)
@@ -283,6 +290,8 @@ public class searchArticleTest {
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
+
+        articleLikes.add(ArticleLike.builder().article(article).user(user).build());
 
 
         //given
@@ -311,7 +320,7 @@ public class searchArticleTest {
                         .category("info")
                         .title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                         .clicks(10)
-                        .likes(10)
+                        .likes(1)
                         .answerCount(1)
                         .commentCount(1)
                         .isClosed(false)
@@ -350,7 +359,7 @@ public class searchArticleTest {
                 .andExpect(jsonPath("$.data[0:1].category").value("info"))
                 .andExpect(jsonPath("$.data[0:1].title").value("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~"))
                 .andExpect(jsonPath("$.data[0:1].clicks").value(10))
-                .andExpect(jsonPath("$.data[0:1].likes").value(10))
+                .andExpect(jsonPath("$.data[0:1].likes").value(1))
                 .andExpect(jsonPath("$.data[0:1].isClosed").value(false))
                 .andExpect(jsonPath("$.data[0:1].commentCount").value(1))
                 .andExpect(jsonPath("$.data[0:1].answerCount").value(1))
