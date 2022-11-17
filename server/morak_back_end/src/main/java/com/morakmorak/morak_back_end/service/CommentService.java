@@ -61,6 +61,18 @@ public class CommentService {
     }
 
     public List<CommentDto.Response> findAllComments(Long articleId) {
-        return commentRepository.findAllCommentsByArticleId(articleId).stream().map(comment->CommentDto.Response.of(comment)).collect(Collectors.toList());
+        return commentRepository.findAllCommentsByArticleId(articleId).stream().map(comment -> CommentDto.Response.of(comment)).collect(Collectors.toList());
+    }
+
+    public boolean deleteComment(Long userId, Long articleId, Long commentId) throws Exception {
+        User verifiedUser = userService.findVerifiedUserById(userId);
+        Article verifiedArticle = articleService.findVerifiedArticle(articleId);
+        Comment foundComment = findVerifiedCommentById(commentId);
+        if (foundComment.hasPermissionWith(verifiedUser) && isCommentableStatus(verifiedArticle)) {
+            commentRepository.deleteById(commentId);
+            return true;
+        } else {
+            throw new BusinessLogicException(ErrorCode.CANNOT_ACCESS_COMMENT);
+        }
     }
 }
