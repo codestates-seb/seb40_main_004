@@ -25,7 +25,3 @@ export const BtnBookmark = () => {
     </>
   );
 };
-/*
-<FontAwesomeIcon icon="fa-regular fa-bookmark" />
-<FontAwesomeIcon icon="fa-solid fa-bookmark" />
-*/

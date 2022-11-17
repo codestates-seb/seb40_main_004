@@ -72,7 +72,7 @@ export const AnswerEditor = () => {
 
   const editorContent = watch('content');
   return (
-    <div className="mt-10">
+    <div className="mt-5">
       <form onSubmit={handleSubmit(onValid)}>
         <QuillNoSSRWrapper
           className="h-96"

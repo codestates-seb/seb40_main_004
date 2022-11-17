@@ -1,4 +1,4 @@
-import { Button } from '../common/Button';
+import { Button } from '../../common/Button';
 export const TextArea = () => {
   return (
     <div className="flex flex-col space-y-3">

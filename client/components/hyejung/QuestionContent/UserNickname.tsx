@@ -1,5 +1,12 @@
-export const UserNickname = () => {
+type UserNicknameProps = {
+  name: string;
+  id: number;
+};
+
+export const UserNickname = ({ name, id }: UserNicknameProps) => {
   return (
-    <span className="font-bold text-sm sm:text-[16px] space-x-1">💎김코딩</span>
+    <button className="font-bold text-sm sm:text-[16px] space-x-1">
+      💎 {name}
+    </button>
   );
 };

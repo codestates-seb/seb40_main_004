@@ -1,8 +1,13 @@
+type ProfileImageProps = {
+  src: string;
+};
+
 import Image from 'next/image';
-export const ProfileImage = () => {
+
+export const ProfileImage = ({ src }: ProfileImageProps) => {
   return (
-    <div className="">
-      <Image src="/favicon.ico" width="40px" height="40px" />
+    <div>
+      <Image src={src} width="40px" height="40px" className="rounded-full" />
     </div>
   );
 };
