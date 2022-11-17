@@ -129,9 +129,9 @@ class ArticleMapperTest {
         assertThat(test.getUserInfo().getNickname()).isEqualTo(article.getUser().getNickname());
         assertThat(test.getUserInfo().getGrade()).isEqualTo(article.getUser().getGrade());
 
-        assertThat(test.getAvatarInfo().getAvatarId()).isEqualTo(article.getUser().getAvatar().getId());
-        assertThat(test.getAvatarInfo().getRemotePath()).isEqualTo(article.getUser().getAvatar().getRemotePath());
-        assertThat(test.getAvatarInfo().getFileName()).isEqualTo(article.getUser().getAvatar().getOriginalFileName());
+        assertThat(test.getAvatar().getAvatarId()).isEqualTo(article.getUser().getAvatar().getId());
+        assertThat(test.getAvatar().getRemotePath()).isEqualTo(article.getUser().getAvatar().getRemotePath());
+        assertThat(test.getAvatar().getFileName()).isEqualTo(article.getUser().getAvatar().getOriginalFileName());
 
     }
 }
