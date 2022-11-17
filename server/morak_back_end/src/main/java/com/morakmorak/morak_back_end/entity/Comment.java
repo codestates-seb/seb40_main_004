@@ -48,13 +48,24 @@ public class Comment extends BaseTime{
         }
     }
 
-    public void injectArticle(Article verifiedArticle) {
+    public Comment injectArticle(Article verifiedArticle) {
         this.article = verifiedArticle;
         article.getComments().add(this);
+        return this;
     }
-    
-    public void injectUser(User verifiedUSer) {
+
+    public Comment injectUser(User verifiedUSer) {
         this.user = verifiedUSer;
         verifiedUSer.getComments().add(this);
+        return this;
+    }
+
+    public boolean hasPermissionWith(User userWhoAccess) {
+        return this.user.getId() == userWhoAccess.getId() ? true : false;
+    }
+
+    public Comment updateContent(String newContent) {
+        this.content = newContent;
+        return this;
     }
 }
