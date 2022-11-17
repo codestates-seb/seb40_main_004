@@ -31,6 +31,8 @@ public enum ErrorCode {
     NICKNAME_EXISTS(CONFLICT, "nickname exists"),
     MISMATCHED_PASSWORD(CONFLICT, "mismatched password, check your original password"),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "This request requires admin confirmation."),
+    CANNOT_ACCESS_COMMENT(CONFLICT,"unable to access comment"),
+    COMMENT_NOT_FOUND(NOT_FOUND,"comment not found"),
 
     /*
     * The error code expresses the dto validation exception of spring framework in web mvc test.

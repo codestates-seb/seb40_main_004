@@ -1,7 +1,6 @@
 package com.morakmorak.morak_back_end.dto;
 
 
-import com.morakmorak.morak_back_end.entity.ReviewBadge;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.JobType;
@@ -34,6 +33,13 @@ public class UserDto {
         private Long userId;
         private String nickname;
         private Grade grade;
+        public static ResponseSimpleUserDto of(User userFromComment) {
+            return ResponseSimpleUserDto.builder()
+                    .userId(userFromComment.getId())
+                    .nickname(userFromComment.getNickname())
+                    .grade(userFromComment.getGrade())
+                    .build();
+        }
     }
 
     @Builder
@@ -42,7 +48,8 @@ public class UserDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class RequestEditProfile {
         @NotBlank
-        @Pattern(regexp = "^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{2,16}$", message = INVALID_NICKNAME) // 영문, 숫자, 한글 2자 이상 16자 이하(공백 및 초성, 자음 불가능)
+        @Pattern(regexp = "^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{2,16}$", message = INVALID_NICKNAME)
+        // 영문, 숫자, 한글 2자 이상 16자 이하(공백 및 초성, 자음 불가능)
         private String nickname;
         @NotBlank
         private String introduce;
@@ -80,23 +87,6 @@ public class UserDto {
             this.github = github;
             this.blog = blog;
         }
-    }
-    @Builder
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ResponseForCommentUserInfo {
-        private Long userId;
-        private String nickname;
-//        private AvatarDto.SimpleResponse avatar;(추가 여부 논의 필요)
-        //mapper 변경 가능 부분, 재사용성을 높이려면 ?? comment가 삭제됐을 경우 상태관리 how??
-        public static ResponseForCommentUserInfo of(com.morakmorak.morak_back_end.entity.User userFromComment) {
-            return ResponseForCommentUserInfo.builder()
-                    .userId(userFromComment.getId())
-                    .nickname(userFromComment.getNickname())
-                    .build();
-        }
-
     }
 
 }

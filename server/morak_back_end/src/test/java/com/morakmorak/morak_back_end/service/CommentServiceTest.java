@@ -57,7 +57,7 @@ class CommentServiceTest {
         given(commentRepository.save(comment)).willReturn(comment);
 
         //when
-        CommentDto.ReponsePost target = commentService.makeComment(1L, 1L, comment);
+        CommentDto.Response target = commentService.makeComment(1L, 1L, comment);
         //then
         verify(commentRepository, times(1)).save(comment);
     }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/articles/{article-id}")
@@ -19,11 +20,23 @@ public class CommentController {
 
     @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto.ReponsePost requestPostComment(@RequestBody @Valid CommentDto.RequestPost request,
-                                                 @PathVariable("article-id") Long articleId,
-                                                 @RequestUser UserDto.UserInfo user) {
+    public CommentDto.Response requestPostComment(@RequestBody @Valid CommentDto.Request request,
+                                                  @PathVariable("article-id") Long articleId,
+                                                  @RequestUser UserDto.UserInfo user) {
         Comment commentNotSaved = Comment.builder().content(request.getContent()).build();
-        CommentDto.ReponsePost madeComment = commentService.makeComment(user.getId(), articleId, commentNotSaved);
+        CommentDto.Response madeComment = commentService.makeComment(user.getId(), articleId, commentNotSaved);
         return madeComment;
+    }
+
+    @PatchMapping("/comments/{comment-id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentDto.Response> requestUpdateComment(@RequestBody @Valid CommentDto.Request request,
+                                                          @PathVariable("article-id") Long articleId,
+                                                          @PathVariable("comment-id") Long commentId,
+                                                          @RequestUser UserDto.UserInfo user) throws Exception {
+
+        commentService.editComment(user.getId(), articleId, commentId, request.getContent());
+
+        return commentService.findAllComments(articleId);
     }
 }

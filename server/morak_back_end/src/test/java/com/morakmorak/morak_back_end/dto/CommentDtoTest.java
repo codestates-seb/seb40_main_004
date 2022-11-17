@@ -25,10 +25,10 @@ class CommentDtoTest {
     @DisplayName("댓글이 공백으로 작성되는 경우 예외가 발생한다.")
     void commentDto_failed_1() {
         //given 댓글 준비
-        CommentDto.RequestPost request = CommentDto.RequestPost.builder()
+        CommentDto.Request request = CommentDto.Request.builder()
                 .content(null).build();
         //when 공백으로 작성된 댓글이 들어와 유효성 검사를 함
-        Set<ConstraintViolation<CommentDto.RequestPost>> validate = validator.validate(request);
+        Set<ConstraintViolation<CommentDto.Request>> validate = validator.validate(request);
         //then 예외가 존재
         Assertions.assertThat(validate).isNotEmpty();
     }
@@ -38,10 +38,10 @@ class CommentDtoTest {
     void commentDto_success_1() {
         //given 댓글 준비
         String VALID_CONTENT = "blahblah";
-        CommentDto.RequestPost request = CommentDto.RequestPost.builder()
+        CommentDto.Request request = CommentDto.Request.builder()
                 .content(VALID_CONTENT).build();
         //when 공백으로 작성된 댓글이 들어와 유효성 검사를 함
-        Set<ConstraintViolation<CommentDto.RequestPost>> validate = validator.validate(request);
+        Set<ConstraintViolation<CommentDto.Request>> validate = validator.validate(request);
         //then 예외가 존재
         Assertions.assertThat(validate).isEmpty();
     }
