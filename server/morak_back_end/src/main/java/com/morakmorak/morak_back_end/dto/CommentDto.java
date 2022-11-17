@@ -25,14 +25,14 @@ public class CommentDto {
         private Long articleId;
         private String content;
         private UserDto.ResponseSimpleUserDto userInfo;
-        private AvatarDto.SimpleResponse simpleResponse;
+        private AvatarDto.SimpleResponse avatar;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
         
         public static CommentDto.Response of(Comment savedComment) {
             return CommentDto.Response.builder()
                     .userInfo(UserDto.ResponseSimpleUserDto.of(savedComment.getUser()))
-                    .simpleResponse(AvatarDto.SimpleResponse.of(savedComment.getUser().getAvatar()))
+                    .avatar(AvatarDto.SimpleResponse.of(savedComment.getUser().getAvatar()))
                     .commentId(savedComment.getId())
                     .articleId(savedComment.getArticle().getId())
                     .content(savedComment.getContent())
