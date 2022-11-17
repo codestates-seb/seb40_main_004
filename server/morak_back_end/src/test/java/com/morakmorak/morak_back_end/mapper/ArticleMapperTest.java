@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.mapper;
 
 import com.morakmorak.morak_back_end.dto.ArticleDto;
+import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
@@ -26,6 +27,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ArticleMapperTest {
     @Autowired
     ArticleRepository articleRepository;
+
+    @Autowired
+    CommentMapper commentMapper;
 
     @Autowired
     ArticleMapper articleMapper;
@@ -57,7 +61,7 @@ class ArticleMapperTest {
         for (int i = 0; i < 3; i++) {
             Answer answer = Answer.builder().build();
             answers.add(answer);
-            Comment comment = Comment.builder().build();
+            Comment comment = Comment.builder().user(user).content("댓글입니다.").build();
             comments.add(comment);
             em.persist(answer);
             em.persist(comment);
@@ -139,6 +143,57 @@ class ArticleMapperTest {
         assertThat(test.getAvatar().getAvatarId()).isEqualTo(article.getUser().getAvatar().getId());
         assertThat(test.getAvatar().getRemotePath()).isEqualTo(article.getUser().getAvatar().getRemotePath());
         assertThat(test.getAvatar().getFileName()).isEqualTo(article.getUser().getAvatar().getOriginalFileName());
+
+    }
+
+    @Test
+    @DisplayName("articleToResponseDetailArticle 매퍼 작동 테스트")
+    public void articleToResponseDetailArticle_test(){
+    //given
+        Article article = articleRepository.findArticleByContent("콘탠트입니다. 제발 됬으면 좋겠습니다.").orElseThrow();
+
+        Boolean isLiked = true;
+        Boolean isBookmarked = true;
+
+        List<TagDto.SimpleTag> tags = article.getArticleTags().stream()
+                .map(articleTag -> tagMapper.tagEntityToTagDto(articleTag.getTag())).collect(Collectors.toList());
+
+        List<CommentDto.Response> comments = article.getComments().stream()
+                .map(comment -> commentMapper.commentToCommentDto(comment)).collect(Collectors.toList());
+
+        Integer likes = article.getArticleLikes().size();
+
+
+        //when
+        ArticleDto.ResponseDetailArticle test = articleMapper
+                .articleToResponseDetailArticle(article, isLiked, isBookmarked, tags, comments, likes);
+
+        //then
+        assertThat(test.getArticleId()).isEqualTo(article.getId());
+        assertThat(test.getCategory()).isEqualTo(article.getCategory().getName());
+        assertThat(test.getTitle()).isEqualTo(article.getTitle());
+        assertThat(test.getClicks()).isEqualTo(article.getClicks());
+        assertThat(test.getLikes()).isEqualTo(article.getArticleLikes().size());
+        assertThat(test.getIsClosed()).isEqualTo(article.getIsClosed());
+
+        assertThat(test.getIsLiked()).isTrue();
+        assertThat(test.getIsBookmarked()).isTrue();
+
+        assertThat(test.getCreatedAt()).isEqualTo(article.getCreatedAt());
+        assertThat(test.getLastModifiedAt()).isEqualTo(article.getLastModifiedAt());
+
+        assertThat(test.getTags().get(0).getTagId()).isEqualTo(tags.get(0).getTagId());
+        assertThat(test.getTags().get(0).getName()).isEqualTo("JAVA");
+
+        assertThat(test.getUserInfo().getUserId()).isEqualTo(article.getUser().getId());
+        assertThat(test.getUserInfo().getNickname()).isEqualTo(article.getUser().getNickname());
+        assertThat(test.getUserInfo().getGrade()).isEqualTo(article.getUser().getGrade());
+
+        assertThat(test.getAvatar().getAvatarId()).isEqualTo(article.getUser().getAvatar().getId());
+        assertThat(test.getAvatar().getRemotePath()).isEqualTo(article.getUser().getAvatar().getRemotePath());
+        assertThat(test.getAvatar().getFileName()).isEqualTo(article.getUser().getAvatar().getOriginalFileName());
+
+        assertThat(test.getComments()).isNotEmpty();
 
     }
 }
