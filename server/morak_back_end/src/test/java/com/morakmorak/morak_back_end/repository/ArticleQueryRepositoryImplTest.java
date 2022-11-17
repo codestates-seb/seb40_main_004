@@ -58,7 +58,7 @@ class ArticleQueryRepositoryImplTest {
                     .vote(Vote.builder().build())
                     .build();
             info.getArticleList().add(article);
-            articleTagJava.injectMappingForArticleAndTagForTesting(article);
+            articleTagJava.injectMappingForArticleAndTag(article);
             em.persist(article);
 
         }
@@ -80,7 +80,7 @@ class ArticleQueryRepositoryImplTest {
                     .vote(Vote.builder().build())
                     .build();
             qna.getArticleList().add(article);
-            articleTagC.injectMappingForArticleAndTagForTesting(article);
+            articleTagC.injectMappingForArticleAndTag(article);
             em.persist(article);
         }
 

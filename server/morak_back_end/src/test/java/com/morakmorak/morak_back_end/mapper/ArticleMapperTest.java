@@ -1,13 +1,11 @@
 package com.morakmorak.morak_back_end.mapper;
 
 import com.morakmorak.morak_back_end.dto.ArticleDto;
-import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.repository.ArticleRepository;
 import com.morakmorak.morak_back_end.util.ArticleTestConstants;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,9 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -75,7 +71,7 @@ class ArticleMapperTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTagForTesting(article);
+        articleTagJava.injectMappingForArticleAndTag(article);
         em.persist(article);
 
     }
