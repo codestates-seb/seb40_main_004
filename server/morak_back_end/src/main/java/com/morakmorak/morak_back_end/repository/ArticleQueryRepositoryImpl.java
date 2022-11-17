@@ -15,6 +15,7 @@ import java.util.List;
 
 import static com.morakmorak.morak_back_end.entity.QAnswer.answer;
 import static com.morakmorak.morak_back_end.entity.QArticle.article;
+import static com.morakmorak.morak_back_end.entity.QArticleLike.articleLike;
 import static com.morakmorak.morak_back_end.entity.QArticleTag.articleTag;
 import static com.morakmorak.morak_back_end.entity.QBookmark.bookmark;
 import static com.morakmorak.morak_back_end.entity.QComment.comment;
@@ -22,7 +23,6 @@ import static com.morakmorak.morak_back_end.entity.QFile.file;
 import static com.morakmorak.morak_back_end.entity.QReview.review;
 import static com.morakmorak.morak_back_end.entity.QTag.tag;
 import static com.morakmorak.morak_back_end.entity.QUser.user;
-import static com.morakmorak.morak_back_end.entity.QVote.vote;
 
 
 @Repository
@@ -49,8 +49,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .fetchJoin()
                 .leftJoin(article.user.answers, answer)
                 .leftJoin(article.user.comments, comment)
-                .leftJoin(article.vote, vote)
-                .fetchJoin()
+                .leftJoin(articleTag.article.articleLikes, articleLike)
                 .leftJoin(article.bookmark, bookmark)
                 .fetchJoin()
                 .leftJoin(article.answers, answer)
@@ -66,6 +65,17 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         Long count = queryFactory
                 .select(article.count())
                 .from(article)
+                .leftJoin(article.user, user)
+                .leftJoin(article.articleTags, articleTag)
+                .leftJoin(articleTag.tag, tag)
+                .leftJoin(article.category, QCategory.category)
+                .leftJoin(article.user.answers, answer)
+                .leftJoin(article.user.comments, comment)
+                .leftJoin(articleTag.article.articleLikes, articleLike)
+                .leftJoin(article.bookmark, bookmark)
+                .leftJoin(article.answers, answer)
+                .leftJoin(article.reviews, review)
+                .leftJoin(article.files, file)
                 .where(categoryEq(category),
                         keywordEq(keyword, target))
                 .orderBy(sortEq(sort))
@@ -88,7 +98,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .leftJoin(articleTag.article.bookmark, bookmark)
                 .leftJoin(articleTag.article.comments, comment)
                 .leftJoin(articleTag.article.reviews, review)
-                .leftJoin(articleTag.article.vote, vote)
+                .leftJoin(articleTag.article.articleLikes, articleLike)
                 .leftJoin(articleTag.article.files, file)
                 .where(categoryEq(category), keywordEq(keyword, target))
                 .offset(pageable.getOffset())
@@ -107,7 +117,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .leftJoin(articleTag.article.bookmark, bookmark)
                 .leftJoin(articleTag.article.comments, comment)
                 .leftJoin(articleTag.article.reviews, review)
-                .leftJoin(articleTag.article.vote, vote)
+                .leftJoin(articleTag.article.articleLikes, articleLike)
                 .leftJoin(articleTag.article.files, file)
                 .where(categoryEq(category), keywordEq(keyword, target))
                 .orderBy(sortEq(sort))
@@ -159,9 +169,9 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
             case "comment-asc":
                 return article.comments.size().asc();
             case "like-desc":
-                return article.vote.count.desc();
+                return article.articleLikes.size().desc();
             case "like-asc":
-                return article.vote.count.asc();
+                return article.articleLikes.size().asc();
             case "answer-desc":
                 return article.answers.size().desc();
             case "answer-asc":
@@ -171,6 +181,5 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         }
         return article.id.desc();
     }
-
-
+    
 }

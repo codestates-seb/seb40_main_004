@@ -2,8 +2,6 @@ package com.morakmorak.morak_back_end.service;
 
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.entity.enums.Grade;
-import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
@@ -18,15 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import javax.persistence.EntityManager;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -185,110 +175,5 @@ public class ArticleServiceTest {
            //then
            assertThat(aBoolean).isTrue();
         }
-
-//        @Test
-//        @DisplayName("게시글을 레포지토리에서 가져오는데 페이징으로 가져온다음 리턴값으로 정확한 값을 리턴하는지 테스트")
-//        public void searchArticleAsPaging_suc(){
-//
-//            Tag JAVA = Tag.builder().name(TagName.JAVA).build();
-//            Category info = Category.builder().name("info").build();
-//
-//
-//
-//            Avatar avatar = Avatar.builder().remotePath("remotePath").originalFileName("originalFileName").build();
-//            User user = User.builder().avatar(avatar).nickname("testNickname").grade(Grade.BRONZE).build();
-//
-//            List<Answer> answers = new ArrayList<>();
-//            List<Comment> comments = new ArrayList<>();
-//
-//            for (int i = 0; i < 3; i++) {
-//                Answer answer = Answer.builder().build();
-//                answers.add(answer);
-//                Comment comment = Comment.builder().build();
-//                comments.add(comment);
-//
-//            }
-//
-//            ArticleTag articleTagJava = ArticleTag.builder().tag(JAVA).build();
-//            Article article
-//                    = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
-//                    .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
-//                    .articleTags(List.of(articleTagJava))
-//                    .category(info)
-//                    .vote(Vote.builder().count(10).build())
-//                    .Comments(comments)
-//                    .answers(answers)
-//                    .user(user)
-//                    .build();
-//            info.getArticleList().add(article);
-//            articleTagJava.injectMappingForArticleAndTagForTesting(article);
-//
-//            List<Article> articles = new ArrayList<>();
-//            for (int i = 0; i < 3; i++) {
-//                articles.add(article);
-//            }
-//
-//            //given
-//            PageRequest pageRequest = PageRequest.of(0, 3);
-//            String category = "info";
-//            String keyword = "안녕하세요";
-//            String target = "content";
-//            String sort = null;
-//
-//            List<TagDto.SimpleTag> tags = new ArrayList<>();
-//
-//            for (int i = 1; i < 3; i++) {
-//            TagDto.SimpleTag tag = TagDto.SimpleTag.builder()
-//                    .tagId(Long.parseLong(String.valueOf(i))).name("JAVA").build();
-//                tags.add(tag);
-//            }
-//
-//            UserDto.ResponseSimpleUserDto userInfo =
-//                    UserDto.ResponseSimpleUserDto.builder().userId(1L)
-//                            .nickname("nickname").grade(Grade.BRONZE).build();
-//
-//            AvatarDto.ResponseAvatarInfo avatarInfo =
-//                    AvatarDto.ResponseAvatarInfo.builder().avatarId(1L)
-//                            .remotePath("localPath").fileName("fileName").build();
-//
-//
-////
-////            List<ArticleDto.ResponseListTypeArticle> result = new ArrayList<>();
-////            for (int i = 1; i < 11; i++) {
-//                ArticleDto.ResponseListTypeArticle responseListTypeArticleBuilder =
-//                        ArticleDto.ResponseListTypeArticle.builder()
-//                                .articleId(Long.parseLong(String.valueOf(1L)))
-//                                .category(category)
-//                                .title("타이틀입니다.타이틀입니다.타이틀입니다.타이틀입니다.")
-//                                .clicks(10)
-//                                .likes(10)
-//                                .answerCount(20)
-//                                .commentCount(15)
-//                                .isClosed(false)
-//                                .tags(tags)
-//                                .createdAt(LocalDateTime.now())
-//                                .lastModifiedAt(LocalDateTime.now())
-//                                .userInfo(userInfo)
-//                                .avatarInfo(avatarInfo)
-//                                .build();
-//
-////                result.add(responseListTypeArticleBuilder);
-//
-////            }
-//            Page<Article> search = new PageImpl<>(articles);
-//
-//            given(articleRepository.search(category, keyword, target, null, pageRequest)).willReturn(search);
-//
-//            given(articleMapper.articleToResponseSearchResultArticle(any(), any(), any(), any()))
-//                    .willReturn(responseListTypeArticleBuilder);
-//            given(new ResponseMultiplePaging<>(any(), search)).willReturn(ResponseMultiplePaging.builder().build());
-//
-//        //when
-//            ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> responseListTypeArticleResponseMultiplePaging =
-//                    articleService.searchArticleAsPaging(category,keyword
-//                    ,target,null, 1, 10);
-//            //then
-//
-//        }
 
 }

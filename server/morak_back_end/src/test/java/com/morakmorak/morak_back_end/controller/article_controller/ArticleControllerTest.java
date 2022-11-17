@@ -1,10 +1,9 @@
-package com.morakmorak.morak_back_end.controller;
+package com.morakmorak.morak_back_end.controller.article_controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.morakmorak.morak_back_end.dto.ArticleDto;
-import com.morakmorak.morak_back_end.dto.FileDto;
-import com.morakmorak.morak_back_end.dto.TagDto;
-import com.morakmorak.morak_back_end.dto.UserDto;
+import com.morakmorak.morak_back_end.controller.ArticleController;
+import com.morakmorak.morak_back_end.controller.ExceptionController;
+import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
@@ -301,18 +300,18 @@ class ArticleControllerTest {
         perform.andExpect(status().isUnauthorized());
      }
 
-     @Test
-     @DisplayName("게시글 삭제시 게시글이 존재하지 않을경우")
-     public void deleteArticle_fail2() throws Exception{
-         //given
-         given(articleService.deleteArticle(anyLong(), any(UserDto.UserInfo.class)))
-                 .willThrow(new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
-         //when
-         ResultActions perform = mockMvc.perform(
-                 delete("/articles/1")
-                         .header(JWT_HEADER, ACCESS_TOKEN)
-         );
-         //then
-         perform.andExpect(status().isNotFound());
-     }
+    @Test
+    @DisplayName("게시글 삭제시 게시글이 존재하지 않을경우")
+    public void deleteArticle_fail2() throws Exception{
+        //given
+        given(articleService.deleteArticle(anyLong(), any(UserDto.UserInfo.class)))
+                .willThrow(new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
+        //when
+        ResultActions perform = mockMvc.perform(
+                delete("/articles/1")
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+        );
+        //then
+        perform.andExpect(status().isNotFound());
+    }
 }
