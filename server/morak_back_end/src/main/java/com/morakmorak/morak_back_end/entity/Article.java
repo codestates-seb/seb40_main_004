@@ -16,14 +16,6 @@ import java.util.Optional;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article extends BaseTime {
-    // 커밋하지 말것
-    // 커밋하지 말것
-    // 커밋하지 말것
-    // 커밋하지 말것
-    // 커밋하지 말것
-    // 커밋하지 말것
-    // 커밋하지 말것
-    // 커밋하지 말것
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

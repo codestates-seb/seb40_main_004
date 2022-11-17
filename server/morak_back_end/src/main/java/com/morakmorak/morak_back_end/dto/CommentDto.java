@@ -15,6 +15,7 @@ public class CommentDto {
         @NotBlank
         public String content;
     }
+
     @Getter
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,11 +23,12 @@ public class CommentDto {
     public static class Response {
         private Long commentId;
         private Long articleId;
+        private String content;
         private UserDto.ResponseSimpleUserDto userInfo;
         private AvatarDto.SimpleResponse simpleResponse;
-        private String content;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
+        
         public static CommentDto.Response of(Comment savedComment) {
             return CommentDto.Response.builder()
                     .userInfo(UserDto.ResponseSimpleUserDto.of(savedComment.getUser()))

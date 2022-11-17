@@ -21,8 +21,8 @@ public class ResponseMultiplePaging<T> {
         this.pageInfo = PageInfo.builder()
                 .page(page.getNumber() + 1)
                 .size(page.getSize())
-                .totalElements(pageInfo.getTotalElements())
-                .totalPages(pageInfo.getTotalPages())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
                 .sort(page.getSort())
                 .build();
     }
