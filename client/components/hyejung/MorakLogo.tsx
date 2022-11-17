@@ -1,10 +1,3 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-14
- * 개요 : footer 컴포넌트에서 Morak 로고와 깃헙 아이콘을 표시합니다.
- */
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import Link from 'next/link';
