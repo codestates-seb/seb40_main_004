@@ -60,12 +60,16 @@ class ArticleMapperTest {
         }
 
         ArticleTag articleTagJava = ArticleTag.builder().tag(JAVA).build();
+        List<ArticleLike> articleLikes = new ArrayList<>();
+        ArticleLike articleLike = ArticleLike.builder().build();
+        articleLikes.add(articleLike);
+        em.persist(articleLike);
         Article article
                 = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                 .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
                 .articleTags(List.of(articleTagJava))
                 .category(info)
-                .vote(Vote.builder().count(10).build())
+                .articleLikes(articleLikes)
                 .comments(comments)
                 .answers(answers)
                 .user(user)
@@ -103,17 +107,17 @@ class ArticleMapperTest {
         int answer = article.getAnswers().size();
         List<Tag> tags = article.getArticleTags().stream()
                 .map(articleTag -> articleTag.getTag()).collect(Collectors.toList());
-
+        Integer likes = article.getArticleLikes().size();
         //when
         ArticleDto.ResponseListTypeArticle test =
-                articleMapper.articleToResponseSearchResultArticle(article, comment, answer, tags);
+                articleMapper.articleToResponseSearchResultArticle(article, comment, answer, tags, likes);
 
         //then
         assertThat(test.getArticleId()).isEqualTo(article.getId());
         assertThat(test.getCategory()).isEqualTo(article.getCategory().getName());
         assertThat(test.getTitle()).isEqualTo(article.getTitle());
         assertThat(test.getClicks()).isEqualTo(article.getClicks());
-        assertThat(test.getLikes()).isEqualTo(article.getVote().getCount());
+        assertThat(test.getLikes()).isEqualTo(article.getArticleLikes().size());
         assertThat(test.getIsClosed()).isEqualTo(article.getIsClosed());
 
         assertThat(test.getCommentCount()).isEqualTo(article.getComments().size());
