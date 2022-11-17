@@ -73,6 +73,29 @@ public class ArticleDto {
         private UserDto.ResponseSimpleUserDto  userInfo;
         private AvatarDto.SimpleResponse avatar;
     }
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponseDetailArticle {
+        private Long articleId;
+        private String category;
+        private String title;
+        private String content;
+        private Integer clicks;
+        private Integer likes;
+        private Boolean isClosed;
+        private Boolean isLiked;
+        private Boolean isBookmarked;
+        private List<TagDto.SimpleTag> tags;
+        private LocalDateTime createdAt;
+        private LocalDateTime lastModifiedAt;
+        private LocalDateTime expiredDate;
 
+        private UserDto.ResponseSimpleUserDto userInfo;
+        private AvatarDto.SimpleResponse avatar;
+
+        private List<CommentDto.Response> comments;
+    }
 
 }
