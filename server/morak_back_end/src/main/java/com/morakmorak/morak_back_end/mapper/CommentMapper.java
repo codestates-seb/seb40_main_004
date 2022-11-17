@@ -2,8 +2,11 @@ package com.morakmorak.morak_back_end.mapper;
 
 import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.entity.Comment;
+import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
+@Mapper(componentModel = "spring", typeConversionPolicy = ReportingPolicy.IGNORE)
 public interface CommentMapper {
 
     @Mapping(source = "comment.id", target = "commentId")
