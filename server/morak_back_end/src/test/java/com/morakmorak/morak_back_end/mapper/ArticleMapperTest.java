@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.mapper;
 
 import com.morakmorak.morak_back_end.dto.ArticleDto;
+import com.morakmorak.morak_back_end.dto.TagDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
@@ -24,10 +25,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class ArticleMapperTest {
     @Autowired
+    ArticleRepository articleRepository;
+
+    @Autowired
     ArticleMapper articleMapper;
 
     @Autowired
-    ArticleRepository articleRepository;
+    TagMapper tagMapper;
 
     @Autowired
     EntityManager em;
@@ -105,8 +109,8 @@ class ArticleMapperTest {
 
         int comment = article.getComments().size();
         int answer = article.getAnswers().size();
-        List<Tag> tags = article.getArticleTags().stream()
-                .map(articleTag -> articleTag.getTag()).collect(Collectors.toList());
+        List<TagDto.SimpleTag> tags = article.getArticleTags().stream()
+                .map(articleTag -> tagMapper.tagEntityToTagDto(articleTag.getTag())).collect(Collectors.toList());
         Integer likes = article.getArticleLikes().size();
         //when
         ArticleDto.ResponseListTypeArticle test =
@@ -124,6 +128,9 @@ class ArticleMapperTest {
         assertThat(test.getAnswerCount()).isEqualTo(article.getAnswers().size());
         assertThat(test.getCreatedAt()).isEqualTo(article.getCreatedAt());
         assertThat(test.getLastModifiedAt()).isEqualTo(article.getLastModifiedAt());
+
+        assertThat(test.getTags().get(0).getTagId()).isEqualTo(tags.get(0).getTagId());
+        assertThat(test.getTags().get(0).getName()).isEqualTo("JAVA");
 
         assertThat(test.getUserInfo().getUserId()).isEqualTo(article.getUser().getId());
         assertThat(test.getUserInfo().getNickname()).isEqualTo(article.getUser().getNickname());

@@ -43,6 +43,6 @@ public interface ArticleMapper {
     ArticleDto.ResponseListTypeArticle articleToResponseSearchResultArticle(Article article,
                                                                             Integer commentCount,
                                                                             Integer answerCount,
-                                                                            List<Tag> tags,
+                                                                            List<TagDto.SimpleTag> tags,
                                                                             Integer likes);
 }

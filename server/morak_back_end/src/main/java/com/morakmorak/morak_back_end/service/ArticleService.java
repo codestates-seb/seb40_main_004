@@ -136,8 +136,8 @@ public class ArticleService {
             Integer likes = article.getArticleLikes().size();
             Integer commentCount = article.getComments().size();
             Integer answerCount = article.getAnswers().size();
-            List<Tag> tags = article.getArticleTags().stream()
-                    .map(articleTag -> articleTag.getTag()).collect(Collectors.toList());
+            List<TagDto.SimpleTag> tags = article.getArticleTags().stream()
+                    .map(articleTag -> tagMapper.tagEntityToTagDto(articleTag.getTag())).collect(Collectors.toList());
             return articleMapper.articleToResponseSearchResultArticle(article, commentCount, answerCount, tags, likes);
         }).collect(Collectors.toList());
 
