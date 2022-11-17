@@ -2,7 +2,9 @@ package com.morakmorak.morak_back_end.mapper;
 
 import com.morakmorak.morak_back_end.dto.ArticleDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
+import com.morakmorak.morak_back_end.entity.Tag;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
@@ -31,6 +33,9 @@ public interface TagMapper {
 
         return tagWithIdAndName;
     }
+
+    @Mapping(source = "tag.id", target = "tagId")
+    TagDto.SimpleTag tagEntityToTagDto(Tag tag);
 
 
 }

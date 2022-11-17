@@ -8,6 +8,7 @@ import com.morakmorak.morak_back_end.mapper.FileMapper;
 import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.security.resolver.RequestUser;
 import com.morakmorak.morak_back_end.service.ArticleService;
+import io.lettuce.core.dynamic.annotation.Param;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,16 +63,23 @@ public class ArticleController {
     }
 
     @GetMapping
-    public ResponseEntity searchArticle(@RequestParam("category") String category,
-                                        @RequestParam("keyword") String keyword,
-                                        @RequestParam("target") String target,
-                                        @RequestParam("sort") String sort,
+    public ResponseEntity searchArticle(@Param("category") String category,
+                                        @Param("keyword") String keyword,
+                                        @Param("target") String target,
+                                        @Param("sort") String sort,
                                         @RequestParam("page") Integer page,
                                         @RequestParam("size") Integer size) {
         ResponseMultiplePaging responseMultiplePaging = articleService.searchArticleAsPaging(category, keyword, target, sort, page, size);
 
 
         return new ResponseEntity(responseMultiplePaging, HttpStatus.OK);
+    }
+
+    @GetMapping("/{article-id}")
+    public ResponseEntity findDetailArticle(@RequestUser UserDto.UserInfo userInfo,
+                                          @PathVariable("article-id") Long articleId) {
+        ArticleDto.ResponseDetailArticle result = articleService.findDetailArticle(articleId, userInfo);
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
 }
