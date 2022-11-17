@@ -75,8 +75,8 @@ public class ArticleController {
         return new ResponseEntity(responseMultiplePaging, HttpStatus.OK);
     }
 
-거    @GetMapping("/{article-id}")
-    public ResponseEntity detailArticle(@RequestUser UserDto.UserInfo userInfo,
+    @GetMapping("/{article-id}")
+    public ResponseEntity findDetailArticle(@RequestUser UserDto.UserInfo userInfo,
                                           @PathVariable("article-id") Long articleId) {
         ArticleDto.ResponseDetailArticle result = articleService.findDetailArticle(articleId, userInfo);
         return new ResponseEntity(result, HttpStatus.OK);
