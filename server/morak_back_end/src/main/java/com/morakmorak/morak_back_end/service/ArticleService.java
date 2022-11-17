@@ -133,11 +133,12 @@ public class ArticleService {
         }
 
         List<ArticleDto.ResponseListTypeArticle> mapper = articles.getContent().stream().map(article -> {
+            Integer likes = article.getArticleLikes().size();
             Integer commentCount = article.getComments().size();
             Integer answerCount = article.getAnswers().size();
             List<Tag> tags = article.getArticleTags().stream()
                     .map(articleTag -> articleTag.getTag()).collect(Collectors.toList());
-            return articleMapper.articleToResponseSearchResultArticle(article, commentCount, answerCount, tags);
+            return articleMapper.articleToResponseSearchResultArticle(article, commentCount, answerCount, tags, likes);
         }).collect(Collectors.toList());
 
         return new ResponseMultiplePaging<>(mapper, articles);
