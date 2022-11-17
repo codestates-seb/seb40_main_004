@@ -5,6 +5,7 @@
  */
 
 import Link from 'next/link';
+import { AuthenticationTimer } from '../../components/haseung/AuthenticationTimer';
 import { Intro } from '../../components/haseung/Intro';
 
 const AuthenticateNumber = () => {
@@ -17,7 +18,7 @@ const AuthenticateNumber = () => {
         </section>
         <section className="flex justify-between mt-3">
           <span>인증번호</span>
-          <span>4:59</span>
+          <AuthenticationTimer />
         </section>
         <input
           type="text"

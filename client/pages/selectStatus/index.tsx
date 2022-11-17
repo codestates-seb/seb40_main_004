@@ -1,3 +1,4 @@
+import { Button } from '../../components/common/Button';
 import { Intro } from '../../components/haseung/Intro';
 
 const index = () => {
@@ -24,9 +25,9 @@ const index = () => {
             </label>
           </div>
         </fieldset>
-        <button className="bg-main-yellow font-semibold hover:bg-main-orange ml-2 flex justify-center items-center w-[400px] h-12 mt-10 rounded-full">
-          가입하기
-        </button>
+        <div className="ml-2 flex justify-center items-center w-[400px] h-12 mt-10 rounded-full">
+          <Button>가입하기</Button>
+        </div>
       </article>
     </main>
   );
