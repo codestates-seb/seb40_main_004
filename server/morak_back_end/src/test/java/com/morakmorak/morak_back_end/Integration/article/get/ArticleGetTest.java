@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -84,12 +85,15 @@ public class ArticleGetTest {
 
         User user = User.builder().nickname("nickname").grade(Grade.BRONZE).build();
 
+        List<ArticleLike> articleLikes = new ArrayList<>();
+
         ArticleTag articleTagJava = ArticleTag.builder().tag(JAVA).build();
+
         Article article = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                 .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
                 .articleTags(List.of(articleTagJava))
                 .category(info)
-                .vote(Vote.builder().build())
+                .articleLikes(articleLikes)
                 .user(user)
                 .build();
         info.getArticleList().add(article);
@@ -130,12 +134,15 @@ public class ArticleGetTest {
 
         User user = User.builder().nickname("nickname").grade(Grade.BRONZE).build();
 
+        List<ArticleLike> articleLikes = new ArrayList<>();
+
         ArticleTag articleTagJava = ArticleTag.builder().tag(JAVA).build();
+
         Article article = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                 .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
                 .articleTags(List.of(articleTagJava))
                 .category(info)
-                .vote(Vote.builder().build())
+                .articleLikes(articleLikes)
                 .user(user)
                 .build();
         info.getArticleList().add(article);
