@@ -2,6 +2,8 @@ package com.morakmorak.morak_back_end.mapper;
 
 import com.morakmorak.morak_back_end.dto.ArticleDto;
 
+import com.morakmorak.morak_back_end.dto.CommentDto;
+import com.morakmorak.morak_back_end.dto.TagDto;
 import com.morakmorak.morak_back_end.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -45,4 +47,21 @@ public interface ArticleMapper {
                                                                             Integer answerCount,
                                                                             List<TagDto.SimpleTag> tags,
                                                                             Integer likes);
+
+    @Mapping(source = "article.id", target = "articleId")
+    @Mapping(source = "article.category.name", target = "category")
+    @Mapping(source = "article.user.id", target = "userInfo.userId")
+    @Mapping(source = "article.user.nickname", target = "userInfo.nickname")
+    @Mapping(source = "article.user.grade", target = "userInfo.grade")
+    @Mapping(source = "article.user.avatar.id", target = "avatar.avatarId")
+    @Mapping(source = "article.user.avatar.originalFileName", target = "avatar.fileName")
+    @Mapping(source = "article.user.avatar.remotePath", target = "avatar.remotePath")
+    ArticleDto.ResponseDetailArticle articleToResponseDetailArticle(Article article,
+                                                                    Boolean isLiked,
+                                                                    Boolean isBookmarked,
+                                                                    List<TagDto.SimpleTag> tags,
+                                                                    List<CommentDto.Response> comments,
+                                                                    Integer likes
+    );
+
 }
