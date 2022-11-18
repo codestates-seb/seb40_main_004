@@ -24,7 +24,7 @@ const Home: NextPage = () => {
         <div className="w-[1280px] py-12 flex justify-center">
           <CheerUp />
         </div>
-        <div className="w-[1163px] h-[597px] mx-auto rounded-2xl bg-white py-10 px-14">
+        <div className="w-[1163px] h-[581px] mx-auto rounded-2xl bg-white py-10 px-14">
           <ListLately />
         </div>
         <div className="w-[1163px] py-12 mx-auto flex gap-14">
