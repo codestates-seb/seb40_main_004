@@ -35,9 +35,7 @@ public class CommentController {
                                                           @PathVariable("comment-id") Long commentId,
                                                           @RequestUser UserDto.UserInfo user) throws Exception {
 
-        commentService.editComment(user.getId(), articleId, commentId, request.getContent());
-
-        return commentService.findAllComments(articleId);
+        return commentService.editComment(user.getId(), articleId, commentId, request.getContent());
     }
 
     @DeleteMapping("/comments/{comment-id}")

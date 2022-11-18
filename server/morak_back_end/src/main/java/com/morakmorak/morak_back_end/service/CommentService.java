@@ -8,7 +8,6 @@ import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.CommentRepository;
-import com.morakmorak.morak_back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +22,6 @@ import static com.morakmorak.morak_back_end.exception.ErrorCode.ARTICLE_NOT_FOUN
 @RequiredArgsConstructor
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
     private final ArticleService articleService;
     private final UserService userService;
 
@@ -36,19 +34,20 @@ public class CommentService {
         return CommentDto.Response.of(savedComment);
     }
 
-    public Comment editComment(Long userId, Long articleId, Long commentId, String newContent) throws Exception {
+    public List<CommentDto.Response> editComment(Long userId, Long articleId, Long commentId, String newContent) throws Exception {
         User verifiedUser = userService.findVerifiedUserById(userId);
         Article verifiedArticle = articleService.findVerifiedArticle(articleId);
         Comment foundComment = findVerifiedCommentById(commentId);
 
-        if (foundComment.hasPermissionWith(verifiedUser) && isCommentableStatus(verifiedArticle)) {
-            return foundComment.updateContent(newContent);
+        if (foundComment.hasPermissionWith(verifiedUser) && isEditableStatus(verifiedArticle)) {
+            foundComment.updateContent(newContent);
+            return findAllComments(articleId);
         } else {
             throw new BusinessLogicException(ErrorCode.CANNOT_ACCESS_COMMENT);
         }
     }
 
-    public boolean isCommentableStatus(Article verifiedArticle) throws Exception {
+    public boolean isEditableStatus(Article verifiedArticle) throws Exception {
         if (verifiedArticle.getArticleStatus() != ArticleStatus.POSTING) {
             throw new BusinessLogicException(ARTICLE_NOT_FOUND);
         } else {
@@ -68,7 +67,7 @@ public class CommentService {
         User verifiedUser = userService.findVerifiedUserById(userId);
         Article verifiedArticle = articleService.findVerifiedArticle(articleId);
         Comment foundComment = findVerifiedCommentById(commentId);
-        if (foundComment.hasPermissionWith(verifiedUser) && isCommentableStatus(verifiedArticle)) {
+        if (foundComment.hasPermissionWith(verifiedUser) && isEditableStatus(verifiedArticle)) {
             commentRepository.deleteById(commentId);
             return true;
         } else {
