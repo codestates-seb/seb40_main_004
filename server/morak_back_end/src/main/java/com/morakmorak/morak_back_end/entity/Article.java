@@ -12,26 +12,33 @@ import java.util.Optional;
 
 @Entity
 @Getter
+@ToString(onlyExplicitlyIncluded = true)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article extends BaseTime {
 
     @Id
+    @ToString.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
     private Long id;
 
     @Builder.Default
+    @ToString.Include
     private Integer clicks = 0;
 
+    @ToString.Include
     private String title;
 
+    @ToString.Include
     private String content;
 
+    @ToString.Include
     @Builder.Default
     private Boolean isClosed = Boolean.FALSE;
 
+    @ToString.Include
     private Long thumbnail;
 
     @Enumerated(EnumType.STRING)

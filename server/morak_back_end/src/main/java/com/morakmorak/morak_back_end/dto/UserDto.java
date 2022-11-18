@@ -69,15 +69,15 @@ public class UserDto {
         private String github;
         private String blog;
 
-        private AvatarDto.Request avatar;
-        private List<TagDto.SimpleTag> tags;
-        private List<ReviewBadgeDto.SimpleReviewBadgeDto> reviewBadges;
+        private AvatarDto.SimpleResponse avatar;
+        private List<TagQueryDto> tags;
+        private List<BadgeQueryDto> reviewBadges;
         private List<ArticleDto.ResponseListTypeArticle> articles;
-        private List<ActivityDto> activities;
+        private List<ActivityQueryDto> activities;
         private List<ReviewDto.Response> reviews;
 
         @QueryProjection
-        public ResponseDashBoard(Long userId, String email, String nickname, JobType jobType, Grade grade, Integer point, String github, String blog) {
+        public ResponseDashBoard(Long userId, String email, String nickname, JobType jobType, Grade grade, Integer point, String github, String blog, Long avatarId, String remotePath, String filename) {
             this.userId = userId;
             this.email = email;
             this.nickname = nickname;
@@ -86,7 +86,19 @@ public class UserDto {
             this.point = point;
             this.github = github;
             this.blog = blog;
+            this.avatar = AvatarDto.SimpleResponse.builder()
+                    .avatarId(avatarId)
+                    .remotePath(remotePath)
+                    .fileName(filename)
+                    .build();
+        }
+
+        public void addRestInfo(List<TagQueryDto> tags, List<BadgeQueryDto> reviewBadges, List<ArticleDto.ResponseListTypeArticle> articles, List<ActivityQueryDto> activities, List<ReviewDto.Response> reviews) {
+            this.tags = tags;
+            this.reviewBadges = reviewBadges;
+            this.articles = articles;
+            this.activities = activities;
+            this.reviews = reviews;
         }
     }
-
 }
