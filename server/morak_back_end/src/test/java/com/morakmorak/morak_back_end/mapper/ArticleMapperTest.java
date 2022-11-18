@@ -135,7 +135,7 @@ class ArticleMapperTest {
         assertThat(test.getLastModifiedAt()).isEqualTo(article.getLastModifiedAt());
 
         assertThat(test.getTags().get(0).getTagId()).isEqualTo(tags.get(0).getTagId());
-        assertThat(test.getTags().get(0).getName()).isEqualTo("JAVA");
+        assertThat(test.getTags().get(0).getName()).isEqualTo(TagName.JAVA);
 
         assertThat(test.getUserInfo().getUserId()).isEqualTo(article.getUser().getId());
         assertThat(test.getUserInfo().getNickname()).isEqualTo(article.getUser().getNickname());
@@ -184,7 +184,7 @@ class ArticleMapperTest {
         assertThat(test.getLastModifiedAt()).isEqualTo(article.getLastModifiedAt());
 
         assertThat(test.getTags().get(0).getTagId()).isEqualTo(tags.get(0).getTagId());
-        assertThat(test.getTags().get(0).getName()).isEqualTo("JAVA");
+        assertThat(test.getTags().get(0).getName()).isEqualTo(TagName.JAVA);
 
         assertThat(test.getUserInfo().getUserId()).isEqualTo(article.getUser().getId());
         assertThat(test.getUserInfo().getNickname()).isEqualTo(article.getUser().getNickname());

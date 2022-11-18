@@ -46,8 +46,9 @@ public class Article extends BaseTime {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Builder.Default
     @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST)
-    private List<Bookmark> bookmarks;
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "article", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -91,15 +92,11 @@ public class Article extends BaseTime {
         user.getArticles().add(this);
     }
 
-    public void infectCategoryForMapping(Category category) {
+    public void injectCategoryForMapping(Category category) {
         this.category = category;
         if (!category.getArticleList().contains(this)) {
             category.getArticleList().add(this);
         }
-    }
-
-    public void infectVoteForMapping(Vote vote) {
-        this.vote = vote;
     }
 
     public void updateArticleElement(Article article) {
