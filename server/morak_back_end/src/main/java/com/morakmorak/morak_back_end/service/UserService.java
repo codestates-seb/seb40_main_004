@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.morakmorak.morak_back_end.exception.ErrorCode.USER_NOT_FOUND;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -48,7 +50,11 @@ public class UserService {
             return articleMapper.articleToResponseSearchResultArticle(e, e.getComments().size(), e.getAnswers().size(), tags, e.getArticleLikes().size());
         }).collect(Collectors.toList());
 
-        userDashboardBasicInfo.addRestInfo(usersTop3Tags, usersTop3Badges, questionsDto, userActivitiesOnThisYear, receivedReviews);
-        return userDashboardBasicInfo;
+        try {
+            userDashboardBasicInfo.addRestInfo(usersTop3Tags, usersTop3Badges, questionsDto, userActivitiesOnThisYear, receivedReviews);
+            return userDashboardBasicInfo;
+        } catch (NullPointerException e) {
+            throw new BusinessLogicException(USER_NOT_FOUND);
+        }
     }
 }
