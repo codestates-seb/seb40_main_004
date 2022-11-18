@@ -4,6 +4,7 @@ package com.morakmorak.morak_back_end.dto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.JobType;
+import com.morakmorak.morak_back_end.service.EnumValid;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
@@ -32,6 +33,7 @@ public class UserDto {
     public static class ResponseSimpleUserDto {
         private Long userId;
         private String nickname;
+        @EnumValid
         private Grade grade;
         public static ResponseSimpleUserDto of(User userFromComment) {
             return ResponseSimpleUserDto.builder()
@@ -64,6 +66,7 @@ public class UserDto {
         private String email;
         private String nickname;
         private JobType jobType;
+        @EnumValid
         private Grade grade;
         private Integer point;
         private String github;

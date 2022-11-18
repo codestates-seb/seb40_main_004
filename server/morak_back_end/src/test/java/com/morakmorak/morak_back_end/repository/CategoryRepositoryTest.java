@@ -23,8 +23,8 @@ class CategoryRepositoryTest {
     CategoryRepository categoryRepository;
 
     @Test
-    @DisplayName("카테고리의 이름으로 카테고리 객체를 찾아내는 테스트 ")
-    public void findByCategoryNameByString() throws Exception{
+    @DisplayName("INFO 카테고리의 이름으로 카테고리 객체를 찾아내는 테스트 ")
+    public void findByCategoryNameByString_INFO() throws Exception{
         //given
         Category category = Category.builder().name(CategoryName.INFO).articleList(List.of(Article.builder().build())).build();
         categoryRepository.save(category);
@@ -33,5 +33,16 @@ class CategoryRepositoryTest {
         //then
         assertThat(dbCategory.getName()).isEqualTo(category.getName());
      }
+    @Test
+    @DisplayName("QNA 카테고리의 이름으로 카테고리 객체를 찾아내는 테스트  ")
+    public void findByCategoryNameByString_QNA() throws Exception{
+        //given
+        Category category = Category.builder().name(CategoryName.QNA).articleList(List.of(Article.builder().build())).build();
+        categoryRepository.save(category);
+        //when
+        Category dbCategory = categoryRepository.findCategoryByName(category.getName()).orElseThrow();
+        //then
+        assertThat(dbCategory.getName()).isEqualTo(category.getName());
+    }
 
 }

@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.service;
 
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
@@ -110,7 +111,7 @@ public class ArticleServiceTest {
                         .thumbnail(1L)
                         .build();
         //given
-        TagDto.SimpleTag java = TagDto.SimpleTag.builder().tagId(1L).name("java").build();
+        TagDto.SimpleTag java = TagDto.SimpleTag.builder().tagId(1L).name(TagName.JAVA).build();
         given(userService.findVerifiedUserById(any())).willReturn(User.builder().build());
         given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().article(Article.builder().build()).build()));
         given(tagRepository.findById(any())).willReturn(Optional.empty());
@@ -171,7 +172,7 @@ public class ArticleServiceTest {
 
            given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().build()));
            //when
-           Boolean aBoolean = articleService.fusionFileDtoWithArticle(article, fileDto);
+           Boolean aBoolean = articleService.findDbFilesAndInjectWithArticle(article, fileDto);
            //then
            assertThat(aBoolean).isTrue();
         }
