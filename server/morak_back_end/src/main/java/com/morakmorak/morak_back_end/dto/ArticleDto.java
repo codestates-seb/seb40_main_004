@@ -1,6 +1,9 @@
 package com.morakmorak.morak_back_end.dto;
 
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
+import com.morakmorak.morak_back_end.service.EnumValid;
 import lombok.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -21,7 +24,8 @@ public class ArticleDto {
         @Size(min = 5)
         private String content;
         private List<TagDto.SimpleTag> tags = new ArrayList<>();
-        private String category;
+        @EnumValid
+        private CategoryName category;
         private List<FileDto.RequestFileWithId> fileId = new ArrayList<>();
         private Long thumbnail;
     }
@@ -57,7 +61,8 @@ public class ArticleDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ResponseListTypeArticle {
         private Long articleId;
-        private String category;
+        @EnumValid
+        private CategoryName category;
         private String title;
         private Integer clicks;
         private Integer likes;
@@ -79,7 +84,8 @@ public class ArticleDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ResponseDetailArticle {
         private Long articleId;
-        private String category;
+        @EnumValid
+        private CategoryName category;
         private String title;
         private String content;
         private Integer clicks;

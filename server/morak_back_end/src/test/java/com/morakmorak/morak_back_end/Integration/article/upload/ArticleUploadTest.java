@@ -6,7 +6,10 @@ import com.morakmorak.morak_back_end.dto.FileDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.Tag;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
+import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.ArticleService;
@@ -79,7 +82,7 @@ public class ArticleUploadTest {
 
         File file2 = fileRepository.save(File.builder().localPath("2").build());
 
-        Category category = categoryRepository.save(Category.builder().name("INFO").build());
+        Category category = categoryRepository.save(Category.builder().name(CategoryName.INFO).build());
 
         Tag tag = tagRepository.save(Tag.builder().name(TagName.JAVA).build());
 
@@ -92,7 +95,7 @@ public class ArticleUploadTest {
     public void upload_suc() throws Exception {
         //given
         Tag tag = tagRepository.findTagByName(TagName.JAVA).orElseThrow();
-        Category category = categoryRepository.findCategoryByName("INFO").orElseThrow();
+        Category category = categoryRepository.findCategoryByName(CategoryName.INFO).orElseThrow();
         File file1 = fileRepository.findFileByLocalPath("1").orElseThrow();
         File file2 = fileRepository.findFileByLocalPath("2").orElseThrow();
 
@@ -143,7 +146,7 @@ public class ArticleUploadTest {
                         .fileId(100L).build(), FileDto.RequestFileWithId.builder()
                         .fileId(111L).build()))
                 .tags(List.of(TagDto.SimpleTag.builder().tagId(tag.getId()).name("Java").build()))
-                .category("INFO")
+                .category(CategoryName.INFO)
                 .thumbnail(1L)
                 .build();
         String content = objectMapper.writeValueAsString(requestUploadArticle);
@@ -163,22 +166,24 @@ public class ArticleUploadTest {
         //then
         perform.andExpect(status().isNotFound());
     }
+
     @Test
-    @DisplayName("게시글 작성시 존재하지 않는 카테고리를 작성할 경우 CATEGORY_NOT_FOUND 예외를 던지고 404 에러코를 반환한다. ")
+    @DisplayName("게시글 작성시 존재하지 않는 카테고리를 작성할 경우 TAG_NOT_FOUND 예외를 던지고 404 에러코를 반환한다. ")
     public void upload_fail3() throws Exception{
         //given
-        Tag tag = tagRepository.findTagByName(TagName.JAVA).orElseThrow();
         File file1 = fileRepository.findFileByLocalPath("1").orElseThrow();
         File file2 = fileRepository.findFileByLocalPath("2").orElseThrow();
 
+
         ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
                 .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(2L).name("JAVA").build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(file2.getId()).build()))
-                .tags(List.of(TagDto.SimpleTag.builder().tagId(tag.getId()).name("Java").build()))
-                .category("NULL")
                 .thumbnail(1L)
+                .category(CategoryName.INFO)
                 .build();
         String content = objectMapper.writeValueAsString(requestUploadArticle);
         //id
@@ -194,9 +199,10 @@ public class ArticleUploadTest {
                         .content(content)
         );
 
-        //then
+//        then
         perform.andExpect(status().isNotFound());
     }
+
     @Test
     @DisplayName("게시글 작성시 존재하지 않는 태그를 작성할 경우 TAG_NOT_FOUND 예외를 던지고 404 에러코를 반환한다. ")
     public void upload_fail1() throws Exception{
@@ -212,7 +218,7 @@ public class ArticleUploadTest {
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(file2.getId()).build()))
-                .category("INFO")
+                .category(CategoryName.INFO)
                 .thumbnail(1L)
                 .build();
         String content = objectMapper.writeValueAsString(requestUploadArticle);
@@ -237,7 +243,7 @@ public class ArticleUploadTest {
     @DisplayName("Article Service fusionCategoryWIthArticle 메서드 통과 테스트")
     public void articleServiceFusionCategoryWIthArticle() throws Exception{
         //given
-        Category category = Category.builder().name("INFO").build();
+        Category category = Category.builder().name(CategoryName.INFO).build();
         Article build = Article.builder().build();
         //when
         Boolean aBoolean = articleService.fusionCategoryWIthArticle(build, category);

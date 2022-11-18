@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.repository;
 
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -50,8 +51,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .leftJoin(article.user.answers, answer)
                 .leftJoin(article.user.comments, comment)
                 .leftJoin(articleTag.article.articleLikes, articleLike)
-                .leftJoin(article.bookmark, bookmark)
-                .fetchJoin()
+                .leftJoin(article.bookmarks, bookmark)
                 .leftJoin(article.answers, answer)
                 .leftJoin(article.reviews, review)
                 .leftJoin(article.files, file)
@@ -72,7 +72,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .leftJoin(article.user.answers, answer)
                 .leftJoin(article.user.comments, comment)
                 .leftJoin(articleTag.article.articleLikes, articleLike)
-                .leftJoin(article.bookmark, bookmark)
+                .leftJoin(article.bookmarks, bookmark)
                 .leftJoin(article.answers, answer)
                 .leftJoin(article.reviews, review)
                 .leftJoin(article.files, file)
@@ -95,7 +95,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .leftJoin(articleTag.article.category, QCategory.category)
                 .leftJoin(articleTag.article.user, user)
                 .leftJoin(articleTag.article.answers, answer)
-                .leftJoin(articleTag.article.bookmark, bookmark)
+                .leftJoin(articleTag.article.bookmarks, bookmark)
                 .leftJoin(articleTag.article.comments, comment)
                 .leftJoin(articleTag.article.reviews, review)
                 .leftJoin(articleTag.article.articleLikes, articleLike)
@@ -114,7 +114,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .leftJoin(articleTag.article.category, QCategory.category)
                 .leftJoin(articleTag.article.user, user)
                 .leftJoin(articleTag.article.answers, answer)
-                .leftJoin(articleTag.article.bookmark, bookmark)
+                .leftJoin(articleTag.article.bookmarks, bookmark)
                 .leftJoin(articleTag.article.comments, comment)
                 .leftJoin(articleTag.article.reviews, review)
                 .leftJoin(articleTag.article.articleLikes, articleLike)
@@ -128,7 +128,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
     }
 
     private BooleanExpression categoryEq(String category) {
-        return category != null ? article.category.name.eq(category) : null;
+        return category != null ? article.category.name.eq(CategoryName.valueOf(category)) : null;
     }
 
     private BooleanExpression keywordEq(String keyword, String target) {
@@ -145,9 +145,9 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
             case "content":
                 return article.content.contains(keyword);
             case "tag":
-                return articleTag.tag.name.in(TagName.valueOf(keyword));
+            return article.articleTags.any().tag.name.in(TagName.valueOf(keyword));
             case "bookmark":
-                return article.bookmark.user.id.eq(Long.parseLong(keyword));
+                 article.bookmarks.any().user.id.eq(Long.parseLong(keyword));
             case "titleAndContent":
                 return article.title.contains(keyword).or(article.content.contains(keyword));
             default:

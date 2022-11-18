@@ -4,6 +4,7 @@ import com.morakmorak.morak_back_end.dto.ArticleDto;
 import com.morakmorak.morak_back_end.dto.FileDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class ArticleTestConstants {
             .fileId(2L).build());
 
     public final static Category REQUEST_STRING_CATEGORY = Category.builder()
-            .name("INFO").build();
+            .name(CategoryName.INFO).build();
     public final static ArticleDto.RequestUploadArticle REQUEST_UPLOAD_ARTICLE
             = ArticleDto.RequestUploadArticle.builder()
             .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
@@ -39,7 +40,7 @@ public class ArticleTestConstants {
                     .files(List.of(File.builder().id(1L).article(Article.builder().id(1L).build()).build(),
                             File.builder().id(2L).article(Article.builder().id(1L).build()).build()))
                     .articleTags(List.of(ArticleTag.builder().tag(Tag.builder().name(TagName.JAVA).build()).build()))
-                    .category(Category.builder().name("Info").build())
+                    .category(Category.builder().name(CategoryName.INFO).build())
                     .user(User.builder().id(1L).build())
                     .files(List.of(File.builder().article(Article.builder().id(1L).build()).build()))
                     .build();

@@ -22,7 +22,7 @@ public class Bookmark extends BaseTime{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "article_id")
     private Article article;
 

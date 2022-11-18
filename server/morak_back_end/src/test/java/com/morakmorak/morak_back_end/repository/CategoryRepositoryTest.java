@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.repository;
 
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.Category;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ class CategoryRepositoryTest {
     @DisplayName("카테고리의 이름으로 카테고리 객체를 찾아내는 테스트 ")
     public void findByCategoryNameByString() throws Exception{
         //given
-        Category category = Category.builder().name("test").articleList(List.of(Article.builder().build())).build();
+        Category category = Category.builder().name(CategoryName.INFO).articleList(List.of(Article.builder().build())).build();
         categoryRepository.save(category);
         //when
         Category dbCategory = categoryRepository.findCategoryByName(category.getName()).orElseThrow();

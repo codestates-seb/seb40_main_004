@@ -138,7 +138,7 @@ public class ArticleServiceTest {
          given(fileRepository.findById(any())).willReturn(Optional.of(File.builder().build()));
          given(tagRepository.findById(any()))
                  .willReturn(Optional.of(Tag.builder().id(1L).build()));
-         given(categoryRepository.findCategoryByName(anyString())).willReturn(Optional.empty());
+         given(categoryRepository.findCategoryByName(any())).willReturn(Optional.empty());
          //when
 
          //then

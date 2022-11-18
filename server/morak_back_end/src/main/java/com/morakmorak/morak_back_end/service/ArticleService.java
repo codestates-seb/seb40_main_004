@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -95,6 +96,9 @@ public class ArticleService {
     }
 
     public Boolean fusionCategoryWIthArticle(Article article, Category category) {
+        if (category == null) {
+            throw new BusinessLogicException(ErrorCode.CATEGORY_NOT_FOUND);
+        }
         Category dbCategory = categoryRepository.findCategoryByName(category.getName())
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.CATEGORY_NOT_FOUND));
         article.infectCategoryForMapping(dbCategory);
@@ -130,14 +134,7 @@ public class ArticleService {
     public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticleAsPaging(String category, String keyword, String target, String sort, Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page-1, size);
 
-        Page<Article> articles;
-
-        if (target.equals("tag")) {
-             articles = articleRepository.tagSearch(category, keyword, target, sort, pageRequest);
-
-        } else {
-            articles = articleRepository.search(category, keyword, target, sort, pageRequest);
-        }
+        Page<Article> articles = articleRepository.search(category, keyword, target, sort, pageRequest);
 
         List<ArticleDto.ResponseListTypeArticle> mapper = articles.getContent().stream().map(article -> {
             Integer likes = article.getArticleLikes().size();
