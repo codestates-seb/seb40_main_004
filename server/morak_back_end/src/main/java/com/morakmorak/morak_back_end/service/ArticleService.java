@@ -130,14 +130,7 @@ public class ArticleService {
     public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticleAsPaging(String category, String keyword, String target, String sort, Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page-1, size);
 
-        Page<Article> articles;
-
-        if (target.equals("tag")) {
-             articles = articleRepository.tagSearch(category, keyword, target, sort, pageRequest);
-
-        } else {
-            articles = articleRepository.search(category, keyword, target, sort, pageRequest);
-        }
+        Page<Article> articles = articleRepository.search(category, keyword, target, sort, pageRequest);
 
         List<ArticleDto.ResponseListTypeArticle> mapper = articles.getContent().stream().map(article -> {
             Integer likes = article.getArticleLikes().size();
