@@ -50,7 +50,7 @@ class ArticleMapperTest {
         em.persist(info);
 
 
-        Avatar avatar = Avatar.builder().remotePath("remotePath").originalFileName("originalFileName").build();
+        Avatar avatar = Avatar.builder().remotePath("remotePath").originalFilename("originalFileName").build();
         em.persist(avatar);
         User user = User.builder().avatar(avatar).nickname("testNickname").grade(Grade.BRONZE).build();
         em.persist(user);
@@ -143,7 +143,7 @@ class ArticleMapperTest {
 
         assertThat(test.getAvatar().getAvatarId()).isEqualTo(article.getUser().getAvatar().getId());
         assertThat(test.getAvatar().getRemotePath()).isEqualTo(article.getUser().getAvatar().getRemotePath());
-        assertThat(test.getAvatar().getFileName()).isEqualTo(article.getUser().getAvatar().getOriginalFileName());
+        assertThat(test.getAvatar().getFilename()).isEqualTo(article.getUser().getAvatar().getOriginalFilename());
 
     }
 
@@ -192,7 +192,7 @@ class ArticleMapperTest {
 
         assertThat(test.getAvatar().getAvatarId()).isEqualTo(article.getUser().getAvatar().getId());
         assertThat(test.getAvatar().getRemotePath()).isEqualTo(article.getUser().getAvatar().getRemotePath());
-        assertThat(test.getAvatar().getFileName()).isEqualTo(article.getUser().getAvatar().getOriginalFileName());
+        assertThat(test.getAvatar().getFilename()).isEqualTo(article.getUser().getAvatar().getOriginalFilename());
 
         assertThat(test.getComments()).isNotEmpty();
 

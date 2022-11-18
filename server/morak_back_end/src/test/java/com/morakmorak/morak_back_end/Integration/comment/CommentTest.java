@@ -59,7 +59,7 @@ public class CommentTest {
     @BeforeEach
     public void setUp() throws Exception {
         Avatar dbAvatar = Avatar.builder()
-                .originalFileName("randomfilename")
+                .originalFilename("randomfilename")
                 .remotePath("randomremotepath")
                 .build();
 
@@ -117,7 +117,7 @@ public class CommentTest {
                 .andExpect(jsonPath("$.userInfo.userId").exists())
                 .andExpect(jsonPath("$.userInfo.nickname").exists())
                 .andExpect(jsonPath("$.avatar.avatarId").exists())
-                .andExpect(jsonPath("$.avatar.fileName").exists())
+                .andExpect(jsonPath("$.avatar.filename").exists())
                 .andExpect(jsonPath("$.avatar.remotePath").exists())
                 .andExpect(jsonPath("$.articleId").exists())
                 .andExpect(jsonPath("$.content").exists())
@@ -148,7 +148,7 @@ public class CommentTest {
                 .andExpect(jsonPath("$[0].userInfo.nickname").exists())
                 .andExpect(jsonPath("$[0].userInfo.grade").isEmpty())
                 .andExpect(jsonPath("$[0].avatar.avatarId").exists())
-                .andExpect(jsonPath("$[0].avatar.fileName").exists())
+                .andExpect(jsonPath("$[0].avatar.filename").exists())
                 .andExpect(jsonPath("$[0].avatar.remotePath").exists())
                 .andExpect(jsonPath("$[0].content").exists())
                 .andExpect(jsonPath("$[0].createdAt").exists())
@@ -233,7 +233,7 @@ public class CommentTest {
                 .andExpect(jsonPath("$[0].userInfo.nickname").exists())
                 .andExpect(jsonPath("$[0].userInfo.grade").isEmpty())
                 .andExpect(jsonPath("$[0].avatar.avatarId").exists())
-                .andExpect(jsonPath("$[0].avatar.fileName").exists())
+                .andExpect(jsonPath("$[0].avatar.filename").exists())
                 .andExpect(jsonPath("$[0].avatar.remotePath").exists())
                 .andExpect(jsonPath("$[0].content").value("살아남을 댓글입니다."))
                 .andExpect(jsonPath("$[0].createdAt").exists())

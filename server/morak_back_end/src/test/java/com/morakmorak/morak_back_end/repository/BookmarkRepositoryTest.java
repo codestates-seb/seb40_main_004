@@ -5,8 +5,6 @@ import com.morakmorak.morak_back_end.entity.Avatar;
 import com.morakmorak.morak_back_end.entity.Bookmark;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
-import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.exception.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,7 @@ class BookmarkRepositoryTest {
     public void checkUserBookmarked_test(){
     //given
 
-        Avatar avatar = Avatar.builder().originalFileName("fileName").remotePath("remotePath").build();
+        Avatar avatar = Avatar.builder().originalFilename("fileName").remotePath("remotePath").build();
 
         User user = User.builder().nickname("nickname").avatar(avatar)
                 .email("test@naver.com").grade(Grade.BRONZE).build();
@@ -64,7 +62,7 @@ class BookmarkRepositoryTest {
     public void checkUserBookmarked_fail(){
         //given
 
-        Avatar avatar = Avatar.builder().originalFileName("fileName").remotePath("remotePath").build();
+        Avatar avatar = Avatar.builder().originalFilename("fileName").remotePath("remotePath").build();
 
         User user = User.builder().nickname("nickname").avatar(avatar)
                 .email("test@naver.com").grade(Grade.BRONZE).build();

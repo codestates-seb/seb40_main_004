@@ -96,7 +96,7 @@ public class searchArticleTest {
         Category info = Category.builder().id(1L).name(CategoryName.INFO).build();
 
 
-        Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFileName("fileName").build();
+        Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFilename("fileName").build();
         User user = User.builder().id(1L).avatar(dbAvatar).nickname("nickname").grade(Grade.BRONZE).build();
 
         List<Answer> answers = new ArrayList<>();
@@ -147,7 +147,7 @@ public class searchArticleTest {
 
         AvatarDto.SimpleResponse dtoAvatar =
                 AvatarDto.SimpleResponse.builder().avatarId(1L)
-                        .remotePath("remotePath").fileName("fileName").build();
+                        .remotePath("remotePath").filename("fileName").build();
 
 
         List<ArticleDto.ResponseListTypeArticle> dtoResponseListTypeArticle = new ArrayList<>();
@@ -209,7 +209,7 @@ public class searchArticleTest {
                 .andExpect(jsonPath("$.data[0:1].userInfo.nickname").value("nickname"))
                 .andExpect(jsonPath("$.data[0:1].userInfo.grade").value("BRONZE"))
                 .andExpect(jsonPath("$.data[0:1].avatar.avatarId").value(1))
-                .andExpect(jsonPath("$.data[0:1].avatar.fileName").value("fileName"))
+                .andExpect(jsonPath("$.data[0:1].avatar.filename").value("fileName"))
                 .andExpect(jsonPath("$.data[0:1].avatar.remotePath").value("remotePath"))
                 .andExpect(jsonPath("$.pageInfo.page").value(1))
                 .andExpect(jsonPath("$.pageInfo.size").value(1))
@@ -238,7 +238,7 @@ public class searchArticleTest {
                                         fieldWithPath("data[].userInfo.nickname").type(JsonFieldType.STRING).description("유저의 닉네임입니다."),
                                         fieldWithPath("data[].userInfo.grade").type(JsonFieldType.STRING).description("유저의 등급입니다."),
                                         fieldWithPath("data[].avatar.avatarId").type(JsonFieldType.NUMBER).description("아바타 파일의 아이디 입니다."),
-                                        fieldWithPath("data[].avatar.fileName").type(JsonFieldType.STRING).description("아바타 파일의 이름입니다."),
+                                        fieldWithPath("data[].avatar.filename").type(JsonFieldType.STRING).description("아바타 파일의 이름입니다."),
                                         fieldWithPath("data[].avatar.remotePath").type(JsonFieldType.STRING).description("아바타 파일의 경로입니다."),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 보여질 페이지 입니다."),
                                         fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("한페이지에 들어갈 게시글의 갯수 입니다."),
@@ -262,7 +262,7 @@ public class searchArticleTest {
         Category info = Category.builder().id(1L).name(CategoryName.INFO).build();
 
 
-        Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFileName("fileName").build();
+        Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFilename("fileName").build();
         User user = User.builder().id(1L).avatar(dbAvatar).nickname("nickname").grade(Grade.BRONZE).build();
 
         List<Answer> answers = new ArrayList<>();
@@ -315,7 +315,7 @@ public class searchArticleTest {
 
         AvatarDto.SimpleResponse dtoAvatar =
                 AvatarDto.SimpleResponse.builder().avatarId(1L)
-                        .remotePath("remotePath").fileName("fileName").build();
+                        .remotePath("remotePath").filename("fileName").build();
 
 
         List<ArticleDto.ResponseListTypeArticle> dtoResponseListTypeArticle = new ArrayList<>();
@@ -377,7 +377,7 @@ public class searchArticleTest {
                 .andExpect(jsonPath("$.data[0:1].userInfo.nickname").value("nickname"))
                 .andExpect(jsonPath("$.data[0:1].userInfo.grade").value("BRONZE"))
                 .andExpect(jsonPath("$.data[0:1].avatar.avatarId").value(1))
-                .andExpect(jsonPath("$.data[0:1].avatar.fileName").value("fileName"))
+                .andExpect(jsonPath("$.data[0:1].avatar.filename").value("fileName"))
                 .andExpect(jsonPath("$.data[0:1].avatar.remotePath").value("remotePath"))
                 .andExpect(jsonPath("$.pageInfo.page").value(1))
                 .andExpect(jsonPath("$.pageInfo.size").value(1))
@@ -406,7 +406,7 @@ public class searchArticleTest {
                                         fieldWithPath("data[].userInfo.nickname").type(JsonFieldType.STRING).description("유저의 닉네임입니다."),
                                         fieldWithPath("data[].userInfo.grade").type(JsonFieldType.STRING).description("유저의 등급입니다."),
                                         fieldWithPath("data[].avatar.avatarId").type(JsonFieldType.NUMBER).description("아바타 파일의 아이디 입니다."),
-                                        fieldWithPath("data[].avatar.fileName").type(JsonFieldType.STRING).description("아바타 파일의 이름입니다."),
+                                        fieldWithPath("data[].avatar.filename").type(JsonFieldType.STRING).description("아바타 파일의 이름입니다."),
                                         fieldWithPath("data[].avatar.remotePath").type(JsonFieldType.STRING).description("아바타 파일의 경로입니다."),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 보여질 페이지 입니다."),
                                         fieldWithPath("pageInfo.size").type(JsonFieldType.NUMBER).description("한페이지에 들어갈 게시글의 갯수 입니다."),
@@ -430,7 +430,7 @@ public class searchArticleTest {
         Tag JAVA = Tag.builder().id(1L).name(TagName.JAVA).build();
         Category info = Category.builder().id(1L).name(CategoryName.INFO).build();
 
-        Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFileName("fileName").build();
+        Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFilename("fileName").build();
         User user = User.builder().id(1L).avatar(dbAvatar).nickname("nickname").grade(Grade.BRONZE).build();
 
         List<Comment> comments = new ArrayList<>();
@@ -474,7 +474,7 @@ public class searchArticleTest {
         UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
 
         AvatarDto.SimpleResponse avatarDto = AvatarDto.SimpleResponse.builder()
-                .avatarId(1L).fileName("fileName").remotePath("remotePath").build();
+                .avatarId(1L).filename("fileName").remotePath("remotePath").build();
 
         UserDto.ResponseSimpleUserDto userInfoDto = UserDto.ResponseSimpleUserDto.builder()
                 .userId(1L).nickname("nickname").grade(Grade.BRONZE).build();
@@ -562,7 +562,7 @@ public class searchArticleTest {
                                         fieldWithPath("userInfo.nickname").type(JsonFieldType.STRING).description("유저의 닉네임입니다."),
                                         fieldWithPath("userInfo.grade").type(JsonFieldType.STRING).description("유저의 등급입니다."),
                                         fieldWithPath("avatar.avatarId").type(JsonFieldType.NUMBER).description("아바타 파일의 아이디 입니다."),
-                                        fieldWithPath("avatar.fileName").type(JsonFieldType.STRING).description("아바타 파일의 이름입니다."),
+                                        fieldWithPath("avatar.filename").type(JsonFieldType.STRING).description("아바타 파일의 이름입니다."),
                                         fieldWithPath("avatar.remotePath").type(JsonFieldType.STRING).description("아바타 파일의 경로입니다."),
                                         fieldWithPath("comments[].commentId").type(JsonFieldType.NUMBER).description("댓글의 아이디 입니다.."),
                                         fieldWithPath("comments[].articleId").type(JsonFieldType.NUMBER).description("댓글이 올라가있는 게시글의 아이디 입니다.."),
@@ -573,7 +573,7 @@ public class searchArticleTest {
                                         fieldWithPath("comments[].userInfo.nickname").type(JsonFieldType.STRING).description("댓글 유저의 닉네임입니다."),
                                         fieldWithPath("comments[].userInfo.grade").type(JsonFieldType.STRING).description("댓글 유저의 등급입니다."),
                                         fieldWithPath("comments[].avatar.avatarId").type(JsonFieldType.NUMBER).description("댓글 유저의 아바타 파일의 아이디 입니다."),
-                                        fieldWithPath("comments[].avatar.fileName").type(JsonFieldType.STRING).description("댓글 유저의 아바타 파일의 이름입니다."),
+                                        fieldWithPath("comments[].avatar.filename").type(JsonFieldType.STRING).description("댓글 유저의 아바타 파일의 이름입니다."),
                                         fieldWithPath("comments[].avatar.remotePath").type(JsonFieldType.STRING).description("댓글 유저의 아바타 파일의 경로입니다.")
                                 ))));
 

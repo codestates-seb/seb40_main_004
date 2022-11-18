@@ -56,7 +56,7 @@ public class AnswerTest {
 
     @BeforeEach
     void setUp() {
-        Avatar dbAvatar = Avatar.builder().originalFileName("randomfilename").remotePath("randomremotepath").build();
+        Avatar dbAvatar = Avatar.builder().originalFilename("randomfilename").remotePath("randomremotepath").build();
         Category qna = Category.builder().name(CategoryName.QNA).build();
         Category info = Category.builder().name(CategoryName.INFO).build();
 
@@ -129,7 +129,7 @@ public class AnswerTest {
                 .andExpect(jsonPath("$.userInfo.userId").exists())
                 .andExpect(jsonPath("$.userInfo.nickname").exists())
                 .andExpect(jsonPath("$.avatar.avatarId").exists())
-                .andExpect(jsonPath("$.avatar.fileName").exists())
+                .andExpect(jsonPath("$.avatar.filename").exists())
                 .andExpect(jsonPath("$.avatar.remotePath").exists())
                 .andExpect(jsonPath("$.answerId").exists())
                 .andExpect(jsonPath("$.content").exists())

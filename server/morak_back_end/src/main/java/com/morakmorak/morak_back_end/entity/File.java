@@ -16,7 +16,7 @@ public class File extends BaseTime{
     @Column(name = "file_id")
     private Long id;
 
-    private String originalFileName;
+    private String originalFilename;
 
     private Integer fileSize;
 

@@ -42,7 +42,7 @@ public class TestConstants {
     public final static String QNA = "qna";
     public final static String INFO = "info";
 
-    public final static Avatar AVATAR = Avatar.builder().id(1L).originalFileName("randomfilename").remotePath("randomremotepath").build();
+    public final static Avatar AVATAR = Avatar.builder().id(1L).originalFilename("randomfilename").remotePath("randomremotepath").build();
     public final static User USER1 = User.builder().id(ID1).email(EMAIL1).name(NAME1).nickname(NICKNAME1).grade(Grade.GOLD).avatar(AVATAR).build();
 
 
