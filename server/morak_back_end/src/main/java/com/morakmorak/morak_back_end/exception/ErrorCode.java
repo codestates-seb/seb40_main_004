@@ -32,6 +32,7 @@ public enum ErrorCode {
     MISMATCHED_PASSWORD(CONFLICT, "mismatched password, check your original password"),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "This request requires admin confirmation."),
     CANNOT_ACCESS_COMMENT(CONFLICT,"unable to access comment"),
+    UNABLE_TO_ANSWER(CONFLICT,"unable to post answer, article is already closed"),
     COMMENT_NOT_FOUND(NOT_FOUND,"comment not found"),
 
     /*

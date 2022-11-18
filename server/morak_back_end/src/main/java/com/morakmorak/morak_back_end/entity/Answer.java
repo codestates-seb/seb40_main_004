@@ -21,8 +21,8 @@ public class Answer extends BaseTime{
     private Long id;
 
     private String content;
-
-    private Boolean isPicked;
+    @Builder.Default
+    private Boolean isPicked = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -65,5 +65,21 @@ public class Answer extends BaseTime{
         this.review = review;
         this.isPicked = true;
         this.article.closeThisArticle();
+    }
+    public boolean isPickedAnswer(Answer answerToCheck) {
+        if (this.isPicked) {
+            return true;
+        }return false;
+    }
+
+    public Answer injectUser(User verifiedUser) {
+        this.user = verifiedUser;
+        verifiedUser.getAnswers().add(this);
+        return this;
+    }
+    public Answer injectArticle(Article verifiedArticle) {
+        this.article = verifiedArticle;
+        verifiedArticle.getAnswers().add(this);
+        return this;
     }
 }

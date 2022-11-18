@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.Integration;
+package com.morakmorak.morak_back_end.Integration.bookmark;
 
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.Bookmark;

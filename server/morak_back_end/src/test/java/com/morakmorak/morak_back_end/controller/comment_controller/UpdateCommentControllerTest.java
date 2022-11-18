@@ -122,7 +122,7 @@ public class UpdateCommentControllerTest {
         commentList.add(exampleComment);
 
         String json = objectMapper.writeValueAsString(request);
-        BDDMockito.given(commentService.findAllComments(any())).willReturn(commentList);
+        BDDMockito.given(commentService.editComment(any(),any(),any(),anyString())).willReturn(commentList);
         //when 유효한 input
         ResultActions perform = mockMvc.perform(patch("/articles/{article-id}/comments/{comment-id}", dbArticle.getId(), dbComment.getId())
                 .contentType(MediaType.APPLICATION_JSON)
