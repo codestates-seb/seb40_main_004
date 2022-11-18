@@ -16,11 +16,16 @@ public class ArticleLike {
     @Column(name = "article_like_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "article_id")
     private Article article;
+
+    public void mapUserAndArticleWithLike() {
+        user.getArticleLikes().add(this);
+        article.getArticleLikes().add(this);
+    }
 }

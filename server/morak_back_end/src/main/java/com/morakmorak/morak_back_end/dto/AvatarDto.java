@@ -28,20 +28,4 @@ public class AvatarDto {
                             .build();
         }
     }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Request {
-        private Long avatarId;
-        private String remotePath;
-        private String filename;
-
-        @QueryProjection
-        public Request(Long avatarId, String remotePath, String filename) {
-            this.avatarId = avatarId;
-            this.remotePath = remotePath;
-            this.filename = filename;
-        }
-    }
 }
