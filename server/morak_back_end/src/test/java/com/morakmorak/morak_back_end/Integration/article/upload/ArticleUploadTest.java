@@ -8,8 +8,6 @@ import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.Tag;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
-import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.ArticleService;
@@ -246,7 +244,7 @@ public class ArticleUploadTest {
         Category category = Category.builder().name(CategoryName.INFO).build();
         Article build = Article.builder().build();
         //when
-        Boolean aBoolean = articleService.fusionCategoryWIthArticle(build, category);
+        Boolean aBoolean = articleService.findDbCategoryAndInjectWithArticle(build, category);
         //then
         Assertions.assertThat(aBoolean).isTrue();
 

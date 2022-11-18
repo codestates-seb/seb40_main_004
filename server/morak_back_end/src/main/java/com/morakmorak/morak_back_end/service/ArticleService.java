@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,13 +41,11 @@ public class ArticleService {
     ) {
         article.injectUserForMapping(userService.findVerifiedUserById(userInfo.getId()));
 
-        fusionFileDtoWithArticle(article, files);
+        findDbFilesAndInjectWithArticle(article, files);
 
-        fusionTagDtoWithArticle(article, tags);
+        findDbTagsAndInjectWithArticle(article, tags);
 
-        fusionCategoryWIthArticle(article, category);
-
-        fusionVoteWithArticle(article);
+        findDbCategoryAndInjectWithArticle(article, category);
 
         Article dbArticle = articleRepository.save(article);
 
@@ -63,9 +60,9 @@ public class ArticleService {
 
         checkArticlePerMission(dbArticle, userInfo);
 
-        fusionFileDtoWithArticle(dbArticle, files);
+        findDbFilesAndInjectWithArticle(dbArticle, files);
 
-        fusionTagDtoWithArticle(dbArticle, tags);
+        findDbTagsAndInjectWithArticle(dbArticle, tags);
 
         return articleMapper.articleToResponseSimpleArticle(dbArticle.getId());
     }
@@ -88,25 +85,15 @@ public class ArticleService {
         return true;
     }
 
-    public Boolean fusionVoteWithArticle(Article article) {
-        Vote vote = Vote.builder().article(article).user(article.getUser()).build();
-        article.infectVoteForMapping(vote);
-
-        return true;
-    }
-
-    public Boolean fusionCategoryWIthArticle(Article article, Category category) {
-        if (category == null) {
-            throw new BusinessLogicException(ErrorCode.CATEGORY_NOT_FOUND);
-        }
+    public Boolean findDbCategoryAndInjectWithArticle(Article article, Category category) {
         Category dbCategory = categoryRepository.findCategoryByName(category.getName())
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.CATEGORY_NOT_FOUND));
-        article.infectCategoryForMapping(dbCategory);
+        article.injectCategoryForMapping(dbCategory);
 
         return true;
     }
 
-    public Boolean fusionTagDtoWithArticle(Article article, List<TagDto.SimpleTag> tags) {
+    public Boolean findDbTagsAndInjectWithArticle(Article article, List<TagDto.SimpleTag> tags) {
         for (int i = article.getArticleTags().size() - 1; i >= 0; i--) {
             article.getArticleTags().remove(i);
         }
@@ -120,7 +107,7 @@ public class ArticleService {
         return true;
     }
 
-    public Boolean fusionFileDtoWithArticle(Article article, List<FileDto.RequestFileWithId> files) {
+    public Boolean findDbFilesAndInjectWithArticle(Article article, List<FileDto.RequestFileWithId> files) {
         files.stream()
                 .forEach(file -> {
                     File dbFile = fileRepository.findById(file.getFileId())

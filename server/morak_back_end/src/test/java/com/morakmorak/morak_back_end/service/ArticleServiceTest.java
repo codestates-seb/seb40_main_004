@@ -172,7 +172,7 @@ public class ArticleServiceTest {
 
            given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().build()));
            //when
-           Boolean aBoolean = articleService.fusionFileDtoWithArticle(article, fileDto);
+           Boolean aBoolean = articleService.findDbFilesAndInjectWithArticle(article, fileDto);
            //then
            assertThat(aBoolean).isTrue();
         }
