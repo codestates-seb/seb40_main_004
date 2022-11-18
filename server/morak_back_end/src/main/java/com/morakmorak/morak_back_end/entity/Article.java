@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.entity;
 
 import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import lombok.*;
@@ -127,4 +128,16 @@ public class Article extends BaseTime {
         this.answers.add(answer);
         answer.isMappedWith(this);
     }
+    public Boolean isClosedArticle() {
+        if (this.isClosed) {
+            return true;
+        }return false;
+    }
+
+    public Boolean isQuestion() {
+        if (this.category.getName() == CategoryName.QNA) {
+            return true;
+        }return false;
+    }
+
 }

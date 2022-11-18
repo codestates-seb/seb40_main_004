@@ -36,4 +36,8 @@ public class File extends BaseTime{
         this.article = article;
         article.getFiles().add(this);
     }
+    public void attachToAnswer(Answer answer) {
+        this.answer = answer;
+        answer.getFiles().add(this);
+    }
 }
