@@ -7,4 +7,15 @@ const nextConfig = {
   },
 };
 
+const withTM = require('next-transpile-modules')([
+  '@fullcalendar/common',
+  '@babel/preset-react',
+  '@fullcalendar/common',
+  '@babel/preset-react',
+  '@fullcalendar/daygrid',
+  '@fullcalendar/react',
+]);
+
 module.exports = nextConfig;
+
+module.exports = withTM({});
