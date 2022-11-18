@@ -82,7 +82,7 @@ public class AnswerTest {
         File file1 = fileRepository.findFileByLocalPath("1").orElseThrow(() -> new AssertionError());
         File file2 = fileRepository.findFileByLocalPath("2").orElseThrow(() -> new AssertionError());
 
-        AnswerDto.RequestPostAnswer request = AnswerDto.RequestPostAnswer.builder().content("10자이하")
+        AnswerDto.RequestPostAnswer request = AnswerDto.RequestPostAnswer.builder().content("10자 이상의 유효한 길이 콘텐츠입니다.")
                 .fileIdList(List.of(FileDto.RequestFileWithId.builder().fileId(file1.getId()).build(),
                         FileDto.RequestFileWithId.builder().fileId(file2.getId()).build()))
                 .build();
