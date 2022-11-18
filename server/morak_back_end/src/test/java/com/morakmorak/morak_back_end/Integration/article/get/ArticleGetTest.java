@@ -80,7 +80,7 @@ public class ArticleGetTest {
         em.persist(info);
 
         Avatar avatar = Avatar.builder().remotePath("remotePath")
-                .originalFileName("fileName")
+                .originalFilename("fileName")
                 .build();
         em.persist(avatar);
 
@@ -129,7 +129,7 @@ public class ArticleGetTest {
         em.persist(info);
 
         Avatar avatar = Avatar.builder().remotePath("remotePath")
-                .originalFileName("fileName")
+                .originalFilename("fileName")
                 .build();
         em.persist(avatar);
 

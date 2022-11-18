@@ -147,7 +147,7 @@ public class PostAnswerControllerTest {
                                                 fieldWithPath("userInfo.nickname").type(JsonFieldType.STRING).description("유저 닉네임입니다"),
                                                 fieldWithPath("userInfo.grade").type(JsonFieldType.STRING).description("유저 등급입니다"),
                                                 fieldWithPath("avatar.avatarId").type(JsonFieldType.NUMBER).description("프로필사진 식별자입니다"),
-                                                fieldWithPath("avatar.fileName").type(JsonFieldType.STRING).description("파일 이름입니다"),
+                                                fieldWithPath("avatar.filename").type(JsonFieldType.STRING).description("파일 이름입니다"),
                                                 fieldWithPath("avatar.remotePath").type(JsonFieldType.STRING).description("유저 닉네임입니다"),
                                                 fieldWithPath("content").type(JsonFieldType.STRING).description("답글 내용입니다"),
                                                 fieldWithPath("answerId").type(JsonFieldType.NUMBER).description("답글 식별자입니다"),

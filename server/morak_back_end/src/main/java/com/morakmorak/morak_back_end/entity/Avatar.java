@@ -16,7 +16,7 @@ public class Avatar extends BaseTime{
     @Column(name = "avatar_id")
     private Long id;
 
-    private String originalFileName;
+    private String originalFilename;
 
     private Integer fileSize;
 

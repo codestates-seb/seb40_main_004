@@ -15,7 +15,7 @@ public interface CommentMapper {
     @Mapping(source = "comment.user.nickname", target = "userInfo.nickname")
     @Mapping(source = "comment.user.grade", target = "userInfo.grade")
     @Mapping(source = "comment.user.avatar.id", target = "avatar.avatarId")
-    @Mapping(source = "comment.user.avatar.originalFileName", target = "avatar.fileName")
+    @Mapping(source = "comment.user.avatar.originalFilename", target = "avatar.filename")
     @Mapping(source = "comment.user.avatar.remotePath", target = "avatar.remotePath")
     CommentDto.Response commentToCommentDto(Comment comment);
 }

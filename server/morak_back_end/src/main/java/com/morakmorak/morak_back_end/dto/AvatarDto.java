@@ -11,19 +11,19 @@ public class AvatarDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SimpleResponse {
         private Long avatarId;
-        private String fileName;
+        private String filename;
         private String remotePath;
 
         public static SimpleResponse of(Avatar avatar) {
             return avatar == null ? SimpleResponse.builder()
                     .avatarId(null)
-                    .fileName(null)
+                    .filename(null)
                     .remotePath(null)
                     .build()
                     :
                     SimpleResponse.builder()
                             .avatarId(avatar.getId())
-                            .fileName(avatar.getOriginalFileName())
+                            .filename(avatar.getOriginalFilename())
                             .remotePath(avatar.getRemotePath())
                             .build();
         }
