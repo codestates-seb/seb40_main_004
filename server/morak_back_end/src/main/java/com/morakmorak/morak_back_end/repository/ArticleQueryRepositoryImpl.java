@@ -85,48 +85,6 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         return new PageImpl<>(result, pageable, count);
     }
 
-    @Override
-    public Page<Article> tagSearch(String category, String keyword, String target, String sort, Pageable pageable) {
-        List<Article> re = queryFactory
-                .select(articleTag.article)
-                .from(articleTag)
-                .leftJoin(articleTag.article, article)
-                .leftJoin(articleTag.tag, tag)
-                .leftJoin(articleTag.article.category, QCategory.category)
-                .leftJoin(articleTag.article.user, user)
-                .leftJoin(articleTag.article.answers, answer)
-                .leftJoin(articleTag.article.bookmarks, bookmark)
-                .leftJoin(articleTag.article.comments, comment)
-                .leftJoin(articleTag.article.reviews, review)
-                .leftJoin(articleTag.article.articleLikes, articleLike)
-                .leftJoin(articleTag.article.files, file)
-                .where(categoryEq(category), keywordEq(keyword, target))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(sortEq(sort))
-                .fetch();
-
-        Long count = queryFactory
-                .select(articleTag.article.count())
-                .from(articleTag)
-                .leftJoin(articleTag.article, article)
-                .leftJoin(articleTag.tag, tag)
-                .leftJoin(articleTag.article.category, QCategory.category)
-                .leftJoin(articleTag.article.user, user)
-                .leftJoin(articleTag.article.answers, answer)
-                .leftJoin(articleTag.article.bookmarks, bookmark)
-                .leftJoin(articleTag.article.comments, comment)
-                .leftJoin(articleTag.article.reviews, review)
-                .leftJoin(articleTag.article.articleLikes, articleLike)
-                .leftJoin(articleTag.article.files, file)
-                .where(categoryEq(category), keywordEq(keyword, target))
-                .orderBy(sortEq(sort))
-                .fetchOne();
-
-
-        return new PageImpl<>(re, pageable, count);
-    }
-
     private BooleanExpression categoryEq(String category) {
         return category != null ? article.category.name.eq(CategoryName.valueOf(category)) : null;
     }
