@@ -20,15 +20,4 @@ public interface FileMapper {
         return filesWithOnlyId;
     }
 
-    default List<FileDto.RequestFileWithId> RequestFileWithIdToFile(ArticleDto.RequestUpdateArticle requestUploadArticle) {
-        List<FileDto.RequestFileWithId> filesWithOnlyId = requestUploadArticle.getFileId().stream()
-                .map(file -> FileDto.RequestFileWithId.builder()
-                        .fileId(file.getFileId())
-                        .build())
-                .collect(Collectors.toList());
-        return filesWithOnlyId;
-    }
-
-
-
 }
