@@ -1,5 +1,9 @@
 package com.morakmorak.morak_back_end.util;
 
+import com.morakmorak.morak_back_end.entity.Avatar;
+import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.entity.enums.Grade;
+
 import java.time.LocalDateTime;
 
 public class TestConstants {
@@ -37,4 +41,9 @@ public class TestConstants {
 
     public final static String QNA = "qna";
     public final static String INFO = "info";
+
+    public final static Avatar AVATAR = Avatar.builder().id(1L).originalFileName("randomfilename").remotePath("randomremotepath").build();
+    public final static User USER1 = User.builder().id(ID1).email(EMAIL1).name(NAME1).nickname(NICKNAME1).grade(Grade.GOLD).avatar(AVATAR).build();
+
+
 }
