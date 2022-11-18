@@ -5,6 +5,7 @@ import com.morakmorak.morak_back_end.dto.ArticleDto;
 import com.morakmorak.morak_back_end.dto.FileDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
@@ -92,7 +93,7 @@ public class ArticleUpdateTest {
 
         File file4 = fileRepository.save(File.builder().localPath("22").build());
 
-        Category category = categoryRepository.save(Category.builder().name("INFO").build());
+        Category category = categoryRepository.save(Category.builder().name(CategoryName.INFO).build());
 
         tagRepository.save(Tag.builder().name(TagName.C).build());
 

@@ -6,6 +6,7 @@ import com.morakmorak.morak_back_end.controller.ArticleController;
 import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
@@ -92,7 +93,7 @@ public class searchArticleTest {
     public void searchArticleTest_suc() throws Exception {
         //given
         Tag JAVA = Tag.builder().id(1L).name(TagName.JAVA).build();
-        Category info = Category.builder().id(1L).name("info").build();
+        Category info = Category.builder().id(1L).name(CategoryName.INFO).build();
 
 
         Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFileName("fileName").build();
@@ -154,7 +155,7 @@ public class searchArticleTest {
         ArticleDto.ResponseListTypeArticle responseListTypeArticleBuilder =
                 ArticleDto.ResponseListTypeArticle.builder()
                         .articleId(Long.parseLong(String.valueOf(1L)))
-                        .category("info")
+                        .category(CategoryName.INFO)
                         .title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                         .clicks(10)
                         .likes(1)
@@ -193,7 +194,7 @@ public class searchArticleTest {
         //then
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0:1].articleId").value(1))
-                .andExpect(jsonPath("$.data[0:1].category").value("info"))
+                .andExpect(jsonPath("$.data[0:1].category").value("INFO"))
                 .andExpect(jsonPath("$.data[0:1].title").value("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~"))
                 .andExpect(jsonPath("$.data[0:1].clicks").value(10))
                 .andExpect(jsonPath("$.data[0:1].likes").value(1))
@@ -258,7 +259,7 @@ public class searchArticleTest {
     public void searchArticleTest_suc2() throws Exception {
         //given
         Tag JAVA = Tag.builder().id(1L).name(TagName.JAVA).build();
-        Category info = Category.builder().id(1L).name("info").build();
+        Category info = Category.builder().id(1L).name(CategoryName.INFO).build();
 
 
         Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFileName("fileName").build();
@@ -322,7 +323,7 @@ public class searchArticleTest {
         ArticleDto.ResponseListTypeArticle responseListTypeArticleBuilder =
                 ArticleDto.ResponseListTypeArticle.builder()
                         .articleId(Long.parseLong(String.valueOf(1L)))
-                        .category("info")
+                        .category(CategoryName.INFO)
                         .title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                         .clicks(10)
                         .likes(1)
@@ -343,14 +344,14 @@ public class searchArticleTest {
         ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> responseListTypeArticleResponseMultiplePaging =
                 new ResponseMultiplePaging<>(dtoResponseListTypeArticle, search);
 
-        given(articleService.searchArticleAsPaging("info", "JAVA",
+        given(articleService.searchArticleAsPaging("INFO", "JAVA",
                 "tag", "desc", 1, 1))
                 .willReturn(responseListTypeArticleResponseMultiplePaging);
 
 //     when
         ResultActions perform = mockMvc.perform(
                 get("/articles")
-                        .param("category", "info")
+                        .param("category", "INFO")
                         .param("keyword", "JAVA")
                         .param("target", "tag")
                         .param("sort", "desc")
@@ -361,7 +362,7 @@ public class searchArticleTest {
         //then
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.data[0:1].articleId").value(1))
-                .andExpect(jsonPath("$.data[0:1].category").value("info"))
+                .andExpect(jsonPath("$.data[0:1].category").value("INFO"))
                 .andExpect(jsonPath("$.data[0:1].title").value("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~"))
                 .andExpect(jsonPath("$.data[0:1].clicks").value(10))
                 .andExpect(jsonPath("$.data[0:1].likes").value(1))
@@ -427,7 +428,7 @@ public class searchArticleTest {
     public void findDetailArticle_suc() throws Exception {
         //given
         Tag JAVA = Tag.builder().id(1L).name(TagName.JAVA).build();
-        Category info = Category.builder().id(1L).name("info").build();
+        Category info = Category.builder().id(1L).name(CategoryName.INFO).build();
 
         Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFileName("fileName").build();
         User user = User.builder().id(1L).avatar(dbAvatar).nickname("nickname").grade(Grade.BRONZE).build();
@@ -493,7 +494,7 @@ public class searchArticleTest {
 
         ArticleDto.ResponseDetailArticle result = ArticleDto.ResponseDetailArticle.builder()
                 .articleId(1L)
-                .category("info")
+                .category(CategoryName.INFO)
                 .title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                 .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
                 .clicks(10)
@@ -521,7 +522,7 @@ public class searchArticleTest {
         //then
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.articleId").value(article.getId()))
-                .andExpect(jsonPath("$.category").value("info"))
+                .andExpect(jsonPath("$.category").value("INFO"))
                 .andExpect(jsonPath("$.title").value("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~"))
                 .andExpect(jsonPath("$.content").value("콘탠트입니다. 제발 됬으면 좋겠습니다."))
                 .andExpect(jsonPath("$.clicks").value(10))
@@ -577,4 +578,7 @@ public class searchArticleTest {
                                 ))));
 
     }
-}
+
+
+    }
+

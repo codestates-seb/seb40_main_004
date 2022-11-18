@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.entity;
 
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,13 +19,13 @@ public class Category extends BaseTime {
     @Column(name = "category_id")
     private Long id;
 
-    private String name;
+    private CategoryName name;
 
     @OneToMany(mappedBy = "category")
     @Builder.Default
     private List<Article> articleList = new ArrayList<>();
 
-    public Category(String name) {
+    public Category(CategoryName name) {
         this.name = name;
     }
 }

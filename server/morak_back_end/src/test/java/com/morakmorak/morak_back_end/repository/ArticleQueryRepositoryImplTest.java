@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.repository;
 
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,8 +39,8 @@ class ArticleQueryRepositoryImplTest {
         em.persist(JAVA);
         em.persist(C);
 
-        Category info = Category.builder().name("info").build();
-        Category qna = Category.builder().name("qna").build();
+        Category info = Category.builder().name(CategoryName.INFO).build();
+        Category qna = Category.builder().name(CategoryName.QNA).build();
         em.persist(info);
         em.persist(qna);
 
@@ -124,11 +125,11 @@ class ArticleQueryRepositoryImplTest {
         //given
         PageRequest pageRequest = PageRequest.of(0, 20);
         //when
-        Page<Article> articles = articleRepository.search("qna", null, null, null, pageRequest);
+        Page<Article> articles = articleRepository.search("QNA", null, null, null, pageRequest);
         //then
 
-        assertThat(articles.getContent().get(0).getCategory().getName()).isEqualTo("qna");
-        assertThat(articles.getContent().get(9).getCategory().getName()).isEqualTo("qna");
+        assertThat(articles.getContent().get(0).getCategory().getName()).isEqualTo(CategoryName.QNA);
+        assertThat(articles.getContent().get(9).getCategory().getName()).isEqualTo(CategoryName.QNA);
         assertThat(articles.getContent().size()).isEqualTo(10);
     }
 
@@ -153,7 +154,7 @@ class ArticleQueryRepositoryImplTest {
         //given
         PageRequest pageRequest = PageRequest.of(0, 10);
         //when
-        Page<Article> articles = articleRepository.search("info", null, null, null, pageRequest);
+        Page<Article> articles = articleRepository.search("INFO", null, null, null, pageRequest);
         //then
         assertThat(articles.getContent().size()).isSameAs(10);
         assertThat(articles.getSize()).isSameAs(10);

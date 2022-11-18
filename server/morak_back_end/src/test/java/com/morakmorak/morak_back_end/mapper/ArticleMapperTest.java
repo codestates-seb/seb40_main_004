@@ -4,6 +4,7 @@ import com.morakmorak.morak_back_end.dto.ArticleDto;
 import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.repository.ArticleRepository;
@@ -45,7 +46,7 @@ class ArticleMapperTest {
         Tag JAVA = Tag.builder().name(TagName.JAVA).build();
         em.persist(JAVA);
 
-        Category info = Category.builder().name("info").build();
+        Category info = Category.builder().name(CategoryName.INFO).build();
         em.persist(info);
 
 
