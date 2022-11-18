@@ -109,7 +109,7 @@ class ArticleQueryRepositoryImplTest {
         //given
         PageRequest pageRequest = PageRequest.of(0, 10);
         //when
-        Page<Article> articles = articleRepository.tagSearch(null, "C", "tag", null, pageRequest);
+        Page<Article> articles = articleRepository.search(null, "C", "tag", null, pageRequest);
 
 
         assertThat(articles.getTotalElements()).isEqualTo(10);
