@@ -66,7 +66,7 @@ public class Answer extends BaseTime{
         this.isPicked = true;
         this.article.closeThisArticle();
     }
-    public boolean isPickedAnswer(Answer answerToCheck) {
+    public boolean isPickedAnswer() {
         if (this.isPicked) {
             return true;
         }return false;
