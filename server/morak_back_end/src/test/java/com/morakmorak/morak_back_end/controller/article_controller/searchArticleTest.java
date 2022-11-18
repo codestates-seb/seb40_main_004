@@ -137,7 +137,7 @@ public class searchArticleTest {
 
         List<TagDto.SimpleTag> dtoTagList = new ArrayList<>();
         TagDto.SimpleTag dtoTag = TagDto.SimpleTag.builder()
-                .tagId(1L).name("JAVA").build();
+                .tagId(1L).name(TagName.JAVA).build();
         dtoTagList.add(dtoTag);
 
 
@@ -305,7 +305,7 @@ public class searchArticleTest {
 
         List<TagDto.SimpleTag> dtoTagList = new ArrayList<>();
         TagDto.SimpleTag dtoTag = TagDto.SimpleTag.builder()
-                .tagId(1L).name("JAVA").build();
+                .tagId(1L).name(TagName.JAVA).build();
         dtoTagList.add(dtoTag);
 
 
@@ -490,7 +490,7 @@ public class searchArticleTest {
                 .build();
 
         TagDto.SimpleTag tagDto =
-                TagDto.SimpleTag.builder().tagId(1L).name("JAVA").build();
+                TagDto.SimpleTag.builder().tagId(1L).name(TagName.JAVA).build();
 
         ArticleDto.ResponseDetailArticle result = ArticleDto.ResponseDetailArticle.builder()
                 .articleId(1L)

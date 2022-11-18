@@ -5,6 +5,7 @@ import com.morakmorak.morak_back_end.controller.ArticleController;
 import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
@@ -184,7 +185,7 @@ class ArticleControllerTest {
         ArticleDto.RequestUpdateArticle request = ArticleDto.RequestUpdateArticle.builder()
                 .title("타이틀입니다. 잘부탁드립니다. 부탁드립니다.").content("콘텐트입니다. 잘부탁드립니다.")
                 .fileId(List.of(FileDto.RequestFileWithId.builder().fileId(1L).build()))
-                .tags(List.of(TagDto.SimpleTag.builder().name("Java").tagId(1L).build()))
+                .tags(List.of(TagDto.SimpleTag.builder().name(TagName.JAVA).tagId(1L).build()))
                 .thumbnail(1L)
                 .build();
         ArticleDto.ResponseSimpleArticle response = ArticleDto.ResponseSimpleArticle.builder().articleId(1L).build();
