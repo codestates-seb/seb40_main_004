@@ -39,4 +39,13 @@ public class CommentController {
 
         return commentService.findAllComments(articleId);
     }
+
+    @DeleteMapping("/comments/{comment-id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentDto.Response> requestDeleteComment(@PathVariable("article-id") Long articleId,
+                                                          @PathVariable("comment-id") Long commentId,
+                                                          @RequestUser UserDto.UserInfo user) throws Exception {
+        commentService.deleteComment(user.getId(), articleId, commentId);
+        return commentService.findAllComments(articleId);
+    }
 }

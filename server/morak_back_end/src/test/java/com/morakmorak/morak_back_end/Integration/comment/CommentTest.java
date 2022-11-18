@@ -25,8 +25,7 @@ import static org.hamcrest.Matchers.*;
 import static com.morakmorak.morak_back_end.util.CommentTestConstants.VALID_COMMENT;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -184,5 +183,60 @@ public class CommentTest {
         //then 409 conflict 발생
         perform
                 .andExpect(status().isConflict());
+    }
+    @Test
+    @DisplayName("댓글 삭제 시 권한이 없다면 409를 반환한다.")
+    void deleteComment_failed_1() throws Exception {
+        //given 새로운 유저 등장
+        commentRepository.save(Comment.builder().user(savedUser).article(savedArticle).build());
+        Comment savedComment = commentRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
+
+        User newUser = User.builder()
+                .email(EMAIL2)
+                .nickname(NICKNAME2)
+                .password(PASSWORD1)
+                .build();
+        userRepository.save(newUser);
+        User savedNewUser = userRepository.findUserByEmail(EMAIL2).orElseThrow(() -> new AssertionError());
+        String accessTokenForNewUser = jwtTokenUtil.createAccessToken(EMAIL2, savedNewUser.getId(), ROLE_USER_LIST);
+
+        //when 권한 없는 유저가 삭제 요청을 보냈을 때
+        ResultActions perform = mockMvc.perform(delete("/articles/{article-id}/comments/{comment-id}", savedArticle.getId(),savedComment.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(JWT_HEADER, accessTokenForNewUser)
+        );
+        //then 409 conflict 발생
+        perform
+                .andExpect(status().isConflict());
+    }
+    @Test
+    @DisplayName("댓글 수정 시 유효한 데이터가 인입되었다면 200을 반환한다.")
+    void deleteComment_success_1() throws Exception {
+        //given 유효한 댓글 수정 요청
+
+        commentRepository.save(Comment.builder().user(savedUser).article(savedArticle).content("지워질 댓글입니다.").build());
+        Comment savedComment = commentRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
+        commentRepository.save(Comment.builder().user(savedUser).article(savedArticle).content("살아남을 댓글입니다.").build());
+
+        //when 유효한 input
+        ResultActions perform = mockMvc.perform(delete("/articles/{article-id}/comments/{comment-id}", savedArticle.getId(),savedComment.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(JWT_HEADER, accessToken)
+        );
+        Comment survivedComment = commentRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
+        //then 200 ok 반환
+        perform
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].commentId").value(survivedComment.getId().intValue()))
+                .andExpect(jsonPath("$[0].articleId",is(savedArticle.getId().intValue())))
+                .andExpect(jsonPath("$[0].userInfo.userId",is(savedUser.getId().intValue())))
+                .andExpect(jsonPath("$[0].userInfo.nickname").exists())
+                .andExpect(jsonPath("$[0].userInfo.grade").isEmpty())
+                .andExpect(jsonPath("$[0].avatar.avatarId").exists())
+                .andExpect(jsonPath("$[0].avatar.fileName").exists())
+                .andExpect(jsonPath("$[0].avatar.remotePath").exists())
+                .andExpect(jsonPath("$[0].content").value("살아남을 댓글입니다."))
+                .andExpect(jsonPath("$[0].createdAt").exists())
+                .andExpect(jsonPath("$[0].lastModifiedAt").exists());
     }
 }
