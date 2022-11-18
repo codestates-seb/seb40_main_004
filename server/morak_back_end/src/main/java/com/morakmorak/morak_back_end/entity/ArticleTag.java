@@ -26,4 +26,9 @@ public class ArticleTag extends BaseTime{
     public void injectMappingForArticleAndTag(Article article) {
         this.article = article;
     }
+
+    public void mapArticleAndTagWithArticleTag() {
+        this.article.getArticleTags().add(this);
+        this.tag.getArticleTags().add(this);
+    }
 }
