@@ -137,11 +137,13 @@ public class ArticleService {
 
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
         Article dbArticle = findVerifiedArticle(articleId);
-        Long userId = userInfo.getId();
-
+        Long userId = 0L;
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
 
+        if (userInfo != null) {
+            userId = userInfo.getId();
+        }
         if (articleLikeRepository.checkUserLiked(userId, dbArticle.getId()).isPresent()) {
             isLiked = Boolean.TRUE;
         }
