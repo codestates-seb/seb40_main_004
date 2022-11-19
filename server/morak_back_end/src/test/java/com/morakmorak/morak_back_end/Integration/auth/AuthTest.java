@@ -7,7 +7,7 @@ import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.repository.RedisRepositoryImpl;
 import com.morakmorak.morak_back_end.repository.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.service.AuthService;
+import com.morakmorak.morak_back_end.service.auth_user_service.AuthService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
