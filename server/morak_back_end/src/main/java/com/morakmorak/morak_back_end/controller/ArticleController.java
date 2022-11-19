@@ -82,4 +82,12 @@ public class ArticleController {
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
+    @PostMapping("/{article-id}")
+    public ResponseEntity pressLikeButton(@RequestUser UserDto.UserInfo userInfo,
+                                          @PathVariable("article-id") Long articleId) {
+        ArticleDto.ResponseArticleLike responseArticleLike = articleService.pressLikeButton(articleId, userInfo);
+
+        return new ResponseEntity(responseArticleLike, HttpStatus.OK);
+    }
+
 }
