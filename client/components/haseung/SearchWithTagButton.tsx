@@ -1,3 +1,9 @@
+/*
+ * 책임 작성자: 정하승
+ * 최초 작성일: 2022-11-19
+ * 최근 수정일: 2022-11-19
+ */
+
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

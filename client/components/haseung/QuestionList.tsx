@@ -1,3 +1,10 @@
+/*
+ * 책임 작성자: 정하승
+ * 최초 작성일: 2022-11-18
+ * 최근 수정일: 2022-11-18
+ * 개요: 질문 리스트를 표시합니다.
+ */
+
 import { CreatedDate } from '../../components/hyejung/QuestionContent/CreatedDate';
 import { QuestionTitle } from '../../components/hyejung/QuestionContent/QuestionTitle';
 import { TagList } from '../../components/hyejung/QuestionContent/TagList';
