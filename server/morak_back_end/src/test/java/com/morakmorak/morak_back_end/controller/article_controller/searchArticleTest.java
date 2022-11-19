@@ -535,6 +535,23 @@ public class searchArticleTest {
                 .andExpect(jsonPath("$.createdAt").isNotEmpty())
                 .andExpect(jsonPath("$.lastModifiedAt").isNotEmpty())
                 .andExpect(jsonPath("$.expiredDate").isEmpty())
+                .andExpect(jsonPath("$.userInfo.userId").value(1))
+                .andExpect(jsonPath("$.userInfo.nickname").value("nickname"))
+                .andExpect(jsonPath("$.userInfo.grade").value("BRONZE"))
+                .andExpect(jsonPath("$.avatar.avatarId").value(1))
+                .andExpect(jsonPath("$.avatar.filename").value("fileName"))
+                .andExpect(jsonPath("$.avatar.remotePath").value("remotePath"))
+                .andExpect(jsonPath("$.comments[0:1].articleId").value(1))
+                .andExpect(jsonPath("$.comments[0:1].commentId").value(1))
+                .andExpect(jsonPath("$.comments[0:1].userInfo.userId").value(1))
+                .andExpect(jsonPath("$.comments[0:1].userInfo.nickname").value("nickname"))
+                .andExpect(jsonPath("$.comments[0:1].userInfo.grade").value("BRONZE"))
+                .andExpect(jsonPath("$.comments[0:1].avatar.avatarId").value(1))
+                .andExpect(jsonPath("$.comments[0:1].avatar.filename").value("fileName"))
+                .andExpect(jsonPath("$.comments[0:1].avatar.remotePath").value("remotePath"))
+                .andExpect(jsonPath("$.comments[0:1].createdAt").exists())
+                .andExpect(jsonPath("$.comments[0:1].lastModifiedAt").exists())
+
                 .andDo(document(
                         "article search success",
                         preprocessRequest(prettyPrint()),
@@ -579,6 +596,172 @@ public class searchArticleTest {
 
     }
 
+    @Test
+    @DisplayName("dsfds")
+    public void findDetailArticle_suc2() throws Exception {
+        //given
+        Tag JAVA = Tag.builder().id(1L).name(TagName.JAVA).build();
+        Category info = Category.builder().id(1L).name(CategoryName.INFO).build();
 
+        Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFilename("fileName").build();
+        User user = User.builder().id(1L).avatar(dbAvatar).nickname("nickname").grade(Grade.BRONZE).build();
+
+        List<Comment> comments = new ArrayList<>();
+        List<Answer> answers = new ArrayList<>();
+
+        for (int i = 1; i < 2; i++) {
+            Answer answer = Answer.builder().id(1L).build();
+            answers.add(answer);
+            Comment comment = Comment.builder().id(1L).build();
+            comments.add(comment);
+        }
+
+        ArticleTag articleTagJava = ArticleTag.builder().id(1L).tag(JAVA).build();
+
+        List<ArticleLike> articleLikes = new ArrayList<>();
+
+        Article article
+                = Article.builder()
+                .id(1L)
+                .title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
+                .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
+                .articleTags(List.of(articleTagJava))
+                .category(info)
+                .clicks(10)
+                .isClosed(false)
+                .answers(answers)
+                .articleLikes(articleLikes)
+                .comments(comments)
+                .user(user)
+                .build();
+
+        info.getArticleList().add(article);
+
+        articleTagJava.injectMappingForArticleAndTag(article);
+
+        List<Article> articles = new ArrayList<>();
+        articles.add(article);
+
+        articleLikes.add(ArticleLike.builder().id(1L).article(article).user(user).build());
+
+
+        AvatarDto.SimpleResponse avatarDto = AvatarDto.SimpleResponse.builder()
+                .avatarId(1L).filename("fileName").remotePath("remotePath").build();
+
+        UserDto.ResponseSimpleUserDto userInfoDto = UserDto.ResponseSimpleUserDto.builder()
+                .userId(1L).nickname("nickname").grade(Grade.BRONZE).build();
+
+        CommentDto.Response commentDto = CommentDto.Response.builder()
+                .commentId(1L)
+                .articleId(1L)
+                .content("comment 입니다.")
+                .createdAt(LocalDateTime.now())
+                .lastModifiedAt(LocalDateTime.now())
+                .userInfo(userInfoDto)
+                .avatar(avatarDto)
+                .build();
+
+        TagDto.SimpleTag tagDto =
+                TagDto.SimpleTag.builder().tagId(1L).name(TagName.JAVA).build();
+
+        ArticleDto.ResponseDetailArticle result = ArticleDto.ResponseDetailArticle.builder()
+                .articleId(1L)
+                .category(CategoryName.INFO)
+                .title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
+                .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
+                .clicks(10)
+                .likes(1)
+                .isClosed(false)
+                .isBookmarked(false)
+                .isLiked(false)
+                .tags(List.of(tagDto))
+                .createdAt(LocalDateTime.now())
+                .lastModifiedAt(LocalDateTime.now())
+                .expiredDate(null)
+                .userInfo(userInfoDto)
+                .avatar(avatarDto)
+                .comments(List.of(commentDto))
+                .build();
+
+        given(articleService.findDetailArticle(anyLong(), any())).willReturn(result);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                get("/articles/" + article.getId())
+
+        );
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.articleId").value(article.getId()))
+                .andExpect(jsonPath("$.category").value("INFO"))
+                .andExpect(jsonPath("$.title").value("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~"))
+                .andExpect(jsonPath("$.content").value("콘탠트입니다. 제발 됬으면 좋겠습니다."))
+                .andExpect(jsonPath("$.clicks").value(10))
+                .andExpect(jsonPath("$.likes").value(1))
+                .andExpect(jsonPath("$.isClosed").value(false))
+                .andExpect(jsonPath("$.isLiked").value(false))
+                .andExpect(jsonPath("$.isBookmarked").value(false))
+                .andExpect(jsonPath("$.tags[0:1].tagId").value(1))
+                .andExpect(jsonPath("$.tags[0:1].name").value("JAVA"))
+                .andExpect(jsonPath("$.createdAt").isNotEmpty())
+                .andExpect(jsonPath("$.lastModifiedAt").isNotEmpty())
+                .andExpect(jsonPath("$.expiredDate").isEmpty())
+                .andExpect(jsonPath("$.userInfo.userId").value(1))
+                .andExpect(jsonPath("$.userInfo.nickname").value("nickname"))
+                .andExpect(jsonPath("$.userInfo.grade").value("BRONZE"))
+                .andExpect(jsonPath("$.avatar.avatarId").value(1))
+                .andExpect(jsonPath("$.avatar.filename").value("fileName"))
+                .andExpect(jsonPath("$.avatar.remotePath").value("remotePath"))
+                .andExpect(jsonPath("$.comments[0:1].articleId").value(1))
+                .andExpect(jsonPath("$.comments[0:1].commentId").value(1))
+                .andExpect(jsonPath("$.comments[0:1].userInfo.userId").value(1))
+                .andExpect(jsonPath("$.comments[0:1].userInfo.nickname").value("nickname"))
+                .andExpect(jsonPath("$.comments[0:1].userInfo.grade").value("BRONZE"))
+                .andExpect(jsonPath("$.comments[0:1].avatar.avatarId").value(1))
+                .andExpect(jsonPath("$.comments[0:1].avatar.filename").value("fileName"))
+                .andExpect(jsonPath("$.comments[0:1].avatar.remotePath").value("remotePath"))
+                .andExpect(jsonPath("$.comments[0:1].createdAt").exists())
+                .andExpect(jsonPath("$.comments[0:1].lastModifiedAt").exists())
+                .andDo(document(
+                        "article search success",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("게시글의 아이디입니다."),
+                                        fieldWithPath("category").type(JsonFieldType.STRING).description("게시글의 카테고리입니다."),
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("게시글의 제목입니다."),
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("게시글의 내용입니."),
+                                        fieldWithPath("clicks").type(JsonFieldType.NUMBER).description("게시글의 조회수 입니다."),
+                                        fieldWithPath("likes").type(JsonFieldType.NUMBER).description("게시글의 좋아요 숫자입니다."),
+                                        fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("jwt의 회원이 좋아요를 누르면 true를 반환합니다."),
+                                        fieldWithPath("isBookmarked").type(JsonFieldType.BOOLEAN).description("jwt의 회원이 북마크 했다면 true를 반환합니다."),
+                                        fieldWithPath("isClosed").type(JsonFieldType.BOOLEAN).description("게시글의 채택 되었다면 true를 반환합니다."),
+                                        fieldWithPath("createdAt").type(JsonFieldType.STRING).description("게시글이 생성된 날짜입니다."),
+                                        fieldWithPath("lastModifiedAt").type(JsonFieldType.STRING).description("게시글이 마지막으로 수정한 날짜 입니다."),
+                                        fieldWithPath("expiredDate").type(JsonFieldType.NULL).description("게시글이 유효기한입니다. 아직은 사용하지 않습니다."),
+                                        fieldWithPath("tags[].tagId").type(JsonFieldType.NUMBER).description("태그 아이디 입니다."),
+                                        fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("태그 이름입니다."),
+                                        fieldWithPath("userInfo.userId").type(JsonFieldType.NUMBER).description("유저의 아이디입니다."),
+                                        fieldWithPath("userInfo.nickname").type(JsonFieldType.STRING).description("유저의 닉네임입니다."),
+                                        fieldWithPath("userInfo.grade").type(JsonFieldType.STRING).description("유저의 등급입니다."),
+                                        fieldWithPath("avatar.avatarId").type(JsonFieldType.NUMBER).description("아바타 파일의 아이디 입니다."),
+                                        fieldWithPath("avatar.filename").type(JsonFieldType.STRING).description("아바타 파일의 이름입니다."),
+                                        fieldWithPath("avatar.remotePath").type(JsonFieldType.STRING).description("아바타 파일의 경로입니다."),
+                                        fieldWithPath("comments[].commentId").type(JsonFieldType.NUMBER).description("댓글의 아이디 입니다.."),
+                                        fieldWithPath("comments[].articleId").type(JsonFieldType.NUMBER).description("댓글이 올라가있는 게시글의 아이디 입니다.."),
+                                        fieldWithPath("comments[].content").type(JsonFieldType.STRING).description("댓글의 내용입니다."),
+                                        fieldWithPath("comments[].createdAt").type(JsonFieldType.STRING).description("댓글이 작성된 날짜 입니다."),
+                                        fieldWithPath("comments[].lastModifiedAt").type(JsonFieldType.STRING).description("댓글이 마지막으로 수정된 날짜 입니다."),
+                                        fieldWithPath("comments[].userInfo.userId").type(JsonFieldType.NUMBER).description("댓글 유저의 아이디입니다."),
+                                        fieldWithPath("comments[].userInfo.nickname").type(JsonFieldType.STRING).description("댓글 유저의 닉네임입니다."),
+                                        fieldWithPath("comments[].userInfo.grade").type(JsonFieldType.STRING).description("댓글 유저의 등급입니다."),
+                                        fieldWithPath("comments[].avatar.avatarId").type(JsonFieldType.NUMBER).description("댓글 유저의 아바타 파일의 아이디 입니다."),
+                                        fieldWithPath("comments[].avatar.filename").type(JsonFieldType.STRING).description("댓글 유저의 아바타 파일의 이름입니다."),
+                                        fieldWithPath("comments[].avatar.remotePath").type(JsonFieldType.STRING).description("댓글 유저의 아바타 파일의 경로입니다.")
+                                ))));
     }
+
+}
 
