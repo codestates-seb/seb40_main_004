@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.mapper;
 
 import com.morakmorak.morak_back_end.dto.AuthDto;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.security.oauth.Oauth2UserDto;
 import org.mapstruct.Mapper;
@@ -15,4 +16,8 @@ public interface UserMapper {
     @Mapping(source = "name", target = "nickname")
     @Mapping(source = "provider", target = "provider")
     User toOAuthEntity(Oauth2UserDto dto);
+
+    User EditProfileToEntity(UserDto.RequestEditProfile dto);
+
+    UserDto.RequestEditProfile userToEditProfile(User user);
 }
