@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,18 +28,20 @@ import java.util.List;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ROLE_USER_LIST;
-import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
+import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@Transactional
+
 @SpringBootTest(value = {
         "jwt.secretKey=only_test_secret_Key_value_gn..rlfdlrkqnwhrgkekspdy",
         "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
 })
 @AutoConfigureMockMvc
+@Transactional
+@Rollback(value = true)
 public class ArticleGetTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -224,107 +227,72 @@ public class ArticleGetTest {
     @Test
     @DisplayName("게시글 상세조회 컨트롤러 이용시 jwt토큰을 보낼시 isBookmarked와 isLiked를 확인하고 true or false를 보낸다.")
     public void findDetailArticle_suc() throws Exception {
-    //given
-        Tag JAVA = Tag.builder().name(TagName.JAVA).build();
-        em.persist(JAVA);
+        em.flush();
+        em.clear();
+        //given
 
-        Category info = Category.builder().name(CategoryName.INFO).build();
-        em.persist(info);
-
-        Avatar avatar = Avatar.builder().remotePath("remotePath")
-                .originalFilename("fileName")
-                .build();
-        em.persist(avatar);
-
-        User user = User.builder().email(EMAIL1).nickname("nickname").grade(Grade.BRONZE).avatar(avatar).build();
+        Tag C = Tag.builder().name(TagName.C).build();
 
 
-        ArticleTag articleTagJava = ArticleTag.builder().tag(JAVA).build();
-
-
-
-        Article article = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
-                .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
-                .articleTags(List.of(articleTagJava))
-                .category(info)
+        Avatar avatar = Avatar.builder().originalFilename("filename").remotePath("remotePath").build();
+        User user = User.builder().email("test@naver.com").nickname("nickname").grade(Grade.BRONZE).avatar(avatar).build();
+        Article article = Article.builder()
+                .title("안녕하세요 타이틀입니다. 잘부탁드립니다. 제발 되었으면 좋겠습니다.")
+                .content("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다.")
                 .user(user)
                 .build();
-        info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
-        em.persist(article);
+        ArticleTag articleTag = ArticleTag.builder().article(article).tag(C).build();
+        article.getArticleTags().add(articleTag);
+        C.getArticleTags().add(articleTag);
+        em.persist(articleTag);
+        em.persist(C);
 
-        user.getArticles().add(article);
+        em.persist(avatar);
         em.persist(user);
 
-        Bookmark bookmark = Bookmark.builder().article(article).user(user).build();
+        ArticleLike articleLike = ArticleLike.builder().user(user).article(article).build();
+        user.getArticleLikes().add(articleLike);
+        article.getArticleLikes().add(articleLike);
+        em.persist(articleLike);
+
+        Bookmark bookmark = Bookmark.builder().user(user).article(article).build();
         article.getBookmarks().add(bookmark);
         user.getBookmarks().add(bookmark);
         em.persist(bookmark);
 
-        ArticleLike articleLike = ArticleLike.builder().article(article).user(user).build();
-        article.getArticleLikes().add(articleLike);
-        user.getArticleLikes().add(articleLike);
-        em.persist(articleLike);
-
-        Comment comment = Comment.builder().article(article).content("내용니ㅐ야너ㅐㅓ랸ㅇㄴㅇㄴㄹ")
-                .user(user).build();
-        em.persist(comment);
+        Comment comment = Comment.builder().content("댓글의 내용입니다. 잘부탁드립니다.하하하핳하하하하").user(user).article(article).build();
         article.getComments().add(comment);
+        user.getComments().add(comment);
+        em.persist(comment);
+
+        em.persist(article);
+        em.persist(user);
+
+        User dbUser = userRepository.findUserByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("유저없음"));
+        String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST);
+
+        Article dbArticle = articleRepository.findArticleByContent("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다.")
+                .orElseThrow(() -> new RuntimeException("게시글 없음"));
 
 
-        CommentDto.Response commentDto = CommentDto.Response.builder().avatar(AvatarDto.SimpleResponse.of(avatar))
-                .articleId(article.getId())
-                .commentId(comment.getId())
-                .content(comment.getContent())
-                .userInfo(UserDto.ResponseSimpleUserDto.of(user))
-                .avatar(AvatarDto.SimpleResponse.of(avatar))
-                .build();
-        Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
-
-    //when
+        //when
         ResultActions perform = mockMvc.perform(
-                get("/articles/" + id)
+                get("/articles/" + article.getId())
                         .header(JWT_HEADER, accessToken)
         );
 
         //then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.articleId").value(article.getId()))
-                .andExpect(jsonPath("$.title").value(article.getTitle()))
-                .andExpect(jsonPath("$.content").value(article.getContent()))
-                .andExpect(jsonPath("$.clicks").value(article.getClicks()))
-                .andExpect(jsonPath("$.likes").value(1))
-                .andExpect(jsonPath("$.isClosed").value(false))
-                .andExpect(jsonPath("$.isLiked").value(true))
-                .andExpect(jsonPath("$.isBookmarked").value(true))
-                .andExpect(jsonPath("$.tags[0:1].tagId").value(1))
-                .andExpect(jsonPath("$.tags[0:1].name").value("JAVA"))
-                .andExpect(jsonPath("$.createdAt").exists())
-                .andExpect(jsonPath("$.lastModifiedAt").exists())
-                .andExpect(jsonPath("$.expiredAt").doesNotExist())
-                .andExpect(jsonPath("$.userInfo.userId").value(id))
-                .andExpect(jsonPath("$.userInfo.nickname").value("nickname"))
-                .andExpect(jsonPath("$.userInfo.grade").value("BRONZE"))
-                .andExpect(jsonPath("$.avatar.avatarId").value(avatar.getId()))
-                .andExpect(jsonPath("$.avatar.filename").value(avatar.getOriginalFilename()))
-                .andExpect(jsonPath("$.avatar.remotePath").value(avatar.getRemotePath()))
-                .andExpect(jsonPath("$.comments[0:1].articleId").value(commentDto.getArticleId().intValue()))
-                .andExpect(jsonPath("$.comments[0:1].commentId").value(comment.getId().intValue()))
-                .andExpect(jsonPath("$.comments[0:1].userInfo.userId").value(user.getId().intValue()))
-                .andExpect(jsonPath("$.comments[0:1].userInfo.nickname").value("nickname"))
-                .andExpect(jsonPath("$.comments[0:1].userInfo.grade").value("BRONZE"))
-                .andExpect(jsonPath("$.comments[0:1].avatar.avatarId").value(avatar.getId().intValue()))
-                .andExpect(jsonPath("$.comments[0:1].avatar.filename").value(avatar.getOriginalFilename()))
-                .andExpect(jsonPath("$.comments[0:1].avatar.remotePath").value(avatar.getRemotePath()))
-                .andExpect(jsonPath("$.comments[0:1].createdAt").exists())
-                .andExpect(jsonPath("$.comments[0:1].lastModifiedAt").exists());
+                .andExpect(jsonPath("$.articleId").value(article.getId().intValue()));
+
     }
 
     @Test
     @DisplayName("게시글 상세조회시 jwt 토큰을 보내지 않을시 isBookmarked와 isLiked를 flase로 보낸다.")
     public void findDetailArticle_suc2() throws Exception {
+        em.flush();
+        em.clear();
         //given
         Tag JAVA = Tag.builder().name(TagName.JAVA).build();
         em.persist(JAVA);
@@ -341,7 +309,7 @@ public class ArticleGetTest {
 
 
         ArticleTag articleTagJava = ArticleTag.builder().tag(JAVA).build();
-
+        JAVA.getArticleTags().add(articleTagJava);
 
 
         Article article = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
@@ -352,6 +320,7 @@ public class ArticleGetTest {
                 .build();
         info.getArticleList().add(article);
         articleTagJava.injectMappingForArticleAndTag(article);
+        em.persist(articleTagJava);
         em.persist(article);
 
         user.getArticles().add(article);
@@ -386,7 +355,7 @@ public class ArticleGetTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                get("/articles/" + id)
+                get("/articles/" + article.getId())
 
         );
 

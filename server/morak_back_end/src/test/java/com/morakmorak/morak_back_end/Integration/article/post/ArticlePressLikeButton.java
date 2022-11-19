@@ -74,7 +74,7 @@ public class ArticlePressLikeButton {
 
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/" + article.getId())
+                post("/articles/" + article.getId()+"/likes")
                         .header(JWT_HEADER, accessToken)
         );
         //then
@@ -106,7 +106,7 @@ public class ArticlePressLikeButton {
 
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/" + article.getId())
+                post("/articles/" + article.getId()+"/likes")
                         .header(JWT_HEADER, accessToken)
         );
         //then
@@ -130,7 +130,7 @@ public class ArticlePressLikeButton {
 
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/" + 500)
+                post("/articles/" + 500+"/likes")
                         .header(JWT_HEADER, accessToken)
         );
         //then
@@ -149,7 +149,7 @@ public class ArticlePressLikeButton {
 
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/" + dbArticle.getId())
+                post("/articles/" + article.getId()+"/likes")
         );
 
         //then

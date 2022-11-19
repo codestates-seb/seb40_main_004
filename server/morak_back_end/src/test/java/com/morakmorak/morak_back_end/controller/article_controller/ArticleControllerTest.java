@@ -362,7 +362,7 @@ class ArticleControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/"+articleId)
+                post("/articles/" + articleId+"/likes")
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
@@ -404,7 +404,7 @@ class ArticleControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/"+articleId)
+                post("/articles/" + articleId+"/likes")
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
@@ -443,7 +443,7 @@ class ArticleControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/"+articleId)
+                post("/articles/" + articleId+"/likes")
         );
 
         //then
@@ -466,7 +466,7 @@ class ArticleControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/" + articleId)
+                post("/articles/" + 500+"/likes")
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
