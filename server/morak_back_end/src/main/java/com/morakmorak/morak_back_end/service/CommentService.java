@@ -4,7 +4,6 @@ import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.Comment;
 import com.morakmorak.morak_back_end.entity.User;
-import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.CommentRepository;
@@ -14,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.morakmorak.morak_back_end.exception.ErrorCode.ARTICLE_NOT_FOUND;
 
 @Service
 @Transactional
@@ -39,7 +36,7 @@ public class CommentService {
         Article verifiedArticle = articleService.findVerifiedArticle(articleId);
         Comment foundComment = findVerifiedCommentById(commentId);
 
-        if (foundComment.hasPermissionWith(verifiedUser) && isEditableStatus(verifiedArticle)) {
+        if (foundComment.hasPermissionWith(verifiedUser) && verifiedArticle.statusIsPosting()) {
             foundComment.updateContent(newContent);
             return findAllComments(articleId);
         } else {
@@ -47,13 +44,6 @@ public class CommentService {
         }
     }
 
-    public boolean isEditableStatus(Article verifiedArticle) throws Exception {
-        if (verifiedArticle.getArticleStatus() != ArticleStatus.POSTING) {
-            throw new BusinessLogicException(ARTICLE_NOT_FOUND);
-        } else {
-            return true;
-        }
-    }
 
     public Comment findVerifiedCommentById(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(() -> new BusinessLogicException(ErrorCode.COMMENT_NOT_FOUND));
@@ -67,7 +57,7 @@ public class CommentService {
         User verifiedUser = userService.findVerifiedUserById(userId);
         Article verifiedArticle = articleService.findVerifiedArticle(articleId);
         Comment foundComment = findVerifiedCommentById(commentId);
-        if (foundComment.hasPermissionWith(verifiedUser) && isEditableStatus(verifiedArticle)) {
+        if (foundComment.hasPermissionWith(verifiedUser) && verifiedArticle.statusIsPosting()) {
             commentRepository.deleteById(commentId);
             return true;
         } else {
