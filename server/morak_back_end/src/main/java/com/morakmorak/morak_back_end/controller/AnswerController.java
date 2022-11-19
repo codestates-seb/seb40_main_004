@@ -4,6 +4,8 @@ import com.morakmorak.morak_back_end.dto.AnswerDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.File;
+import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.security.resolver.RequestUser;
 import com.morakmorak.morak_back_end.service.AnswerService;
 import com.morakmorak.morak_back_end.service.FileService;
@@ -33,6 +35,25 @@ public class AnswerController {
         List<File> fileList = fileService.createFileListFrom(request.getFileIdList());
         return answerService.postAnswer(articleId, user.getId(), answerNotSaved, fileList);
     }
+    @PatchMapping("/answers/{answer-id}")
+    @ResponseStatus(HttpStatus.OK)
+    public AnswerDto.SimpleResponsePostAnswer updateAnswer(@PathVariable("article-id") Long articleId,
+                                                         @PathVariable("answer-id") Long answerId,
+                                                         @RequestUser UserDto.UserInfo user,
+                                                         @RequestBody @Valid AnswerDto.RequestUpdateAnswer request
+    ) throws Exception {
+        Answer.AnswerBuilder answer =Answer.builder();
+        if ((request.getContent() == null) && (request.getFileIdList().isEmpty())) {
+            throw new BusinessLogicException(ErrorCode.BAD_REQUEST);
+        }else{
+            answer.content(request.getContent());
+            List<File> fileList = fileService.createFileListFrom(request.getFileIdList());
+            answer.files(fileList);
+        }
+        Answer answerChanges = answer.build();
+        return answerService.editAnswer(articleId, answerId, user.getId(), answerChanges);
+    }
+
 
 
 }

@@ -20,7 +20,6 @@ import java.util.List;
 public class AnswerService {
     private final ArticleService articleService;
     private final UserService userService;
-    private final CommentService commentService;
     private final AnswerRepository answerRepository;
 
     public AnswerDto.SimpleResponsePostAnswer postAnswer(Long articleId, Long userId, Answer answerNotSaved, List<File> fileList) throws Exception {
@@ -28,7 +27,7 @@ public class AnswerService {
         Article verifiedArticle = articleService.findVerifiedArticle(articleId);
 
         if (verifiedArticle.isQuestion() && !verifiedArticle.isClosedArticle()
-                && commentService.isEditableStatus(verifiedArticle)) {
+                && verifiedArticle.statusIsPosting()) {
             Answer savedAnswer = answerRepository.save(injectAllInto(answerNotSaved, verifiedUser, verifiedArticle, fileList));
             return AnswerDto.SimpleResponsePostAnswer.of(savedAnswer);
         } else {
@@ -46,5 +45,25 @@ public class AnswerService {
         fileList.stream().forEach(file -> {
             file.attachToAnswer(answer);
         });
+    }
+
+    public AnswerDto.SimpleResponsePostAnswer editAnswer(Long articleId, Long answerId, Long userId, Answer answerChanges) {
+        Answer verifiedAnswer = findVerifiedAnswerById(answerId);
+        User verifiedUser = userService.findVerifiedUserById(userId);
+        Article verifiedArticle = articleService.findVerifiedArticle(articleId);
+
+        if (!verifiedAnswer.hasPermissionWith(verifiedUser) || verifiedAnswer.isPickedAnswer()||
+                verifiedArticle.isClosedArticle() || !verifiedArticle.statusIsPosting()) {
+            throw new BusinessLogicException(ErrorCode.UNABLE_TO_ANSWER);
+        } else {
+            attachFilesToAnswer(verifiedAnswer,answerChanges.getFiles());
+            verifiedAnswer.updateAnswer(answerChanges);
+            return AnswerDto.SimpleResponsePostAnswer.of(verifiedAnswer);
+        }
+
+    }
+
+    public Answer findVerifiedAnswerById(Long answerId) {
+        return answerRepository.findById(answerId).orElseThrow(() ->new BusinessLogicException(ErrorCode.ANSWER_NOT_FOUND));
     }
 }

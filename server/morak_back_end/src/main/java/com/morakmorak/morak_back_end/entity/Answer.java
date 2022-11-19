@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.exception.ErrorCode.BAD_REQUEST;
 
@@ -81,5 +82,16 @@ public class Answer extends BaseTime{
         this.article = verifiedArticle;
         verifiedArticle.getAnswers().add(this);
         return this;
+    }
+    public Answer updateAnswer(Answer answerChanges) {
+        Optional.ofNullable(answerChanges.getContent())
+                .ifPresent(changedContent-> {
+            this.content= changedContent;
+        });
+        return this;
+    }
+
+    public boolean hasPermissionWith(User userWhoAccess) {
+        return this.user.getId() == userWhoAccess.getId() ? true : false;
     }
 }

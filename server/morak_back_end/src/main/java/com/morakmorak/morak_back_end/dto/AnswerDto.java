@@ -19,7 +19,15 @@ public class AnswerDto {
         @Length(min = 10)
         private String content;
         private List<FileDto.RequestFileWithId> fileIdList = new ArrayList<>();
-//        private Long thumbnail; todo: 반영 여부 확인하기
+    }
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class RequestUpdateAnswer {
+        private String content;
+        @Builder.Default
+        private List<FileDto.RequestFileWithId> fileIdList = new ArrayList<>();
     }
     @Getter
     @Builder
