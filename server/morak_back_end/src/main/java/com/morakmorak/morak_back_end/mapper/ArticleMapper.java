@@ -56,6 +56,7 @@ public interface ArticleMapper {
     @Mapping(source = "article.user.avatar.id", target = "avatar.avatarId")
     @Mapping(source = "article.user.avatar.originalFilename", target = "avatar.filename")
     @Mapping(source = "article.user.avatar.remotePath", target = "avatar.remotePath")
+    @Mapping(source = "comments", target = "comments")
     ArticleDto.ResponseDetailArticle articleToResponseDetailArticle(Article article,
                                                                     Boolean isLiked,
                                                                     Boolean isBookmarked,
