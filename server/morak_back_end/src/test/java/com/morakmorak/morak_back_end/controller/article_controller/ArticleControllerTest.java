@@ -82,7 +82,6 @@ class ArticleControllerTest {
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
 
-
     @Test
     @DisplayName("게시글을 등록할때 등록이 완전히 성공할때")
     public void uploadArticle_suc() throws Exception {
@@ -315,4 +314,138 @@ class ArticleControllerTest {
         //then
         perform.andExpect(status().isNotFound());
     }
+
+    @Test
+    @DisplayName("로그인한 회원이 게시글의 좋아요를 눌렀을때 처음 좋아요를 눌렀을 경우 좋아요 갯수가 1개 증가하고 201 코드를 던진다.")
+    public void pressLikeButton_suc() throws Exception{
+        //given
+        Long articleId = 1L;
+        UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
+
+        ArticleDto.ResponseArticleLike responseArticleLike =
+                ArticleDto.ResponseArticleLike.builder().articleId(1L).userId(1L).isLiked(true).likeCount(1).build();
+
+        given(articleService.pressLikeButton(anyLong(), any())).willReturn(responseArticleLike);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/"+articleId)
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+        );
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.articleId").value(1L))
+                .andExpect(jsonPath("$.userId").value(1L))
+                .andExpect(jsonPath("$.isLiked").value(true))
+                .andExpect(jsonPath("$.likeCount").value(1))
+                .andDo(document(
+                        "게시글_좋아요_처음누를때_성공_201",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("글의 아이디 입니다."),
+                                        fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저의 아이디 입니다."),
+                                        fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("해당 유저가 좋아요를 눌렀는지 안눌렀지를 보여줍니다,"),
+                                        fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("해당 게시글의 좋아요 숫자입니다.")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("로그인한 회원이 게시글의 누른 좋아용를 취소할 경우 좋아요 갯수가 1개 감소하고 201 코드를 던진다.")
+    public void pressLikeButton_suc2() throws Exception{
+        //given
+        Long articleId = 1L;
+        UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
+
+        ArticleDto.ResponseArticleLike responseArticleLike =
+                ArticleDto.ResponseArticleLike.builder().articleId(1L).userId(1L).isLiked(true).likeCount(0).build();
+
+        given(articleService.pressLikeButton(anyLong(), any())).willReturn(responseArticleLike);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/"+articleId)
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+        );
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.articleId").value(1L))
+                .andExpect(jsonPath("$.userId").value(1L))
+                .andExpect(jsonPath("$.isLiked").value(true))
+                .andExpect(jsonPath("$.likeCount").value(0))
+                .andDo(document(
+                        "게시글_좋아요_두번_누를때_(취소)_성공_201",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("글의 아이디 입니다."),
+                                        fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저의 아이디 입니다."),
+                                        fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("해당 유저가 좋아요를 눌렀는지 안눌렀지를 보여줍니다,"),
+                                        fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("해당 게시글의 좋아요 숫자입니다.")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("로그인하지 않은 유저가 좋아요를 누른다면, 404 User Not Found 에러를 던진다.")
+    public void pressLikeButton_fail1() throws Exception{
+        //given
+        Long articleId = 1L;
+
+        given(articleService.pressLikeButton(anyLong(), any()))
+                .willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/"+articleId)
+        );
+
+        //then
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "로그인하지않은_회원이_좋아요를_누를시_실패_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글에 좋아요를 누른다면, 404 Article Not Found 에러를 던진다.")
+    public void pressLikeButton_fail2() throws Exception{
+        //given
+        Long articleId = 1L;
+
+        given(articleService.pressLikeButton(anyLong(), any()))
+                .willThrow(new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/" + articleId)
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+        );
+
+        //then
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "로그인한_회원이_존재하지_않는_게시글에_좋아요를_누를시_실패_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        )));
+    }
+
 }
