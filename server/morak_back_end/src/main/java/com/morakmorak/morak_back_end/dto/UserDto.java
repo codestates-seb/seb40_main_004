@@ -92,7 +92,7 @@ public class UserDto {
             this.avatar = AvatarDto.SimpleResponse.builder()
                     .avatarId(avatarId)
                     .remotePath(remotePath)
-                    .fileName(filename)
+                    .filename(filename)
                     .build();
         }
 

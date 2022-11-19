@@ -126,7 +126,7 @@ public class UserServiceTest {
 
         AvatarDto.SimpleResponse avatar = AvatarDto.SimpleResponse.builder()
                 .avatarId(ID1)
-                .fileName("fileName")
+                .filename("fileName")
                 .remotePath("remotePath")
                 .build();
 
