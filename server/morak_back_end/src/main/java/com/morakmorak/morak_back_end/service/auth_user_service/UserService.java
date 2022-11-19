@@ -1,12 +1,12 @@
-package com.morakmorak.morak_back_end.service;
+package com.morakmorak.morak_back_end.service.auth_user_service;
 
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.TagMapper;
+import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.repository.UserQueryRepository;
 import com.morakmorak.morak_back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,19 +17,31 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.morakmorak.morak_back_end.exception.ErrorCode.NICKNAME_EXISTS;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
     private final ArticleMapper articleMapper;
     private final TagMapper tagMapper;
+    private final UserMapper userMapper;
 
     public User findVerifiedUserById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+        return userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
+    }
+
+    public void checkDuplicateNickname(String nickname) {
+        if (userRepository.findUserByNickname(nickname).isPresent()) throw new BusinessLogicException(NICKNAME_EXISTS);
+    }
+
+    public UserDto.RequestEditProfile editUserProfile(User request, Long userId) {
+        User dbUser = findVerifiedUserById(userId);
+        if (!request.getNickname().equals(dbUser.getNickname())) checkDuplicateNickname(request.getNickname());
+        dbUser.editProfile(request);
+        return userMapper.userToEditProfile(dbUser);
     }
 
     public UserDto.ResponseDashBoard findUserDashboard(Long userId) {

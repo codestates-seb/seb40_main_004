@@ -1,12 +1,16 @@
 package com.morakmorak.morak_back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,6 +49,12 @@ public class Article extends BaseTime {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private ArticleStatus articleStatus = ArticleStatus.POSTING;
+
+    @CreatedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(updatable = false,name = "created_date")
+    private LocalDate createDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")

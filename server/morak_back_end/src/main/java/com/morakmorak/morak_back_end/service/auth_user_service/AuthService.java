@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.service;
+package com.morakmorak.morak_back_end.service.auth_user_service;
 
 import com.morakmorak.morak_back_end.adapter.RandomKeyGenerator;
 import com.morakmorak.morak_back_end.adapter.TokenGenerator;
@@ -9,6 +9,7 @@ import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.UserRole;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.service.mail_service.MailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ import java.util.Optional;
 import static com.morakmorak.morak_back_end.entity.enums.RoleName.ROLE_USER;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
-import static com.morakmorak.morak_back_end.service.MailSenderImpl.*;
+import static com.morakmorak.morak_back_end.service.mail_service.MailSenderImpl.*;
 
 @Service
 @Transactional

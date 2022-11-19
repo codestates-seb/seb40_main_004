@@ -1,40 +1,34 @@
 package com.morakmorak.morak_back_end.service.user_service;
 
-import com.morakmorak.morak_back_end.dto.*;
-import com.morakmorak.morak_back_end.entity.Article;
+import com.morakmorak.morak_back_end.dto.UserDto;
+import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.*;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
+import com.morakmorak.morak_back_end.mapper.UserMapperImpl;
 import com.morakmorak.morak_back_end.repository.UserQueryRepository;
 import com.morakmorak.morak_back_end.repository.UserRepository;
-import com.morakmorak.morak_back_end.service.UserService;
-import com.morakmorak.morak_back_end.util.ActivityQueryDtoTestImpl;
-import com.morakmorak.morak_back_end.util.BadgeQueryDtoTestImpl;
-import com.morakmorak.morak_back_end.util.TagQueryDtoTestImpl;
-import com.morakmorak.morak_back_end.util.TestConstants;
-import org.assertj.core.api.Assertions;
+import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Optional;
 
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
     @Mock
@@ -47,122 +41,71 @@ public class UserServiceTest {
     UserService userService;
 
     @Mock
-    UserMapper userMapper;
-
-    @Mock
-    TagMapper tagMapper;
-
-    @Mock
     ArticleMapper articleMapper;
 
-    @Test
-    @DisplayName("getUSerDashboard에 실패하면 나머지 로직은 실행되지 않고 예외가 발생한다.")
-    void findUserDashboard_failed() {
-        //given
-        given(userQueryRepository.getUserDashboardBasicInfo(ID1)).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+    @Mock
+    UserMapper userMapper;
 
-        //when then
-        assertThatThrownBy(() -> userService.findUserDashboard(ID1)).isInstanceOf(BusinessLogicException.class);
+    User requestUser;
+
+    @BeforeEach
+    public void init() {
+        requestUser = User.builder()
+                .nickname(NICKNAME1)
+                .infoMessage(CONTENT1)
+                .github(GITHUB_URL)
+                .blog(TISTORY_URL)
+                .jobType(JobType.DEVELOPER)
+                .build();
     }
 
     @Test
-    @DisplayName("")
-    void findUserDashboard_success() {
+    @DisplayName("해당 유저가 존재하지 않을 때 BusinessLogicException 발생")
+    void editUserProfile_failed() {
         //given
-        int year = LocalDate.now().getYear();
+        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        UserDto.ResponseSimpleUserDto simpleUserDto = UserDto.ResponseSimpleUserDto.builder()
-                .userId(ID1)
-                .grade(Grade.VIP)
-                .nickname(NICKNAME1)
+        //when //then
+        assertThatThrownBy(() -> userService.editUserProfile(requestUser, ID1)).isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    @DisplayName("해당 닉네임이 이미 존재할 때 BusinessLogicException 발생")
+    void editUserProfile_failed2() {
+        //given
+        User dbUser = User.builder().build();
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(dbUser));
+        given(userRepository.findUserByNickname(anyString())).willReturn(Optional.of(dbUser));
+
+        //when then
+        assertThatThrownBy(() -> userService.editUserProfile(requestUser, ID1)).isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    @DisplayName("로직이 정상적으로 수행된 경우 수정이 반영된 값을 반환")
+    void editUserProfile_failed3() {
+        //given
+        UserDto.RequestEditProfile response = UserDto.RequestEditProfile.builder()
+                .blog(requestUser.getBlog())
+                .nickname(requestUser.getNickname())
+                .github(requestUser.getGithub())
+                .jobType(requestUser.getJobType())
+                .infoMessage(requestUser.getInfoMessage())
                 .build();
 
-        ReviewDto.Response review1 = ReviewDto.Response.builder()
-                .reviewId(ID1)
-                .content(CONTENT1)
-                .createdAt(NOW_TIME)
-                .userInfo(simpleUserDto)
-                .build();
-
-        ActivityQueryDtoTestImpl activities1 = ActivityQueryDtoTestImpl.builder()
-                .answerCount(1)
-                .commentCount(1)
-                .articleCount(1)
-                .total(3)
-                .date("2022-01-01")
-                .build();
-
-        TagQueryDtoTestImpl tag1 = TagQueryDtoTestImpl
-                .builder()
-                .tagId(ID1)
-                .name(TagName.NODE.getName())
-                .build();
-
-        TagDto.SimpleTag tag2 = TagDto.SimpleTag
-                .builder()
-                .tagId(ID1)
-                .name(TagName.NODE)
-                .build();
-
-        ArticleDto.ResponseListTypeArticle question1 = ArticleDto.ResponseListTypeArticle.builder()
-                .articleId(ID1)
-                .answerCount(TWO)
-                .category(CategoryName.QNA)
-                .clicks(ONE)
-                .likes(TWO)
-                .isClosed(Boolean.FALSE)
-                .title(TITLE1)
-                .commentCount(ONE)
-                .createdAt(NOW_TIME)
-                .lastModifiedAt(NOW_TIME)
-                .userInfo(simpleUserDto)
-                .tags(List.of(tag2))
-                .build();
-
-        BadgeQueryDtoTestImpl badge1 = BadgeQueryDtoTestImpl.builder()
-                .badgeId(ID1)
-                .name(BadgeName.KINDLY.getName())
-                .build();
-
-        AvatarDto.SimpleResponse avatar = AvatarDto.SimpleResponse.builder()
-                .avatarId(ID1)
-                .filename("fileName")
-                .remotePath("remotePath")
-                .build();
-
-        UserDto.ResponseDashBoard dashBoard = UserDto.ResponseDashBoard.builder()
-                .userId(ID1)
-                .email(EMAIL1)
-                .nickname(NICKNAME1)
-                .jobType(JobType.DEVELOPER)
-                .grade(Grade.VIP)
-                .point(THREE)
-                .github(GITHUB_URL)
-                .blog(TISTORY_URL)
-                .avatar(avatar)
-                .tags(List.of(tag1))
-                .reviewBadges(List.of(badge1))
-                .articles(List.of(question1))
-                .activities(List.of(activities1))
-                .reviews(List.of(review1))
-                .build();
-
-        given(userQueryRepository.getUserDashboardBasicInfo(ID1)).willReturn(dashBoard);
-        given(userQueryRepository.getUserDashboardBasicInfo(ID1)).willReturn(UserDto.ResponseDashBoard.builder().email(EMAIL1).build());
-        given(userQueryRepository.get50RecentQuestions(ID1)).willReturn(List.of(Article.builder().id(ID1).build()));
-        given(userQueryRepository.getReceivedReviews(ID1)).willReturn(List.of(review1));
-        given(userRepository.getUsersTop3Badges(ID1)).willReturn(List.of(badge1));
-        given(userRepository.getUsersTop3Tags(ID1)).willReturn(List.of(tag1));
-        given(userRepository.getUserActivitiesOnThisYear(Date.valueOf(year + "-01-01"), Date.valueOf(year+1 + "-01-01"), ID1)).willReturn(List.of(ActivityQueryDtoTestImpl.builder().answerCount(1).build()));
-        given(articleMapper.articleToResponseSearchResultArticle(any(Article.class), anyInt(), anyInt(), any(List.class), anyInt())).willReturn(question1);
+        User dbUser = User.builder().build();
+        given(userRepository.findById(ID1)).willReturn(Optional.of(dbUser));
+        given(userRepository.findUserByNickname(requestUser.getNickname())).willReturn(Optional.empty());
+        given(userMapper.userToEditProfile(any(User.class))).willReturn(response);
 
         //when
-        UserDto.ResponseDashBoard result = userService.findUserDashboard(ID1);
+        UserDto.RequestEditProfile result = userService.editUserProfile(requestUser, ID1);
 
-        // then
-        assertThat(result.getActivities().get(0).getAnswerCount()).isEqualTo(ONE);
-        assertThat(result.getArticles().get(0).getCommentCount()).isEqualTo(ONE);
-        assertThat(result.getEmail()).isEqualTo(EMAIL1);
-        assertThat(result.getReviews().get(0).getContent()).isEqualTo(CONTENT1);
+        //then
+        assertThat(result.getBlog()).isEqualTo(requestUser.getBlog());
+        assertThat(result.getGithub()).isEqualTo(requestUser.getGithub());
+        assertThat(result.getNickname()).isEqualTo(requestUser.getNickname());
+        assertThat(result.getJobType()).isEqualTo(requestUser.getJobType());
+        assertThat(result.getInfoMessage()).isEqualTo(requestUser.getInfoMessage());
     }
 }

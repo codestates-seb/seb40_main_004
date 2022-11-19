@@ -4,45 +4,41 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.config.SecurityTestConfig;
 import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.controller.UserController;
-import com.morakmorak.morak_back_end.dto.*;
-import com.morakmorak.morak_back_end.entity.enums.*;
+import com.morakmorak.morak_back_end.dto.UserDto;
+import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.entity.enums.JobType;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.service.UserService;
-import com.morakmorak.morak_back_end.util.ActivityQueryDtoTestImpl;
-import com.morakmorak.morak_back_end.util.BadgeQueryDtoTestImpl;
-import com.morakmorak.morak_back_end.util.TagQueryDtoTestImpl;
+import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.*;
+import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentRequest;
+import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentResponse;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.JsonFieldType.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -71,247 +67,182 @@ public class UserControllerTest {
 
     @BeforeEach
     public void init() {
-        jwtTokenUtil = new JwtTokenUtil(ACCESS_TOKEN, REFRESH_TOKEN);
+        jwtTokenUtil = new JwtTokenUtil(SECRET_KEY, REFRESH_KEY);
     }
 
     @Test
-    @DisplayName("해당 유저 아이디가 존재하지 않을 경우 404 예외 반환")
-    void requestDashboard_failed() throws Exception {
-        //given
-        given(userService.findUserDashboard(any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+    @DisplayName("해당 유저가 존재하지 않을 경우 404 예외 반환")
+    public void patchUserProfile_failed1() throws Exception {
+        // given
+        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
+                .nickname(NICKNAME2)
+                .blog(TISTORY_URL)
+                .github(GITHUB_URL)
+                .infoMessage(CONTENT1)
+                .jobType(JobType.DEVELOPER)
+                .build();
 
-        //when
-        ResultActions perform = mockMvc.perform(get("/users/1/dashboard")
-                .header(JWT_HEADER, BEARER_ACCESS_TOKEN));
+        String json = objectMapper.writeValueAsString(request);
+
+        BDDMockito.given(userService.editUserProfile(any(User.class), any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+
+        // when
+        ResultActions perform = mockMvc.perform(patch("/users/profiles")
+                .header(JWT_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
 
         //then
         perform.andExpect(status().isNotFound())
-                .andDo(document(
-                        "대시보드_조회_실패_404",
+                .andDo(document("회원정보_수정_실패_404",
                         getDocumentRequest(),
                         getDocumentResponse(),
                         requestHeaders(
-                                headerWithName(JWT_HEADER).description("유효하지 않은 엑세스 토큰 (만료, 파기, 서명 등)")
+                                headerWithName(JWT_HEADER).description("액세스 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("nickname").description("닉네임"),
+                                fieldWithPath("infoMessage").description("자기소개"),
+                                fieldWithPath("github").description("깃허브 주소"),
+                                fieldWithPath("blog").description("블로그 주소"),
+                                fieldWithPath("jobType").description("직업")
+                        )
+                        ));
+    }
+
+    @Test
+    @DisplayName("해당 닉네임이 이미 존재할 경우 409 반환")
+    public void patchUserProfile_failed3() throws Exception {
+        // given
+        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
+                .nickname(NICKNAME2)
+                .blog(TISTORY_URL)
+                .github(GITHUB_URL)
+                .infoMessage(CONTENT1)
+                .jobType(JobType.DEVELOPER)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        BDDMockito.given(userService.editUserProfile(any(User.class), any())).willThrow(new BusinessLogicException(ErrorCode.NICKNAME_EXISTS));
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+
+        // when
+        ResultActions perform = mockMvc.perform(patch("/users/profiles")
+                .header(JWT_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isConflict())
+                .andDo(document("회원정보_수정_실패_409",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("액세스 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("nickname").description("닉네임"),
+                                fieldWithPath("infoMessage").description("자기소개"),
+                                fieldWithPath("github").description("깃허브 주소"),
+                                fieldWithPath("blog").description("블로그 주소"),
+                                fieldWithPath("jobType").description("직업")
                         )
                 ));
     }
 
     @Test
-    @DisplayName("해등 유저 아이디가 존재할 경우 200OK와 유저 대시보드 정보 반환")
-    void requestDashboard_success() throws Exception {
-        String fileName = "대박사진.jpg";
-        String remotePath = "서울역";
-        LocalDate now = LocalDate.now();
-
-        //given
-
-        UserDto.ResponseSimpleUserDto simpleUserDto = UserDto.ResponseSimpleUserDto.builder()
-                .userId(ID1)
-                .grade(Grade.VIP)
-                .nickname(NICKNAME1)
-                .build();
-
-        ReviewDto.Response review1 = ReviewDto.Response.builder()
-                .reviewId(ID1)
-                .content(CONTENT1)
-                .createdAt(NOW_TIME)
-                .userInfo(simpleUserDto)
-                .build();
-
-        ReviewDto.Response review2 = ReviewDto.Response.builder()
-                .reviewId(ID2)
-                .content(CONTENT2)
-                .createdAt(NOW_TIME)
-                .userInfo(simpleUserDto)
-                .build();
-
-        ActivityQueryDtoTestImpl activities1 = ActivityQueryDtoTestImpl.builder()
-                .answerCount(1)
-                .commentCount(1)
-                .articleCount(1)
-                .total(3)
-                .date("2022-01-01")
-                .build();
-
-        ActivityQueryDtoTestImpl activities2 = ActivityQueryDtoTestImpl.builder()
-                .answerCount(1)
-                .commentCount(1)
-                .articleCount(1)
-                .total(3)
-                .date("2022-01-01")
-                .build();
-
-        ActivityQueryDtoTestImpl activities3 = ActivityQueryDtoTestImpl.builder()
-                .answerCount(1)
-                .commentCount(1)
-                .articleCount(1)
-                .total(3)
-                .date("2022-01-01")
-                .build();
-
-        TagQueryDtoTestImpl tag1 = TagQueryDtoTestImpl
-                .builder()
-                .tagId(ID1)
-                .name(TagName.NODE.toString())
-                .build();
-
-        TagQueryDtoTestImpl tag2 = TagQueryDtoTestImpl
-                .builder()
-                .tagId(ID2)
-                .name(TagName.JAVA.toString())
-                .build();
-
-        TagDto.SimpleTag tag3 = TagDto.SimpleTag
-                .builder()
-                .tagId(ID1)
-                .name(TagName.NODE)
-                .build();
-
-        TagDto.SimpleTag tag4 = TagDto.SimpleTag
-                .builder()
-                .tagId(ID1)
-                .name(TagName.NODE)
-                .build();
-
-        AvatarDto.SimpleResponse avatar = AvatarDto.SimpleResponse.builder()
-                .avatarId(ID1)
-                .filename(fileName)
-                .remotePath(remotePath)
-                .build();
-
-
-        ArticleDto.ResponseListTypeArticle question1 = ArticleDto.ResponseListTypeArticle.builder()
-                .articleId(ID1)
-                .answerCount(TWO)
-                .category(CategoryName.QNA)
-                .clicks(ONE)
-                .likes(TWO)
-                .isClosed(Boolean.FALSE)
-                .title(TITLE1)
-                .commentCount(ONE)
-                .createdAt(NOW_TIME)
-                .lastModifiedAt(NOW_TIME)
-                .userInfo(simpleUserDto)
-                .tags(List.of(tag3, tag4))
-                .avatar(avatar)
-                .build();
-
-        ArticleDto.ResponseListTypeArticle question2 = ArticleDto.ResponseListTypeArticle.builder()
-                .articleId(ID1)
-                .answerCount(TWO)
-                .category(CategoryName.QNA)
-                .clicks(ONE)
-                .likes(TWO)
-                .isClosed(Boolean.FALSE)
-                .title(TITLE1)
-                .commentCount(ONE)
-                .createdAt(NOW_TIME)
-                .lastModifiedAt(NOW_TIME)
-                .userInfo(simpleUserDto)
-                .tags(List.of(tag3, tag4))
-                .avatar(avatar)
-                .build();
-
-        BadgeQueryDtoTestImpl badge1 = BadgeQueryDtoTestImpl.builder()
-                .badgeId(ID1)
-                .name(BadgeName.KINDLY.toString())
-                .build();
-
-        BadgeQueryDtoTestImpl badge2 = BadgeQueryDtoTestImpl.builder()
-                .badgeId(ID2)
-                .name(BadgeName.WISE.toString())
-                .build();
-
-
-        UserDto.ResponseDashBoard answer = UserDto.ResponseDashBoard.builder()
-                .userId(ID1)
-                .email(EMAIL1)
-                .nickname(NICKNAME1)
-                .jobType(JobType.DEVELOPER)
-                .grade(Grade.VIP)
-                .point(THREE)
-                .github(GITHUB_URL)
+    @DisplayName("프로필 수정 요청이 유효성 검증을 통과하지 못할 경우 400 상태코드 반환")
+    public void patchUserProfile_failed2() throws Exception {
+        // given
+        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
+                .nickname(INVALID_NICKNAME)
                 .blog(TISTORY_URL)
-                .avatar(avatar)
-                .tags(List.of(tag1, tag2))
-                .reviewBadges(List.of(badge1, badge2))
-                .articles(List.of(question1, question2))
-                .activities(List.of(activities1, activities2, activities3))
-                .reviews(List.of(review1, review2))
+                .github(GITHUB_URL)
+                .infoMessage(CONTENT1)
+                .jobType(JobType.DEVELOPER)
                 .build();
 
-        given(userService.findUserDashboard(any())).willReturn(answer);
+        String json = objectMapper.writeValueAsString(request);
 
-        //when
-        ResultActions perform = mockMvc.perform(get("/users/1/dashboard"));
+        BDDMockito.given(userService.editUserProfile(any(User.class), any())).willThrow(new BusinessLogicException(ErrorCode.ONLY_TEST_CODE));
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+
+        // when
+        ResultActions perform = mockMvc.perform(patch("/users/profiles")
+                .header(JWT_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document("회원정보_수정_실패_400",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("액세스 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("nickname").description("유효하지 않은 닉네임(null 혹은 웹 어플리케이션 규칙에 맞지 않는 경우)"),
+                                fieldWithPath("infoMessage").description("유효성 검증 대상 아님"),
+                                fieldWithPath("github").description("유효성 검증 대상 아님"),
+                                fieldWithPath("blog").description("유효성 검증 대상 아님"),
+                                fieldWithPath("jobType").description("유효하지 않은 직업(미리 협의된 대문자 상수만 가능, 혹은 null인 경우)")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("해당 유저가 존재하고 유효성 검증에 통과할 경우 200 OK와 변경된 내역에 대한 반환")
+    public void patchUserProfile_success() throws Exception {
+        // given
+        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
+                .nickname(NICKNAME2)
+                .blog(TISTORY_URL)
+                .github(GITHUB_URL)
+                .infoMessage(CONTENT1)
+                .jobType(JobType.DEVELOPER)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        BDDMockito.given(userService.editUserProfile(any(User.class), any())).willReturn(request);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+
+        // when
+        ResultActions perform = mockMvc.perform(patch("/users/profiles")
+                .header(JWT_HEADER, token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
 
         //then
         perform.andExpect(status().isOk())
-                .andDo(document(
-                        "대시보드_조회_성공_200",
+                .andExpect(jsonPath("$.nickname").value(request.getNickname()))
+                .andExpect(jsonPath("$.blog").value(request.getBlog()))
+                .andExpect(jsonPath("$.github").value(request.getGithub()))
+                .andExpect(jsonPath("$.infoMessage").value(request.getInfoMessage()))
+                .andExpect(jsonPath("$.jobType").value(request.getJobType().toString()))
+                .andDo(document("회원정보_수정_성공_200",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("액세스 토큰")
+                        ),
+                        requestFields(
+                                fieldWithPath("nickname").description("닉네임"),
+                                fieldWithPath("infoMessage").description("자기소개"),
+                                fieldWithPath("github").description("깃허브 주소"),
+                                fieldWithPath("blog").description("블로그 주소"),
+                                fieldWithPath("jobType").description("직업")
+                        ),
                         responseFields(
-                                fieldWithPath("userId").type(NUMBER).description("유저 db 시퀀스값"),
-                                fieldWithPath("email").type(STRING).description("유저 이메일"),
-                                fieldWithPath("nickname").type(STRING).description("유저 닉네임"),
-                                fieldWithPath("jobType").type(STRING).description("유저 직업"),
-                                fieldWithPath("grade").type(STRING).description("유저 등급"),
-                                fieldWithPath("point").type(NUMBER).description("유저 포인트"),
-                                fieldWithPath("github").type(STRING).description("깃허브 주소"),
-                                fieldWithPath("blog").type(STRING).description("블로그 주소"),
-                                fieldWithPath("avatar").type(OBJECT).description("프로필 사진 및 정보"),
-                                fieldWithPath("avatar.avatarId").type(NUMBER).description("프로필 이미지 db 시퀀스값"),
-                                fieldWithPath("avatar.filename").type(STRING).description("프로필 이미지 파일명"),
-                                fieldWithPath("avatar.remotePath").type(STRING).description("프로필 이미지 url"),
-                                fieldWithPath("tags").type(ARRAY).description("기술 태그 목록"),
-                                fieldWithPath("tags[].tagId").type(NUMBER).description("태그 db 시퀀스값"),
-                                fieldWithPath("tags[].name").type(STRING).description("태그 이름"),
-                                fieldWithPath("reviewBadges").type(ARRAY).description("리뷰 배지 목록"),
-                                fieldWithPath("reviewBadges[].badgeId").type(NUMBER).description("리뷰 배지 db 시퀀스값"),
-                                fieldWithPath("reviewBadges[].name").type(STRING).description("배지 이름"),
-                                fieldWithPath("activities").type(ARRAY).description("연간 활동량 목록"),
-                                fieldWithPath("activities[].articleCount").type(NUMBER).description("일일 게시글 작성수"),
-                                fieldWithPath("activities[].answerCount").type(NUMBER).description("일일 답변 작성 수"),
-                                fieldWithPath("activities[].commentCount").type(NUMBER).description("일일 댓글 작성 수"),
-                                fieldWithPath("activities[].total").type(NUMBER).description("일일 토탈 게시글/댓글 작성 수"),
-                                fieldWithPath("activities[].date").type(STRING).description("해당일"),
-                                fieldWithPath("reviews").type(ARRAY).description("받은 리뷰 목록"),
-                                fieldWithPath("reviews[].reviewId").type(NUMBER).description("리뷰 아이디 db 시퀀스값"),
-                                fieldWithPath("reviews[].content").type(STRING).description("리뷰 내용"),
-                                fieldWithPath("reviews[].userInfo").type(OBJECT).description("리뷰 작성자 정보"),
-                                fieldWithPath("reviews[].userInfo.userId").type(NUMBER).description("리뷰 작성자 db 시퀀스값"),
-                                fieldWithPath("reviews[].userInfo.nickname").type(STRING).description("리뷰 작성자 닉네임"),
-                                fieldWithPath("reviews[].userInfo.grade").type(STRING).description("리뷰 작성자 등급"),
-                                fieldWithPath("reviews[].createdAt").type(STRING).description("리뷰 작성일시"),
-                                fieldWithPath("articles").type(ARRAY).description("질문 목"),
-                                fieldWithPath("articles[].articleId").type(NUMBER).description("질문글 db 시퀀스값"),
-                                fieldWithPath("articles[].category").type(STRING).description("카테고리 (질문글 고정)"),
-                                fieldWithPath("articles[].title").type(STRING).description("질문글 제목"),
-                                fieldWithPath("articles[].clicks").type(NUMBER).description("조회수"),
-                                fieldWithPath("articles[].likes").type(NUMBER).description("좋아요 수"),
-                                fieldWithPath("articles[].isClosed").type(BOOLEAN).description("질문 마감 여부"),
-                                fieldWithPath("articles[].tags").type(ARRAY).description("질문글 태그"),
-                                fieldWithPath("articles[].tags[].tagId").type(NUMBER).description("태그 db 시퀀스값"),
-                                fieldWithPath("articles[].tags[].name").type(STRING).description("태그명"),
-                                fieldWithPath("articles[].commentCount").type(NUMBER).description("댓글 수"),
-                                fieldWithPath("articles[].answerCount").type(NUMBER).description("답글 수"),
-                                fieldWithPath("articles[].createdAt").type(STRING).description("작성일"),
-                                fieldWithPath("articles[].lastModifiedAt").type(STRING).description("수정일"),
-                                fieldWithPath("articles[].userInfo").type(OBJECT).description("작성 유저 정보"),
-                                fieldWithPath("articles[].userInfo.userId").type(NUMBER).description("작성 유저 db 시퀀스값"),
-                                fieldWithPath("articles[].userInfo.nickname").type(STRING).description("작성 유저 닉네임"),
-                                fieldWithPath("articles[].userInfo.grade").type(STRING).description("작성 유저 등급"),
-                                fieldWithPath("articles[].avatar").type(OBJECT).description("유저 프로필 정보"),
-                                fieldWithPath("articles[].avatar.avatarId").type(NUMBER).description("프로필 이미지 db 시퀀스 값"),
-                                fieldWithPath("articles[].avatar.filename").type(STRING).description("프로필 이미지 파일명"),
-                                fieldWithPath("articles[].avatar.remotePath").type(STRING).description("프로필 이미지 경로"),
-                                fieldWithPath("avatar").type(OBJECT).description("유저 프로필 정보"),
-                                fieldWithPath("avatar.avatarId").type(NUMBER).description("프로필 이미지 db 시퀀스 값"),
-                                fieldWithPath("avatar.filename").type(STRING).description("프로필 이미지 파일명"),
-                                fieldWithPath("avatar.remotePath").type(STRING).description("프로필 이미지 경로")
+                                fieldWithPath("nickname").description("수정 후 닉네임"),
+                                fieldWithPath("infoMessage").description("수정 후 자기소개"),
+                                fieldWithPath("github").description("수정 후 깃허브 주소"),
+                                fieldWithPath("blog").description("수정 후 블로그 주소"),
+                                fieldWithPath("jobType").description("수정 후 직업")
                         )
-                        )
-                );
+                ));
     }
 }

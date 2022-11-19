@@ -1,8 +1,12 @@
 package com.morakmorak.morak_back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,12 @@ public class Comment extends BaseTime{
     private Long id;
 
     private String content;
+
+    @CreatedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(updatable = false,name = "created_date")
+    private LocalDate createDate;
 
     @Builder.Default
     @OneToMany(mappedBy = "comment")

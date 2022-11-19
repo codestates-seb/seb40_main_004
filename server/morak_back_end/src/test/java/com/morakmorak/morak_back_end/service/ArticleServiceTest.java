@@ -10,6 +10,7 @@ import com.morakmorak.morak_back_end.repository.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.CategoryRepository;
 import com.morakmorak.morak_back_end.repository.FileRepository;
 import com.morakmorak.morak_back_end.repository.TagRepository;
+import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import com.morakmorak.morak_back_end.util.ArticleTestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

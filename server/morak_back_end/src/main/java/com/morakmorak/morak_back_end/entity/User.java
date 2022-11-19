@@ -1,14 +1,21 @@
 package com.morakmorak.morak_back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.JobType;
 import com.morakmorak.morak_back_end.entity.enums.UserStatus;
+import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
+import io.netty.util.internal.StringUtil;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -165,6 +172,15 @@ public class User {
 
     public void injectAvatar(Avatar avatar) {
         this.avatar = avatar;
+    }
 
+    public void editProfile(User request) {
+        if (StringUtil.isNullOrEmpty(request.getNickname())) throw new BusinessLogicException(ErrorCode.BAD_REQUEST);
+
+        this.infoMessage = request.infoMessage;
+        this.github = request.github;
+        this.blog = request.blog;
+        this.nickname = request.nickname;
+        this.jobType = request.jobType;
     }
 }
