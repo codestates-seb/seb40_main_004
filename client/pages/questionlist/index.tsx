@@ -1,8 +1,4 @@
-import {
-  faMagnifyingGlass,
-  faPlus,
-  faRefresh,
-} from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '../../components/common/Button';
 import LoadMoreButton from '../../components/haseung/LoadMoreButton';
