@@ -12,6 +12,7 @@ import { Header } from '../../components/common/Header';
 import LoadMoreButton from '../../components/haseung/LoadMoreButton';
 import { QuestionList } from '../../components/haseung/QuestionList';
 import { SearchWithTagButton } from '../../components/haseung/SearchWithTagButton';
+import { TagButton } from '../../components/hyejung/TagButton';
 
 const Questions: NextPage = () => {
   return (
@@ -33,9 +34,7 @@ const Questions: NextPage = () => {
             className="w-[30%] justify-center mt-10 border border-solid border-font-gray rounded-xl mr-2"
           />
           <Button>검색</Button>
-          {[...Array(3)].map(() => (
-            <SearchWithTagButton />
-          ))}
+          <SearchWithTagButton />
           <LoadMoreButton />
         </form>
         <QuestionList />
