@@ -102,7 +102,7 @@ public class PostAnswerControllerTest {
     }
     @Test
     @DisplayName("유효한 등록 요청인 경우 201 created 반환")
-    void postFile_success_1() throws Exception {
+    void postAnswer_success_1() throws Exception {
         //given
         AnswerDto.RequestPostAnswer request = AnswerDto.RequestPostAnswer.builder().content("유효한 길이의 게시물입니다.")
                 .fileIdList(REQUEST_FILE_WITH_IDS)
