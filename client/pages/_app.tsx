@@ -1,7 +1,9 @@
-import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import 'react-quill/dist/quill.snow.css';
 import { RecoilRoot } from 'recoil';
+import '../styles/globals.css';
+import 'react-quill/dist/quill.snow.css';
+import '@fullcalendar/common/main.css';
+import '@fullcalendar/daygrid/main.css';
 
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
   require('../mocks');
