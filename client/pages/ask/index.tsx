@@ -1,7 +1,8 @@
+import { NextPage } from 'next';
 import { Editor } from '../../components/common/Editor';
 import { TagSelect } from '../../components/haseung/TagSelect';
 
-const index = () => {
+const Ask: NextPage = () => {
   return (
     <>
       <Editor />
@@ -10,4 +11,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Ask;
