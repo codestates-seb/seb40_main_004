@@ -65,4 +65,7 @@ public interface ArticleMapper {
                                                                     Integer likes
     );
 
+
+    ArticleDto.ResponseArticleLike makingResponseArticleLikeDto(Long articleId, Long userId, Boolean isLiked, Integer likeCount);
+
 }
