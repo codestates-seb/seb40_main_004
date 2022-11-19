@@ -137,18 +137,13 @@ public class ArticleService {
 
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
         Article dbArticle = findVerifiedArticle(articleId);
-        Long userId = 0L;
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
 
         if (userInfo != null) {
-            userId = userInfo.getId();
-        }
-        if (articleLikeRepository.checkUserLiked(userId, dbArticle.getId()).isPresent()) {
-            isLiked = Boolean.TRUE;
-        }
-        if (bookmarkRepository.checkUserBookmarked(userId, dbArticle.getId()).isPresent()) {
-            isBookmarked = Boolean.TRUE;
+            Long userId = userInfo.getId();
+            isLiked = articleLikeRepository.checkUserLiked(userId, dbArticle.getId()).isPresent();
+            isBookmarked = bookmarkRepository.checkUserBookmarked(userId, dbArticle.getId()).isPresent();
         }
 
         Integer likes = dbArticle.getArticleLikes().size();
