@@ -15,9 +15,6 @@ module.exports = {
         'main-gray': '#A0A0A0',
         'background-gray': '#F2F2F2',
       },
-      fontFamily: {
-        press: ["Josefin Sans"],
-      },
     },
   },
   plugins: [],
