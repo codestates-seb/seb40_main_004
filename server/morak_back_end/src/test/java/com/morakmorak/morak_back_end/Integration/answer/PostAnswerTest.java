@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
 })
 @AutoConfigureMockMvc
-public class AnswerTest {
+public class PostAnswerTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
     @Autowired
@@ -77,7 +77,7 @@ public class AnswerTest {
      * */
     @Test
     @DisplayName("카테고리가 question이 아닌 경우 409 예외 반환")
-    void postFile_failed_1() throws Exception {
+    void postAnswer_failed_1() throws Exception {
         //given
         File file1 = fileRepository.findFileByLocalPath("1").orElseThrow(() -> new AssertionError());
         File file2 = fileRepository.findFileByLocalPath("2").orElseThrow(() -> new AssertionError());
