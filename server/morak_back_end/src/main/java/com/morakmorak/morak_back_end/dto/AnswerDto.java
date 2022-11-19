@@ -43,4 +43,15 @@ public class AnswerDto {
                     .build();
         }
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponseAnswerLike {
+        private Long answerId;
+        private Long userId;
+        private Boolean isLiked;
+        private Integer likeCount;
+    }
 }
