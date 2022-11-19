@@ -112,7 +112,7 @@ class ArticleControllerTest {
         perform.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.articleId").value(responseSimpleArticle.getArticleId()))
                 .andDo(document(
-                        "article upload success",
+                        "게시글_업로드에_성공_201",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -155,7 +155,14 @@ class ArticleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content));
         //then
-        perform.andExpect(status().isNotFound());
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "게시글을_등록할때_존재하지_않는_태그를_작성하려할떄_실패_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        )));
     }
 
     @Test
@@ -174,7 +181,14 @@ class ArticleControllerTest {
                                 .content(content)
                 );
         //then
-        perform.andExpect(status().isBadRequest());
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                        "게시글을_등록할때_유효성_검증에_실패한_경우_실패_400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        )));
     }
 
     @Test
@@ -210,7 +224,7 @@ class ArticleControllerTest {
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.articleId").value(1L))
                 .andDo(document(
-                        "article updaate success",
+                        "게시글_수정에_성공할_경우_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -235,7 +249,7 @@ class ArticleControllerTest {
     }
 
     @Test
-    @DisplayName("게시글을 수정할때 유효성 검증에 실패한 경우")
+    @DisplayName("게시글을 수정할때 유효성 검증에 실패한 경우 400에러를 던진다. ")
     public void articlUpdate_fail1() throws Exception {
         //given
         ArticleDto.RequestUpdateArticle requestUploadArticle = ArticleDto.RequestUpdateArticle.builder().build();
@@ -249,7 +263,13 @@ class ArticleControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
                 );
-        perform.andExpect(status().isBadRequest());
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                "게시글을_수정시_유효성_검증에_실패_400",
+                requestHeaders(
+                        headerWithName(JWT_HEADER).description("access token")
+                )
+        ));
     }
 
     /**
@@ -278,7 +298,7 @@ class ArticleControllerTest {
 
         perform.andExpect(status().isNoContent())
                 .andDo(document(
-                        "article delete success",
+                        "게시글을_삭제할때_본인의_게시글을_삭제할때_성공_204",
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("access token")
                         )
@@ -297,11 +317,17 @@ class ArticleControllerTest {
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
         //then
-        perform.andExpect(status().isUnauthorized());
+        perform.andExpect(status().isUnauthorized()) .andDo(document(
+                "게시글_삭제시_타인의_게시글을_삭제하려할떄_403",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestHeaders(
+                        headerWithName(JWT_HEADER).description("access token")
+                )));
      }
 
     @Test
-    @DisplayName("게시글 삭제시 게시글이 존재하지 않을경우")
+    @DisplayName("게시글 삭제시 게시글이 존재하지 않을경우 404 Article_Not_Found 를 던진다. ")
     public void deleteArticle_fail2() throws Exception{
         //given
         given(articleService.deleteArticle(anyLong(), any(UserDto.UserInfo.class)))
@@ -312,11 +338,18 @@ class ArticleControllerTest {
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
         //then
-        perform.andExpect(status().isNotFound());
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "게시글_삭제시_게시글이_존재하지_않을경우_실패_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        )));
     }
 
     @Test
-    @DisplayName("로그인한 회원이 게시글의 좋아요를 눌렀을때 처음 좋아요를 눌렀을 경우 좋아요 갯수가 1개 증가하고 201 코드를 던진다.")
+    @DisplayName("로그인한 회원이 게시글의 좋아요를 눌렀을때 처음 좋아요를 눌렀을 경우 좋아요 갯수가 1개 증가하고 200 코드를 던진다.")
     public void pressLikeButton_suc() throws Exception{
         //given
         Long articleId = 1L;
@@ -340,7 +373,7 @@ class ArticleControllerTest {
                 .andExpect(jsonPath("$.isLiked").value(true))
                 .andExpect(jsonPath("$.likeCount").value(1))
                 .andDo(document(
-                        "게시글_좋아요_처음누를때_성공_201",
+                        "게시글_좋아요_처음누를때_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -358,7 +391,7 @@ class ArticleControllerTest {
     }
 
     @Test
-    @DisplayName("로그인한 회원이 게시글의 누른 좋아용를 취소할 경우 좋아요 갯수가 1개 감소하고 201 코드를 던진다.")
+    @DisplayName("로그인한 회원이 게시글의 누른 좋아용를 취소할 경우 좋아요 갯수가 1개 감소하고 200 코드를 던진다.")
     public void pressLikeButton_suc2() throws Exception{
         //given
         Long articleId = 1L;
@@ -382,7 +415,7 @@ class ArticleControllerTest {
                 .andExpect(jsonPath("$.isLiked").value(true))
                 .andExpect(jsonPath("$.likeCount").value(0))
                 .andDo(document(
-                        "게시글_좋아요_두번_누를때_(취소)_성공_201",
+                        "게시글_좋아요_두번_누를때_(취소)_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(

@@ -217,7 +217,7 @@ public class searchArticleTest {
                 .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
                 .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true))
                 .andDo(document(
-                        "article search success",
+                        "게시글_조회시_제목으로_검색에_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
@@ -385,7 +385,7 @@ public class searchArticleTest {
                 .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
                 .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true))
                 .andDo(document(
-                        "article search success",
+                        "게시글_감색시_태그명으로_조회_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
@@ -424,7 +424,7 @@ public class searchArticleTest {
     }
 
     @Test
-    @DisplayName("게시글 상세조회 API를 이용할때 사용자가 좋아요와 북마크를 했다면 201 코드를 던지고 ResponseDetailArticle DTO를 반환한다.")
+    @DisplayName("게시글 상세조회 API를 이용할때 사용자가 좋아요와 북마크를 했다면 200 코드를 던지고 ResponseDetailArticle DTO를 반환한다.")
     public void findDetailArticle_suc() throws Exception {
         //given
         Tag JAVA = Tag.builder().id(1L).name(TagName.JAVA).build();
@@ -553,11 +553,11 @@ public class searchArticleTest {
                 .andExpect(jsonPath("$.comments[0:1].lastModifiedAt").exists())
 
                 .andDo(document(
-                        "article search success",
+                        "로그인한_회원이_게시글_상세조회시_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
-                                headerWithName(JWT_HEADER).description("access tokend이 필요없을때도 있음")
+                                headerWithName(JWT_HEADER).description("access token")
                         ),
                         responseFields(
                                 List.of(
@@ -597,7 +597,7 @@ public class searchArticleTest {
     }
 
     @Test
-    @DisplayName("dsfds")
+    @DisplayName("로그인하지 않은 회원이 게시글 상세조회를 시도했을경우 isLiked와 isBookmarked가 기본적으로 false로 나온다.")
     public void findDetailArticle_suc2() throws Exception {
         //given
         Tag JAVA = Tag.builder().id(1L).name(TagName.JAVA).build();
@@ -723,7 +723,7 @@ public class searchArticleTest {
                 .andExpect(jsonPath("$.comments[0:1].createdAt").exists())
                 .andExpect(jsonPath("$.comments[0:1].lastModifiedAt").exists())
                 .andDo(document(
-                        "article search success",
+                        "로그인하지않은_회원이_게시글을_상세조회시_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
