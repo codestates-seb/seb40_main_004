@@ -145,9 +145,11 @@ public class ArticlePressLikeButton {
                 .build();
         em.persist(article);
 
+        Article dbArticle = articleRepository.findArticleByContent(article.getContent()).orElseThrow();
+
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/" + article.getId())
+                post("/articles/" + dbArticle.getId())
         );
 
         //then
