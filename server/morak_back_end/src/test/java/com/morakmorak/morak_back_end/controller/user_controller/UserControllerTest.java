@@ -175,7 +175,7 @@ public class UserControllerTest {
 
         AvatarDto.SimpleResponse avatar = AvatarDto.SimpleResponse.builder()
                 .avatarId(ID1)
-                .fileName(fileName)
+                .filename(fileName)
                 .remotePath(remotePath)
                 .build();
 
@@ -262,7 +262,7 @@ public class UserControllerTest {
                                 fieldWithPath("blog").type(STRING).description("블로그 주소"),
                                 fieldWithPath("avatar").type(OBJECT).description("프로필 사진 및 정보"),
                                 fieldWithPath("avatar.avatarId").type(NUMBER).description("프로필 이미지 db 시퀀스값"),
-                                fieldWithPath("avatar.fileName").type(STRING).description("프로필 이미지 파일명"),
+                                fieldWithPath("avatar.filename").type(STRING).description("프로필 이미지 파일명"),
                                 fieldWithPath("avatar.remotePath").type(STRING).description("프로필 이미지 url"),
                                 fieldWithPath("tags").type(ARRAY).description("기술 태그 목록"),
                                 fieldWithPath("tags[].tagId").type(NUMBER).description("태그 db 시퀀스값"),
@@ -304,11 +304,11 @@ public class UserControllerTest {
                                 fieldWithPath("articles[].userInfo.grade").type(STRING).description("작성 유저 등급"),
                                 fieldWithPath("articles[].avatar").type(OBJECT).description("유저 프로필 정보"),
                                 fieldWithPath("articles[].avatar.avatarId").type(NUMBER).description("프로필 이미지 db 시퀀스 값"),
-                                fieldWithPath("articles[].avatar.fileName").type(STRING).description("프로필 이미지 파일명"),
+                                fieldWithPath("articles[].avatar.filename").type(STRING).description("프로필 이미지 파일명"),
                                 fieldWithPath("articles[].avatar.remotePath").type(STRING).description("프로필 이미지 경로"),
                                 fieldWithPath("avatar").type(OBJECT).description("유저 프로필 정보"),
                                 fieldWithPath("avatar.avatarId").type(NUMBER).description("프로필 이미지 db 시퀀스 값"),
-                                fieldWithPath("avatar.fileName").type(STRING).description("프로필 이미지 파일명"),
+                                fieldWithPath("avatar.filename").type(STRING).description("프로필 이미지 파일명"),
                                 fieldWithPath("avatar.remotePath").type(STRING).description("프로필 이미지 경로")
                         )
                         )
