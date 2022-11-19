@@ -677,7 +677,6 @@ public class searchArticleTest {
                 .tags(List.of(tagDto))
                 .createdAt(LocalDateTime.now())
                 .lastModifiedAt(LocalDateTime.now())
-                .expiredDate(null)
                 .userInfo(userInfoDto)
                 .avatar(avatarDto)
                 .comments(List.of(commentDto))
