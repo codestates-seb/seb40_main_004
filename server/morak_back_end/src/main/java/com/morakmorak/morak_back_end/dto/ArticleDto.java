@@ -103,4 +103,14 @@ public class ArticleDto {
         private List<CommentDto.Response> comments;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponseArticleLike {
+        private Long articleId;
+        private Long userId;
+        private Boolean isLiked;
+        private Integer likeCount;
+    }
 }
