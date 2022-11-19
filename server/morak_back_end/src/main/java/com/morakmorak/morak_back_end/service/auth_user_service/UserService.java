@@ -32,6 +32,10 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
     }
 
+    public UserDto.RequestEditProfile editUserProfile(User request, Long userId) {
+        return null;
+    }
+
     public UserDto.ResponseDashBoard findUserDashboard(Long userId) {
         int year = LocalDate.now().getYear();
 
