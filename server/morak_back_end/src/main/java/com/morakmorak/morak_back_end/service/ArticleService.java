@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,10 +33,9 @@ public class ArticleService {
     private final CategoryRepository categoryRepository;
     private final ArticleLikeRepository articleLikeRepository;
     private final BookmarkRepository bookmarkRepository;
-
     private final CommentMapper commentMapper;
-
     private final TagMapper tagMapper;
+
     public ArticleDto.ResponseSimpleArticle upload(
             Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
             List<FileDto.RequestFileWithId> files, Category category
@@ -120,7 +120,7 @@ public class ArticleService {
     }
 
     public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticleAsPaging(String category, String keyword, String target, String sort, Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page-1, size);
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
 
         Page<Article> articles = articleRepository.search(category, keyword, target, sort, pageRequest);
 
@@ -138,16 +138,13 @@ public class ArticleService {
 
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
         Article dbArticle = findVerifiedArticle(articleId);
-        Long userId = userInfo.getId();
-
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
 
-        if (articleLikeRepository.checkUserLiked(userId, dbArticle.getId()).isPresent()) {
-            isLiked = Boolean.TRUE;
-        }
-        if (bookmarkRepository.checkUserBookmarked(userId, dbArticle.getId()).isPresent()) {
-            isBookmarked = Boolean.TRUE;
+        if (userInfo != null) {
+            Long userId = userInfo.getId();
+            isLiked = articleLikeRepository.checkUserLiked(userId, dbArticle.getId()).isPresent();
+            isBookmarked = bookmarkRepository.checkUserBookmarked(userId, dbArticle.getId()).isPresent();
         }
 
         Integer likes = dbArticle.getArticleLikes().size();
@@ -165,6 +162,34 @@ public class ArticleService {
                         tags, comments, likes);
 
         return responseDetailArticle;
+    }
+
+    public ArticleDto.ResponseArticleLike pressLikeButton(Long articleId, UserDto.UserInfo userInfo) {
+
+        Optional.ofNullable(userInfo).orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+
+        Article dbArticle = findVerifiedArticle(articleId);
+
+        User dbUser = userService.findVerifiedUserById(userInfo.getId());
+
+        articleLikeRepository.checkUserLiked(dbUser.getId(), dbArticle.getId()).ifPresentOrElse(
+                articleLike -> {
+                    articleLikeRepository.deleteById(articleLike.getId());
+                },
+                () -> {
+                    ArticleLike articleLike = ArticleLike.builder().article(dbArticle).user(dbUser).build();
+                    dbArticle.getArticleLikes().add(articleLike);
+                    dbUser.getArticleLikes().add(articleLike);
+
+                }
+        );
+
+        Boolean isLiked = articleLikeRepository
+                .checkUserLiked(dbUser.getId(), dbArticle.getId()).isPresent();
+
+        Integer likeCount = dbArticle.getArticleLikes().size();
+
+        return articleMapper.makingResponseArticleLikeDto(dbArticle.getId(), dbUser.getId(), isLiked, likeCount);
     }
 
 }

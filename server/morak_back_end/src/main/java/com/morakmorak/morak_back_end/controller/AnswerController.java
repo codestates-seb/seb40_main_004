@@ -9,6 +9,7 @@ import com.morakmorak.morak_back_end.service.AnswerService;
 import com.morakmorak.morak_back_end.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,5 +35,14 @@ public class AnswerController {
         return answerService.postAnswer(articleId, user.getId(), answerNotSaved, fileList);
     }
 
+
+    @PostMapping("/answers/{answer-id}/likes")
+    public ResponseEntity pressLikeButton(@RequestUser UserDto.UserInfo userInfo,
+                                          @PathVariable("article-id") String articleId,
+                                          @PathVariable("answer-id") Long answerId) {
+        AnswerDto.ResponseAnswerLike responseAnswerLike = answerService.pressLikeButton(answerId, userInfo);
+
+        return new ResponseEntity(responseAnswerLike, HttpStatus.OK);
+    }
 
 }

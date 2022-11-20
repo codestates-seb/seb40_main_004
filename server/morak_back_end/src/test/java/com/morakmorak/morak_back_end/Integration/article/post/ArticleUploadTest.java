@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.Integration.article.upload;
+package com.morakmorak.morak_back_end.Integration.article.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.dto.ArticleDto;

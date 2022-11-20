@@ -3,6 +3,7 @@ package com.morakmorak.morak_back_end.mapper;
 import com.morakmorak.morak_back_end.dto.ArticleDto;
 import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
@@ -196,5 +197,20 @@ class ArticleMapperTest {
 
         assertThat(test.getComments()).isNotEmpty();
 
+    }
+
+    @Test
+    @DisplayName("makingResponseArticleLikeDto 메퍼 작동 테스트")
+    public void makingResponseArticleLikeDto(){
+    //given
+        Long articleId = 1L;
+        UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
+    //when
+        ArticleDto.ResponseArticleLike responseArticleLike = articleMapper.makingResponseArticleLikeDto(articleId, userInfo.getId(), true, 1);
+        //then
+        assertThat(responseArticleLike.getArticleId()).isEqualTo(1L);
+        assertThat(responseArticleLike.getUserId()).isEqualTo(1L);
+        assertThat(responseArticleLike.getIsLiked()).isTrue();
+        assertThat(responseArticleLike.getLikeCount()).isEqualTo(1);
     }
 }
