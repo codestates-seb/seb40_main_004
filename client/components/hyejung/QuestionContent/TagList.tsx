@@ -1,8 +1,13 @@
+/*
+ * 책임 작성자: 박혜정
+ * 최초 작성일: 2022-11-18
+ * 최근 수정일: 2022-11-20
+ */
 type TagListProps = {
   tags: string[];
 };
 
-import { TagButton } from '../TagButton';
+import { TagButton } from '../BtnTag';
 
 export const TagList = ({ tags }: TagListProps) => {
   return (
