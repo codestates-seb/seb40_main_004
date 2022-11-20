@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.controller.answer;
+package com.morakmorak.morak_back_end.controller.answer_controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.config.SecurityTestConfig;
@@ -186,7 +186,7 @@ public class AnswerControllerTest {
                 .andExpect(jsonPath("$.isLiked").value(true))
                 .andExpect(jsonPath("$.likeCount").value(1))
                 .andDo(document(
-                        "다변글_좋아요_처음누를때_성공_201",
+                        "다변글_좋아요_처음누를때_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -227,7 +227,7 @@ public class AnswerControllerTest {
                 .andExpect(jsonPath("$.isLiked").value(true))
                 .andExpect(jsonPath("$.likeCount").value(0))
                 .andDo(document(
-                        "답변글_좋아요_두번_누를때_(취소)_성공_201",
+                        "답변글_좋아요_두번_누를때_취소_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(

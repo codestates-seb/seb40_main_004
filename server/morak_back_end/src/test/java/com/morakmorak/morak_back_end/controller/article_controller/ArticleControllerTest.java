@@ -272,13 +272,6 @@ class ArticleControllerTest {
         ));
     }
 
-    /**
-     * 아직 테스트에 통과하지 못했습니다. 서비스로직을 목으로 설정해두었지만, 실제로 작동하면서 ARTICLE_NOT_FOUND 예외를
-     * 터트리는걸로 예상됩니다. 추후 잡도록 하겠습니다.
-     * @Date 22-11-11
-     * @Auther Beak Sion
-     * @throws Exception
-     */
     @Test
     @DisplayName("게시글을 삭제할때 성공 테스트")
     public void articleDelete_suc() throws Exception {
@@ -415,7 +408,7 @@ class ArticleControllerTest {
                 .andExpect(jsonPath("$.isLiked").value(true))
                 .andExpect(jsonPath("$.likeCount").value(0))
                 .andDo(document(
-                        "게시글_좋아요_두번_누를때_(취소)_성공_200",
+                        "게시글_좋아요_두번_누를때_취소_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(

@@ -153,6 +153,61 @@ public class ArticleGetTest {
     }
 
     @Test
+    @DisplayName("게시글을 타이틀명과 카테고리로 검색 실패시 비어있는 data 리스트를 반환하고 pageInfo Dto와  201코드와 Ok를 반환한다.")
+    public void searchArticleTest_title2() throws Exception {
+        Tag JAVA = Tag.builder().name(TagName.JAVA).build();
+        em.persist(JAVA);
+
+        Category info = Category.builder().name(CategoryName.INFO).build();
+        em.persist(info);
+
+        Avatar avatar = Avatar.builder().remotePath("remotePath")
+                .originalFilename("fileName")
+                .build();
+        em.persist(avatar);
+
+        User user = User.builder().nickname("nickname").grade(Grade.BRONZE).avatar(avatar).build();
+
+        List<ArticleLike> articleLikes = new ArrayList<>();
+
+        ArticleTag articleTagJava = ArticleTag.builder().tag(JAVA).build();
+
+        Article article = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
+                .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
+                .articleTags(List.of(articleTagJava))
+                .category(info)
+                .articleLikes(articleLikes)
+                .user(user)
+                .build();
+        info.getArticleList().add(article);
+        articleTagJava.injectMappingForArticleAndTag(article);
+        em.persist(article);
+
+        user.getArticles().add(article);
+        em.persist(user);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                get("/articles")
+                        .param("category", "INFO")
+                        .param("keyword", "존재하지 않음")
+                        .param("target", "title")
+                        .param("sort", "desc")
+                        .param("page", "1")
+                        .param("size", "1")
+        );
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.pageInfo.page").value(1))
+                .andExpect(jsonPath("$.pageInfo.size").value(1))
+                .andExpect(jsonPath("$.pageInfo.totalElements").value(0))
+                .andExpect(jsonPath("$.pageInfo.totalPages").value(0))
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(false));
+    }
+
+
+    @Test
     @DisplayName("게시글을 태그명과 카테고리로 검색 성공시 201코드와 Ok를 반환한다.")
     public void searchArticleTest_tag() throws Exception {
         Tag JAVA = Tag.builder().name(TagName.JAVA).build();

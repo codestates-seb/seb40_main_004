@@ -7,6 +7,7 @@ import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +42,7 @@ class AnswerServiceTest {
     AnswerLikeRepository answerLikeRepository;
 
     @Test
-    @DisplayName("게시글의 좋아요를 누를때 회원이 좋아요를 처음누르는거면 201코드와 json을 리턴한다.")
+    @DisplayName("답변글의 좋아요를 누를때 회원이 좋아요를 처음누르는거면 201코드와 json을 리턴한다.")
     public void pressLikeButton_suc1(){
         //given
         Long answerId = 1L;
