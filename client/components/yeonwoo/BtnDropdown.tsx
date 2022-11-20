@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { isLoggedInAtom } from '../../atoms';
+import { isLoggedInAtom } from '../../atomsYW';
 
 export const BtnDropdown = () => {
   const setIsLoggedIn = useSetRecoilState(isLoggedInAtom);
