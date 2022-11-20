@@ -225,7 +225,7 @@ include::{snippets}/로그인한_회원이_존재하지_않는_게시글에_좋�
 include::{snippets}/로그인한_회원이_존재하지_않는_게시글에_좋아요를_누를시_실패_404/response-body.adoc[]
 ***
 == 게시글 조회
-=== 성공 게시글 조회시 제목으로 검색 200
+=== 성공 게시글 검색시 제목으로 검색 200
 
 .http-request
 include::{snippets}/게시글_조회시_제목으로_검색에_성공_200/http-request.adoc[]
@@ -239,19 +239,300 @@ include::{snippets}/게시글_조회시_제목으로_검색에_성공_200/http-r
 .response-fields
 include::{snippets}/게시글_조회시_제목으로_검색에_성공_200/response-body.adoc[]
 
+=== 실패 게시글 검색시 존재하지 않는 제목으로 검색 200
+
+.http-request
+include::{snippets}/게시글_조회시_존재하지_않는_제목으로_검색에_실패_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_조회시_존재하지_않는_제목으로_검색에_실패_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_조회시_존재하지_않는_제목으로_검색에_실패_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_조회시_존재하지_않는_제목으로_검색에_실패_200/response-body.adoc[]
+
 === 성공 게시글 검색시 태그명으로 검색 200
 
 .http-request
-include::{snippets}/게시글_감색시_태그명으로_조회_성공_200/http-request.adoc[]
+include::{snippets}/게시글_검색시_태그명으로_조회_성공_200/http-request.adoc[]
 
 .request-fields
-include::{snippets}/게시글_감색시_태그명으로_조회_성공_200/request-fields.adoc[]
+include::{snippets}/게시글_검색시_태그명으로_조회_성공_200/request-fields.adoc[]
 
 .http-response
-include::{snippets}/게시글_감색시_태그명으로_조회_성공_200/http-response.adoc[]
+include::{snippets}/게시글_검색시_태그명으로_조회_성공_200/http-response.adoc[]
 
 .response-fields
-include::{snippets}/게시글_감색시_태그명으로_조회_성공_200/response-body.adoc[]
+include::{snippets}/게시글_검색시_태그명으로_조회_성공_200/response-body.adoc[]
+
+=== 실패 존재하지 않는 태그명으로 검색 200
+
+.http-request
+include::{snippets}/게시글_검색시_존재하지_않는_태그명으로_조회_실패_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_검색시_존재하지_않는_태그명으로_조회_실패_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_검색시_존재하지_않는_태그명으로_조회_실패_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_검색시_존재하지_않는_태그명으로_조회_실패_200/response-body.adoc[]
+
+=== 성공 게시글 내용으로 검색 200
+
+.http-request
+include::{snippets}/게시글_검색시_글의_내용으로_조회_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_검색시_글의_내용으로_조회_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_검색시_글의_내용으로_조회_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_검색시_글의_내용으로_조회_성공_200/response-body.adoc[]
+
+=== 실패 존재하지 않는 게시글의 내용 200
+
+.http-request
+include::{snippets}/게시글_검색시_글의_내용으로_조회_실패_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_검색시_글의_내용으로_조회_실패_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_검색시_글의_내용으로_조회_실패_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_검색시_글의_내용으로_조회_실패_200/response-body.adoc[]
+
+=== 성공 게시글의 제목과 내용으로 검색 200
+
+.http-request
+include::{snippets}/게시글_검색시_글의_제목과_내용으로_조회_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_검색시_글의_제목과_내용으로_조회_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_검색시_글의_제목과_내용으로_조회_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_검색시_글의_제목과_내용으로_조회_성공_200/response-body.adoc[]
+
+=== 실패 존재하지 않는 게시글의 제목과 내용으로 검색 200
+
+.http-request
+include::{snippets}/게시글_검색시_글의_제목과_내용으로_조회_실패_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_검색시_글의_제목과_내용으로_조회_실패_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_검색시_글의_제목과_내용으로_조회_실패_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_검색시_글의_제목과_내용으로_조회_실패_200/response-body.adoc[]
+
+=== 성공 게시글 검색시 해당 유저의 아이디로 북마크 조회 성공 200
+
+.http-request
+include::{snippets}/게시글_검색시_북마크로_조회_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_검색시_북마크로_조회_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_검색시_북마크로_조회_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_검색시_북마크로_조회_성공_200/response-body.adoc[]
+
+=== 실패 게시글 검색시 존재하지 않는 유저의 아이디 또는 북마크가 없을 경우 실패 200
+
+.http-request
+include::{snippets}/게시글_검색시_북마크로_조회_실패_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_검색시_북마크로_조회_실패_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_검색시_북마크로_조회_실패_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_검색시_북마크로_조회_실패_200/response-body.adoc[]
+
+=== 성공 게시글검색 정렬조건 최근순  200
+
+.http-request
+include::{snippets}/게시글검색_정렬조건_최근순_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글검색_정렬조건_최근순_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글검색_정렬조건_최근순_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글검색_정렬조건_최근순_성공_200/response-body.adoc[]
+
+
+=== 성공 게시글검색 정렬조건 오래된순 200
+
+.http-request
+include::{snippets}/게시글검색_정렬조건_오래된순_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글검색_정렬조건_오래된순_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글검색_정렬조건_오래된순_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글검색_정렬조건_오래된순_성공_200/response-body.adoc[]
+
+=== 성공 게시글검색 정렬조건 댓글갯수 최근순 200
+
+.http-request
+include::{snippets}/게시글검색_정렬조건_댓글갯수_최근순_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글검색_정렬조건_댓글갯수_최근순_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글검색_정렬조건_댓글갯수_최근순_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글검색_정렬조건_댓글갯수_최근순_성공_200/response-body.adoc[]
+
+=== 성공 게시글검색 정렬조건 댓글갯수 오래된순 200
+
+.http-request
+include::{snippets}/게시글검색_정렬조건_댓글갯수_오래된순_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글검색_정렬조건_댓글갯수_오래된순_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글검색_정렬조건_댓글갯수_오래된순_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글검색_정렬조건_댓글갯수_오래된순_성공_200/response-body.adoc[]
+
+=== 성공 게시글 정렬조건 좋아요수 최근순 200
+
+.http-request
+include::{snippets}/게시글검색_정렬조건_좋아요수_최근순_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글검색_정렬조건_좋아요수_최근순_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글검색_정렬조건_좋아요수_최근순_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글검색_정렬조건_좋아요수_최근순_성공_200/response-body.adoc[]
+
+=== 성공 게시글검색 정렬조건 좋아요수 오래된순 200
+
+.http-request
+include::{snippets}/게시글검색_정렬조건_좋아요수_오래된순_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글검색_정렬조건_좋아요수_오래된순_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글검색_정렬조건_좋아요수_오래된순_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글검색_정렬조건_좋아요수_오래된순_성공_200/response-body.adoc[]
+
+=== 성공 게시글검색 정렬조건 답변수 최근순 200
+
+.http-request
+include::{snippets}/게시글검색_정렬조건_답변수_최근순_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글검색_정렬조건_답변수_최근순_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글검색_정렬조건_답변수_최근순_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글검색_정렬조건_답변수_최근순_성공_200/response-body.adoc[]
+
+=== 성공 게시글검색 정렬조건 답변수 오래된순 200
+
+.http-request
+include::{snippets}/게시글검색_정렬조건_답변수_오래된순_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글검색_정렬조건_답변수_오래된순_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글검색_정렬조건_답변수_오래된순_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글검색_정렬조건_답변수_오래된순_성공_200/response-body.adoc[]
+
+=== 성공 게시글검색 정렬조건 채택 안된순 최근순 200
+
+.http-request
+include::{snippets}/게시글_검색정렬시_채택_안된것으로_최근순_조회_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_검색정렬시_채택_안된것으로_최근순_조회_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_검색정렬시_채택_안된것으로_최근순_조회_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_검색정렬시_채택_안된것으로_최근순_조회_성공_200/response-body.adoc[]
+
+=== 성공 게시글검색 정렬조건 채택안된순 오래된순 200
+
+.http-request
+include::{snippets}/게시글_정렬시_채택안된순으로_오래된순_조회_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_정렬시_채택안된순으로_오래된순_조회_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_정렬시_채택안된순으로_오래된순_조회_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_정렬시_채택안된순으로_오래된순_조회_성공_200/response-body.adoc[]
+
+=== 성공 게시글검색 정렬조건 채택된순 최근순 200
+
+.http-request
+include::{snippets}/게시글검색_정렬조건_채택된것_최근순_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글검색_정렬조건_채택된것_최근순_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글검색_정렬조건_채택된것_최근순_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글검색_정렬조건_채택된것_최근순_성공_200/response-body.adoc[]
+
+=== 성공 게시글검색 정렬조건 채택된것 오래된순 200
+
+.http-request
+include::{snippets}/게시글검색_정렬조건_채택된것_오래된순_성공_200/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글검색_정렬조건_채택된것_오래된순_성공_200/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글검색_정렬조건_채택된것_오래된순_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글검색_정렬조건_채택된것_오래된순_성공_200/response-body.adoc[]
 
 ***
 == 게시글 상세조회
@@ -282,6 +563,20 @@ include::{snippets}/로그인하지않은_회원이_게시글을_상세조회시
 
 .response-fields
 include::{snippets}/로그인하지않은_회원이_게시글을_상세조회시_성공_200/response-body.adoc[]
+
+=== 실패 존재하지 않는 게시글을 상세조회시 404
+
+.http-request
+include::{snippets}/게시글_상세조회시_존재하지_않는_게시글을_조회할때_실패_404/http-request.adoc[]
+
+.request-fields
+include::{snippets}/게시글_상세조회시_존재하지_않는_게시글을_조회할때_실패_404/request-fields.adoc[]
+
+.http-response
+include::{snippets}/게시글_상세조회시_존재하지_않는_게시글을_조회할때_실패_404/http-response.adoc[]
+
+.response-fields
+include::{snippets}/게시글_상세조회시_존재하지_않는_게시글을_조회할때_실패_404/response-body.adoc[]
 
 ***
 == 답변글 좋아요
