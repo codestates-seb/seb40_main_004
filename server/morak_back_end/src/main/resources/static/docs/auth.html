@@ -7,7 +7,7 @@
 <meta name="generator" content="Asciidoctor 2.0.10">
 <meta name="application-name" content="morakmorak">
 <meta name="author" content="YANGEUNCHAN">
-<title>회원 정보/토큰 관련 API</title>
+<title>인증 관련 API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -440,7 +440,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1>회원 정보/토큰 관련 API</h1>
+<h1>인증 관련 API</h1>
 <div class="details">
 <span id="author" class="author">YANGEUNCHAN</span><br>
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
@@ -770,19 +770,6 @@ Content-Length: 124
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 400,
-  "code" : "400 BAD_REQUEST",
-  "message" : null,
-  "validation" : {
-    "email" : "invalid email"
-  }
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_404_인증키">1.3. 실패 404_인증키</h3>
@@ -857,17 +844,6 @@ X-Frame-Options: DENY
 Content-Length: 126
 
 {
-  "status" : 404,
-  "code" : "INVALID_AUTH_KEY",
-  "message" : "invalid auth key, check your email",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
   "status" : 404,
   "code" : "INVALID_AUTH_KEY",
   "message" : "invalid auth key, check your email",
@@ -956,17 +932,6 @@ Content-Length: 100
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 409,
-  "code" : "EMAIL_EXISTS",
-  "message" : "EMAIL_EXISTS",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_409_중복_닉네임">1.5. 실패 409_중복_닉네임</h3>
@@ -1048,17 +1013,6 @@ Content-Length: 106
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 409,
-  "code" : "NICKNAME_EXISTS",
-  "message" : "nickname exists",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 <hr>
 </div>
 </div>
@@ -1121,12 +1075,6 @@ X-Frame-Options: DENY
 Content-Length: 4
 
 true</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>true</code></pre>
 </div>
 </div>
 </div>
@@ -1192,17 +1140,6 @@ Content-Length: 165
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 409,
-  "code" : "AUTH_KEY_ALREADY_EXISTS",
-  "message" : "auth key already exists, you can only request once every 5 minutes",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_409_이미_존재하는_이메일">2.3. 실패 409_이미 존재하는 이메일</h3>
@@ -1259,17 +1196,6 @@ X-Frame-Options: DENY
 Content-Length: 100
 
 {
-  "status" : 409,
-  "code" : "EMAIL_EXISTS",
-  "message" : "EMAIL_EXISTS",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
   "status" : 409,
   "code" : "EMAIL_EXISTS",
   "message" : "EMAIL_EXISTS",
@@ -1349,14 +1275,28 @@ Content-Length: 29
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "authKey" : "222222222"
-}</code></pre>
-</div>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. response-fields</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>authKey</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set in user&#8217;s useState And send when requestJoin</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_실패_404_존재하지_않음">3.2. 실패 404_존재하지_않음</h3>
@@ -1375,7 +1315,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. request-fields</caption>
+<caption class="title">Table 11. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1426,17 +1366,6 @@ Content-Length: 126
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 404,
-  "code" : "INVALID_AUTH_KEY",
-  "message" : "invalid auth key, check your email",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 <hr>
 </div>
 </div>
@@ -1460,7 +1389,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. request-fields</caption>
+<caption class="title">Table 12. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1501,12 +1430,6 @@ Content-Length: 4
 true</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>true</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_400_유효성_검사_2">4.2. 실패 400_유효성 검사</h3>
@@ -1524,7 +1447,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. request-fields</caption>
+<caption class="title">Table 13. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1572,19 +1495,6 @@ Content-Length: 130
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 400,
-  "code" : "400 BAD_REQUEST",
-  "message" : null,
-  "validation" : {
-    "nickname" : "invalid nickname"
-  }
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_409_닉네임_중복">4.3. 실패 409_닉네임 중복</h3>
@@ -1602,7 +1512,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. request-fields</caption>
+<caption class="title">Table 14. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1648,17 +1558,6 @@ Content-Length: 106
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 409,
-  "code" : "NICKNAME_EXISTS",
-  "message" : "nickname exists",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -1682,7 +1581,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. request-fields</caption>
+<caption class="title">Table 15. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1731,15 +1630,33 @@ Content-Length: 84
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "accessToken" : "Bearer AccessToken",
-  "refreshToken" : "Bearer RefreshToken"
-}</code></pre>
-</div>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 16. response-fields</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>accessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">accessToken, set client&#8217;s LocalStorage</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refreshToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">refreshToken, set client&#8217;s Cookie</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_실패_401_잘못된_입력값">5.2. 실패 401 잘못된 입력값</h3>
@@ -1758,7 +1675,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. request-fields</caption>
+<caption class="title">Table 17. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1939,15 +1856,33 @@ Content-Length: 84
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "accessToken" : "Bearer AccessToken",
-  "refreshToken" : "Bearer RefreshToken"
-}</code></pre>
-</div>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 18. response-fields</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>accessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set client&#8217;s localStorage</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refreshToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set client&#8217;s cookie</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_실패_401_유효하지_않은_토큰">7.2. 실패 401_유효하지 않은 토큰</h3>
@@ -2067,7 +2002,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. request-fields</caption>
+<caption class="title">Table 19. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2113,12 +2048,6 @@ Content-Length: 4
 true</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>true</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_409_잘못된_패스워드">8.2. 실패 409_잘못된 패스워드</h3>
@@ -2138,7 +2067,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 17. request-fields</caption>
+<caption class="title">Table 20. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2191,19 +2120,6 @@ Content-Length: 133
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 400,
-  "code" : "400 BAD_REQUEST",
-  "message" : null,
-  "validation" : {
-    "newPassword" : "invalid password"
-  }
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_409_잘못된_패스워드_2">8.3. 실패 409_잘못된 패스워드</h3>
@@ -2223,7 +2139,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 18. request-fields</caption>
+<caption class="title">Table 21. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2274,17 +2190,6 @@ Content-Length: 144
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 409,
-  "code" : "MISMATCHED_PASSWORD",
-  "message" : "mismatched password, check your original password",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 <hr>
 </div>
 </div>
@@ -2308,7 +2213,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 19. request-fields</caption>
+<caption class="title">Table 22. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2349,12 +2254,6 @@ Content-Length: 4
 true</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>true</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_404_존재하지_않는_이메일">9.2. 실패 404_존재하지 않는 이메일</h3>
@@ -2372,7 +2271,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 20. request-fields</caption>
+<caption class="title">Table 23. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2418,17 +2317,6 @@ Content-Length: 104
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 404,
-  "code" : "USER_NOT_FOUND",
-  "message" : "USER_NOT_FOUND",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_409_5분내_요청_이력">9.3. 실패 409_5분내_요청_이력</h3>
@@ -2446,7 +2334,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 21. request-fields</caption>
+<caption class="title">Table 24. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2492,17 +2380,6 @@ Content-Length: 165
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 409,
-  "code" : "AUTH_KEY_ALREADY_EXISTS",
-  "message" : "auth key already exists, you can only request once every 5 minutes",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 <hr>
 </div>
 </div>
@@ -2527,7 +2404,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 22. request-fields</caption>
+<caption class="title">Table 25. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2573,12 +2450,6 @@ Content-Length: 4
 true</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>true</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_400_유효성_검사_3">10.2. 실패 400_유효성 검사</h3>
@@ -2597,7 +2468,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 23. request-fields</caption>
+<caption class="title">Table 26. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2650,19 +2521,6 @@ Content-Length: 130
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 400,
-  "code" : "400 BAD_REQUEST",
-  "message" : null,
-  "validation" : {
-    "authKey" : "must not be blank"
-  }
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_404_존재하지_않는_인증키">10.3. 실패 404_존재하지 않는 인증키</h3>
@@ -2681,7 +2539,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 24. request-fields</caption>
+<caption class="title">Table 27. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2732,17 +2590,6 @@ Content-Length: 126
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 404,
-  "code" : "INVALID_AUTH_KEY",
-  "message" : "invalid auth key, check your email",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 <hr>
 </div>
 </div>
@@ -2766,7 +2613,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 25. request-fields</caption>
+<caption class="title">Table 28. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2812,17 +2659,6 @@ Content-Length: 101
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 400,
-  "code" : "ONLY_TEST_CODE",
-  "message" : "BAD_REQUEST",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_400_유효성_검사_4">11.2. 실패 400_유효성 검사</h3>
@@ -2840,7 +2676,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 26. request-fields</caption>
+<caption class="title">Table 29. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2886,17 +2722,6 @@ Content-Length: 101
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 400,
-  "code" : "ONLY_TEST_CODE",
-  "message" : "BAD_REQUEST",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_실패_409_잘못된_패스워드_3">11.3. 실패 409_잘못된 패스워드</h3>
@@ -2914,7 +2739,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 27. request-fields</caption>
+<caption class="title">Table 30. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2960,17 +2785,6 @@ Content-Length: 101
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "status" : 400,
-  "code" : "ONLY_TEST_CODE",
-  "message" : "BAD_REQUEST",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -2978,7 +2792,7 @@ Content-Length: 101
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-11-20 00:32:48 +0900
+Last updated 2022-11-21 03:50:23 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
