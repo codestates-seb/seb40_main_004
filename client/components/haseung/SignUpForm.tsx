@@ -84,7 +84,9 @@ export const SignUpForm = () => {
         type="text"
         placeholder="닉네임을 입력해주세요."
       />
-      <p className="font-bold text-red-500">{errors.nickName?.message}</p>
+      <p className="font-bold text-red-500 text-sm text-center">
+        {errors.nickName?.message}
+      </p>
       <label htmlFor="email" className="font-bold">
         이메일
       </label>
@@ -100,7 +102,9 @@ export const SignUpForm = () => {
         type="text"
         placeholder="이메일을 입력해주세요."
       />
-      <p className="text-red-500 font-semibold">{errors.email?.message}</p>
+      <p className="text-red-500 font-semibold text-sm text-center">
+        {errors.email?.message}
+      </p>
       <label htmlFor="password" className="font-bold">
         비밀번호
       </label>
@@ -110,14 +114,17 @@ export const SignUpForm = () => {
           pattern: {
             value:
               /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
-            message: '비밀번호를 확인해주세요.',
+            message:
+              '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다.',
           },
         })}
         className="rounded-full w-96 h-10"
         type="password"
         autoComplete="off"
       />
-      <p className="font-semibold text-red-500"> {errors.password?.message}</p>
+      <p className="font-semibold text-red-500 relative right-0 text-sm">
+        {errors.password?.message}
+      </p>
       <label htmlFor="confirmPassword" className="font-bold">
         비밀번호 확인
       </label>
@@ -129,11 +136,12 @@ export const SignUpForm = () => {
         type="password"
         autoComplete="off"
       />
-      <p className="font-semibold text-red-500">
+      <p className="font-semibold text-red-500 text-sm text-center">
         {errors.confirmPassword?.message}
       </p>
       <section className="mx-auto rounded-full w-96 h-10 space-y-2">
-        <input type="submit" value="가입하기" />
+        {/* <input type="submit" value="가입하기" /> */}
+        <Button>가입하기</Button>
       </section>
       <span className="mt-3 text-main-gray">
         이미 계정이 있으신가요?{' '}
