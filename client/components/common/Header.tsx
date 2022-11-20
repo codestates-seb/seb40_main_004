@@ -5,7 +5,7 @@
  */
 
 import { useRecoilValue } from 'recoil';
-import { isLoggedInAtom } from '../../atoms';
+import { isLoggedInAtom } from '../../atomsYW';
 import { BtnUser } from '../yeonwoo/BtnUser';
 import { BtnLogin } from '../yeonwoo/BtnLogin';
 import { Logo } from '../yeonwoo/Logo';

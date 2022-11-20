@@ -7,7 +7,7 @@
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSetRecoilState } from 'recoil';
-import { isLoggedInAtom } from '../../atoms';
+import { isLoggedInAtom } from '../../atomsYW';
 
 export const BtnLogin = () => {
   const setIsLoggedIn = useSetRecoilState(isLoggedInAtom);
