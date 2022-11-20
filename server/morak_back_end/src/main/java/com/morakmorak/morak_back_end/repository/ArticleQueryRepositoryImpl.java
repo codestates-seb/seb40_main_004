@@ -134,6 +134,14 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 return article.answers.size().desc();
             case "answer-asc":
                 return article.answers.size().asc();
+            case "isChecked-true-desc":
+                return article.isClosed.eq(true).desc();
+            case "isChecked-true-asc":
+                return article.isClosed.eq(true).asc();
+            case "isChecked-false-desc":
+                return article.isClosed.eq(false).desc();
+            case "isChecked-false-asc":
+                return article.isClosed.eq(false).asc();
             default:
                 article.id.desc();
         }
