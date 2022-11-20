@@ -9,7 +9,6 @@ import { useState } from 'react';
 
 export const EditAvatar = () => {
   const [isClicked, setIsClicked] = useState(false);
-  console.log(isClicked);
   return (
     <>
       <div className="relative group">
