@@ -18,7 +18,6 @@ export const CommentList = () => {
   const { data, isLoading } = useFetch('/api/articles/1');
   const content: ArticleDetail = data?.article;
   const comments = content?.comments;
-  console.log(comments);
 
   if (isLoading) return <div>로딩중~</div>;
   return (

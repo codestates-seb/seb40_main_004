@@ -2,7 +2,7 @@ type TagListProps = {
   tags: string[];
 };
 
-import { TagButton } from '../TagButton';
+import { TagButton } from '../BtnTag';
 
 export const TagList = ({ tags }: TagListProps) => {
   return (
