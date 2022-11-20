@@ -19,7 +19,7 @@ export const SocialLoginBtn = () => {
         onClick={handleKaKaoClick}
         src={KaKao}
         alt="kakaologin"
-        className="cursor-pointer"
+        className="cursor-pointer rounded-full"
         priority
       />
     </section>
