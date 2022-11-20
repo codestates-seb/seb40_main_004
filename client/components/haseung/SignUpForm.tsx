@@ -62,7 +62,7 @@ export const SignUpForm = () => {
 
   return (
     <form
-      className="flex flex-col mx-auto justify-center items-start mt-3 space-y-5"
+      className="flex flex-col mx-auto justify-center items-start mt-3 space-y-3"
       onSubmit={handleSubmit(onValid)}
     >
       <label htmlFor="nickName" className="font-bold">
