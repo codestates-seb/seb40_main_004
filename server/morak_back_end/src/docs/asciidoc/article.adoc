@@ -77,20 +77,6 @@ include::{snippets}/게시글을_등록할때_존재하지_않는_태그를_작�
 .response-fields
 include::{snippets}/게시글을_등록할때_존재하지_않는_태그를_작성하려할떄_실패_404/response-body.adoc[]
 
-===
-
-.http-request
-include::{snippets}/아아아아아/http-request.adoc[]
-
-.request-fields
-include::{snippets}/아아아아아/request-fields.adoc[]
-
-.http-response
-include::{snippets}/아아아아아/http-response.adoc[]
-
-.response-fields
-include::{snippets}/아아아아아/response-body.adoc[]
-
 ***
 == 게시글 수정
 === 성공 200
