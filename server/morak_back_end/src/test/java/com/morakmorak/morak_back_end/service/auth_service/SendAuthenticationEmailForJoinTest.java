@@ -1,23 +1,18 @@
 package com.morakmorak.morak_back_end.service.auth_service;
 
-import com.morakmorak.morak_back_end.dto.EmailDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.service.MailSenderImpl;
-import com.morakmorak.morak_back_end.util.SecurityTestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static com.morakmorak.morak_back_end.service.MailSenderImpl.*;
+import static com.morakmorak.morak_back_end.service.mail_service.MailSenderImpl.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
 import static com.morakmorak.morak_back_end.util.TestConstants.PASSWORD1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.Matchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 public class SendAuthenticationEmailForJoinTest extends AuthServiceTest {

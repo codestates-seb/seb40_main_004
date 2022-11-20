@@ -2,15 +2,20 @@ package com.morakmorak.morak_back_end.Integration.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.controller.UserController;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.*;
+import com.morakmorak.morak_back_end.repository.RedisRepositoryImpl;
+import com.morakmorak.morak_back_end.repository.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -27,6 +32,7 @@ import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,6 +55,127 @@ public class UserTest {
     UserController userController;
     @Autowired
     EntityManager em;
+    @Autowired
+    UserRepository userRepository;
+
+    @Test
+    @DisplayName("유효성 검사에 실패할 경우 400 badRequest")
+    public void editUserProfile_failed1() throws Exception {
+        //given
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
+                .infoMessage(CONTENT1)
+                .github(GITHUB_URL)
+                .jobType(JobType.DEVELOPER)
+                .nickname(INVALID_NICKNAME)
+                .blog(TISTORY_URL)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc.perform(patch("/users/profiles")
+                .header(JWT_HEADER, token)
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        perform.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("닉네임이 이미 존재할 경우 409 Conflict")
+    public void editUserProfile_failed2() throws Exception {
+        //given
+        User dbUser = User.builder().build();
+        User saved = userRepository.save(dbUser);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, saved.getId(), ROLE_USER_LIST);
+
+        em.persist(User.builder().nickname(NICKNAME1).build());
+
+        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
+                .infoMessage(CONTENT1)
+                .github(GITHUB_URL)
+                .jobType(JobType.DEVELOPER)
+                .nickname(NICKNAME1)
+                .blog(TISTORY_URL)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc.perform(patch("/users/profiles")
+                .header(JWT_HEADER, token)
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        perform.andExpect(status().isConflict());
+    }
+
+    @Test
+    @DisplayName("아이디가 존재하지 않을 경우 404 NOTFOUND")
+    public void editUserProfile_failed3() throws Exception {
+        //given
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
+                .infoMessage(CONTENT1)
+                .github(GITHUB_URL)
+                .jobType(JobType.DEVELOPER)
+                .nickname(NICKNAME1)
+                .blog(TISTORY_URL)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc.perform(patch("/users/profiles")
+                .header(JWT_HEADER, token)
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        //then
+        perform.andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("정상 통과할 경우 유저 정보가 수정되고 200 OK")
+    public void editUserProfile_success() throws Exception {
+        //given
+        User dbUser = User.builder().build();
+        User saved = userRepository.save(dbUser);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, saved.getId(), ROLE_USER_LIST);
+        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
+                .infoMessage(CONTENT1)
+                .github(GITHUB_URL)
+                .jobType(JobType.DEVELOPER)
+                .nickname(NICKNAME1)
+                .blog(TISTORY_URL)
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //when
+        ResultActions perform = mockMvc.perform(patch("/users/profiles")
+                .header(JWT_HEADER, token)
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON));
+        User editedUser = em.find(User.class, saved.getId());
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.infoMessage").value(CONTENT1))
+                .andExpect(jsonPath("$.github").value(GITHUB_URL))
+                .andExpect(jsonPath("$.nickname").value(NICKNAME1))
+                .andExpect(jsonPath("$.jobType").value(JobType.DEVELOPER.toString()))
+                .andExpect(jsonPath("$.blog").value(TISTORY_URL));
+
+        Assertions.assertThat(editedUser.getInfoMessage()).isEqualTo(CONTENT1);
+        Assertions.assertThat(editedUser.getGithub()).isEqualTo(GITHUB_URL);
+        Assertions.assertThat(editedUser.getNickname()).isEqualTo(NICKNAME1);
+        Assertions.assertThat(editedUser.getJobType()).isEqualTo(JobType.DEVELOPER);
+        Assertions.assertThat(editedUser.getBlog()).isEqualTo(TISTORY_URL);
+    }
 //
 //    @Test
 //    @DisplayName("시퀀스 값(User ID)을 찾을 수 없는 경우 404 반환")

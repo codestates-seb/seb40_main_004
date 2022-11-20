@@ -15,7 +15,7 @@ public class TagDto {
     public static class SimpleTag {
         @NotBlank
         private Long tagId;
-        @EnumValid
+//        @EnumValid
         private TagName name;
 
         @QueryProjection

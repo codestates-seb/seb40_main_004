@@ -7,6 +7,7 @@ import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.CommentRepository;
+import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
