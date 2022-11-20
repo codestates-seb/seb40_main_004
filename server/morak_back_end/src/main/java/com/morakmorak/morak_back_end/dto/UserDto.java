@@ -48,7 +48,7 @@ public class UserDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class RequestEditProfile {
+    public static class SimpleEditProfile {
         @NotBlank
         @Pattern(regexp = "^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{2,16}$", message = INVALID_NICKNAME)// 영문, 숫자, 한글 2자 이상 16자 이하(공백 및 초성, 자음 불가능)
         private String nickname;
@@ -57,6 +57,43 @@ public class UserDto {
         private String blog;
         @EnumValid
         private JobType jobType;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponseRanking {
+        private Long userId;
+        private String nickname;
+        private String infoMessage;
+        private Integer point;
+        private Grade grade;
+        private JobType jobType;
+        private Long articleCount;
+        private Long likeCount;
+        private Long answerCount;
+        private Integer rank;
+        private AvatarDto.SimpleResponse avatar;
+
+        @QueryProjection
+        public ResponseRanking(Long userId, String nickname, String infoMessage, Integer point, Grade grade, JobType jobType, Long articleCount, Long likeCount, Long answerCount, Long avatarId, String filename, String remotePath) {
+            this.userId = userId;
+            this.nickname = nickname;
+            this.infoMessage = infoMessage;
+            this.point = point;
+            this.grade = grade;
+            this.jobType = jobType;
+            this.articleCount = articleCount;
+            this.likeCount = likeCount;
+            this.answerCount = answerCount;
+            this.avatar = AvatarDto.SimpleResponse
+                    .builder()
+                    .avatarId(avatarId)
+                    .filename(filename)
+                    .remotePath(remotePath)
+                    .build();
+        }
     }
 
     @Builder

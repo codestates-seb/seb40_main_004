@@ -183,4 +183,8 @@ public class User {
         this.nickname = request.nickname;
         this.jobType = request.jobType;
     }
+
+    public void addArticle(Article article) {
+        this.articles.add(article);
+    }
 }

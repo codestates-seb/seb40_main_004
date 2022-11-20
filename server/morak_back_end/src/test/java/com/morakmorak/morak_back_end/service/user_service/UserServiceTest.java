@@ -5,9 +5,7 @@ import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.*;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
-import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
-import com.morakmorak.morak_back_end.mapper.UserMapperImpl;
 import com.morakmorak.morak_back_end.repository.UserQueryRepository;
 import com.morakmorak.morak_back_end.repository.UserRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
@@ -18,9 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 
@@ -85,7 +80,7 @@ public class UserServiceTest {
     @DisplayName("로직이 정상적으로 수행된 경우 수정이 반영된 값을 반환")
     void editUserProfile_failed3() {
         //given
-        UserDto.RequestEditProfile response = UserDto.RequestEditProfile.builder()
+        UserDto.SimpleEditProfile response = UserDto.SimpleEditProfile.builder()
                 .blog(requestUser.getBlog())
                 .nickname(requestUser.getNickname())
                 .github(requestUser.getGithub())
@@ -99,7 +94,7 @@ public class UserServiceTest {
         given(userMapper.userToEditProfile(any(User.class))).willReturn(response);
 
         //when
-        UserDto.RequestEditProfile result = userService.editUserProfile(requestUser, ID1);
+        UserDto.SimpleEditProfile result = userService.editUserProfile(requestUser, ID1);
 
         //then
         assertThat(result.getBlog()).isEqualTo(requestUser.getBlog());

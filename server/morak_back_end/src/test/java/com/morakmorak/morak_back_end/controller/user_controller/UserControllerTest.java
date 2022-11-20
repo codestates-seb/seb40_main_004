@@ -4,8 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.config.SecurityTestConfig;
 import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.controller.UserController;
+import com.morakmorak.morak_back_end.dto.AvatarDto;
+import com.morakmorak.morak_back_end.dto.PageInfo;
+import com.morakmorak.morak_back_end.dto.ResponseMultiplePaging;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.JobType;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
@@ -22,11 +26,18 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.List;
 
 import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentRequest;
 import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentResponse;
@@ -36,8 +47,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -71,178 +86,97 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("해당 유저가 존재하지 않을 경우 404 예외 반환")
-    public void patchUserProfile_failed1() throws Exception {
-        // given
-        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
+    @DisplayName("유저 랭킹 조회 시 200Ok와 리스트를 반환한다.")
+    void getRank() throws Exception {
+        //given
+        AvatarDto.SimpleResponse avatar = AvatarDto.SimpleResponse.builder().avatarId(ID1)
+                .filename(CONTENT1)
+                .remotePath(CONTENT2)
+                .build();
+
+        UserDto.ResponseRanking response1 = UserDto.ResponseRanking.builder()
+                .userId(ID1)
+                .answerCount(1L)
+                .infoMessage(CONTENT1)
+                .jobType(JobType.DEVELOPER)
+                .grade(Grade.VIP)
                 .nickname(NICKNAME2)
-                .blog(TISTORY_URL)
-                .github(GITHUB_URL)
-                .infoMessage(CONTENT1)
-                .jobType(JobType.DEVELOPER)
+                .likeCount(1L)
+                .point(ONE)
+                .articleCount(1L)
+                .rank(TWO)
+                .avatar(avatar)
                 .build();
 
-        String json = objectMapper.writeValueAsString(request);
-
-        BDDMockito.given(userService.editUserProfile(any(User.class), any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
-
-        // when
-        ResultActions perform = mockMvc.perform(patch("/users/profiles")
-                .header(JWT_HEADER, token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
-
-        //then
-        perform.andExpect(status().isNotFound())
-                .andDo(document("회원정보_수정_실패_404",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName(JWT_HEADER).description("액세스 토큰")
-                        ),
-                        requestFields(
-                                fieldWithPath("nickname").description("닉네임"),
-                                fieldWithPath("infoMessage").description("자기소개"),
-                                fieldWithPath("github").description("깃허브 주소"),
-                                fieldWithPath("blog").description("블로그 주소"),
-                                fieldWithPath("jobType").description("직업")
-                        )
-                        ));
-    }
-
-    @Test
-    @DisplayName("해당 닉네임이 이미 존재할 경우 409 반환")
-    public void patchUserProfile_failed3() throws Exception {
-        // given
-        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
+        UserDto.ResponseRanking response2 = UserDto.ResponseRanking.builder()
+                .userId(ID1)
+                .answerCount(1L)
+                .infoMessage(CONTENT1)
+                .jobType(JobType.DEVELOPER)
+                .grade(Grade.VIP)
                 .nickname(NICKNAME2)
-                .blog(TISTORY_URL)
-                .github(GITHUB_URL)
-                .infoMessage(CONTENT1)
-                .jobType(JobType.DEVELOPER)
+                .likeCount(1L)
+                .point(ONE)
+                .articleCount(1L)
+                .rank(TWO)
+                .avatar(avatar)
                 .build();
 
-        String json = objectMapper.writeValueAsString(request);
-
-        BDDMockito.given(userService.editUserProfile(any(User.class), any())).willThrow(new BusinessLogicException(ErrorCode.NICKNAME_EXISTS));
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
-
-        // when
-        ResultActions perform = mockMvc.perform(patch("/users/profiles")
-                .header(JWT_HEADER, token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
-
-        //then
-        perform.andExpect(status().isConflict())
-                .andDo(document("회원정보_수정_실패_409",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName(JWT_HEADER).description("액세스 토큰")
-                        ),
-                        requestFields(
-                                fieldWithPath("nickname").description("닉네임"),
-                                fieldWithPath("infoMessage").description("자기소개"),
-                                fieldWithPath("github").description("깃허브 주소"),
-                                fieldWithPath("blog").description("블로그 주소"),
-                                fieldWithPath("jobType").description("직업")
-                        )
-                ));
-    }
-
-    @Test
-    @DisplayName("프로필 수정 요청이 유효성 검증을 통과하지 못할 경우 400 상태코드 반환")
-    public void patchUserProfile_failed2() throws Exception {
-        // given
-        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
-                .nickname(INVALID_NICKNAME)
-                .blog(TISTORY_URL)
-                .github(GITHUB_URL)
-                .infoMessage(CONTENT1)
-                .jobType(JobType.DEVELOPER)
+        PageInfo page = PageInfo.builder()
+                .page(1)
+                .size(2)
+                .sort(Sort.by("point"))
+                .totalElements(2L)
                 .build();
 
-        String json = objectMapper.writeValueAsString(request);
+        PageRequest pageable = PageRequest.of(1, 2, Sort.by("point"));
+        Page<UserDto.ResponseRanking> result = new PageImpl<>(List.of(response1, response2), pageable, 2L);
 
-        BDDMockito.given(userService.editUserProfile(any(User.class), any())).willThrow(new BusinessLogicException(ErrorCode.ONLY_TEST_CODE));
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        ResponseMultiplePaging<UserDto.ResponseRanking> response = new ResponseMultiplePaging<>(List.of(response1, response2), result);
 
-        // when
-        ResultActions perform = mockMvc.perform(patch("/users/profiles")
-                .header(JWT_HEADER, token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
+        BDDMockito.given(userService.getUserRankList(any(PageRequest.class))).willReturn(response);
 
-        //then
-        perform.andExpect(status().isBadRequest())
-                .andDo(document("회원정보_수정_실패_400",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName(JWT_HEADER).description("액세스 토큰")
-                        ),
-                        requestFields(
-                                fieldWithPath("nickname").description("유효하지 않은 닉네임(null 혹은 웹 어플리케이션 규칙에 맞지 않는 경우)"),
-                                fieldWithPath("infoMessage").description("유효성 검증 대상 아님"),
-                                fieldWithPath("github").description("유효성 검증 대상 아님"),
-                                fieldWithPath("blog").description("유효성 검증 대상 아님"),
-                                fieldWithPath("jobType").description("유효하지 않은 직업(미리 협의된 대문자 상수만 가능, 혹은 null인 경우)")
-                        )
-                ));
-    }
-
-    @Test
-    @DisplayName("해당 유저가 존재하고 유효성 검증에 통과할 경우 200 OK와 변경된 내역에 대한 반환")
-    public void patchUserProfile_success() throws Exception {
-        // given
-        UserDto.RequestEditProfile request = UserDto.RequestEditProfile.builder()
-                .nickname(NICKNAME2)
-                .blog(TISTORY_URL)
-                .github(GITHUB_URL)
-                .infoMessage(CONTENT1)
-                .jobType(JobType.DEVELOPER)
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        BDDMockito.given(userService.editUserProfile(any(User.class), any())).willReturn(request);
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
-
-        // when
-        ResultActions perform = mockMvc.perform(patch("/users/profiles")
-                .header(JWT_HEADER, token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json));
+        //when
+        ResultActions perform = mockMvc.perform(get("/users/ranks")
+                .param("size", "2")
+                .param("page", "1")
+                .param("q","point"));
 
         //then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.nickname").value(request.getNickname()))
-                .andExpect(jsonPath("$.blog").value(request.getBlog()))
-                .andExpect(jsonPath("$.github").value(request.getGithub()))
-                .andExpect(jsonPath("$.infoMessage").value(request.getInfoMessage()))
-                .andExpect(jsonPath("$.jobType").value(request.getJobType().toString()))
-                .andDo(document("회원정보_수정_성공_200",
+                .andDo(document(
+                        "유저_랭킹조회_성공_200",
                         getDocumentRequest(),
                         getDocumentResponse(),
-                        requestHeaders(
-                                headerWithName(JWT_HEADER).description("액세스 토큰")
-                        ),
-                        requestFields(
-                                fieldWithPath("nickname").description("닉네임"),
-                                fieldWithPath("infoMessage").description("자기소개"),
-                                fieldWithPath("github").description("깃허브 주소"),
-                                fieldWithPath("blog").description("블로그 주소"),
-                                fieldWithPath("jobType").description("직업")
+                        requestParameters(
+                                parameterWithName("q").description("정렬 조건 - articles(게시글 작성순), answers(답변 작성순), point(포인트순)"),
+                                parameterWithName("page").description("현재 페이지"),
+                                parameterWithName("size").description("페이지당 개수")
                         ),
                         responseFields(
-                                fieldWithPath("nickname").description("수정 후 닉네임"),
-                                fieldWithPath("infoMessage").description("수정 후 자기소개"),
-                                fieldWithPath("github").description("수정 후 깃허브 주소"),
-                                fieldWithPath("blog").description("수정 후 블로그 주소"),
-                                fieldWithPath("jobType").description("수정 후 직업")
+                                fieldWithPath("data[].rank").type(NUMBER).description("임시로 넣어놨으며 아직 별도 구현 예정 없습니다, 필요 시 협의 필요"),
+                                fieldWithPath("data[].userId").type(NUMBER).description("유저 db 시퀀스값"),
+                                fieldWithPath("data[].answerCount").type(NUMBER).description("답변 작성 횟수"),
+                                fieldWithPath("data[].infoMessage").type(STRING).description("자기소개"),
+                                fieldWithPath("data[].jobType").type(STRING).description("직업"),
+                                fieldWithPath("data[].grade").type(STRING).description("등급"),
+                                fieldWithPath("data[].nickname").type(STRING).description("이메일"),
+                                fieldWithPath("data[].likeCount").type(NUMBER).description("받은 좋아요 수"),
+                                fieldWithPath("data[].point").type(NUMBER).description("보유 포인트"),
+                                fieldWithPath("data[].articleCount").type(NUMBER).description("게시글(정보+질문)글 작성 횟수"),
+                                fieldWithPath("data[].avatar").type(OBJECT).description("유저 프로필 이미지 객체"),
+                                fieldWithPath("data[].avatar.avatarId").type(NUMBER).description("프로필 이미지 db 시퀀스"),
+                                fieldWithPath("data[].avatar.filename").type(STRING).description("프로필 이미지 파일명"),
+                                fieldWithPath("data[].avatar.remotePath").type(STRING).description("프로필 이미지 서버 url"),
+                                fieldWithPath("pageInfo.totalElements").type(NUMBER).description("db 데이터 총 개수"),
+                                fieldWithPath("pageInfo.totalPages").type(NUMBER).description("총 페이지 개수"),
+                                fieldWithPath("pageInfo.page").type(NUMBER).description("현재 페이지"),
+                                fieldWithPath("pageInfo.size").type(NUMBER).description("페이지 사이즈"),
+                                fieldWithPath("pageInfo.sort.empty").type(BOOLEAN).description("해당 페이지가 비어있는지"),
+                                fieldWithPath("pageInfo.sort.sorted").type(BOOLEAN).description("페이지가 정렬되어 있다면 true"),
+                                fieldWithPath("pageInfo.sort.unsorted").type(BOOLEAN).description("페이지가 정렬되지 않았다면 true")
                         )
-                ));
+                        )
+                );
     }
 }
