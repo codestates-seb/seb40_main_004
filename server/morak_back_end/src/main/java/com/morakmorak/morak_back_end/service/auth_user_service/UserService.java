@@ -10,6 +10,8 @@ import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.repository.UserQueryRepository;
 import com.morakmorak.morak_back_end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -37,11 +39,17 @@ public class UserService {
         if (userRepository.findUserByNickname(nickname).isPresent()) throw new BusinessLogicException(NICKNAME_EXISTS);
     }
 
-    public UserDto.RequestEditProfile editUserProfile(User request, Long userId) {
+    public UserDto.SimpleEditProfile editUserProfile(User request, Long userId) {
         User dbUser = findVerifiedUserById(userId);
         if (!request.getNickname().equals(dbUser.getNickname())) checkDuplicateNickname(request.getNickname());
         dbUser.editProfile(request);
         return userMapper.userToEditProfile(dbUser);
+    }
+
+    public ResponseMultiplePaging<UserDto.ResponseRanking> getUserRankList(PageRequest request) {
+        Page<User> userRankPage = userQueryRepository.getRankData(request);
+        List<UserDto.ResponseRanking> result = userMapper.toResponseRankDto(userRankPage.getContent());
+        return new ResponseMultiplePaging<>(result, userRankPage);
     }
 
     public UserDto.ResponseDashBoard findUserDashboard(Long userId) {
