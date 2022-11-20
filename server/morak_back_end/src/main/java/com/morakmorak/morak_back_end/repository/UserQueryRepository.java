@@ -3,19 +3,19 @@ package com.morakmorak.morak_back_end.repository;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
-import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.exception.ErrorCode;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.BatchSize;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.morakmorak.morak_back_end.entity.QAnswer.*;
 import static com.morakmorak.morak_back_end.entity.QArticle.article;
@@ -26,7 +26,6 @@ import static com.morakmorak.morak_back_end.entity.QCategory.*;
 import static com.morakmorak.morak_back_end.entity.QComment.*;
 import static com.morakmorak.morak_back_end.entity.QReview.*;
 import static com.morakmorak.morak_back_end.entity.QUser.*;
-import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -68,5 +67,53 @@ public class UserQueryRepository {
                     .where(user.id.eq(userId))
                     .fetchOne();
 
+    }
+
+    public Page<User> getRankData(Pageable pageable) {
+        List<String> sortTypes = getSortTypes(pageable);
+
+        List<User> result;
+
+            result = jpaQueryFactory.select(user)
+                    .from(article, user, answer)
+                    .orderBy(getOrderSpecifier(sortTypes))
+                    .groupBy(user.id)
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetch();
+
+        return new PageImpl<>(result, pageable, getCount(user));
+    }
+
+    private OrderSpecifier<?> getOrderSpecifier(List<String> sortTypes) {
+
+        if (sortTypes.size() == 0) return user.point.desc();
+
+        switch (sortTypes.get(0)) {
+            case "point" :
+                return user.point.desc();
+            case "articles" :
+                return user.articles.size().desc();
+            case "answers" :
+                return user.answers.size().desc();
+            case "likes" :
+                return user.answers.any().answerLike.size().add(user.articles.any().articleLikes.size()).desc();
+            default:
+                return user.point.desc();
+            }
+    }
+
+    private List<String> getSortTypes(Pageable pageable) {
+        return pageable
+                .getSort()
+                .stream()
+                .map(Sort.Order::getProperty)
+                .collect(Collectors.toList());
+    }
+
+    private Long getCount(EntityPathBase<?> entity) {
+        return jpaQueryFactory.select(entity.count())
+                .from(entity)
+                .fetchOne();
     }
 }
