@@ -7,6 +7,7 @@ import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.Notification;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.DomainType;
+import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.NotificationService;
 import com.morakmorak.morak_back_end.util.SecurityTestConstants;
@@ -25,13 +26,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
+
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
 @SpringBootTest(value = {
@@ -55,6 +57,11 @@ public class NotificationTest {
     @Autowired
     NotificationController notificationController;
 
+    @Autowired
+    NotificationRepository notificationRepository;
+
+    private final String BASE_URL = "localhost:8080.com";
+
     User user;
 
     String accessToken;
@@ -69,6 +76,7 @@ public class NotificationTest {
                     .message(String.valueOf(i))
                     .isChecked(i % 2 == 0 ? Boolean.TRUE : Boolean.FALSE)
                     .domainType(DomainType.ARTICLE)
+                    .uri("/posts/" + i)
                     .user(user)
                     .build();
 
@@ -113,5 +121,20 @@ public class NotificationTest {
         assertThat(notifications.getData().size()).isEqualTo(10);
         assertThat(notifications.getData().get(0).getMessage()).isEqualTo("29");
         assertThat(notifications.getData().get(9).getMessage()).isEqualTo("20");
+    }
+
+    @Test
+    @DisplayName("리다이렉트 정상 반환 테스트")
+    void getNotification() throws Exception {
+        //given
+        List<Notification> notifications = notificationRepository.findAll();
+        Long id = notifications.get(0).getId();
+        String uri = notifications.get(0).getUri();
+        //when
+        ResultActions perform = mockMvc.perform(get("/notifications/{id}", id));
+
+        //then
+        perform.andExpect(status().isPermanentRedirect())
+                .andExpect(redirectedUrl(BASE_URL + uri));
     }
 }
