@@ -3,6 +3,8 @@ package com.morakmorak.morak_back_end.repository.user_repository;
 import com.morakmorak.morak_back_end.config.JpaQueryFactoryConfig;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.repository.user.UserQueryRepository;
+import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

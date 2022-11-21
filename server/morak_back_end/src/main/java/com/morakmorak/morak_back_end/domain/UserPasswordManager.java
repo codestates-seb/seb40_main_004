@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.adapter;
+package com.morakmorak.morak_back_end.domain;
 
 import com.morakmorak.morak_back_end.entity.User;
 import lombok.RequiredArgsConstructor;

@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.repository;
 
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.repository.answer.AnswerLikeRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

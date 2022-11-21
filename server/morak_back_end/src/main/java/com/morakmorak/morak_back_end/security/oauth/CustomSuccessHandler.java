@@ -4,7 +4,7 @@ import com.morakmorak.morak_back_end.entity.RefreshToken;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.repository.RefreshTokenRepository;
-import com.morakmorak.morak_back_end.repository.UserRepository;
+import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

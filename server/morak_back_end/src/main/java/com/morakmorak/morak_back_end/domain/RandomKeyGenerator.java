@@ -1,7 +1,5 @@
-package com.morakmorak.morak_back_end.adapter;
+package com.morakmorak.morak_back_end.domain;
 
-import com.morakmorak.morak_back_end.security.util.SecurityConstants;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;

@@ -15,7 +15,7 @@ import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.CategoryMapper;
 import com.morakmorak.morak_back_end.mapper.FileMapper;
 import com.morakmorak.morak_back_end.mapper.TagMapper;
-import com.morakmorak.morak_back_end.repository.ArticleRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.ArticleService;
 import org.junit.jupiter.api.DisplayName;

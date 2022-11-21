@@ -153,5 +153,4 @@ public class Article extends BaseTime {
             return true;
         }return false;
     }
-
 }

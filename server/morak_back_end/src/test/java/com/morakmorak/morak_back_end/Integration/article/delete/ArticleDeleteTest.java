@@ -2,7 +2,8 @@ package com.morakmorak.morak_back_end.Integration.article.delete;
 
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.User;
-import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
+import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

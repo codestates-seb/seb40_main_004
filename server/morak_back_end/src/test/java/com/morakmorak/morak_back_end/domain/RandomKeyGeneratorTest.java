@@ -1,6 +1,5 @@
-package com.morakmorak.morak_back_end.adapter;
+package com.morakmorak.morak_back_end.domain;
 
-import com.morakmorak.morak_back_end.security.util.SecurityConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class RandomKeyGeneratorTest {
     RandomKeyGenerator randomKeyGenerator;

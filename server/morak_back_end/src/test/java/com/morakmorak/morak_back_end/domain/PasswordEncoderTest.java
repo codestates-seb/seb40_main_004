@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.adapter;
+package com.morakmorak.morak_back_end.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
