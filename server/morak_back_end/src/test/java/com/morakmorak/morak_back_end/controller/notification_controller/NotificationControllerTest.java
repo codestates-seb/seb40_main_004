@@ -42,14 +42,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.*;
+import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -90,7 +91,7 @@ public class NotificationControllerTest {
     void getNotification_failed_404() throws Exception {
         //given
         String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
-        BDDMockito.given(notificationService.findNotificationsBy(any(), any(PageRequest.class))).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+        BDDMockito.given(notificationService.findNotificationsBy(any(), any(PageRequest.class))).willThrow(new BusinessLogicException(USER_NOT_FOUND));
 
         //when
         ResultActions perform = mockMvc.perform(get("/notifications?page=1&size=2")
@@ -180,6 +181,65 @@ public class NotificationControllerTest {
         ResultActions perform = mockMvc.perform(get("/notifications/1"));
         //then
         perform.andExpect(status().isPermanentRedirect())
-                .andExpect(redirectedUrl(BASE_URL + "/anyString"));
+                .andExpect(redirectedUrl(BASE_URL + "/anyString"))
+                .andDo(
+                        document("알림_개별조회_성공_200",
+                        getDocumentRequest(),
+                        getDocumentResponse()
+                )
+                );
+    }
+
+    @Test
+    @DisplayName("해당 Notification 객체가 존재하지 않으면 404 반환")
+    void deleteNotification_failed1() throws Exception {
+        //given
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        willThrow(new BusinessLogicException(NOTIFICATION_NOT_FOUND)).given(notificationService).deleteNotificationData(anyLong(), any());
+        //when
+        ResultActions perform = mockMvc.perform(delete("/notifications/1")
+                .header(JWT_HEADER, token));
+        //then
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "알림삭제_실패_404",
+                        getDocumentRequest(),
+                        getDocumentResponse()
+                ));
+    }
+
+    @Test
+    @DisplayName("해당 Notification에 대해 해당 유저의 권한이 없다면 403 Forbidden 반환")
+    void deleteNotification_failed2() throws Exception {
+        //given
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        willThrow(new BusinessLogicException(NO_ACCESS_TO_THAT_OBJECT)).given(notificationService).deleteNotificationData(anyLong(), any());
+        //when
+        ResultActions perform = mockMvc.perform(delete("/notifications/1")
+                .header(JWT_HEADER, token));
+        //then
+        perform.andExpect(status().isForbidden())
+                .andDo(document(
+                        "알림삭제_실패_403",
+                        getDocumentRequest(),
+                        getDocumentResponse()
+                ));
+    }
+
+    @Test
+    @DisplayName("로직이 정상적으로 실행된다면 203 반환")
+    void deleteNotification_success() throws Exception {
+        //given
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        //when
+        ResultActions perform = mockMvc.perform(delete("/notifications/1")
+                .header(JWT_HEADER, token));
+        //then
+        perform.andExpect(status().isNoContent())
+                .andDo(document(
+                        "알림삭제_성공_203",
+                        getDocumentRequest(),
+                        getDocumentResponse()
+                ));
     }
 }

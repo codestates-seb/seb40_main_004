@@ -38,4 +38,10 @@ public class NotificationController {
         String redirect_uri = notificationService.findNotificationUriBy(id);
         response.setHeader("Location",BASE_URL + redirect_uri);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteNotification(@PathVariable Long id, @RequestUser UserDto.UserInfo token) {
+        notificationService.deleteNotificationData(id, token.getId());
+    }
 }

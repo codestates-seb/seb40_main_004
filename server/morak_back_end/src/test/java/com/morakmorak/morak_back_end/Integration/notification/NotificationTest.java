@@ -26,12 +26,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -66,6 +69,8 @@ public class NotificationTest {
 
     String accessToken;
 
+    List<Notification> notifications = new ArrayList<>();
+
     @BeforeEach
     void init() {
         user = User.builder().build();
@@ -83,6 +88,7 @@ public class NotificationTest {
             notification.mapUserAndNotification();
             em.persist(notification);
             em.persist(user);
+            notifications.add(notification);
         }
 
         accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST);
@@ -127,7 +133,6 @@ public class NotificationTest {
     @DisplayName("리다이렉트 정상 반환 테스트")
     void getNotification() throws Exception {
         //given
-        List<Notification> notifications = notificationRepository.findAll();
         Long id = notifications.get(0).getId();
         String uri = notifications.get(0).getUri();
         //when
@@ -136,5 +141,36 @@ public class NotificationTest {
         //then
         perform.andExpect(status().isPermanentRedirect())
                 .andExpect(redirectedUrl(BASE_URL + uri));
+    }
+
+    @Test
+    @DisplayName("삭제 시 유저가 다를 경우 403 반환 테스트")
+    void deleteNotification_failed() throws Exception {
+        //given
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, ID2, ROLE_USER_LIST);
+        Long id = notifications.get(0).getId();
+        //when
+        ResultActions perform = mockMvc.perform(delete("/notifications/{id}", id)
+                .header(JWT_HEADER, accessToken));
+
+        //then
+        perform.andExpect(status().isForbidden());
+    }
+
+    @Test
+    @DisplayName("로직 정상 수행 후 notification 삭제 여부 확인")
+    void deleteNotification() throws Exception {
+        //given
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST);
+        Long id = notifications.get(0).getId();
+        //when
+        ResultActions perform = mockMvc.perform(delete("/notifications/{id}", id)
+                .header(JWT_HEADER, accessToken));
+
+        Optional<Notification> result = notificationRepository.findById(id);
+
+        //then
+        perform.andExpect(status().isNoContent());
+        assertThat(result).isEmpty();
     }
 }
