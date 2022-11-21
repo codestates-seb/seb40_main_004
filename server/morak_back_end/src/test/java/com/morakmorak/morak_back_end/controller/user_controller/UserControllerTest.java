@@ -122,13 +122,6 @@ public class UserControllerTest {
                 .avatar(avatar)
                 .build();
 
-        PageInfo page = PageInfo.builder()
-                .page(1)
-                .size(2)
-                .sort(Sort.by("point"))
-                .totalElements(2L)
-                .build();
-
         PageRequest pageable = PageRequest.of(1, 2, Sort.by("point"));
         Page<UserDto.ResponseRanking> result = new PageImpl<>(List.of(response1, response2), pageable, 2L);
 
