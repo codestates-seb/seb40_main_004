@@ -5,6 +5,7 @@ import com.morakmorak.morak_back_end.controller.ArticleController;
 import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
@@ -553,6 +554,126 @@ class ArticleControllerTest {
                                 headerWithName(JWT_HEADER).description("access token")
                         )));
 
+    }
+
+    @Test
+    @DisplayName("로그인한 회원이 실제 존재하는 게시글을 신고하면 201코드와 ReportId를 리턴한다.")
+    public void reportArticle_suc() throws Exception {
+    //given
+
+        ArticleDto.RequestReportArticle requestReportArticle =
+                ArticleDto.RequestReportArticle.builder().reason(ReportReason.BAD_LANGUAGE).content("이유").build();
+
+        Long articleId = 1L;
+
+        ArticleDto.ResponseReportArticle resultDto = ArticleDto.ResponseReportArticle.builder().reportId(1L).build();
+
+        given(articleService.reportArticle(any(), any(), any())).willReturn(resultDto);
+
+        String content = objectMapper.writeValueAsString(requestReportArticle);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/{article-id}/reports", articleId)
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+
+        //then
+        perform.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.reportId").value(resultDto.getReportId()))
+                .andDo(document(
+                        "로그인한_회원이_존재하는_게시글을_신고할때_201",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다.")
+                        ),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        requestFields(
+                                fieldWithPath("reason").type(JsonFieldType.STRING).description("신고 카테고리 내용입니다. 이넘으로 적어주세요"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("신고 사유입니다.")
+                        ),
+                        responseFields(
+                                fieldWithPath("reportId").type(JsonFieldType.NUMBER).description("신고 아이디입니다.")
+                        )));
+    }
+
+    @Test
+    @DisplayName("로그인한 회원이 실제 존재하지 않는 게시글을 신고하면 404코드를 리턴한다.")
+    public void reportArticle_fail() throws Exception {
+        //given
+
+        ArticleDto.RequestReportArticle requestReportArticle =
+                ArticleDto.RequestReportArticle.builder().reason(ReportReason.BAD_LANGUAGE).content("이유").build();
+
+        given(articleService.reportArticle(any(), any(), any()))
+                .willThrow(new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
+
+        String content = objectMapper.writeValueAsString(requestReportArticle);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/{article-id}/reports", 500L)
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+
+        //then
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "로그인한_회원이_존재하지않는_게시글을_신고할때_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다.")
+                        ),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        requestFields(
+                                fieldWithPath("reason").type(JsonFieldType.STRING).description("신고 카테고리 내용입니다. 이넘으로 적어주세요"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("신고 사유입니다.")
+                        )));
+    }
+
+    @Test
+    @DisplayName("로그인하지않은 회원이 실제 존재하는 게시글을 신고하면 404코드를 리턴한다.")
+    public void reportArticle_fail2() throws Exception {
+        //given
+
+        ArticleDto.RequestReportArticle requestReportArticle =
+                ArticleDto.RequestReportArticle.builder().reason(ReportReason.BAD_LANGUAGE).content("이유").build();
+
+        given(articleService.reportArticle(any(), any(), any()))
+                .willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+
+        String content = objectMapper.writeValueAsString(requestReportArticle);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/{article-id}/reports", 500L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+
+        //then
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "로그인하지않은_회원이_존재하는_게시글을_신고할때_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다.")
+                        ),
+                        requestFields(
+                                fieldWithPath("reason").type(JsonFieldType.STRING).description("신고 카테고리 내용입니다. 이넘으로 적어주세요"),
+                                fieldWithPath("content").type(JsonFieldType.STRING).description("신고 사유입니다.")
+                        )));
     }
 
 }
