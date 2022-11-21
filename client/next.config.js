@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+
+const withPlugins = require('next-compose-plugins');
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -16,6 +18,4 @@ const withTM = require('next-transpile-modules')([
   '@fullcalendar/react',
 ]);
 
-module.exports = nextConfig;
-
-module.exports = withTM({});
+module.exports = withPlugins([withTM], nextConfig);
