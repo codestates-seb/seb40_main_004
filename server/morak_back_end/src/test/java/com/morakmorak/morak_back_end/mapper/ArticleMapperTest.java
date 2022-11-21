@@ -213,4 +213,30 @@ class ArticleMapperTest {
         assertThat(responseArticleLike.getIsLiked()).isTrue();
         assertThat(responseArticleLike.getLikeCount()).isEqualTo(1);
     }
+
+    @Test
+    @DisplayName("RequestReportArticleToReport 매퍼 작동 테스트")
+    public void RequestReportArticleToReport_test() {
+        //given
+        ArticleDto.RequestReportArticle dto =
+                ArticleDto.RequestReportArticle.builder().reason(ReportReason.BAD_LANGUAGE).content("내용").build();
+
+        //when
+        Report report = articleMapper.requestReportArticleToReport(dto);
+        //then
+        assertThat(report.getContent()).isEqualTo(dto.getContent());
+        assertThat(report.getReason()).isEqualTo(dto.getReason());
+    }
+
+    @Test
+    @DisplayName("reportToResponseArticle 매퍼 작동 테스트")
+    public void reportToResponseArticle_test() {
+        //given
+        Report report = Report.builder().id(1L).build();
+
+        //when
+        ArticleDto.ResponseReportArticle result = articleMapper.reportToResponseArticle(report);
+        //then
+        assertThat(result.getReportId()).isEqualTo(report.getId());
+    }
 }
