@@ -4,9 +4,7 @@
  * 최근 수정일: 2022-11-19
  */
 
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TagButton } from '../hyejung/TagButton';
+import { TagButton } from '../hyejung/BtnTag';
 
 export const SearchWithTagButton = () => {
   return (
