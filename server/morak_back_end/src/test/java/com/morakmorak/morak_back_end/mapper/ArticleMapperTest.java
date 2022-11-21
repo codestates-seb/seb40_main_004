@@ -7,8 +7,9 @@ import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
-import com.morakmorak.morak_back_end.repository.ArticleRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.util.ArticleTestConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -150,8 +151,8 @@ class ArticleMapperTest {
 
     @Test
     @DisplayName("articleToResponseDetailArticle 매퍼 작동 테스트")
-    public void articleToResponseDetailArticle_test(){
-    //given
+    public void articleToResponseDetailArticle_test() {
+        //given
         Article article = articleRepository.findArticleByContent("콘탠트입니다. 제발 됬으면 좋겠습니다.").orElseThrow();
 
         Boolean isLiked = true;
@@ -200,17 +201,96 @@ class ArticleMapperTest {
     }
 
     @Test
+    @DisplayName("articleToResponseBlockedArticle 매퍼 신고 5번 당했을경우 작동 테스트")
+    public void articleToResponseBlockedArticle_test() {
+        //given
+        Article article = articleRepository.findArticleByContent("콘탠트입니다. 제발 됬으면 좋겠습니다.").orElseThrow();
+
+        for (int i = 0; i < 5; i++) {
+            Report report = Report.builder().article(article).reason(ReportReason.BAD_LANGUAGE).build();
+            em.persist(report);
+            article.getReports().add(report);
+        }
+
+        Boolean isLiked = true;
+        Boolean isBookmarked = true;
+
+        List<TagDto.SimpleTag> tags = new ArrayList<>();
+
+        List<CommentDto.Response> comments = new ArrayList<>();
+
+        Integer likes = article.getArticleLikes().size();
+        String report = "이 글은 신고가 누적되 더이상 확인하실 수 없습니다.";
+        //when
+        ArticleDto.ResponseDetailArticle test = articleMapper
+                .articleToResponseBlockedArticle(article, isLiked, isBookmarked,report, tags, comments, likes);
+
+        //then
+        assertThat(test.getArticleId()).isEqualTo(article.getId());
+        assertThat(test.getCategory()).isEqualTo(article.getCategory().getName());
+        assertThat(test.getTitle()).isEqualTo("이 글은 신고가 누적되 더이상 확인하실 수 없습니다.");
+        assertThat(test.getContent()).isEqualTo("이 글은 신고가 누적되 더이상 확인하실 수 없습니다.");
+        assertThat(test.getClicks()).isEqualTo(article.getClicks());
+        assertThat(test.getLikes()).isEqualTo(article.getArticleLikes().size());
+        assertThat(test.getIsClosed()).isEqualTo(article.getIsClosed());
+
+        assertThat(test.getIsLiked()).isTrue();
+        assertThat(test.getIsBookmarked()).isTrue();
+
+        assertThat(test.getCreatedAt()).isEqualTo(article.getCreatedAt());
+        assertThat(test.getLastModifiedAt()).isEqualTo(article.getLastModifiedAt());
+
+        assertThat(test.getTags().size()).isEqualTo(0);
+
+        assertThat(test.getUserInfo().getUserId()).isEqualTo(article.getUser().getId());
+        assertThat(test.getUserInfo().getNickname()).isEqualTo(article.getUser().getNickname());
+        assertThat(test.getUserInfo().getGrade()).isEqualTo(article.getUser().getGrade());
+
+        assertThat(test.getAvatar().getAvatarId()).isEqualTo(article.getUser().getAvatar().getId());
+        assertThat(test.getAvatar().getRemotePath()).isEqualTo(article.getUser().getAvatar().getRemotePath());
+        assertThat(test.getAvatar().getFilename()).isEqualTo(article.getUser().getAvatar().getOriginalFilename());
+
+        assertThat(test.getComments().size()).isEqualTo(0);
+
+    }
+        @Test
     @DisplayName("makingResponseArticleLikeDto 메퍼 작동 테스트")
-    public void makingResponseArticleLikeDto(){
-    //given
+    public void makingResponseArticleLikeDto() {
+        //given
         Long articleId = 1L;
         UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
-    //when
+        //when
         ArticleDto.ResponseArticleLike responseArticleLike = articleMapper.makingResponseArticleLikeDto(articleId, userInfo.getId(), true, 1);
         //then
         assertThat(responseArticleLike.getArticleId()).isEqualTo(1L);
         assertThat(responseArticleLike.getUserId()).isEqualTo(1L);
         assertThat(responseArticleLike.getIsLiked()).isTrue();
         assertThat(responseArticleLike.getLikeCount()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("RequestReportArticleToReport 매퍼 작동 테스트")
+    public void RequestReportArticleToReport_test() {
+        //given
+        ArticleDto.RequestReportArticle dto =
+                ArticleDto.RequestReportArticle.builder().reason(ReportReason.BAD_LANGUAGE).content("내용").build();
+
+        //when
+        Report report = articleMapper.requestReportArticleToReport(dto);
+        //then
+        assertThat(report.getContent()).isEqualTo(dto.getContent());
+        assertThat(report.getReason()).isEqualTo(dto.getReason());
+    }
+
+    @Test
+    @DisplayName("reportToResponseArticle 매퍼 작동 테스트")
+    public void reportToResponseArticle_test() {
+        //given
+        Report report = Report.builder().id(1L).build();
+
+        //when
+        ArticleDto.ResponseReportArticle result = articleMapper.reportToResponseArticle(report);
+        //then
+        assertThat(result.getReportId()).isEqualTo(report.getId());
     }
 }

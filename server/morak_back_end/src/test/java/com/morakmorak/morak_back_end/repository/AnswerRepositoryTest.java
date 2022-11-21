@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.repository;
 
 import com.morakmorak.morak_back_end.entity.Answer;
+import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,11 +1,13 @@
 package com.morakmorak.morak_back_end.service.auth_service;
 
-import com.morakmorak.morak_back_end.adapter.RandomKeyGenerator;
-import com.morakmorak.morak_back_end.adapter.TokenGenerator;
-import com.morakmorak.morak_back_end.adapter.UserPasswordManager;
+import com.morakmorak.morak_back_end.domain.RandomKeyGenerator;
+import com.morakmorak.morak_back_end.domain.TokenGenerator;
+import com.morakmorak.morak_back_end.domain.UserPasswordManager;
 import com.morakmorak.morak_back_end.config.RedisRepositoryTestImpl;
 import com.morakmorak.morak_back_end.entity.User;
-import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.repository.user.RoleRepository;
+import com.morakmorak.morak_back_end.repository.user.UserRepository;
+import com.morakmorak.morak_back_end.repository.user.UserRoleRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.auth_user_service.AuthService;
 import com.morakmorak.morak_back_end.service.mail_service.MailSenderImpl;

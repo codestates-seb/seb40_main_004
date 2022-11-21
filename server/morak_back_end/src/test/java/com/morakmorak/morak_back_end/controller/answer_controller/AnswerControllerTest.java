@@ -107,7 +107,6 @@ public class AnswerControllerTest {
                         )
                 );
     }
-
     @Test
     @DisplayName("유효한 등록 요청인 경우 201 created 반환")
     void postAnswer_success_1() throws Exception {
@@ -204,7 +203,7 @@ public class AnswerControllerTest {
 
     @Test
     @DisplayName("로그인한 회원이 답변글의 좋아요를 눌렀을때 처음 좋아요를 눌렀을 경우 좋아요 갯수가 1개 증가하고 201 코드를 던진다.")
-    public void pressLikeButton_suc() throws Exception {
+    public void pressLikeButton_suc() throws Exception{
         //given
         Long answerId = 1L;
         UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
@@ -216,7 +215,7 @@ public class AnswerControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/1/answers/" + answerId + "/likes")
+                RestDocumentationRequestBuilders.post("/articles/{article-id}/answers/{answer-id}/likes", 1, answerId)
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
@@ -230,6 +229,10 @@ public class AnswerControllerTest {
                         "다변글_좋아요_처음누를때_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다."),
+                                parameterWithName("answer-id").description("답변글의 아이디 입니다.")
+                        ),
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("access token")
                         ),
@@ -243,10 +246,9 @@ public class AnswerControllerTest {
                         )
                 ));
     }
-
     @Test
     @DisplayName("로그인한 회원이 답변글의 누른 좋아요를 취소할 경우 좋아요 갯수가 1개 감소하고 201 코드를 던진다.")
-    public void pressLikeButton_suc2() throws Exception {
+    public void pressLikeButton_suc2() throws Exception{
         //given
         Long answerId = 1L;
         UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
@@ -258,7 +260,7 @@ public class AnswerControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                RestDocumentationRequestBuilders.post("/articles/1/answers/" + answerId + "/likes")
+                RestDocumentationRequestBuilders.post("/articles/{article-id}/answers/{answer-id}/likes", 1, answerId)
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
@@ -272,6 +274,10 @@ public class AnswerControllerTest {
                         "답변글_좋아요_두번_누를때_취소_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다."),
+                                parameterWithName("answer-id").description("답변글의 아이디 입니다.")
+                        ),
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("access token")
                         ),
@@ -285,10 +291,9 @@ public class AnswerControllerTest {
                         )
                 ));
     }
-
     @Test
     @DisplayName("로그인하지 않은 유저가 좋아요를 누른다면, 404 User Not Found 에러를 던진다.")
-    public void pressLikeButton_fail1() throws Exception {
+    public void pressLikeButton_fail1() throws Exception{
         //given
         Long answerId = 1L;
 
@@ -297,7 +302,7 @@ public class AnswerControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                RestDocumentationRequestBuilders.post("/articles/1/answers/" + answerId + "/likes")
+                RestDocumentationRequestBuilders.post("/articles/{article-id}/answers/{answer-id}/likes", 1, answerId)
         );
 
         //then
@@ -305,13 +310,17 @@ public class AnswerControllerTest {
                 .andDo(document(
                         "로그인하지않은_회원이_좋아요를_누를시_실패_404",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다."),
+                                parameterWithName("answer-id").description("답변글의 아이디 입니다.")
+                        )
                 ));
     }
 
     @Test
     @DisplayName("존재하지 않는 답변글에 좋아요를 누른다면, 404 Article Not Found 에러를 던진다.")
-    public void pressLikeButton_fail2() throws Exception {
+    public void pressLikeButton_fail2() throws Exception{
         //given
         Long answerId = 1L;
 
@@ -320,7 +329,7 @@ public class AnswerControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                RestDocumentationRequestBuilders.post("/articles/1/answers/" + answerId + "/likes")
+                RestDocumentationRequestBuilders.post("/articles/{article-id}/answers/{answer-id}/likes", 1, answerId)
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
@@ -332,6 +341,11 @@ public class AnswerControllerTest {
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("access token")
+
+                        ),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다."),
+                                parameterWithName("answer-id").description("답변글의 아이디 입니다.")
                         )));
     }
 }

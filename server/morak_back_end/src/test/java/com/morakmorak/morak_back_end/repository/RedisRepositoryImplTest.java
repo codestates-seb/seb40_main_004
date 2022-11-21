@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.repository;
 
 import com.morakmorak.morak_back_end.config.RedisContainerTest;
 import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.repository.redis.RedisRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

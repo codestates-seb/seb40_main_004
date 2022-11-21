@@ -9,6 +9,8 @@ import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.CommentMapper;
 import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.repository.article.ArticleLikeRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,6 +38,8 @@ public class ArticleService {
     private final BookmarkRepository bookmarkRepository;
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
+
+    private final ReportRepository reportRepository;
 
     public ArticleDto.ResponseSimpleArticle upload(
             Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
@@ -156,6 +161,12 @@ public class ArticleService {
         List<CommentDto.Response> comments = dbArticle.getComments().stream()
                 .map(commentMapper::commentToCommentDto).collect(Collectors.toList());
 
+        if (dbArticle.getReports().size() >= 5) {
+            String report = "이 글은 신고가 누적되 더이상 확인하실 수 없습니다.";
+            return articleMapper.articleToResponseBlockedArticle(dbArticle, isLiked, isBookmarked,
+                    report,new ArrayList<>(),new ArrayList<>(),likes);
+        }
+
         ArticleDto.ResponseDetailArticle responseDetailArticle =
                 articleMapper.articleToResponseDetailArticle(dbArticle, isLiked, isBookmarked,
                         tags, comments, likes);
@@ -191,4 +202,23 @@ public class ArticleService {
         return articleMapper.makingResponseArticleLikeDto(dbArticle.getId(), dbUser.getId(), isLiked, likeCount);
     }
 
+    public ArticleDto.ResponseReportArticle reportArticle(Long articleId, UserDto.UserInfo userInfo, Report reportArticle) {
+        Article dbArticle = findVerifiedArticle(articleId);
+        
+        User dbUser = null;
+
+        if (userInfo != null) {
+            dbUser = userService.findVerifiedUserById(userInfo.getId());
+        } else {
+            throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
+        }
+        
+        reportArticle.injectMappingUserAndArticle(dbUser, dbArticle);
+        dbArticle.getReports().add(reportArticle);
+        dbUser.getReports().add(reportArticle);
+
+        Report dbReport = reportRepository.save(reportArticle);
+
+       return articleMapper.reportToResponseArticle(dbReport);
+    }
 }

@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.entity;
 
 
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,6 +18,8 @@ public class Report extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "report_id")
     private Long id;
+
+    private ReportReason reason;
 
     private String content;
 
@@ -36,5 +39,8 @@ public class Report extends BaseTime {
     @JoinColumn(name = "answer_id")
     private Answer answer;
 
-
+    public void injectMappingUserAndArticle(User user, Article article) {
+        this.user = user;
+        this.article = article;
+    }
 }

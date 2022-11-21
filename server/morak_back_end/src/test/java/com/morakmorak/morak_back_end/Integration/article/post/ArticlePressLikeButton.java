@@ -2,7 +2,9 @@ package com.morakmorak.morak_back_end.Integration.article.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
+import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
+import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.ArticleService;
 import org.junit.jupiter.api.DisplayName;

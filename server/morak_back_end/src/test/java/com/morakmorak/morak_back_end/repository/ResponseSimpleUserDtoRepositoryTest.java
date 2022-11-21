@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.repository;
 
 import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

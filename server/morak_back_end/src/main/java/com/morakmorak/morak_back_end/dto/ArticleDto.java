@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.dto;
 
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
+import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.service.EnumValid;
 import lombok.*;
 
@@ -113,4 +114,22 @@ public class ArticleDto {
         private Boolean isLiked;
         private Integer likeCount;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class RequestReportArticle {
+        private ReportReason reason;
+        private String content;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponseReportArticle {
+        private Long reportId;
+    }
+
 }

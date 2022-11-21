@@ -158,3 +158,72 @@ include::{snippets}/닉네임_중복_체크_실패_409/request-fields.adoc[]
 
 .http-response
 include::{snippets}/닉네임_중복_체크_실패_409/http-response.adoc[]
+
+***
+
+== 유저 알림 조회
+
+=== 유저 알림 리스트 조회_성공200
+
+.http-request
+include::{snippets}/알림조회_성공_200//http-request.adoc[]
+
+.request-parameters
+include::{snippets}/알림조회_성공_200//request-parameters.adoc[]
+
+.http-response
+include::{snippets}/알림조회_성공_200//http-response.adoc[]
+
+.response-fields
+include::{snippets}/알림조회_성공_200//response-fields.adoc[]
+
+=== 유저 알림 리스트 조회_실패404
+
+.http-request
+include::{snippets}/알림조회_실패_404//http-request.adoc[]
+
+.request-parameters
+include::{snippets}/알림조회_실패_404//request-parameters.adoc[]
+
+.http-response
+include::{snippets}/알림조회_실패_404//http-response.adoc[]
+
+***
+
+== 유저 알림 개별 조회(클릭)
+
+=== 유저 알림 조회_성공308
+
+.http-request
+include::{snippets}/알림_개별조회_성공_200//http-request.adoc[]
+
+.http-response
+include::{snippets}/알림_개별조회_성공_200//http-response.adoc[]
+
+***
+
+== 유저 알림 조회
+
+=== 유저 알림 삭제_성공204
+
+.http-request
+include::{snippets}/알림삭제_성공_203//http-request.adoc[]
+
+.http-response
+include::{snippets}/알림삭제_성공_203//http-response.adoc[]
+
+=== 유저 알림 삭제_실패403
+
+.http-request
+include::{snippets}/알림삭제_실패_403//http-request.adoc[]
+
+.http-response
+include::{snippets}/알림삭제_실패_403//http-response.adoc[]
+
+=== 유저 알림 삭제_실패404
+
+.http-request
+include::{snippets}/알림삭제_실패_404//http-request.adoc[]
+
+.http-response
+include::{snippets}/알림삭제_실패_404//http-response.adoc[]

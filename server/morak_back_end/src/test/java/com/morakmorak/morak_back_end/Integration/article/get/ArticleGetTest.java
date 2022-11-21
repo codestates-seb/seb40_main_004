@@ -7,8 +7,13 @@ import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleTagRepository;
+import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
+import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.ArticleService;
 import org.junit.jupiter.api.DisplayName;
@@ -288,16 +293,21 @@ public class ArticleGetTest {
 
         Tag C = Tag.builder().name(TagName.C).build();
 
+        Category category = Category.builder().name(CategoryName.INFO).build();
+        em.persist(category);
 
         Avatar avatar = Avatar.builder().originalFilename("filename").remotePath("remotePath").build();
         User user = User.builder().email("test@naver.com").nickname("nickname").grade(Grade.BRONZE).avatar(avatar).build();
         Article article = Article.builder()
                 .title("안녕하세요 타이틀입니다. 잘부탁드립니다. 제발 되었으면 좋겠습니다.")
                 .content("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다.")
+                .category(category)
+                .clicks(10)
                 .user(user)
                 .build();
         ArticleTag articleTag = ArticleTag.builder().article(article).tag(C).build();
         article.getArticleTags().add(articleTag);
+        category.getArticleList().add(article);
         C.getArticleTags().add(articleTag);
         em.persist(articleTag);
         em.persist(C);
@@ -339,9 +349,135 @@ public class ArticleGetTest {
 
         //then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.articleId").value(article.getId().intValue()));
+                .andExpect(jsonPath("$.articleId").value(article.getId()))
+                .andExpect(jsonPath("$.category").value("INFO"))
+                .andExpect(jsonPath("$.title").value("안녕하세요 타이틀입니다. 잘부탁드립니다. 제발 되었으면 좋겠습니다."))
+                .andExpect(jsonPath("$.content").value("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다."))
+                .andExpect(jsonPath("$.clicks").value(10))
+                .andExpect(jsonPath("$.likes").value(1))
+                .andExpect(jsonPath("$.isClosed").value(false))
+                .andExpect(jsonPath("$.isLiked").value(true))
+                .andExpect(jsonPath("$.isBookmarked").value(true))
+                .andExpect(jsonPath("$.tags[0:1].tagId").value(C.getId().intValue()))
+                .andExpect(jsonPath("$.tags[0:1].name").value("C"))
+                .andExpect(jsonPath("$.createdAt").isNotEmpty())
+                .andExpect(jsonPath("$.lastModifiedAt").isNotEmpty())
+                .andExpect(jsonPath("$.expiredDate").isEmpty())
+                .andExpect(jsonPath("$.userInfo.userId").value(dbUser.getId()))
+                .andExpect(jsonPath("$.userInfo.nickname").value("nickname"))
+                .andExpect(jsonPath("$.userInfo.grade").value("BRONZE"))
+                .andExpect(jsonPath("$.avatar.avatarId").value(avatar.getId()))
+                .andExpect(jsonPath("$.avatar.filename").value("filename"))
+                .andExpect(jsonPath("$.avatar.remotePath").value("remotePath"))
+                .andExpect(jsonPath("$.comments[0:1].articleId").value(dbArticle.getId().intValue()))
+                .andExpect(jsonPath("$.comments[0:1].content").value("댓글의 내용입니다. 잘부탁드립니다.하하하핳하하하하"))
+                .andExpect(jsonPath("$.comments[0:1].commentId").value(comment.getId().intValue()))
+                .andExpect(jsonPath("$.comments[0:1].userInfo.userId").value(dbUser.getId().intValue()))
+                .andExpect(jsonPath("$.comments[0:1].userInfo.nickname").value("nickname"))
+                .andExpect(jsonPath("$.comments[0:1].userInfo.grade").value("BRONZE"))
+                .andExpect(jsonPath("$.comments[0:1].avatar.avatarId").value(avatar.getId().intValue()))
+                .andExpect(jsonPath("$.comments[0:1].avatar.filename").value("filename"))
+                .andExpect(jsonPath("$.comments[0:1].avatar.remotePath").value("remotePath"))
+                .andExpect(jsonPath("$.comments[0:1].createdAt").exists())
+                .andExpect(jsonPath("$.comments[0:1].lastModifiedAt").exists());
+
 
     }
+
+    @Test
+    @DisplayName("게시글 상세조회 컨트롤러 해당 게시글이 5번의 신고를 당했을경우.")
+    public void findDetailBlockArticle_suc() throws Exception {
+        em.flush();
+        em.clear();
+        //given
+
+        Tag C = Tag.builder().name(TagName.C).build();
+
+        Category category = Category.builder().name(CategoryName.INFO).build();
+        em.persist(category);
+
+        Avatar avatar = Avatar.builder().originalFilename("filename").remotePath("remotePath").build();
+        User user = User.builder().email("test@naver.com").nickname("nickname").grade(Grade.BRONZE).avatar(avatar).build();
+        Article article = Article.builder()
+                .title("안녕하세요 타이틀입니다. 잘부탁드립니다. 제발 되었으면 좋겠습니다.")
+                .content("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다.")
+                .user(user)
+                .category(category)
+                .clicks(10)
+                .build();
+        ArticleTag articleTag = ArticleTag.builder().article(article).tag(C).build();
+        article.getArticleTags().add(articleTag);
+        C.getArticleTags().add(articleTag);
+        category.getArticleList().add(article);
+        em.persist(articleTag);
+        em.persist(C);
+
+        for (int i = 0; i < 5; i++) {
+            Report report = Report.builder().reason(ReportReason.BAD_LANGUAGE).build();
+            article.getReports().add(report);
+            em.persist(report);
+
+        }
+
+        em.persist(avatar);
+        em.persist(user);
+
+        ArticleLike articleLike = ArticleLike.builder().user(user).article(article).build();
+        user.getArticleLikes().add(articleLike);
+        article.getArticleLikes().add(articleLike);
+        em.persist(articleLike);
+
+        Bookmark bookmark = Bookmark.builder().user(user).article(article).build();
+        article.getBookmarks().add(bookmark);
+        user.getBookmarks().add(bookmark);
+        em.persist(bookmark);
+
+        Comment comment = Comment.builder().content("댓글의 내용입니다. 잘부탁드립니다.하하하핳하하하하").user(user).article(article).build();
+        article.getComments().add(comment);
+        user.getComments().add(comment);
+        em.persist(comment);
+
+        em.persist(article);
+        em.persist(user);
+
+        User dbUser = userRepository.findUserByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("유저없음"));
+        String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST);
+
+        Article dbArticle = articleRepository.findArticleByContent("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다.")
+                .orElseThrow(() -> new RuntimeException("게시글 없음"));
+
+
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                get("/articles/" + article.getId())
+                        .header(JWT_HEADER, accessToken)
+        );
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.articleId").value(article.getId()))
+                .andExpect(jsonPath("$.category").value("INFO"))
+                .andExpect(jsonPath("$.title").value("이 글은 신고가 누적되 더이상 확인하실 수 없습니다."))
+                .andExpect(jsonPath("$.content").value("이 글은 신고가 누적되 더이상 확인하실 수 없습니다."))
+                .andExpect(jsonPath("$.clicks").value(10))
+                .andExpect(jsonPath("$.likes").value(1))
+                .andExpect(jsonPath("$.isClosed").value(false))
+                .andExpect(jsonPath("$.isLiked").value(true))
+                .andExpect(jsonPath("$.isBookmarked").value(true))
+                .andExpect(jsonPath("$.tags").isEmpty())
+                .andExpect(jsonPath("$.createdAt").isNotEmpty())
+                .andExpect(jsonPath("$.lastModifiedAt").isNotEmpty())
+                .andExpect(jsonPath("$.expiredDate").isEmpty())
+                .andExpect(jsonPath("$.userInfo.userId").value(dbUser.getId()))
+                .andExpect(jsonPath("$.userInfo.nickname").value("nickname"))
+                .andExpect(jsonPath("$.userInfo.grade").value("BRONZE"))
+                .andExpect(jsonPath("$.avatar.avatarId").value(avatar.getId()))
+                .andExpect(jsonPath("$.avatar.filename").value("filename"))
+                .andExpect(jsonPath("$.avatar.remotePath").value("remotePath"))
+                .andExpect(jsonPath("$.comments").isEmpty());
+    }
+
 
     @Test
     @DisplayName("게시글 상세조회시 jwt 토큰을 보내지 않을시 isBookmarked와 isLiked를 flase로 보낸다.")

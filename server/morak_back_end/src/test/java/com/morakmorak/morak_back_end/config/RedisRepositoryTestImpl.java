@@ -1,7 +1,7 @@
 package com.morakmorak.morak_back_end.config;
 
 import com.morakmorak.morak_back_end.entity.User;
-import com.morakmorak.morak_back_end.repository.RedisRepository;
+import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 
 import java.util.Optional;
 

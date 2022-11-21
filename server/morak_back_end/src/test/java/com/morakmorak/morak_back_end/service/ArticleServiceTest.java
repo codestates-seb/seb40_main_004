@@ -2,12 +2,15 @@ package com.morakmorak.morak_back_end.service;
 
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
-import com.morakmorak.morak_back_end.repository.*;
-import com.morakmorak.morak_back_end.repository.ArticleRepository;
+import com.morakmorak.morak_back_end.repository.ReportRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleLikeRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.CategoryRepository;
 import com.morakmorak.morak_back_end.repository.FileRepository;
 import com.morakmorak.morak_back_end.repository.TagRepository;
@@ -52,6 +55,9 @@ public class ArticleServiceTest {
 
     @Mock
     ArticleLikeRepository articleLikeRepository;
+
+    @Mock
+    ReportRepository reportRepository;
 
     @Test
     @DisplayName("게시글 등록 서비스로직 성공 테스트")
@@ -272,5 +278,73 @@ public class ArticleServiceTest {
         assertThatThrownBy(() -> articleService.pressLikeButton(articleId, userInfo))
                 .isInstanceOf(BusinessLogicException.class);
 
+    }
+
+    @Test
+    @DisplayName("게시글을 신고할때 모든 요소가 정확하게 다 존재하고 report객채가 잘 생성되었을때")
+    public void reportArticle_suc1(){
+    //given
+        UserDto.UserInfo userInfo = UserDto.UserInfo.builder().email("test@naver.com").id(1L).build();
+
+        Report report = Report.builder().reason(ReportReason.BAD_LANGUAGE).content("이유").build();
+
+        Article dbArticle = Article.builder().id(1L).title("제목입니다.제목입니다.제목입니다.제목입니다.").content("본문 입니다.본문 입니다.본문 입니다.")
+                .build();
+
+        User dbUser = User.builder().id(1L).email("test@naver.com").nickname("nickname").grade(Grade.BRONZE).build();
+
+        Report dbReport = Report.builder().id(1L).article(dbArticle).user(dbUser)
+                .reason(ReportReason.BAD_LANGUAGE).content("이유").build();
+
+        ArticleDto.ResponseReportArticle resultDto = ArticleDto.ResponseReportArticle.builder().reportId(1L).build();
+
+        given(articleRepository.findById(any())).willReturn(Optional.of(dbArticle));
+        given(userService.findVerifiedUserById(any())).willReturn(dbUser);
+        given(reportRepository.save(any())).willReturn(dbReport);
+        given(articleMapper.reportToResponseArticle(any())).willReturn(resultDto);
+
+
+        //when
+        ArticleDto.ResponseReportArticle result = articleService.reportArticle(1L, userInfo, report);
+        //then
+
+        assertThat(result.getReportId()).isEqualTo(1L);
+    }
+    @Test
+    @DisplayName("게시글을 신고할때 존재하지 않는 게시글을 신고할때 404예외를 터트린다.")
+    public void reportArticle_fail1(){
+        //given
+        UserDto.UserInfo userInfo = UserDto.UserInfo.builder().email("test@naver.com").id(1L).build();
+
+        Report report = Report.builder().reason(ReportReason.BAD_LANGUAGE).content("이유").build();
+
+        given(articleRepository.findById(any())).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> articleService.reportArticle(1L, userInfo, report))
+                .isInstanceOf(BusinessLogicException.class);
+
+    }
+
+    @Test
+    @DisplayName("게시글을 신고할때 존재하지 않는 유저가 신고를 한다면 404예외를 터트린다.")
+    public void reportArticle_fail2(){
+        //given
+        UserDto.UserInfo userInfo = UserDto.UserInfo.builder().email("test@naver.com").id(1L).build();
+
+        Report report = Report.builder().reason(ReportReason.BAD_LANGUAGE).content("이유").build();
+
+        Article dbArticle = Article.builder().id(1L).title("제목입니다.제목입니다.제목입니다.제목입니다.").content("본문 입니다.본문 입니다.본문 입니다.")
+                .build();
+
+
+        given(articleRepository.findById(any())).willReturn(Optional.of(dbArticle));
+        given(userService.findVerifiedUserById(any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+
+        //when
+        //then
+        assertThatThrownBy(() -> articleService.reportArticle(1L, userInfo, report))
+                .isInstanceOf(BusinessLogicException.class);
     }
 }

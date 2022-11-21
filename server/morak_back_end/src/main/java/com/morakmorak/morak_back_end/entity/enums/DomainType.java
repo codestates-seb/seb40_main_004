@@ -4,4 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum DomainType {
+    ARTICLE,
+    ANSWER,
+    COMMENT
 }

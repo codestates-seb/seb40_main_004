@@ -142,19 +142,16 @@ public class Article extends BaseTime {
         this.answers.add(answer);
         answer.isMappedWith(this);
     }
-
     public Boolean isClosedArticle() {
         if (this.isClosed) {
             return true;
-        }
-        return false;
+        }return false;
     }
 
     public Boolean isQuestion() {
         if (this.category.getName() == CategoryName.QNA) {
             return true;
-        }
-        return false;
+        }return false;
     }
 
     public Boolean statusIsPosting() {

@@ -23,7 +23,7 @@ public class Notification extends BaseTime {
 
     private Boolean isChecked;
 
-    private long domainId;
+    private Long domainId;
 
     private String uri;
 
@@ -34,5 +34,9 @@ public class Notification extends BaseTime {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void mapUserAndNotification() {
+        this.user.getNotifications().add(this);
+    }
 
+    public void changeCheckStatus() { this.isChecked = true; }
 }
