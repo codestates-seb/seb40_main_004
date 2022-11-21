@@ -80,8 +80,8 @@ include::{snippets}/게시글을_등록할때_존재하지_않는_태그를_작�
 .http-request
 include::{snippets}/게시글_수정에_성공할_경우_성공_200/http-request.adoc[]
 
-.request-parameters
-include::{snippets}/게시글_수정에_성공할_경우_성공_200/request-fields.adoc[]
+.Path parameters
+include::{snippets}/게시글_수정에_성공할_경우_성공_200/path-parameters.adoc[]
 
 .request-fields
 include::{snippets}/게시글_수정에_성공할_경우_성공_200/request-fields.adoc[]
@@ -98,8 +98,8 @@ include::{snippets}/게시글_수정에_성공할_경우_성공_200/response-fie
 .http-request
 include::{snippets}/게시글을_수정시_유효성_검증에_실패_400/http-request.adoc[]
 
-.request-parameters
-include::{snippets}/게시글을_수정시_유효성_검증에_실패_400/request-fields.adoc[]
+.Path parameters
+include::{snippets}/게시글을_수정시_유효성_검증에_실패_400/path-parameters.adoc[]
 
 .request-fields
 include::{snippets}/게시글을_수정시_유효성_검증에_실패_400/request-fields.adoc[]
@@ -481,6 +481,20 @@ include::{snippets}/로그인하지않은_회원이_게시글을_상세조회시
 .response-fields
 include::{snippets}/로그인하지않은_회원이_게시글을_상세조회시_성공_200/response-fields.adoc[]
 
+
+=== 성공 신고를 5번 이상 받은 게시글 상세 조회시 200
+.http-request
+include::{snippets}/로그인한_회원이_게시글_상세조회시_신고를_5번_이상_받은_게시글_조회_성공_200/http-request.adoc[]
+
+.Path parameters
+include::{snippets}/로그인한_회원이_게시글_상세조회시_신고를_5번_이상_받은_게시글_조회_성공_200/path-parameters.adoc[]
+
+.http-response
+include::{snippets}/로그인한_회원이_게시글_상세조회시_신고를_5번_이상_받은_게시글_조회_성공_200/http-response.adoc[]
+
+.response-fields
+include::{snippets}/로그인한_회원이_게시글_상세조회시_신고를_5번_이상_받은_게시글_조회_성공_200/response-fields.adoc[]
+
 === 실패 존재하지 않는 게시글을 상세조회시 404
 
 .http-request
@@ -596,4 +610,49 @@ include::{snippets}/로그인한_회원이_존재하지_않는_답변글에_좋�
 
 .http-response
 include::{snippets}/로그인한_회원이_존재하지_않는_답변글에_좋아요를_누를시_실패_404/http-response.adoc[]
+
+***
+== 게시글 신고
+=== 성공 로그인한 회원이 게시글 신고 201
+.HTTP request
+include::{snippets}/로그인한_회원이_존재하는_게시글을_신고할때_201/http-request.adoc[]
+
+.Path parameters
+include::{snippets}/로그인한_회원이_존재하는_게시글을_신고할때_201/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/로그인한_회원이_존재하는_게시글을_신고할때_201/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/로그인한_회원이_존재하는_게시글을_신고할때_201/http-response.adoc[]
+
+.Response Fields
+include::{snippets}/로그인한_회원이_존재하는_게시글을_신고할때_201/response-fields.adoc[]
+
+=== 실패 로그인한 회원이 존재하지 않는 게시글 신고 404
+.HTTP request
+include::{snippets}/로그인한_회원이_존재하지않는_게시글을_신고할때_404/http-request.adoc[]
+
+.Path parameters
+include::{snippets}/로그인한_회원이_존재하지않는_게시글을_신고할때_404/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/로그인한_회원이_존재하지않는_게시글을_신고할때_404/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/로그인한_회원이_존재하지않는_게시글을_신고할때_404/http-response.adoc[]
+
+=== 실패 로그인하지 않은 회원이 게시글 신고 404
+.HTTP request
+include::{snippets}/로그인하지않은_회원이_존재하는_게시글을_신고할때_404/http-request.adoc[]
+
+.Path parameters
+include::{snippets}/로그인하지않은_회원이_존재하는_게시글을_신고할때_404/path-parameters.adoc[]
+
+.request-fields
+include::{snippets}/로그인하지않은_회원이_존재하는_게시글을_신고할때_404/request-fields.adoc[]
+
+.HTTP response
+include::{snippets}/로그인하지않은_회원이_존재하는_게시글을_신고할때_404/http-response.adoc[]
+
 
