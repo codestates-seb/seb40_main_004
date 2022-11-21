@@ -1,8 +1,14 @@
 // 백엔드 소통 O
+export interface Tags {
+  tagId: number;
+  name: string;
+}
+
+// 백엔드 소통 O
 export interface UserInfo {
   userId: number;
   nickname: string;
-  grade: null;
+  grade: string;
 }
 
 // 백엔드 소통 O
@@ -13,7 +19,7 @@ export interface Avatar {
 }
 
 // 백엔드 소통 O
-export interface Comment {
+export interface CommentProps {
   commentId: number;
   articleId: number;
   content: string;
@@ -21,6 +27,26 @@ export interface Comment {
   lastModifiedAt: string;
   userInfo: UserInfo;
   avatar: Avatar;
+}
+
+// 백엔드 소통 O
+export interface ArticleDetail {
+  articleId: number;
+  category: string;
+  title: string;
+  content: string;
+  clicks: number;
+  likes: number;
+  isClosed: boolean;
+  isLiked: boolean;
+  isBookmarked: boolean;
+  createdAt: string;
+  lastModifiedAt: string;
+  expiredDate: null;
+  tags: Tags[];
+  userInfo: UserInfo;
+  avatar: Avatar;
+  comments: Comment[];
 }
 
 // 임의 지정
@@ -33,23 +59,6 @@ export interface Answer {
   likes: number;
   profileImg: string;
   content: string;
-  selection: boolean;
-  isLiked: boolean;
-  isBookmarked: boolean;
-  comments: Comment[];
-}
-
-// 임의 지정
-export interface ArticleDetail {
-  id: string;
-  title: string;
-  author: string;
-  authorId: string;
-  level: string;
-  createdAt: string;
-  likes: number;
-  content: string;
-  tags: string[];
   selection: boolean;
   isLiked: boolean;
   isBookmarked: boolean;
