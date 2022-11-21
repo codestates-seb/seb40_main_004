@@ -113,4 +113,22 @@ public class ArticleDto {
         private Boolean isLiked;
         private Integer likeCount;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class RequestReportArticle {
+        private ReportReason reason;
+        private String content;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponseReportArticle {
+        private Long reportId;
+    }
+
 }
