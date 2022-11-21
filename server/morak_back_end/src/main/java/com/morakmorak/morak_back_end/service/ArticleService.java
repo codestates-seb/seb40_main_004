@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -192,4 +193,23 @@ public class ArticleService {
         return articleMapper.makingResponseArticleLikeDto(dbArticle.getId(), dbUser.getId(), isLiked, likeCount);
     }
 
+    public ArticleDto.ResponseReportArticle reportArticle(Long articleId, UserDto.UserInfo userInfo, Report reportArticle) {
+        Article dbArticle = findVerifiedArticle(articleId);
+        
+        User dbUser = null;
+
+        if (userInfo != null) {
+            dbUser = userService.findVerifiedUserById(userInfo.getId());
+        } else {
+            throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
+        }
+        
+        reportArticle.injectMappingUserAndArticle(dbUser, dbArticle);
+        dbArticle.getReports().add(reportArticle);
+        dbUser.getReports().add(reportArticle);
+
+        Report dbReport = reportRepository.save(reportArticle);
+
+       return articleMapper.reportToResponseArticle(dbReport);
+    }
 }
