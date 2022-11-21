@@ -21,6 +21,7 @@ import com.morakmorak.morak_back_end.service.NotificationService;
 import com.morakmorak.morak_back_end.util.SecurityTestConstants;
 import com.morakmorak.morak_back_end.util.TestConstants;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.mockito.Mock;
@@ -44,6 +45,7 @@ import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -54,6 +56,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WithMockUser
@@ -75,6 +78,8 @@ public class NotificationControllerTest {
     NotificationService notificationService;
 
     JwtTokenUtil jwtTokenUtil;
+
+    private final String BASE_URL = "localhost:8080.com";
 
     @BeforeEach
     public void init() {
@@ -165,5 +170,16 @@ public class NotificationControllerTest {
                                 fieldWithPath("pageInfo.sort.sorted").type(BOOLEAN).description("정렬되었다면 true")
                         )
                 ));
+    }
+
+    @Test
+    void getNotificationUri() throws Exception {
+        //given
+        given(notificationService.findNotificationUriBy(ID1)).willReturn("/anyString");
+        //when
+        ResultActions perform = mockMvc.perform(get("/notifications/1"));
+        //then
+        perform.andExpect(status().isPermanentRedirect())
+                .andExpect(redirectedUrl(BASE_URL + "/anyString"));
     }
 }
