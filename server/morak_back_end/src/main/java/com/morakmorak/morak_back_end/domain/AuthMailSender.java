@@ -1,8 +1,7 @@
-package com.morakmorak.morak_back_end.adapter;
+package com.morakmorak.morak_back_end.domain;
 
-import com.morakmorak.morak_back_end.repository.RedisRepository;
+import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.service.mail_service.MailSender;
-import com.morakmorak.morak_back_end.service.mail_service.MailSenderImpl;
 import lombok.RequiredArgsConstructor;
 
 import static com.morakmorak.morak_back_end.service.mail_service.MailSenderImpl.BASIC_AUTH_SUBJECT;

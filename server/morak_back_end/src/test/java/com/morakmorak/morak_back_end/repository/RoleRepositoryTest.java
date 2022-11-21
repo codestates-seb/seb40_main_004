@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.repository;
 
 import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.enums.RoleName;
+import com.morakmorak.morak_back_end.repository.user.RoleRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

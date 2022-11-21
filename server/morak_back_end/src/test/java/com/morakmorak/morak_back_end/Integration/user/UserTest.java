@@ -2,37 +2,21 @@ package com.morakmorak.morak_back_end.Integration.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.controller.UserController;
-import com.morakmorak.morak_back_end.dto.UserDto;
-import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.entity.enums.*;
-import com.morakmorak.morak_back_end.repository.UserQueryRepository;
-import com.morakmorak.morak_back_end.repository.UserRepository;
+import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
-import java.util.Optional;
-
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
-import static com.morakmorak.morak_back_end.util.TestConstants.*;
-import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // TODO : 테스트 시 매번 calendar 365개를 저장하는 방식이 너무 비효율적이다. 해당 부분에 대한 로직 자체를 검토하고 다시 활성화 예정.
 @Transactional

@@ -9,6 +9,8 @@ import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.CommentMapper;
 import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.repository.article.ArticleLikeRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
