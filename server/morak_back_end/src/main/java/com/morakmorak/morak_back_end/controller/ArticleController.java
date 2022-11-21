@@ -90,4 +90,14 @@ public class ArticleController {
         return new ResponseEntity(responseArticleLike, HttpStatus.OK);
     }
 
+    @PostMapping("/{article-id}/reports")
+    public ResponseEntity reportArticle(@PathVariable("article-id") Long articleId,
+                                        @RequestBody ArticleDto.RequestReportArticle reportArticle,
+                                        @RequestUser UserDto.UserInfo userInfo) {
+        ArticleDto.ResponseReportArticle responseReportArticle =
+                articleService.reportArticle(articleId, userInfo, articleMapper.requestReportArticleToReport(reportArticle));
+
+        return new ResponseEntity(responseReportArticle, HttpStatus.CREATED);
+    }
+
 }
