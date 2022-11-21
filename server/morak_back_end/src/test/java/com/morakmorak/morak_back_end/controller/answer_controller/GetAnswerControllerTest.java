@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.controller.answer;
+package com.morakmorak.morak_back_end.controller.answer_controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.config.SecurityTestConfig;
@@ -7,8 +7,6 @@ import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
-import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.AnswerService;
 import com.morakmorak.morak_back_end.service.FileService;
@@ -25,7 +23,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
-import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -33,25 +30,21 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.morakmorak.morak_back_end.util.AnswerTestConstants.VALID_ANSWER_REQUEST;
-import static com.morakmorak.morak_back_end.util.ArticleTestConstants.REQUEST_FILE_WITH_IDS;
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.TestConstants.NOW_TIME;
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest({AnswerController.class, ExceptionController.class})
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 @Import(SecurityTestConfig.class)
-public class UpdateAnswerControllerTest {
+public class GetAnswerControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -63,14 +56,49 @@ public class UpdateAnswerControllerTest {
     AnswerService answerService;
     @MockBean
     FileService fileService;
+//
+//    @Test
+//    @DisplayName("카테고리가 question이 아닌 경우 409 예외 반환")
+//    void getAnswers_failed_1() throws Exception {
+//        //given
+//        AnswerDto.RequestPostAnswer request = AnswerDto.RequestPostAnswer.builder().content("유효한 길이의 게시물입니다.")
+//                .fileIdList(REQUEST_FILE_WITH_IDS)
+//                .build();
+//
+//        String json = objectMapper.writeValueAsString(request);
+//
+//        Article invalidArticle_info = Article.builder().category(Category.builder().name(CategoryName.INFO).build()).build();
+//
+//        BDDMockito.given(answerService.postAnswer(any(), any(), any(), anyList())).willThrow(new BusinessLogicException(ErrorCode.UNABLE_TO_ANSWER));
+//        //when
+//        ResultActions perform = mockMvc.perform(post("/articles/1/answers/")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(json)
+//                .header(JWT_HEADER, ACCESS_TOKEN)
+//        );
+//
+//        //then
+//        perform.andExpect(status().isConflict())
+//                .andDo(
+//                        document(
+//                                "task post answer failed caused by invalid article category",
+//                                preprocessRequest(prettyPrint()),
+//                                preprocessResponse(prettyPrint()),
+//                                requestHeaders(
+//                                        headerWithName(JWT_HEADER).description("access token")
+//                                ),
+//                                requestFields(
+//                                        fieldWithPath("content").type(JsonFieldType.STRING).description("답변 본문입니다."),
+//                                        fieldWithPath("fileIdList[].fileId").type(JsonFieldType.NUMBER).description("첨부파일 식별자 목록입니다.")
+//                                )
+//                        )
+//                );
+//    }
 
     @Test
-    @DisplayName("유효한 수정 요청인 경우 200 반환")
-    void updateAnswer_success_1() throws Exception {
+    @DisplayName("유효한 댓글 조회 요청인 경우 200 ok 반환")
+    void getAnswer_success_1() throws Exception {
         //given
-        AnswerDto.RequestPostAnswer request = VALID_ANSWER_REQUEST;
-
-        String json = objectMapper.writeValueAsString(request);
         UserDto.ResponseSimpleUserDto dtoUserInfo =
                 UserDto.ResponseSimpleUserDto.builder().userId(1L)
                         .nickname("nickname").grade(Grade.BRONZE).build();
@@ -97,29 +125,22 @@ public class UpdateAnswerControllerTest {
         Page<Answer> answerInPage = new PageImpl<>(answers, pageable, 1L);
         ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> answerResponseMultiplePaging =
                 new ResponseMultiplePaging<>(dtoResponseListTypeAnswer, answerInPage);
-        BDDMockito.given(answerService.editAnswer(any(),any(),any(),any(Answer.class))).willReturn(answerResponseMultiplePaging);
+        BDDMockito.given(answerService.readAllAnswers(any(),anyInt(),anyInt())).willReturn(answerResponseMultiplePaging);
 
         //when
-        ResultActions perform = mockMvc.perform(patch("/articles/1/answers/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .header(JWT_HEADER, ACCESS_TOKEN)
+        ResultActions perform = mockMvc.perform(
+                get("/articles/1/answers")
+                        .param("page","0")
+                        .param("size","5")
         );
 
         //then
         perform.andExpect(status().isOk())
                 .andDo(
                         document(
-                                "답변 수정 요청 성공_200",
+                                "답변 조회 성공_200",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
-                                requestHeaders(
-                                        headerWithName(JWT_HEADER).description("access token")
-                                ),
-                                requestFields(
-                                        fieldWithPath("content").type(JsonFieldType.STRING).description("답변 본문입니다."),
-                                        fieldWithPath("fileIdList[].fileId").type(JsonFieldType.NUMBER).description("첨부파일 식별자 목록입니다.")
-                                ),
                                 responseFields(
                                         List.of(
                                                 fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("답변을 리스트 형태로 보여줍니다."),
@@ -158,39 +179,5 @@ public class UpdateAnswerControllerTest {
                         )
                 );
     }
-    @Test
-    @DisplayName("답변이 이미 채택되었다면 409를 반환한다.")
-    void updateAnswer_failed_1() throws Exception {
-        //given
-        AnswerDto.RequestPostAnswer request = AnswerDto.RequestPostAnswer.builder().content("유효한 길이의 게시물입니다.15자 이상이랍니다.")
-                .fileIdList(REQUEST_FILE_WITH_IDS)
-                .build();
 
-        String json = objectMapper.writeValueAsString(request);
-
-        BDDMockito.given(answerService.editAnswer(any(),any(),any(),any(Answer.class))).willThrow(new BusinessLogicException(ErrorCode.UNABLE_TO_ANSWER));
-        //when
-        ResultActions perform = mockMvc.perform(patch("/articles/1/answers/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .header(JWT_HEADER, ACCESS_TOKEN)
-        );
-
-        //then
-        perform.andExpect(status().isConflict())
-                .andDo(
-                        document(
-                                "task update answer failed because the requested Answer is already picked.",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                requestHeaders(
-                                        headerWithName(JWT_HEADER).description("access token")
-                                ),
-                                requestFields(
-                                        fieldWithPath("content").type(JsonFieldType.STRING).description("답변 본문입니다."),
-                                        fieldWithPath("fileIdList[].fileId").type(JsonFieldType.NUMBER).description("첨부파일 식별자 목록입니다.")
-                                )
-                        )
-                );
-    }
 }

@@ -60,9 +60,15 @@ public class UpdateAnswerTest {
     @Autowired
     private ArticleRepository articleRepository;
 
+    /*
+     * 게시글이 있을 때 해당 게시글에 등록했던 답변을 수정 시
+     * 내용 혹은 파일을 첨부해 등록할 수 있다.둘 다 null이라면 에러가 발생한다.
+     * 수정 성공 시 답변 리스트로 응답이 나간다.
+     * 답변이 채택되지 않은 경우, 게시글이 정상 상태인 경우에만 수정 가능하다.
+     */
     @BeforeEach
     void setUp() {
-        Avatar dbAvatar = Avatar.builder().originalFileName("randomfilename").remotePath("randomremotepath").build();
+        Avatar dbAvatar = Avatar.builder().originalFilename("randomfilename").remotePath("randomremotepath").build();
         Category qna = Category.builder().name(CategoryName.QNA).build();
         Category info = Category.builder().name(CategoryName.INFO).build();
 

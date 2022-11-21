@@ -54,6 +54,13 @@ public class PostAnswerTest {
     @Autowired
     private ArticleRepository articleRepository;
 
+    /*
+    * 게시글이 있을 때 해당 게시글에 대한 답변을 등록 시
+    * 15자 이상의 내용과 파일을 첨부해 등록할 수 있다.
+    * 등록 성공 시 답변 리스트로 응답이 나간다.
+    * 답변을 마친 closed 게시물이라면 작성 실패한다
+    * 질문 카테고리의 글에만 답변 작성 가능하다.
+    */
     @BeforeEach
     void setUp() {
         Avatar dbAvatar = Avatar.builder().originalFilename("randomfilename").remotePath("randomremotepath").build();
