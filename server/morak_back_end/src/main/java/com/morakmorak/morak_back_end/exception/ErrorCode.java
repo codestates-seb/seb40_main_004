@@ -37,6 +37,7 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(NOT_FOUND,"comment not found"),
 
     NOTIFICATION_NOT_FOUND(NOT_FOUND, "notification not found"),
+    NO_ACCESS_TO_THAT_OBJECT(FORBIDDEN, "no access to that object"),
 
     /*
     * The error code expresses the dto validation exception of spring framework in web mvc test.

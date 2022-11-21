@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 
 @Service
@@ -33,5 +35,11 @@ public class NotificationService {
         Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new BusinessLogicException(NOTIFICATION_NOT_FOUND));
         notification.changeCheckStatus();
         return notification.getUri();
+    }
+
+    public void deleteNotificationData(Long notificationId, Long userID) {
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new BusinessLogicException(NOTIFICATION_NOT_FOUND));
+        if (!Objects.equals(notification.getUser().getId(), userID)) throw new BusinessLogicException(NO_ACCESS_TO_THAT_OBJECT);
+        notificationRepository.delete(notification);
     }
 }
