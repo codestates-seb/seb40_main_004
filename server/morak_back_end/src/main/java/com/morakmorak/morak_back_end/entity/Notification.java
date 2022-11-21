@@ -37,4 +37,6 @@ public class Notification extends BaseTime {
     public void mapUserAndNotification() {
         this.user.getNotifications().add(this);
     }
+
+    public void changeCheckStatus() { this.isChecked = true; }
 }
