@@ -1,11 +1,8 @@
-package com.morakmorak.morak_back_end.repository;
+package com.morakmorak.morak_back_end.repository.user_repository;
 
 import com.morakmorak.morak_back_end.config.JpaQueryFactoryConfig;
-import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.entity.Calendar;
-import com.morakmorak.morak_back_end.entity.Category;
-import com.morakmorak.morak_back_end.entity.enums.*;
+import com.morakmorak.morak_back_end.repository.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,15 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.*;
-import java.util.stream.Collectors;
 
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
@@ -70,6 +65,97 @@ public class UserRepositoryTest {
     private Tag tag2;
     private Tag tag3;
     private Tag tag4;
+
+    @BeforeEach
+    void init() {
+        userQueryRepository = new UserQueryRepository(jpaQueryFactory);
+
+        user = User.builder().nickname(NICKNAME1).point(100).build();
+        other = User.builder().nickname(NICKNAME2).point(1000).build();
+
+        Article article_user1 = Article.builder().user(user).build();
+        Article article_user2 = Article.builder().user(user).build();
+
+        article_user1.injectUserForMapping(user);
+        article_user2.injectUserForMapping(user);
+
+        Article article_other1 = Article.builder().user(other).build();
+        article_other1.injectUserForMapping(other);
+
+        Answer answer_other1 = Answer.builder().user(other).article(article_user1).build();
+        answer_other1.injectUser(other);
+
+        ArticleLike articleLike1 = ArticleLike.builder().article(article_user1).user(other).build();
+        ArticleLike articleLike2 = ArticleLike.builder().article(article_user1).user(other).build();
+        ArticleLike articleLike3 = ArticleLike.builder().article(article_user1).user(other).build();
+        ArticleLike articleLike4 = ArticleLike.builder().article(article_user1).user(other).build();
+        articleLike1.mapUserAndArticleWithLike();
+        articleLike1.mapUserAndArticleWithLike();
+
+        ArticleLike articleLike_user1 = ArticleLike.builder().article(article_other1).user(user).build();
+        ArticleLike articleLike_user2 = ArticleLike.builder().article(article_other1).user(user).build();
+        articleLike_user1.mapUserAndArticleWithLike();
+        articleLike_user2.mapUserAndArticleWithLike();
+
+        AnswerLike answerLike_user1 = AnswerLike.builder().answer(answer_other1).user(other).build();
+
+        entityManager.persist(user);
+        entityManager.persist(other);
+
+        entityManager.persist(article_user1);
+        entityManager.persist(article_user2);
+
+        entityManager.persist(article_other1);
+
+        entityManager.persist(answer_other1);
+
+        entityManager.persist(articleLike1);
+        entityManager.persist(articleLike2);
+
+        entityManager.persist(articleLike_user1);
+        entityManager.persist(articleLike_user2);
+
+        entityManager.persist(answerLike_user1);
+    }
+
+    @Test
+    @DisplayName("포인트순 조회시 ohter가 1위")
+    void getUserRankPage1() {
+        //given
+        PageRequest page = PageRequest.of(0, 10, Sort.by("point"));
+        //when
+        Page<User> rank = userQueryRepository.getRankData(page);
+        //then
+        assertThat(rank.toList().get(0).getNickname()).isEqualTo(NICKNAME2);
+        assertThat(rank.toList().get(1).getNickname()).isEqualTo(NICKNAME1);
+    }
+
+    @Test
+    @DisplayName("게시글 작성순 조회시 user가 1위")
+    void getUserRankPage2() {
+        //given
+        PageRequest page = PageRequest.of(0, 2, Sort.by("articles"));
+        //when
+        Page<User> rank = userQueryRepository.getRankData(page);
+        //then
+        System.out.println("ddddd" + rank.toList().get(1).getArticles().size());
+        System.out.println(rank.toList().get(1).getArticles().size());
+
+        assertThat(rank.toList().get(0).getNickname()).isEqualTo(NICKNAME1);
+        assertThat(rank.toList().get(1).getNickname()).isEqualTo(NICKNAME2);
+    }
+
+    @Test
+    @DisplayName("답변순 조회시 other가 1위,")
+    void getUserRankPage3() {
+        //given
+        PageRequest page = PageRequest.of(0, 2, Sort.by("answers"));
+        //when
+        Page<User> rank = userQueryRepository.getRankData(page);
+        //then
+        assertThat(rank.toList().get(0).getNickname()).isEqualTo(NICKNAME2);
+        assertThat(rank.toList().get(1).getNickname()).isEqualTo(NICKNAME1);
+    }
 //
 //    @BeforeEach
 //    void init() {

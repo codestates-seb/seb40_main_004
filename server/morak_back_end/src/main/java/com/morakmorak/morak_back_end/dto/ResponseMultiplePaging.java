@@ -26,5 +26,4 @@ public class ResponseMultiplePaging<T> {
                 .sort(page.getSort())
                 .build();
     }
-
 }
