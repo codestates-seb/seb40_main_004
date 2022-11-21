@@ -40,8 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -89,7 +88,6 @@ public class searchArticleTest {
 
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
-
 
     @Test
     @DisplayName("게시글을 검색할때 타이틀명으로 검색에 성공할때")
@@ -3890,6 +3888,159 @@ public class searchArticleTest {
                                         fieldWithPath("comments[].avatar.avatarId").type(JsonFieldType.NUMBER).description("댓글 유저의 아바타 파일의 아이디 입니다."),
                                         fieldWithPath("comments[].avatar.filename").type(JsonFieldType.STRING).description("댓글 유저의 아바타 파일의 이름입니다."),
                                         fieldWithPath("comments[].avatar.remotePath").type(JsonFieldType.STRING).description("댓글 유저의 아바타 파일의 경로입니다.")
+                                ))));
+
+    }
+    @Test
+    @DisplayName("게시글 상세조회 컨트롤러 이용시 jwt토큰을 보낼시 isBookmarked와 isLiked를 확인하고 true or false를 보낸다.신고횟수가 5번이상이라면 글의 내용을 가린다. ")
+    public void findDetailBlockArticle_suc() throws Exception {
+        Tag JAVA = Tag.builder().id(1L).name(TagName.JAVA).build();
+        Category info = Category.builder().id(1L).name(CategoryName.INFO).build();
+
+        Avatar dbAvatar = Avatar.builder().id(1L).remotePath("remotePath").originalFilename("fileName").build();
+        User user = User.builder().id(1L).avatar(dbAvatar).nickname("nickname").grade(Grade.BRONZE).build();
+
+        List<Comment> comments = new ArrayList<>();
+        List<Answer> answers = new ArrayList<>();
+
+        for (int i = 1; i < 2; i++) {
+            Answer answer = Answer.builder().id(1L).build();
+            answers.add(answer);
+            Comment comment = Comment.builder().id(1L).build();
+            comments.add(comment);
+        }
+
+        ArticleTag articleTagJava = ArticleTag.builder().id(1L).tag(JAVA).build();
+
+        List<ArticleLike> articleLikes = new ArrayList<>();
+
+        Article article
+                = Article.builder()
+                .id(1L)
+                .title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
+                .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
+                .articleTags(List.of(articleTagJava))
+                .category(info)
+                .clicks(10)
+                .isClosed(false)
+                .answers(answers)
+                .articleLikes(articleLikes)
+                .comments(comments)
+                .user(user)
+                .build();
+
+        info.getArticleList().add(article);
+
+        articleTagJava.injectMappingForArticleAndTag(article);
+
+        List<Article> articles = new ArrayList<>();
+        articles.add(article);
+
+        articleLikes.add(ArticleLike.builder().id(1L).article(article).user(user).build());
+
+        UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
+
+        AvatarDto.SimpleResponse avatarDto = AvatarDto.SimpleResponse.builder()
+                .avatarId(1L).filename("fileName").remotePath("remotePath").build();
+
+        UserDto.ResponseSimpleUserDto userInfoDto = UserDto.ResponseSimpleUserDto.builder()
+                .userId(1L).nickname("nickname").grade(Grade.BRONZE).build();
+
+        CommentDto.Response commentDto = CommentDto.Response.builder()
+                .commentId(1L)
+                .articleId(1L)
+                .content("comment 입니다.")
+                .createdAt(LocalDateTime.now())
+                .lastModifiedAt(LocalDateTime.now())
+                .userInfo(userInfoDto)
+                .avatar(avatarDto)
+                .build();
+
+        TagDto.SimpleTag tagDto =
+                TagDto.SimpleTag.builder().tagId(1L).name(TagName.JAVA).build();
+
+        ArticleDto.ResponseDetailArticle result = ArticleDto.ResponseDetailArticle.builder()
+                .articleId(1L)
+                .category(CategoryName.INFO)
+                .title("이 글은 신고가 누적되 더이상 확인하실 수 없습니다.")
+                .content("이 글은 신고가 누적되 더이상 확인하실 수 없습니다.")
+                .clicks(10)
+                .likes(1)
+                .isClosed(false)
+                .isBookmarked(true)
+                .isLiked(true)
+                .tags(new ArrayList<>())
+                .createdAt(LocalDateTime.now())
+                .lastModifiedAt(LocalDateTime.now())
+                .expiredDate(null)
+                .userInfo(userInfoDto)
+                .avatar(avatarDto)
+                .comments(new ArrayList<>())
+                .build();
+
+        given(articleService.findDetailArticle(anyLong(), any())).willReturn(result);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                get("/articles/{article-id}", article.getId())
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+        );
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.articleId").value(article.getId()))
+                .andExpect(jsonPath("$.category").value("INFO"))
+                .andExpect(jsonPath("$.title").value("이 글은 신고가 누적되 더이상 확인하실 수 없습니다."))
+                .andExpect(jsonPath("$.content").value("이 글은 신고가 누적되 더이상 확인하실 수 없습니다."))
+                .andExpect(jsonPath("$.clicks").value(10))
+                .andExpect(jsonPath("$.likes").value(1))
+                .andExpect(jsonPath("$.isClosed").value(false))
+                .andExpect(jsonPath("$.isLiked").value(true))
+                .andExpect(jsonPath("$.isBookmarked").value(true))
+                .andExpect(jsonPath("$.tags").isEmpty())
+                .andExpect(jsonPath("$.createdAt").isNotEmpty())
+                .andExpect(jsonPath("$.lastModifiedAt").isNotEmpty())
+                .andExpect(jsonPath("$.expiredDate").isEmpty())
+                .andExpect(jsonPath("$.userInfo.userId").value(1))
+                .andExpect(jsonPath("$.userInfo.nickname").value("nickname"))
+                .andExpect(jsonPath("$.userInfo.grade").value("BRONZE"))
+                .andExpect(jsonPath("$.avatar.avatarId").value(1))
+                .andExpect(jsonPath("$.avatar.filename").value("fileName"))
+                .andExpect(jsonPath("$.avatar.remotePath").value("remotePath"))
+                .andExpect(jsonPath("$.comments").isEmpty())
+                .andDo(document(
+                        "로그인한_회원이_게시글_상세조회시_신고를_5번_이상_받은_게시글_조회_성공_200",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글 아이디 입니다.")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("게시글의 아이디입니다."),
+                                        fieldWithPath("category").type(JsonFieldType.STRING).description("게시글의 카테고리입니다."),
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("게시글의 제목입니다."),
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("게시글의 내용입니."),
+                                        fieldWithPath("clicks").type(JsonFieldType.NUMBER).description("게시글의 조회수 입니다."),
+                                        fieldWithPath("likes").type(JsonFieldType.NUMBER).description("게시글의 좋아요 숫자입니다."),
+                                        fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("jwt의 회원이 좋아요를 누르면 true를 반환합니다."),
+                                        fieldWithPath("isBookmarked").type(JsonFieldType.BOOLEAN).description("jwt의 회원이 북마크 했다면 true를 반환합니다."),
+                                        fieldWithPath("isClosed").type(JsonFieldType.BOOLEAN).description("게시글의 채택 되었다면 true를 반환합니다."),
+                                        fieldWithPath("createdAt").type(JsonFieldType.STRING).description("게시글이 생성된 날짜입니다."),
+                                        fieldWithPath("lastModifiedAt").type(JsonFieldType.STRING).description("게시글이 마지막으로 수정한 날짜 입니다."),
+                                        fieldWithPath("expiredDate").type(JsonFieldType.NULL).description("게시글이 유효기한입니다. 아직은 사용하지 않습니다."),
+                                        fieldWithPath("tags[]").type(JsonFieldType.ARRAY).description("신고글의 태그는 빈 배열을 리턴합니다."),
+                                        fieldWithPath("userInfo.userId").type(JsonFieldType.NUMBER).description("유저의 아이디입니다."),
+                                        fieldWithPath("userInfo.nickname").type(JsonFieldType.STRING).description("유저의 닉네임입니다."),
+                                        fieldWithPath("userInfo.grade").type(JsonFieldType.STRING).description("유저의 등급입니다."),
+                                        fieldWithPath("avatar.avatarId").type(JsonFieldType.NUMBER).description("아바타 파일의 아이디 입니다."),
+                                        fieldWithPath("avatar.filename").type(JsonFieldType.STRING).description("아바타 파일의 이름입니다."),
+                                        fieldWithPath("avatar.remotePath").type(JsonFieldType.STRING).description("아바타 파일의 경로입니다."),
+                                        fieldWithPath("comments[]").type(JsonFieldType.ARRAY).description("신고글의 댓글은 빈 배열을 리턴합니다.")
+
                                 ))));
 
     }
