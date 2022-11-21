@@ -37,6 +37,8 @@ public class ArticleService {
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
 
+    private final ReportRepository reportRepository;
+
     public ArticleDto.ResponseSimpleArticle upload(
             Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
             List<FileDto.RequestFileWithId> files, Category category
@@ -157,6 +159,12 @@ public class ArticleService {
 
         List<CommentDto.Response> comments = dbArticle.getComments().stream()
                 .map(commentMapper::commentToCommentDto).collect(Collectors.toList());
+
+        if (dbArticle.getReports().size() >= 5) {
+            String report = "이 글은 신고가 누적되 더이상 확인하실 수 없습니다.";
+            return articleMapper.articleToResponseBlockedArticle(dbArticle, isLiked, isBookmarked,
+                    report,new ArrayList<>(),new ArrayList<>(),likes);
+        }
 
         ArticleDto.ResponseDetailArticle responseDetailArticle =
                 articleMapper.articleToResponseDetailArticle(dbArticle, isLiked, isBookmarked,
