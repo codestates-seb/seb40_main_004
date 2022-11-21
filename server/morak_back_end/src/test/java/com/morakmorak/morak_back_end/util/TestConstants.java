@@ -33,6 +33,7 @@ public class TestConstants {
 
     public final static String CONTENT1 = "아무말이나 적어야지~";
     public final static String CONTENT2 = "아무말이나 적어야지~2";
+    public final static String CONTENT3 = "아무말이나 적어야지~3 15글자 이상";
 
     public final static LocalDateTime NOW_TIME = LocalDateTime.now();
 

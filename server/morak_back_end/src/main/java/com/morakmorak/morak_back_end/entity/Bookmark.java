@@ -26,4 +26,8 @@ public class Bookmark extends BaseTime{
     @JoinColumn(name = "article_id")
     private Article article;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "answer_id")
+    private Answer answer;
+
 }

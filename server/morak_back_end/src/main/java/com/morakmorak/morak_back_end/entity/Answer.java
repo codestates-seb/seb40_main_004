@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.exception.ErrorCode.BAD_REQUEST;
 
@@ -66,6 +67,10 @@ public class Answer extends BaseTime{
     @OneToMany(mappedBy = "answer")
     private List<AnswerLike> answerLike = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "answer")
+    private List<Bookmark> bookmarks = new ArrayList<>();//북마크로직에 답변 북마크 로직 추가 필요
+
     void isMappedWith(Article article) {
         this.article = article;
     }
@@ -76,7 +81,7 @@ public class Answer extends BaseTime{
         this.isPicked = true;
         this.article.closeThisArticle();
     }
-    public boolean isPickedAnswer(Answer answerToCheck) {
+    public Boolean isPickedAnswer() {
         if (this.isPicked) {
             return true;
         }return false;
@@ -91,5 +96,16 @@ public class Answer extends BaseTime{
         this.article = verifiedArticle;
         verifiedArticle.getAnswers().add(this);
         return this;
+    }
+    public Answer updateAnswer(Answer answerChanges) {
+        Optional.ofNullable(answerChanges.getContent())
+                .ifPresent(changedContent-> {
+            this.content= changedContent;
+        });
+        return this;
+    }
+
+    public boolean hasPermissionWith(User userWhoAccess) {
+        return this.user.getId() == userWhoAccess.getId() ? true : false;
     }
 }
