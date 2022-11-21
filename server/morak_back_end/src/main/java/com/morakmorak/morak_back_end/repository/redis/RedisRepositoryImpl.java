@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.repository;
+package com.morakmorak.morak_back_end.repository.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;

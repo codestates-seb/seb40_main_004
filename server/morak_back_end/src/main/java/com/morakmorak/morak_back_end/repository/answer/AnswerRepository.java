@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.repository;
+package com.morakmorak.morak_back_end.repository.answer;
 
 import com.morakmorak.morak_back_end.entity.Answer;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.repository;
+package com.morakmorak.morak_back_end.repository.user;
 
 import com.morakmorak.morak_back_end.entity.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;

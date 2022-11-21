@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.repository;
+package com.morakmorak.morak_back_end.repository.redis;
 
 import java.util.Optional;
 
