@@ -19,6 +19,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -98,5 +99,41 @@ public class NotificationServiceTest {
         //then
         assertThat(result).isEqualTo(notification.getUri());
         assertThat(notification.getIsChecked()).isTrue();
+    }
+
+    @Test
+    @DisplayName("해당 Notification을 찾을 수 없을 경우 BusniessLogicException 발생")
+    void deleteNotificationData_failed() {
+        //given
+        given(notificationRepository.findById(ID1)).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThatThrownBy(() -> notificationService.deleteNotificationData(ID1, ID1)).isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    @DisplayName("해당 Notification의 userId가 토큰의 userId와 다르다면 BusniessLogicException 발생")
+    void deleteNotificationData_failed2() {
+        //given
+        User user = User.builder().id(ID2).build();
+        Notification notification = Notification.builder().id(ID1).user(user).build();
+        given(notificationRepository.findById(ID1)).willReturn(Optional.of(notification));
+        //when
+        //then
+        assertThatThrownBy(() -> notificationService.deleteNotificationData(ID1, ID1)).isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    @DisplayName("로직이 정상적으로 수행된다면 notificationReprository.delete가 1회 실행된다.")
+    void deleteNotificationData_success() {
+        //given
+        User user = User.builder().id(ID1).build();
+        Notification notification = Notification.builder().id(ID1).user(user).build();
+        given(notificationRepository.findById(ID1)).willReturn(Optional.of(notification));
+        //when
+        notificationService.deleteNotificationData(ID1, ID1);
+        //then
+        Mockito.verify(notificationRepository, times(1)).delete(notification);
     }
 }
