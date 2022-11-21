@@ -68,4 +68,10 @@ public interface ArticleMapper {
 
     ArticleDto.ResponseArticleLike makingResponseArticleLikeDto(Long articleId, Long userId, Boolean isLiked, Integer likeCount);
 
+
+    Report requestReportArticleToReport(ArticleDto.RequestReportArticle reportArticle);
+
+    @Mapping(source = "report.id", target = "reportId")
+    ArticleDto.ResponseReportArticle reportToResponseArticle(Report report);
+
 }
