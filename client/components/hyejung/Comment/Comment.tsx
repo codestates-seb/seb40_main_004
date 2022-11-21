@@ -6,37 +6,45 @@
    - 질문/답변에 대한 코멘트를 렌더링합니다.
  */
 
-import { UserNickname } from '../QuestionContent/UserNickname';
-import { CreatedDate } from '../QuestionContent/CreatedDate';
+import { UserNickname } from '../UserNickname';
+import { CreatedDate } from '../CreatedDate';
 import { ProfileImage } from '../ProfileImage';
 
-type CommentProps = {
-  id: number;
-  profileImage: string;
-  name: string;
-  userId: number;
-  cretedAt: string;
+import { CommentProps } from '../../../libs/interfaces';
+/*
+  commentId: number;
+  articleId: number;
   content: string;
-};
+  createdAt: string;
+  lastModifiedAt: string;
+  userInfo: UserInfo;
+  avatar: Avatar;
+   */
 
 export const Comment = ({
-  id,
-  profileImage,
-  name,
-  userId,
-  cretedAt,
+  commentId,
+  articleId,
   content,
+  createdAt,
+  lastModifiedAt,
+  userInfo,
+  avatar,
 }: CommentProps) => {
   return (
     <section className="flex w-full">
-      <ProfileImage src={profileImage} />
+      <ProfileImage src={avatar.remotePath} />
       <section className="flex w-full flex-col pl-4 space-y-3">
         <article className="w-full flex justify-between items-center">
-          <UserNickname name={name} id={userId} />
-          <CreatedDate createdAt={cretedAt} />
+          <UserNickname
+            nickname={userInfo.nickname}
+            userId={userInfo.userId}
+            grade={userInfo.grade}
+          />
+          <CreatedDate createdAt={createdAt} />
         </article>
         <p className="text-xs sm:text-base">{content}</p>
         <article className="space-x-2 text-xs ml-auto">
+          {/* 로그인 후 user state를 확인하여 보임/숨김 처리 필요! */}
           <button>수정</button>
           <button>삭제</button>
         </article>
