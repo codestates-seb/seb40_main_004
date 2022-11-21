@@ -53,6 +53,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -222,6 +223,14 @@ public class searchArticleTest {
                         "게시글_조회시_제목으로_검색에_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -352,6 +361,14 @@ public class searchArticleTest {
                         "게시글_조회시_존재하지_않는_제목으로_검색에_실패_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -503,6 +520,14 @@ public class searchArticleTest {
                         "게시글_검색시_태그명으로_조회_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -637,6 +662,14 @@ public class searchArticleTest {
                         "게시글_검색시_존재하지_않는_태그명으로_조회_실패_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -789,6 +822,14 @@ public class searchArticleTest {
                         "게시글_검색시_글의_내용으로_조회_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -922,6 +963,14 @@ public class searchArticleTest {
                         "게시글_검색시_글의_내용으로_조회_실패_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -1073,6 +1122,14 @@ public class searchArticleTest {
                         "게시글_검색시_글의_제목과_내용으로_조회_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -1207,6 +1264,14 @@ public class searchArticleTest {
                         "게시글_검색시_글의_제목과_내용으로_조회_실패_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -1359,6 +1424,14 @@ public class searchArticleTest {
                         "게시글_검색시_북마크로_조회_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -1494,6 +1567,14 @@ public class searchArticleTest {
                         "게시글_검색시_북마크로_조회_실패_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -1609,6 +1690,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "desc")
                         .param("page", "1")
                         .param("size", "1")
@@ -1643,6 +1726,15 @@ public class searchArticleTest {
                         "게시글검색_정렬조건_최근순_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -1775,6 +1867,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "asc")
                         .param("page", "1")
                         .param("size", "1")
@@ -1809,6 +1903,15 @@ public class searchArticleTest {
                         "게시글검색_정렬조건_오래된순_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -1941,6 +2044,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "comment-desc")
                         .param("page", "1")
                         .param("size", "1")
@@ -1975,6 +2080,15 @@ public class searchArticleTest {
                         "게시글검색_정렬조건_댓글갯수_최근순_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -2107,6 +2221,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "comment-asc")
                         .param("page", "1")
                         .param("size", "1")
@@ -2141,6 +2257,15 @@ public class searchArticleTest {
                         "게시글검색_정렬조건_댓글갯수_오래된순_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -2273,6 +2398,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "like-desc")
                         .param("page", "1")
                         .param("size", "1")
@@ -2307,6 +2434,15 @@ public class searchArticleTest {
                         "게시글검색_정렬조건_좋아요수_최근순_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -2439,6 +2575,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "like-asc")
                         .param("page", "1")
                         .param("size", "1")
@@ -2473,6 +2611,15 @@ public class searchArticleTest {
                         "게시글검색_정렬조건_좋아요수_오래된순_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -2605,6 +2752,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "answer-desc")
                         .param("page", "1")
                         .param("size", "1")
@@ -2639,6 +2788,15 @@ public class searchArticleTest {
                         "게시글검색_정렬조건_답변수_최근순_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -2771,6 +2929,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "answer-asc")
                         .param("page", "1")
                         .param("size", "1")
@@ -2805,6 +2965,15 @@ public class searchArticleTest {
                         "게시글검색_정렬조건_답변수_오래된순_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -2937,6 +3106,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "isChecked-false-desc")
                         .param("page", "1")
                         .param("size", "1")
@@ -2971,6 +3142,15 @@ public class searchArticleTest {
                         "게시글_검색정렬시_채택_안된것으로_최근순_조회_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -3103,6 +3283,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "isChecked-false-asc")
                         .param("page", "1")
                         .param("size", "1")
@@ -3137,6 +3319,15 @@ public class searchArticleTest {
                         "게시글_정렬시_채택안된순으로_오래된순_조회_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -3271,6 +3462,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "isChecked-true-desc")
                         .param("page", "1")
                         .param("size", "1")
@@ -3305,6 +3498,14 @@ public class searchArticleTest {
                         "게시글검색_정렬조건_채택된것_최근순_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -3438,6 +3639,8 @@ public class searchArticleTest {
         ResultActions perform = mockMvc.perform(
                 get("/articles")
                         .param("category", "INFO")
+                        .param("keyword", "null")
+                        .param("target", "null")
                         .param("sort", "isChecked-true-asc")
                         .param("page", "1")
                         .param("size", "1")
@@ -3472,6 +3675,14 @@ public class searchArticleTest {
                         "게시글검색_정렬조건_채택된것_오래된순_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("category").description("카테고리 검색 기능입니다."),
+                                parameterWithName("keyword").description("검색어 입니다."),
+                                parameterWithName("target").description("검색할 대상입니다."),
+                                parameterWithName("sort").description("정렬조건 기능입니다."),
+                                parameterWithName("page").description("현재 보여질 페이지 번호입니다."),
+                                parameterWithName("size").description("한페이지에 보여질 게시글의 갯수입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("게시글을 리스트 형태로 보여줍니다."),
@@ -3599,7 +3810,7 @@ public class searchArticleTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                get("/articles/" + article.getId())
+                get("/articles/{article-id}", article.getId())
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
@@ -3642,6 +3853,9 @@ public class searchArticleTest {
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글 아이디 입니다.")
                         ),
                         responseFields(
                                 List.of(
@@ -3770,7 +3984,7 @@ public class searchArticleTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                get("/articles/" + article.getId())
+                get("/articles/{article-id}", article.getId())
 
         );
 
@@ -3810,6 +4024,9 @@ public class searchArticleTest {
                         "로그인하지않은_회원이_게시글을_상세조회시_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다.")
+                        ),
                         responseFields(
                                 List.of(
                                         fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("게시글의 아이디입니다."),
@@ -3894,7 +4111,7 @@ public class searchArticleTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                get("/articles/" + 500)
+                get("/articles/{article-id}", 500)
 
         );
 
@@ -3903,7 +4120,12 @@ public class searchArticleTest {
                 .andDo(document(
                         "게시글_상세조회시_존재하지_않는_게시글을_조회할때_실패_404",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())));
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글 아이디입니다.")
+                        )));
+
+
     }
 }
 
