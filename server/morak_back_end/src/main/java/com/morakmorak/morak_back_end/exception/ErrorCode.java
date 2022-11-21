@@ -36,6 +36,8 @@ public enum ErrorCode {
     UNABLE_TO_ANSWER(CONFLICT,"unable to post answer, article is already closed"),
     COMMENT_NOT_FOUND(NOT_FOUND,"comment not found"),
 
+    NOTIFICATION_NOT_FOUND(NOT_FOUND, "notification not found"),
+
     /*
     * The error code expresses the dto validation exception of spring framework in web mvc test.
     * @author : YangEunChan
