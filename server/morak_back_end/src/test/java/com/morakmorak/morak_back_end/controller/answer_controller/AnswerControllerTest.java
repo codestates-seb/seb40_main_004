@@ -44,6 +44,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -175,7 +177,7 @@ public class AnswerControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                post("/articles/1/answers/"+answerId+"/likes")
+                RestDocumentationRequestBuilders.post("/articles/{article-id}/answers/{answer-id}/likes", 1, answerId)
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
@@ -189,6 +191,10 @@ public class AnswerControllerTest {
                         "다변글_좋아요_처음누를때_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다."),
+                                parameterWithName("answer-id").description("답변글의 아이디 입니다.")
+                        ),
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("access token")
                         ),
@@ -216,7 +222,7 @@ public class AnswerControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                RestDocumentationRequestBuilders.post("/articles/1/answers/"+answerId+"/likes")
+                RestDocumentationRequestBuilders.post("/articles/{article-id}/answers/{answer-id}/likes", 1, answerId)
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
@@ -230,6 +236,10 @@ public class AnswerControllerTest {
                         "답변글_좋아요_두번_누를때_취소_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다."),
+                                parameterWithName("answer-id").description("답변글의 아이디 입니다.")
+                        ),
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("access token")
                         ),
@@ -254,7 +264,7 @@ public class AnswerControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                RestDocumentationRequestBuilders.post("/articles/1/answers/"+answerId+"/likes")
+                RestDocumentationRequestBuilders.post("/articles/{article-id}/answers/{answer-id}/likes", 1, answerId)
         );
 
         //then
@@ -262,7 +272,11 @@ public class AnswerControllerTest {
                 .andDo(document(
                         "로그인하지않은_회원이_좋아요를_누를시_실패_404",
                         preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint())
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다."),
+                                parameterWithName("answer-id").description("답변글의 아이디 입니다.")
+                        )
                 ));
     }
 
@@ -277,7 +291,7 @@ public class AnswerControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                RestDocumentationRequestBuilders.post("/articles/1/answers/"+answerId+"/likes")
+                RestDocumentationRequestBuilders.post("/articles/{article-id}/answers/{answer-id}/likes", 1, answerId)
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
@@ -289,6 +303,11 @@ public class AnswerControllerTest {
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("access token")
+
+                        ),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다."),
+                                parameterWithName("answer-id").description("답변글의 아이디 입니다.")
                         )));
     }
 }
