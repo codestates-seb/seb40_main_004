@@ -95,40 +95,33 @@ public class GetAnswersTest {
 
         User user = User.builder().nickname("nickname").grade(Grade.BRONZE).avatar(avatar).build();
 
-        List<ArticleLike> articleLikes = new ArrayList<>();
-
-
         Article article = Article.builder().title("테스트 타이틀입니다.")
                 .content("콘탠트입니다. 질문을 많이 올려주세요.")
                 .category(qna)
-                .articleLikes(articleLikes)
                 .user(user)
                 .build();
+
         qna.getArticleList().add(article);
         em.persist(article);
-
-        user.getArticles().add(article);
 
         Answer answer = Answer.builder()
                 .content("15글자 이상의 유효한 답변내용입니다.")
                 .user(user)
                 .isPicked(false)
                 .article(article).build();
-
-        article.addAnswer(answer);
         user.getAnswers().add(answer);
-        em.persist(user);
+        article.getAnswers().add(answer);
+        em.persist(answer);
 
-        
         //when
-        ResultActions perform
-                = mockMvc.perform(get("/articles/{article-id}/answers", article.getId())
-                .param("page","0")
+        ResultActions perform = mockMvc.perform(
+                get("/articles/{article-id}/answers", article.getId())
+                .param("page","1")
                 .param("size","5")
         );
         //then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0:1].answerId").value(article.getId().intValue()))
+                .andExpect(jsonPath("$.data[0:1].answerId").value(answer.getId().intValue()))
                 .andExpect(jsonPath("$.data[0:1].content").exists())
                 .andExpect(jsonPath("$.data[0:1].answerLikeCount").exists())
                 .andExpect(jsonPath("$.data[0:1].isPicked").value(false))
@@ -152,9 +145,9 @@ public class GetAnswersTest {
                 .andExpect(jsonPath("$.data[0:1].avatar.filename").exists())
                 .andExpect(jsonPath("$.data[0:1].avatar.remotePath").exists())
                 .andExpect(jsonPath("$.pageInfo.page").value(1))
-                .andExpect(jsonPath("$.pageInfo.size").value(1))
+                .andExpect(jsonPath("$.pageInfo.size").value(5))
                 .andExpect(jsonPath("$.pageInfo.totalElements").value(1))
                 .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
-                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(false));
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true));
     }
 }

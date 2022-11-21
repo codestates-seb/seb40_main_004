@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.dto;
 
 import com.morakmorak.morak_back_end.entity.Answer;
+import com.morakmorak.morak_back_end.entity.Comment;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -79,7 +80,7 @@ public class AnswerDto {
                     .createdAt(answer.getCreatedAt())
                     .isPicked(answer.getIsPicked())
                     .answerLikeCount(answer.getAnswerLike().size())
-                    .commentPreview(CommentDto.ResponseForAnswer.of(Optional.ofNullable(answer.getComments().get(0))))
+                    .commentPreview(CommentDto.ResponseForAnswer.of(answer.getComments()))
                     .commentCount(answer.getComments().size())
                     .build();
         }

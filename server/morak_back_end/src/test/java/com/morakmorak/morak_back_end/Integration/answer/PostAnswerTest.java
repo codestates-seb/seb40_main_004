@@ -22,11 +22,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ROLE_USER_LIST;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,14 +56,16 @@ public class PostAnswerTest {
     private FileRepository fileRepository;
     @Autowired
     private ArticleRepository articleRepository;
+    @PersistenceContext
+    EntityManager em;
 
     /*
-    * 게시글이 있을 때 해당 게시글에 대한 답변을 등록 시
-    * 15자 이상의 내용과 파일을 첨부해 등록할 수 있다.
-    * 등록 성공 시 답변 리스트로 응답이 나간다.
-    * 답변을 마친 closed 게시물이라면 작성 실패한다
-    * 질문 카테고리의 글에만 답변 작성 가능하다.
-    */
+     * 게시글이 있을 때 해당 게시글에 대한 답변을 등록 시
+     * 15자 이상의 내용과 파일을 첨부해 등록할 수 있다.
+     * 등록 성공 시 답변 리스트로 응답이 나간다.
+     * 답변을 마친 closed 게시물이라면 작성 실패한다
+     * 질문 카테고리의 글에만 답변 작성 가능하다.
+     */
     @BeforeEach
     void setUp() {
         Avatar dbAvatar = Avatar.builder().originalFilename("randomfilename").remotePath("randomremotepath").build();
@@ -125,23 +130,61 @@ public class PostAnswerTest {
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
+
+        Avatar avatar = Avatar.builder().remotePath("remotePath")
+                .originalFilename("fileName")
+                .build();
+        em.persist(avatar);
+
+        User user = User.builder().nickname("nickname").grade(Grade.BRONZE).avatar(avatar).build();
+
+        Article article = Article.builder().title("테스트 타이틀입니다.")
+                .content("콘탠트입니다. 질문을 많이 올려주세요.")
+                .category(qna)
+                .user(user)
+                .build();
+
+        qna.getArticleList().add(article);
+        em.persist(article);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST);
+
         //when
-        ResultActions perform = mockMvc.perform(post("/articles/{article-id}/answers/", validArticle.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json)
-                .header(JWT_HEADER, accessToken)
+        ResultActions perform = mockMvc.perform(
+                post("/articles/{article-id}/answers", article.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+                        .header(JWT_HEADER, accessToken)
         );
         //then
         perform.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.userInfo.userId").exists())
-                .andExpect(jsonPath("$.userInfo.nickname").exists())
-                .andExpect(jsonPath("$.avatar.avatarId").exists())
-                .andExpect(jsonPath("$.avatar.filename").exists())
-                .andExpect(jsonPath("$.avatar.remotePath").exists())
-                .andExpect(jsonPath("$.answerId").exists())
-                .andExpect(jsonPath("$.content").exists())
-                .andExpect(jsonPath("$.createdAt").exists())
-                .andExpect(jsonPath("$.lastModifiedAt").exists());
+                .andExpect(jsonPath("$.data[0:1].answerId").exists())
+                .andExpect(jsonPath("$.data[0:1].content").exists())
+                .andExpect(jsonPath("$.data[0:1].answerLikeCount").exists())
+                .andExpect(jsonPath("$.data[0:1].isPicked").value(false))
+                .andExpect(jsonPath("$.data[0:1].commentCount").value(0))
+                .andExpect(jsonPath("$.data[0:1].commentPreview.commentId").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.answerId").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.content").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.userId").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.nickname").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.grade").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.avatarId").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.filename").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.remotePath").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.lastModifiedAt").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.createdAt").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].createdAt").exists())
+                .andExpect(jsonPath("$.data[0:1].userInfo.userId").value(user.getId().intValue()))
+                .andExpect(jsonPath("$.data[0:1].userInfo.nickname").exists())
+                .andExpect(jsonPath("$.data[0:1].userInfo.grade").exists())
+                .andExpect(jsonPath("$.data[0:1].avatar.avatarId").value(avatar.getId().intValue()))
+                .andExpect(jsonPath("$.data[0:1].avatar.filename").exists())
+                .andExpect(jsonPath("$.data[0:1].avatar.remotePath").exists())
+                .andExpect(jsonPath("$.pageInfo.page").value(1))
+                .andExpect(jsonPath("$.pageInfo.size").value(5))
+                .andExpect(jsonPath("$.pageInfo.totalElements").value(1))
+                .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true));
     }
 
 }

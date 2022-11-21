@@ -23,6 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,8 @@ public class UpdateAnswerTest {
     AnswerRepository answerRepository;
     @Autowired
     private ArticleRepository articleRepository;
+    @PersistenceContext
+    EntityManager em;
 
     /*
      * 게시글이 있을 때 해당 게시글에 등록했던 답변을 수정 시
@@ -97,7 +101,7 @@ public class UpdateAnswerTest {
 
         String json = objectMapper.writeValueAsString(request);
         //when
-        ResultActions perform = mockMvc.perform(patch("/articles/{article-id}/answers/{answer-id}", validArticle.getId(),savedAnswer.getId())
+        ResultActions perform = mockMvc.perform(patch("/articles/{article-id}/answers/{answer-id}", validArticle.getId(), savedAnswer.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .header(JWT_HEADER, accessToken)
@@ -105,6 +109,7 @@ public class UpdateAnswerTest {
         //then
         perform.andExpect(status().isBadRequest());
     }
+
     @Test
     @DisplayName("정상적인 상태에서 답변은 성공적으로 수정 후 반환, 200 ")
     void postAnswer_success_1() throws Exception {
@@ -118,23 +123,70 @@ public class UpdateAnswerTest {
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
+        Avatar avatar = Avatar.builder().remotePath("remotePath")
+                .originalFilename("fileName")
+                .build();
+        em.persist(avatar);
+        Category qna = Category.builder().name(CategoryName.QNA).build();
+        em.persist(qna);
+        User user = User.builder().nickname("nickname").grade(Grade.BRONZE).avatar(avatar).build();
+
+        Article article = Article.builder().title("테스트 타이틀입니다.")
+                .content("콘탠트입니다. 질문을 많이 올려주세요.")
+                .category(qna)
+                .user(user)
+                .build();
+
+        qna.getArticleList().add(article);
+        em.persist(article);
+
+        Answer answer = Answer.builder()
+                .content("15글자 이상의 유효한 답변내용입니다.")
+                .user(user)
+                .isPicked(false)
+                .article(article).build();
+        user.getAnswers().add(answer);
+        article.getAnswers().add(answer);
+        em.persist(answer);
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST);
         //when
-        ResultActions perform = mockMvc.perform(patch("/articles/{article-id}/answers/{answer-id}", validArticle.getId(),savedAnswer.getId())
+        ResultActions perform = mockMvc.perform(patch("/articles/{article-id}/answers/{answer-id}", article.getId(), answer.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .header(JWT_HEADER, accessToken)
         );
         //then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.userInfo.userId").exists())
-                .andExpect(jsonPath("$.userInfo.nickname").exists())
-                .andExpect(jsonPath("$.avatar.avatarId").exists())
-                .andExpect(jsonPath("$.avatar.fileName").exists())
-                .andExpect(jsonPath("$.avatar.remotePath").exists())
-                .andExpect(jsonPath("$.answerId").exists())
-                .andExpect(jsonPath("$.content").exists())
-                .andExpect(jsonPath("$.createdAt").exists())
-                .andExpect(jsonPath("$.lastModifiedAt").exists());
+                .andExpect(jsonPath("$.data[0:1].answerId").exists())
+                .andExpect(jsonPath("$.data[0:1].content").exists())
+                .andExpect(jsonPath("$.data[0:1].answerLikeCount").exists())
+                .andExpect(jsonPath("$.data[0:1].isPicked").value(false))
+                .andExpect(jsonPath("$.data[0:1].commentCount").value(0))
+                .andExpect(jsonPath("$.data[0:1].commentPreview.commentId").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.answerId").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.content").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.userId").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.nickname").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.grade").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.avatarId").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.filename").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.remotePath").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.lastModifiedAt").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].commentPreview.createdAt").isEmpty())
+                .andExpect(jsonPath("$.data[0:1].createdAt").exists())
+                .andExpect(jsonPath("$.data[0:1].userInfo.userId").value(user.getId().intValue()))
+                .andExpect(jsonPath("$.data[0:1].userInfo.nickname").exists())
+                .andExpect(jsonPath("$.data[0:1].userInfo.grade").exists())
+                .andExpect(jsonPath("$.data[0:1].avatar.avatarId").value(avatar.getId().intValue()))
+                .andExpect(jsonPath("$.data[0:1].avatar.filename").exists())
+                .andExpect(jsonPath("$.data[0:1].avatar.remotePath").exists())
+                .andExpect(jsonPath("$.pageInfo.page").value(1))
+                .andExpect(jsonPath("$.pageInfo.size").value(5))
+                .andExpect(jsonPath("$.pageInfo.totalElements").value(1))
+                .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true));
+
     }
 
 }
