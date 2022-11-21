@@ -1,7 +1,7 @@
 package com.morakmorak.morak_back_end.dto;
 
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
-퍼import com.morakmorak.morak_back_end.entity.enums.ReportReason;
+import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.service.EnumValid;
 import lombok.*;
 
