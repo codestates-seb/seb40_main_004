@@ -11,38 +11,21 @@ public class AvatarDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SimpleResponse {
         private Long avatarId;
-        private String fileName;//컨벤션 확인
+        private String filename;
         private String remotePath;
 
-        //mapper 적용 가능 부분
         public static SimpleResponse of(Avatar avatar) {
             return avatar == null ? SimpleResponse.builder()
                     .avatarId(null)
-                    .fileName(null)
+                    .filename(null)
                     .remotePath(null)
                     .build()
                     :
                     SimpleResponse.builder()
                             .avatarId(avatar.getId())
-                            .fileName(avatar.getOriginalFileName())
+                            .filename(avatar.getOriginalFilename())
                             .remotePath(avatar.getRemotePath())
                             .build();
-        }
-    }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Request {
-        private Long avatarId;
-        private String remotePath;
-        private String filename;
-
-        @QueryProjection
-        public Request(Long avatarId, String remotePath, String filename) {
-            this.avatarId = avatarId;
-            this.remotePath = remotePath;
-            this.filename = filename;
         }
     }
 }

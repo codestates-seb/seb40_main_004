@@ -27,7 +27,7 @@ class ArticleLikeRepositoryTest {
     @DisplayName("checkUserLiked 메서드 정상작동 테스트")
     public void checkUserLiked_test(){
     //given
-        Avatar avatar = Avatar.builder().originalFileName("fileName").remotePath("remotePath").build();
+        Avatar avatar = Avatar.builder().originalFilename("fileName").remotePath("remotePath").build();
 
         User user = User.builder().nickname("nickname").avatar(avatar)
                 .email("test@naver.com").grade(Grade.BRONZE).build();

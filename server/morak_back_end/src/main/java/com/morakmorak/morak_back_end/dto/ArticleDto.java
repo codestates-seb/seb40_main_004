@@ -3,7 +3,6 @@ package com.morakmorak.morak_back_end.dto;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.service.EnumValid;
 import lombok.*;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -104,4 +103,14 @@ public class ArticleDto {
         private List<CommentDto.Response> comments;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponseArticleLike {
+        private Long articleId;
+        private Long userId;
+        private Boolean isLiked;
+        private Integer likeCount;
+    }
 }

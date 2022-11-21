@@ -1,11 +1,11 @@
 package com.morakmorak.morak_back_end.adapter;
 
 import com.morakmorak.morak_back_end.repository.RedisRepository;
-import com.morakmorak.morak_back_end.service.MailSenderImpl;
+import com.morakmorak.morak_back_end.service.mail_service.MailSenderImpl;
 import lombok.RequiredArgsConstructor;
 
-import static com.morakmorak.morak_back_end.service.MailSenderImpl.BASIC_AUTH_SUBJECT;
-import static com.morakmorak.morak_back_end.service.MailSenderImpl.BASIC_PASSWORD_SUBJECT;
+import static com.morakmorak.morak_back_end.service.mail_service.MailSenderImpl.BASIC_AUTH_SUBJECT;
+import static com.morakmorak.morak_back_end.service.mail_service.MailSenderImpl.BASIC_PASSWORD_SUBJECT;
 
 @RequiredArgsConstructor
 public class AuthMailSender {

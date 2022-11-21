@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.Integration.article.upload;
+package com.morakmorak.morak_back_end.Integration.article.post;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.dto.ArticleDto;
@@ -8,8 +8,6 @@ import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.Tag;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
-import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.ArticleService;
@@ -103,7 +101,7 @@ public class ArticleUploadTest {
         ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
                 .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
                 .tags(List.of(TagDto.SimpleTag.builder()
-                        .tagId(tag.getId()).name("Java").build()))
+                        .tagId(tag.getId()).name(TagName.JAVA).build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(file2.getId()).build()))
@@ -145,7 +143,7 @@ public class ArticleUploadTest {
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(100L).build(), FileDto.RequestFileWithId.builder()
                         .fileId(111L).build()))
-                .tags(List.of(TagDto.SimpleTag.builder().tagId(tag.getId()).name("Java").build()))
+                .tags(List.of(TagDto.SimpleTag.builder().tagId(tag.getId()).name(TagName.JAVA).build()))
                 .category(CategoryName.INFO)
                 .thumbnail(1L)
                 .build();
@@ -178,7 +176,7 @@ public class ArticleUploadTest {
         ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
                 .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
                 .tags(List.of(TagDto.SimpleTag.builder()
-                        .tagId(2L).name("JAVA").build()))
+                        .tagId(2L).name(TagName.JAVA).build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(file2.getId()).build()))
@@ -214,7 +212,7 @@ public class ArticleUploadTest {
         ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
                 .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
                 .tags(List.of(TagDto.SimpleTag.builder()
-                        .tagId(2L).name("NULL").build()))
+                        .tagId(2L).build()))
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
                         .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
                         .fileId(file2.getId()).build()))
@@ -246,7 +244,7 @@ public class ArticleUploadTest {
         Category category = Category.builder().name(CategoryName.INFO).build();
         Article build = Article.builder().build();
         //when
-        Boolean aBoolean = articleService.fusionCategoryWIthArticle(build, category);
+        Boolean aBoolean = articleService.findDbCategoryAndInjectWithArticle(build, category);
         //then
         Assertions.assertThat(aBoolean).isTrue();
 

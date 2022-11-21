@@ -2,7 +2,7 @@ ifndef::snippets[]
 :snippets: ./build/generated-snippets
 endif::[]
 
-= 회원 정보/토큰 관련 API
+= 인증 관련 API
 :sectnums:
 :toc: left
 :toclevels: 4
@@ -64,9 +64,6 @@ include::{snippets}/회원가입_실패_400/request-fields.adoc[]
 .http-response
 include::{snippets}/회원가입_실패_400/http-response.adoc[]
 
-.response-fields
-include::{snippets}/회원가입_실패_400/response-body.adoc[]
-
 === 실패 404_인증키
 
 .http-request
@@ -77,9 +74,6 @@ include::{snippets}/회원가입_실패_404/request-fields.adoc[]
 
 .http-response
 include::{snippets}/회원가입_실패_404/http-response.adoc[]
-
-.response-fields
-include::{snippets}/회원가입_실패_404/response-body.adoc[]
 
 === 실패 409_중복_이메일
 
@@ -92,9 +86,6 @@ include::{snippets}/회원가입_실패_409/request-fields.adoc[]
 .http-response
 include::{snippets}/회원가입_실패_409/http-response.adoc[]
 
-.response-fields
-include::{snippets}/회원가입_실패_409/response-body.adoc[]
-
 === 실패 409_중복_닉네임
 
 .http-request
@@ -105,9 +96,6 @@ include::{snippets}/회원가입_실패_409_닉네임중복/request-fields.adoc[
 
 .http-response
 include::{snippets}/회원가입_실패_409_닉네임중복/http-response.adoc[]
-
-.response-fields
-include::{snippets}/회원가입_실패_409_닉네임중복/response-body.adoc[]
 
 ***
 
@@ -124,9 +112,6 @@ include::{snippets}/이메일_인증_요청_성공_201/request-fields.adoc[]
 .http-response
 include::{snippets}/이메일_인증_요청_성공_201/http-response.adoc[]
 
-.response-fields
-include::{snippets}/이메일_인증_요청_성공_201/response-body.adoc[]
-
 === 실패 409_시간 제한
 
 .http-request
@@ -138,9 +123,6 @@ include::{snippets}/이메일_인증_요청_실패_409/request-fields.adoc[]
 .http-response
 include::{snippets}/이메일_인증_요청_실패_409/http-response.adoc[]
 
-.response-fields
-include::{snippets}/이메일_인증_요청_실패_409/response-body.adoc[]
-
 === 실패 409_이미 존재하는 이메일
 
 .http-request
@@ -151,9 +133,6 @@ include::{snippets}/이메일_인증_요청_실패_409_중복/request-fields.ado
 
 .http-response
 include::{snippets}/이메일_인증_요청_실패_409_중복/http-response.adoc[]
-
-.response-fields
-include::{snippets}/이메일_인증_요청_실패_409_중복/response-body.adoc[]
 
 ***
 
@@ -171,7 +150,7 @@ include::{snippets}/이메일_인증_성공_200/request-fields.adoc[]
 include::{snippets}/이메일_인증_성공_200/http-response.adoc[]
 
 .response-fields
-include::{snippets}/이메일_인증_성공_200/response-body.adoc[]
+include::{snippets}/이메일_인증_성공_200/response-fields.adoc[]
 
 === 실패 404_존재하지_않음
 
@@ -183,9 +162,6 @@ include::{snippets}/이메일_인증키_전송_404/request-fields.adoc[]
 
 .http-response
 include::{snippets}/이메일_인증키_전송_404/http-response.adoc[]
-
-.response-fields
-include::{snippets}/이메일_인증키_전송_404/response-body.adoc[]
 
 ***
 
@@ -202,9 +178,6 @@ include::{snippets}/닉네임_중복확인_성공_200/request-fields.adoc[]
 .http-response
 include::{snippets}/닉네임_중복확인_성공_200/http-response.adoc[]
 
-.response-fields
-include::{snippets}/닉네임_중복확인_성공_200/response-body.adoc[]
-
 === 실패 400_유효성 검사
 
 .http-request
@@ -216,9 +189,6 @@ include::{snippets}/닉네임_중복확인_유효하지_않은_요청값_400/req
 .http-response
 include::{snippets}/닉네임_중복확인_유효하지_않은_요청값_400/http-response.adoc[]
 
-.response-fields
-include::{snippets}/닉네임_중복확인_유효하지_않은_요청값_400/response-body.adoc[]
-
 === 실패 409_닉네임 중복
 
 .http-request
@@ -229,9 +199,6 @@ include::{snippets}/닉네임_중복_체크_실패_409/request-fields.adoc[]
 
 .http-response
 include::{snippets}/닉네임_중복_체크_실패_409/http-response.adoc[]
-
-.response-fields
-include::{snippets}/닉네임_중복_체크_실패_409/response-body.adoc[]
 
 == 로그인
 
@@ -247,7 +214,7 @@ include::{snippets}/로그인_성공_201/request-fields.adoc[]
 include::{snippets}/로그인_성공_201/http-response.adoc[]
 
 .response-fields
-include::{snippets}/로그인_성공_201/response-body.adoc[]
+include::{snippets}/로그인_성공_201/response-fields.adoc[]
 
 === 실패 401 잘못된 입력값
 
@@ -297,7 +264,7 @@ include::{snippets}/리프레시_토큰_갱신_성공_201/http-request.adoc[]
 include::{snippets}/리프레시_토큰_갱신_성공_201//http-response.adoc[]
 
 .response-fields
-include::{snippets}/리프레시_토큰_갱신_성공_201/response-body.adoc[]
+include::{snippets}/리프레시_토큰_갱신_성공_201/response-fields.adoc[]
 
 === 실패 401_유효하지 않은 토큰
 
@@ -336,9 +303,6 @@ include::{snippets}/비밀번호_변경_성공_200/request-fields.adoc[]
 .http-response
 include::{snippets}/비밀번호_변경_성공_200/http-response.adoc[]
 
-.response-fields
-include::{snippets}/비밀번호_변경_성공_200/response-body.adoc[]
-
 === 실패 409_잘못된 패스워드
 
 .http-request
@@ -350,9 +314,6 @@ include::{snippets}/비밀번호_변경_실패_400/request-fields.adoc[]
 .http-response
 include::{snippets}/비밀번호_변경_실패_400/http-response.adoc[]
 
-.response-fields
-include::{snippets}/비밀번호_변경_실패_400/response-body.adoc[]
-
 === 실패 409_잘못된 패스워드
 
 .http-request
@@ -363,9 +324,6 @@ include::{snippets}/비밀번호_변경_실패_409/request-fields.adoc[]
 
 .http-response
 include::{snippets}/비밀번호_변경_실패_409/http-response.adoc[]
-
-.response-fields
-include::{snippets}/비밀번호_변경_실패_409/response-body.adoc[]
 
 ***
 
@@ -382,8 +340,6 @@ include::{snippets}/비밀번호_찾기_성공_201/request-fields.adoc[]
 .http-response
 include::{snippets}/비밀번호_찾기_성공_201/http-response.adoc[]
 
-.response-fields
-include::{snippets}/비밀번호_찾기_성공_201/response-body.adoc[]
 
 === 실패 404_존재하지 않는 이메일
 
@@ -396,9 +352,6 @@ include::{snippets}/비밀번호_찾기_실패_404/request-fields.adoc[]
 .http-response
 include::{snippets}/비밀번호_찾기_실패_404/http-response.adoc[]
 
-.response-fields
-include::{snippets}/비밀번호_찾기_실패_404/response-body.adoc[]
-
 === 실패 409_5분내_요청_이력
 
 .http-request
@@ -409,9 +362,6 @@ include::{snippets}/비밀번호_찾기_실패_409/request-fields.adoc[]
 
 .http-response
 include::{snippets}/비밀번호_찾기_실패_409/http-response.adoc[]
-
-.response-fields
-include::{snippets}/비밀번호_찾기_실패_409/response-body.adoc[]
 
 
 ***
@@ -429,9 +379,6 @@ include::{snippets}/임시_패스워드_성공_200/request-fields.adoc[]
 .http-response
 include::{snippets}/임시_패스워드_성공_200/http-response.adoc[]
 
-.response-fields
-include::{snippets}/임시_패스워드_성공_200/response-body.adoc[]
-
 === 실패 400_유효성 검사
 
 .http-request
@@ -443,9 +390,6 @@ include::{snippets}/임시_패스워드_실패_400/request-fields.adoc[]
 .http-response
 include::{snippets}/임시_패스워드_실패_400/http-response.adoc[]
 
-.response-fields
-include::{snippets}/임시_패스워드_실패_400/response-body.adoc[]
-
 === 실패 404_존재하지 않는 인증키
 
 .http-request
@@ -456,9 +400,6 @@ include::{snippets}/임시_패스워드_실패_404/request-fields.adoc[]
 
 .http-response
 include::{snippets}/임시_패스워드_실패_404/http-response.adoc[]
-
-.response-fields
-include::{snippets}/임시_패스워드_실패_404/response-body.adoc[]
 
 ***
 
@@ -475,9 +416,6 @@ include::{snippets}/회원_탈퇴_성공_204/request-fields.adoc[]
 .http-response
 include::{snippets}/회원_탈퇴_성공_204/http-response.adoc[]
 
-.response-fields
-include::{snippets}/회원_탈퇴_성공_204/response-body.adoc[]
-
 === 실패 400_유효성 검사
 
 .http-request
@@ -489,9 +427,6 @@ include::{snippets}/회원_탈퇴_씰패_400/request-fields.adoc[]
 .http-response
 include::{snippets}/회원_탈퇴_씰패_400/http-response.adoc[]
 
-.response-fields
-include::{snippets}/회원_탈퇴_씰패_400/response-body.adoc[]
-
 === 실패 409_잘못된 패스워드
 
 .http-request
@@ -502,7 +437,4 @@ include::{snippets}/회원_탈퇴_실패_409/request-fields.adoc[]
 
 .http-response
 include::{snippets}/회원_탈퇴_실패_409/http-response.adoc[]
-
-.response-fields
-include::{snippets}/회원_탈퇴_실패_409/response-body.adoc[]
 

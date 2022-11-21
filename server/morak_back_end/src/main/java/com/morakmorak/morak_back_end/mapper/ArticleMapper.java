@@ -40,7 +40,7 @@ public interface ArticleMapper {
     @Mapping(source = "article.user.nickname", target = "userInfo.nickname")
     @Mapping(source = "article.user.grade", target = "userInfo.grade")
     @Mapping(source = "article.user.avatar.id", target = "avatar.avatarId")
-    @Mapping(source = "article.user.avatar.originalFileName", target = "avatar.fileName")
+    @Mapping(source = "article.user.avatar.originalFilename", target = "avatar.filename")
     @Mapping(source = "article.user.avatar.remotePath", target = "avatar.remotePath")
     ArticleDto.ResponseListTypeArticle articleToResponseSearchResultArticle(Article article,
                                                                             Integer commentCount,
@@ -54,8 +54,9 @@ public interface ArticleMapper {
     @Mapping(source = "article.user.nickname", target = "userInfo.nickname")
     @Mapping(source = "article.user.grade", target = "userInfo.grade")
     @Mapping(source = "article.user.avatar.id", target = "avatar.avatarId")
-    @Mapping(source = "article.user.avatar.originalFileName", target = "avatar.fileName")
+    @Mapping(source = "article.user.avatar.originalFilename", target = "avatar.filename")
     @Mapping(source = "article.user.avatar.remotePath", target = "avatar.remotePath")
+    @Mapping(source = "comments", target = "comments")
     ArticleDto.ResponseDetailArticle articleToResponseDetailArticle(Article article,
                                                                     Boolean isLiked,
                                                                     Boolean isBookmarked,
@@ -63,5 +64,8 @@ public interface ArticleMapper {
                                                                     List<CommentDto.Response> comments,
                                                                     Integer likes
     );
+
+
+    ArticleDto.ResponseArticleLike makingResponseArticleLikeDto(Long articleId, Long userId, Boolean isLiked, Integer likeCount);
 
 }

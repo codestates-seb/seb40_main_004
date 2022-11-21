@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @DataJpaTest
@@ -32,13 +33,16 @@ class BookmarkRepositoryTest {
     public void checkUserBookmarked_test(){
     //given
 
-        Avatar avatar = Avatar.builder().originalFileName("fileName").remotePath("remotePath").build();
+        Avatar avatar = Avatar.builder().originalFilename("fileName").remotePath("remotePath").build();
 
         User user = User.builder().nickname("nickname").avatar(avatar)
                 .email("test@naver.com").grade(Grade.BRONZE).build();
         Article article = Article.builder().user(user).build();
         user.getArticles().add(article);
         Bookmark bookmark = Bookmark.builder().user(user).article(article).memo("null").build();
+        user.getBookmarks().add(bookmark);
+        article.getBookmarks().add(bookmark);
+
         em.persist(avatar);
         em.persist(user);
         em.persist(article);
@@ -50,6 +54,34 @@ class BookmarkRepositoryTest {
         //then
         assertThat(dbBookmark.getUser()).isEqualTo(user);
         assertThat(dbBookmark.getArticle()).isEqualTo(article);
+
+    }
+
+    @Test
+    @DisplayName("인자값으로 들어온 게시글과 유저의 아이디로 저장된 북마크가 없을때 런타임 예외를 던진다.")
+    public void checkUserBookmarked_fail(){
+        //given
+
+        Avatar avatar = Avatar.builder().originalFilename("fileName").remotePath("remotePath").build();
+
+        User user = User.builder().nickname("nickname").avatar(avatar)
+                .email("test@naver.com").grade(Grade.BRONZE).build();
+        Article article = Article.builder().user(user).build();
+        user.getArticles().add(article);
+
+        Bookmark bookmark = Bookmark.builder().build();
+
+        em.persist(avatar);
+        em.persist(user);
+        em.persist(article);
+        em.persist(bookmark);
+
+        //when
+        //then
+        assertThatThrownBy(() -> bookmarkRepository.checkUserBookmarked(user.getId(), article.getId()).orElseThrow())
+                .isInstanceOf(RuntimeException.class );
+
+
 
     }
 

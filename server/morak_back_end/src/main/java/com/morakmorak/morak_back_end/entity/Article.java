@@ -1,43 +1,60 @@
 package com.morakmorak.morak_back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Entity
 @Getter
+@ToString(onlyExplicitlyIncluded = true)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article extends BaseTime {
 
     @Id
+    @ToString.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
     private Long id;
 
     @Builder.Default
+    @ToString.Include
     private Integer clicks = 0;
 
+    @ToString.Include
     private String title;
 
+    @ToString.Include
     private String content;
 
+    @ToString.Include
     @Builder.Default
     private Boolean isClosed = Boolean.FALSE;
 
+    @ToString.Include
     private Long thumbnail;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private ArticleStatus articleStatus = ArticleStatus.POSTING;
+
+    @CreatedDate
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(updatable = false,name = "created_date")
+    private LocalDate createDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
@@ -47,8 +64,9 @@ public class Article extends BaseTime {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Builder.Default
     @OneToMany(mappedBy = "article", cascade = CascadeType.PERSIST)
-    private List<Bookmark> bookmarks;
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "article", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
@@ -92,15 +110,11 @@ public class Article extends BaseTime {
         user.getArticles().add(this);
     }
 
-    public void infectCategoryForMapping(Category category) {
+    public void injectCategoryForMapping(Category category) {
         this.category = category;
         if (!category.getArticleList().contains(this)) {
             category.getArticleList().add(this);
         }
-    }
-
-    public void infectVoteForMapping(Vote vote) {
-        this.vote = vote;
     }
 
     public void updateArticleElement(Article article) {

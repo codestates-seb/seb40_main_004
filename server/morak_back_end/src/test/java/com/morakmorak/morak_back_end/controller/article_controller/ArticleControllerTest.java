@@ -5,6 +5,7 @@ import com.morakmorak.morak_back_end.controller.ArticleController;
 import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
@@ -81,7 +82,6 @@ class ArticleControllerTest {
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
 
-
     @Test
     @DisplayName("게시글을 등록할때 등록이 완전히 성공할때")
     public void uploadArticle_suc() throws Exception {
@@ -112,7 +112,7 @@ class ArticleControllerTest {
         perform.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.articleId").value(responseSimpleArticle.getArticleId()))
                 .andDo(document(
-                        "article upload success",
+                        "게시글_업로드에_성공_201",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -155,7 +155,14 @@ class ArticleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content));
         //then
-        perform.andExpect(status().isNotFound());
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "게시글을_등록할때_존재하지_않는_태그를_작성하려할떄_실패_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        )));
     }
 
     @Test
@@ -174,7 +181,14 @@ class ArticleControllerTest {
                                 .content(content)
                 );
         //then
-        perform.andExpect(status().isBadRequest());
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                        "게시글을_등록할때_유효성_검증에_실패한_경우_실패_400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        )));
     }
 
     @Test
@@ -184,7 +198,7 @@ class ArticleControllerTest {
         ArticleDto.RequestUpdateArticle request = ArticleDto.RequestUpdateArticle.builder()
                 .title("타이틀입니다. 잘부탁드립니다. 부탁드립니다.").content("콘텐트입니다. 잘부탁드립니다.")
                 .fileId(List.of(FileDto.RequestFileWithId.builder().fileId(1L).build()))
-                .tags(List.of(TagDto.SimpleTag.builder().name("Java").tagId(1L).build()))
+                .tags(List.of(TagDto.SimpleTag.builder().name(TagName.JAVA).tagId(1L).build()))
                 .thumbnail(1L)
                 .build();
         ArticleDto.ResponseSimpleArticle response = ArticleDto.ResponseSimpleArticle.builder().articleId(1L).build();
@@ -210,7 +224,7 @@ class ArticleControllerTest {
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.articleId").value(1L))
                 .andDo(document(
-                        "article updaate success",
+                        "게시글_수정에_성공할_경우_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -235,7 +249,7 @@ class ArticleControllerTest {
     }
 
     @Test
-    @DisplayName("게시글을 수정할때 유효성 검증에 실패한 경우")
+    @DisplayName("게시글을 수정할때 유효성 검증에 실패한 경우 400에러를 던진다. ")
     public void articlUpdate_fail1() throws Exception {
         //given
         ArticleDto.RequestUpdateArticle requestUploadArticle = ArticleDto.RequestUpdateArticle.builder().build();
@@ -249,16 +263,15 @@ class ArticleControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
                 );
-        perform.andExpect(status().isBadRequest());
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                "게시글을_수정시_유효성_검증에_실패_400",
+                requestHeaders(
+                        headerWithName(JWT_HEADER).description("access token")
+                )
+        ));
     }
 
-    /**
-     * 아직 테스트에 통과하지 못했습니다. 서비스로직을 목으로 설정해두었지만, 실제로 작동하면서 ARTICLE_NOT_FOUND 예외를
-     * 터트리는걸로 예상됩니다. 추후 잡도록 하겠습니다.
-     * @Date 22-11-11
-     * @Auther Beak Sion
-     * @throws Exception
-     */
     @Test
     @DisplayName("게시글을 삭제할때 성공 테스트")
     public void articleDelete_suc() throws Exception {
@@ -278,7 +291,7 @@ class ArticleControllerTest {
 
         perform.andExpect(status().isNoContent())
                 .andDo(document(
-                        "article delete success",
+                        "게시글을_삭제할때_본인의_게시글을_삭제할때_성공_204",
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("access token")
                         )
@@ -297,11 +310,17 @@ class ArticleControllerTest {
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
         //then
-        perform.andExpect(status().isUnauthorized());
+        perform.andExpect(status().isUnauthorized()) .andDo(document(
+                "게시글_삭제시_타인의_게시글을_삭제하려할떄_403",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestHeaders(
+                        headerWithName(JWT_HEADER).description("access token")
+                )));
      }
 
     @Test
-    @DisplayName("게시글 삭제시 게시글이 존재하지 않을경우")
+    @DisplayName("게시글 삭제시 게시글이 존재하지 않을경우 404 Article_Not_Found 를 던진다. ")
     public void deleteArticle_fail2() throws Exception{
         //given
         given(articleService.deleteArticle(anyLong(), any(UserDto.UserInfo.class)))
@@ -312,6 +331,147 @@ class ArticleControllerTest {
                         .header(JWT_HEADER, ACCESS_TOKEN)
         );
         //then
-        perform.andExpect(status().isNotFound());
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "게시글_삭제시_게시글이_존재하지_않을경우_실패_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        )));
     }
+
+    @Test
+    @DisplayName("로그인한 회원이 게시글의 좋아요를 눌렀을때 처음 좋아요를 눌렀을 경우 좋아요 갯수가 1개 증가하고 200 코드를 던진다.")
+    public void pressLikeButton_suc() throws Exception{
+        //given
+        Long articleId = 1L;
+        UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
+
+        ArticleDto.ResponseArticleLike responseArticleLike =
+                ArticleDto.ResponseArticleLike.builder().articleId(1L).userId(1L).isLiked(true).likeCount(1).build();
+
+        given(articleService.pressLikeButton(anyLong(), any())).willReturn(responseArticleLike);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/" + articleId+"/likes")
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+        );
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.articleId").value(1L))
+                .andExpect(jsonPath("$.userId").value(1L))
+                .andExpect(jsonPath("$.isLiked").value(true))
+                .andExpect(jsonPath("$.likeCount").value(1))
+                .andDo(document(
+                        "게시글_좋아요_처음누를때_성공_200",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("글의 아이디 입니다."),
+                                        fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저의 아이디 입니다."),
+                                        fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("해당 유저가 좋아요를 눌렀는지 안눌렀지를 보여줍니다,"),
+                                        fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("해당 게시글의 좋아요 숫자입니다.")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("로그인한 회원이 게시글의 누른 좋아용를 취소할 경우 좋아요 갯수가 1개 감소하고 200 코드를 던진다.")
+    public void pressLikeButton_suc2() throws Exception{
+        //given
+        Long articleId = 1L;
+        UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
+
+        ArticleDto.ResponseArticleLike responseArticleLike =
+                ArticleDto.ResponseArticleLike.builder().articleId(1L).userId(1L).isLiked(true).likeCount(0).build();
+
+        given(articleService.pressLikeButton(anyLong(), any())).willReturn(responseArticleLike);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/" + articleId+"/likes")
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+        );
+
+        //then
+        perform.andExpect(status().isOk())
+                .andExpect(jsonPath("$.articleId").value(1L))
+                .andExpect(jsonPath("$.userId").value(1L))
+                .andExpect(jsonPath("$.isLiked").value(true))
+                .andExpect(jsonPath("$.likeCount").value(0))
+                .andDo(document(
+                        "게시글_좋아요_두번_누를때_취소_성공_200",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("글의 아이디 입니다."),
+                                        fieldWithPath("userId").type(JsonFieldType.NUMBER).description("유저의 아이디 입니다."),
+                                        fieldWithPath("isLiked").type(JsonFieldType.BOOLEAN).description("해당 유저가 좋아요를 눌렀는지 안눌렀지를 보여줍니다,"),
+                                        fieldWithPath("likeCount").type(JsonFieldType.NUMBER).description("해당 게시글의 좋아요 숫자입니다.")
+                                )
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("로그인하지 않은 유저가 좋아요를 누른다면, 404 User Not Found 에러를 던진다.")
+    public void pressLikeButton_fail1() throws Exception{
+        //given
+        Long articleId = 1L;
+
+        given(articleService.pressLikeButton(anyLong(), any()))
+                .willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/" + articleId+"/likes")
+        );
+
+        //then
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "로그인하지않은_회원이_좋아요를_누를시_실패_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint())
+                ));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글에 좋아요를 누른다면, 404 Article Not Found 에러를 던진다.")
+    public void pressLikeButton_fail2() throws Exception{
+        //given
+        Long articleId = 1L;
+
+        given(articleService.pressLikeButton(anyLong(), any()))
+                .willThrow(new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/" + 500+"/likes")
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+        );
+
+        //then
+        perform.andExpect(status().isNotFound())
+                .andDo(document(
+                        "로그인한_회원이_존재하지_않는_게시글에_좋아요를_누를시_실패_404",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        )));
+    }
+
 }

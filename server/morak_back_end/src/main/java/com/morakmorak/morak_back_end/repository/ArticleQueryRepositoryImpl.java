@@ -5,6 +5,9 @@ import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.ComparableExpressionBase;
+import com.querydsl.core.types.dsl.EntityPathBase;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -85,48 +88,6 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         return new PageImpl<>(result, pageable, count);
     }
 
-    @Override
-    public Page<Article> tagSearch(String category, String keyword, String target, String sort, Pageable pageable) {
-        List<Article> re = queryFactory
-                .select(articleTag.article)
-                .from(articleTag)
-                .leftJoin(articleTag.article, article)
-                .leftJoin(articleTag.tag, tag)
-                .leftJoin(articleTag.article.category, QCategory.category)
-                .leftJoin(articleTag.article.user, user)
-                .leftJoin(articleTag.article.answers, answer)
-                .leftJoin(articleTag.article.bookmarks, bookmark)
-                .leftJoin(articleTag.article.comments, comment)
-                .leftJoin(articleTag.article.reviews, review)
-                .leftJoin(articleTag.article.articleLikes, articleLike)
-                .leftJoin(articleTag.article.files, file)
-                .where(categoryEq(category), keywordEq(keyword, target))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(sortEq(sort))
-                .fetch();
-
-        Long count = queryFactory
-                .select(articleTag.article.count())
-                .from(articleTag)
-                .leftJoin(articleTag.article, article)
-                .leftJoin(articleTag.tag, tag)
-                .leftJoin(articleTag.article.category, QCategory.category)
-                .leftJoin(articleTag.article.user, user)
-                .leftJoin(articleTag.article.answers, answer)
-                .leftJoin(articleTag.article.bookmarks, bookmark)
-                .leftJoin(articleTag.article.comments, comment)
-                .leftJoin(articleTag.article.reviews, review)
-                .leftJoin(articleTag.article.articleLikes, articleLike)
-                .leftJoin(articleTag.article.files, file)
-                .where(categoryEq(category), keywordEq(keyword, target))
-                .orderBy(sortEq(sort))
-                .fetchOne();
-
-
-        return new PageImpl<>(re, pageable, count);
-    }
-
     private BooleanExpression categoryEq(String category) {
         return category != null ? article.category.name.eq(CategoryName.valueOf(category)) : null;
     }
@@ -176,10 +137,17 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 return article.answers.size().desc();
             case "answer-asc":
                 return article.answers.size().asc();
+            case "isChecked-true-desc":
+                return article.isClosed.eq(true).desc();
+            case "isChecked-true-asc":
+                return article.isClosed.eq(true).asc();
+            case "isChecked-false-desc":
+                return article.isClosed.eq(false).desc();
+            case "isChecked-false-asc":
+                return article.isClosed.eq(false).asc();
             default:
                 article.id.desc();
         }
         return article.id.desc();
     }
-    
 }
