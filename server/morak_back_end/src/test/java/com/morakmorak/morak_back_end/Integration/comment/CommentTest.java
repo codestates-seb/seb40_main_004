@@ -11,6 +11,7 @@ import com.morakmorak.morak_back_end.repository.user.AvatarRepository;
 import com.morakmorak.morak_back_end.repository.CommentRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -238,5 +239,25 @@ public class CommentTest {
                 .andExpect(jsonPath("$[0].content").value("살아남을 댓글입니다."))
                 .andExpect(jsonPath("$[0].createdAt").exists())
                 .andExpect(jsonPath("$[0].lastModifiedAt").exists());
+    }
+
+    @Test
+    @DisplayName("댓글 작성 시 유저의 포인트가 증가한다.")
+    void postComment_success_2() throws Exception {
+        //given
+        CommentDto.Request request = CommentDto.Request.builder()
+                .content(VALID_COMMENT).build();
+        Integer beforePoint = savedUser.getPoint();
+
+        String json = objectMapper.writeValueAsString(request);
+        //when
+        ResultActions perform = mockMvc.perform(post("/articles/{article-id}/comments", savedArticle.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, accessToken)
+        );
+        //then
+        Integer afterPoint = savedUser.getPoint();
+        Assertions.assertThat(beforePoint < afterPoint).isTrue();
     }
 }
