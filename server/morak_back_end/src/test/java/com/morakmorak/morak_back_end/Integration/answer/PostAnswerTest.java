@@ -82,7 +82,7 @@ public class PostAnswerTest {
 
         this.savedUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
         this.savedFile = fileRepository.findFileByLocalPath("1").orElseThrow(() -> new AssertionError());
-        this.accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+        this.accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
     }
 
@@ -149,7 +149,7 @@ public class PostAnswerTest {
 
         qna.getArticleList().add(article);
         em.persist(article);
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -226,7 +226,7 @@ public class PostAnswerTest {
                 .build();
 
         em.persist(article);
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -280,7 +280,7 @@ public class PostAnswerTest {
         int beforeNotificationSize = article.getUser().getNotifications().size();
         em.persist(article);
         em.persist(user);
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(

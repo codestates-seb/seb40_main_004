@@ -25,12 +25,12 @@ public final class JwtTokenUtil {
         this.refreshByteKey = refreshByteKey.getBytes(StandardCharsets.UTF_8);
     }
 
-    public String createAccessToken(String email, Long id, List<String> roles) {
-        return createToken(email, id, roles, ACCESS_TOKEN_EXPIRE_COUNT, accessByteKey);
+    public String createAccessToken(String email, Long id, List<String> roles, String nickname) {
+        return createToken(email, id, roles, ACCESS_TOKEN_EXPIRE_COUNT, accessByteKey, nickname);
     }
 
-    public String createRefreshToken(String email, Long id, List<String> roles) {
-        return createToken(email, id, roles, REFRESH_TOKEN_EXPIRE_COUNT, refreshByteKey);
+    public String createRefreshToken(String email, Long id, List<String> roles, String nickname) {
+        return createToken(email, id, roles, REFRESH_TOKEN_EXPIRE_COUNT, refreshByteKey, nickname);
     }
 
     public Claims parseAccessToken(String token) {
@@ -41,13 +41,14 @@ public final class JwtTokenUtil {
         return parseToken(refreshByteKey, token);
     }
 
-    String createToken(String email, Long id, List<String> roles, Long expire, byte[] secret) {
+    String createToken(String email, Long id, List<String> roles, Long expire, byte[] secret, String nickname) {
         Claims claims = Jwts
                 .claims()
                 .setSubject(email);
 
         claims.put(ID, id);
         claims.put(ROLES, roles);
+        claims.put(NICKNAME, nickname);
 
         String token = Jwts
                 .builder()

@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
-import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
-import static com.morakmorak.morak_back_end.util.TestConstants.ID1;
+import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,7 +37,7 @@ public class TestControllerTest {
     String user_manager_admin_token;
 
     public String createToken(List<String> roles) {
-        return jwtTokenUtil.createAccessToken(EMAIL1, ID1, roles);
+        return jwtTokenUtil.createAccessToken(EMAIL1, ID1, roles,NICKNAME1);
     }
 
     @BeforeEach

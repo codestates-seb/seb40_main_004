@@ -97,7 +97,7 @@ public class NotificationTest {
             notifications.add(notification);
         }
 
-        accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST);
+        accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST,NICKNAME2);
     }
 
     @Test
@@ -153,7 +153,7 @@ public class NotificationTest {
     @DisplayName("삭제 시 유저가 다를 경우 403 반환 테스트")
     void deleteNotification_failed() throws Exception {
         //given
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, ID2, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, ID2, ROLE_USER_LIST, NICKNAME2);
         Long id = notifications.get(0).getId();
         //when
         ResultActions perform = mockMvc.perform(delete("/notifications/{id}", id)
@@ -167,7 +167,7 @@ public class NotificationTest {
     @DisplayName("로직 정상 수행 후 notification 삭제 여부 확인")
     void deleteNotification() throws Exception {
         //given
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST,NICKNAME1);
         Long id = notifications.get(0).getId();
         //when
         ResultActions perform = mockMvc.perform(delete("/notifications/{id}", id)

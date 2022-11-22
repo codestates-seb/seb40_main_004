@@ -165,7 +165,7 @@ public class User {
 
         if (roles.size() == 0) roles = List.of("Role_User");
 
-        return jwtTokenUtil.createAccessToken(this.getEmail(), this.getId(), roles);
+        return jwtTokenUtil.createAccessToken(this.getEmail(), this.getId(), roles, this.getNickname());
     }
 
     public void injectAvatar(Avatar avatar) {
