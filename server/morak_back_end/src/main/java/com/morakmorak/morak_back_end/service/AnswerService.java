@@ -1,5 +1,7 @@
 package com.morakmorak.morak_back_end.service;
 
+import com.morakmorak.morak_back_end.domain.NotificationGenerator;
+import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.AnswerDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
@@ -13,6 +15,7 @@ import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.repository.answer.AnswerLikeRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
+import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import com.morakmorak.morak_back_end.repository.BookmarkRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +39,8 @@ public class AnswerService {
     private final BookmarkRepository bookmarkRepository;
     private final AnswerLikeRepository answerLikeRepository;
     private final AnswerMapper answerMapper;
+    private final NotificationRepository notificationRepository;
+    private final PointCalculator pointCalculator;
 
     private int size = 5;
     private int page = 0;
@@ -47,6 +52,11 @@ public class AnswerService {
         if (verifiedArticle.isQuestion() && !verifiedArticle.isClosedArticle()
                 && verifiedArticle.statusIsPosting()) {
             Answer savedAnswer = answerRepository.save(injectAllInto(answerNotSaved, verifiedUser, verifiedArticle, fileList));
+            NotificationGenerator generator = NotificationGenerator.of(verifiedUser, savedAnswer);
+            Notification notification = generator.generateNotification();
+
+            verifiedUser.addPoint(savedAnswer, pointCalculator);
+            notificationRepository.save(notification);
             return readAllAnswers(articleId, page, size);
         } else {
             throw new BusinessLogicException(ErrorCode.UNABLE_TO_ANSWER);
@@ -86,6 +96,8 @@ public class AnswerService {
         if (verifiedAnswer.hasPermissionWith(verifiedUser) && !verifiedAnswer.isPickedAnswer()
                 && verifiedArticle.statusIsPosting()) {
             answerRepository.deleteById(answerId);
+
+            verifiedUser.minusPoint(verifiedAnswer, pointCalculator);
             return readAllAnswers(articleId, page, size);
         } else {
             throw new BusinessLogicException(ErrorCode.UNABLE_TO_ANSWER);
@@ -106,12 +118,17 @@ public class AnswerService {
 
         answerLikeRepository.checkUserLiked(dbUser.getId(), dbAnswer.getId()).ifPresentOrElse(
                 answerLike -> {
+                    dbUser.minusPoint(answerLike, pointCalculator);
                     answerLikeRepository.deleteById(answerLike.getId());
                 },
                 () -> {
                     AnswerLike answerLike = AnswerLike.builder().answer(dbAnswer).user(dbUser).build();
                     dbAnswer.getAnswerLike().add(answerLike);
                     dbUser.getAnswerLikes().add(answerLike);
+
+                    if (dbAnswer.getAnswerLike().size() % 10 == 0) {
+                        NotificationGenerator.of(answerLike, dbAnswer.getAnswerLike().size());
+                    }
                 }
         );
 
