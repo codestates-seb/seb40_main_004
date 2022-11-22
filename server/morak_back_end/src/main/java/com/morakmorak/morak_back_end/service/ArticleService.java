@@ -13,6 +13,7 @@ import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.repository.article.ArticleLikeRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
+import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -41,7 +42,7 @@ public class ArticleService {
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
     private final PointCalculator pointCalculator;
-
+    private final NotificationRepository notificationRepository;
     private final ReportRepository reportRepository;
 
     public ArticleDto.ResponseSimpleArticle upload(
@@ -202,7 +203,9 @@ public class ArticleService {
                     dbUser.getArticleLikes().add(articleLike);
 
                     if (dbArticle.getArticleLikes().size() % 10 == 0) {
-                        NotificationGenerator.of(articleLike, dbArticle.getArticleLikes().size());
+                        NotificationGenerator generator = NotificationGenerator.of(articleLike, dbArticle.getArticleLikes().size());
+                        Notification notification = generator.generateNotification();
+                        notificationRepository.save(notification);
                     }
 
                     dbUser.addPoint(articleLike, pointCalculator);
