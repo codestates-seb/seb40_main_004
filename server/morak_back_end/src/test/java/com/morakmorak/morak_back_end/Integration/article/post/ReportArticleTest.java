@@ -26,6 +26,7 @@ import javax.persistence.EntityManager;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
+import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME1;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -88,7 +89,7 @@ public class ReportArticleTest {
             Article dbArticle = articleRepository.findArticleByContent("본문 입니다.본문 입니다.본문 입니다.").orElseThrow();
             User dbUser = userRepository.findUserByEmail(EMAIL1).orElseThrow();
 
-            String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST);
+            String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
             ArticleDto.RequestReportArticle requestReportArticle =
                     ArticleDto.RequestReportArticle.builder().reason(ReportReason.BAD_LANGUAGE).content("이유").build();
@@ -118,7 +119,7 @@ public class ReportArticleTest {
 
         User dbUser = userRepository.findUserByEmail(EMAIL1).orElseThrow();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         ArticleDto.RequestReportArticle requestReportArticle =
                 ArticleDto.RequestReportArticle.builder().reason(ReportReason.BAD_LANGUAGE).content("이유").build();

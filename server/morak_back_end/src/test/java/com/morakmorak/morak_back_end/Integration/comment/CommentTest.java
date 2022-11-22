@@ -74,7 +74,7 @@ public class CommentTest {
                 .build();
         userRepository.save(dbUser);
         this.savedUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
-        this.accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+        this.accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         avatarRepository.save(dbAvatar);
         Avatar savedAvatar = avatarRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
@@ -174,7 +174,7 @@ public class CommentTest {
                 .build();
         userRepository.save(newUser);
         User savedNewUser = userRepository.findUserByEmail(EMAIL2).orElseThrow(() -> new AssertionError());
-        String accessTokenForNewUser = jwtTokenUtil.createAccessToken(EMAIL2, savedNewUser.getId(), ROLE_USER_LIST);
+        String accessTokenForNewUser = jwtTokenUtil.createAccessToken(EMAIL2, savedNewUser.getId(), ROLE_USER_LIST, NICKNAME1);
         String json = objectMapper.writeValueAsString(request);
 
         //when 권한 없는 유저가 수정 요청을 보냈을 때
@@ -201,7 +201,7 @@ public class CommentTest {
                 .build();
         userRepository.save(newUser);
         User savedNewUser = userRepository.findUserByEmail(EMAIL2).orElseThrow(() -> new AssertionError());
-        String accessTokenForNewUser = jwtTokenUtil.createAccessToken(EMAIL2, savedNewUser.getId(), ROLE_USER_LIST);
+        String accessTokenForNewUser = jwtTokenUtil.createAccessToken(EMAIL2, savedNewUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         //when 권한 없는 유저가 삭제 요청을 보냈을 때
         ResultActions perform = mockMvc.perform(delete("/articles/{article-id}/comments/{comment-id}", savedArticle.getId(),savedComment.getId())

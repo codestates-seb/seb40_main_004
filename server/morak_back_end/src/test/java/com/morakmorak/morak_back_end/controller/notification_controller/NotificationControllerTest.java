@@ -90,7 +90,7 @@ public class NotificationControllerTest {
     @Test
     void getNotification_failed_404() throws Exception {
         //given
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST,NICKNAME1);
         BDDMockito.given(notificationService.findNotificationsBy(any(), any(PageRequest.class))).willThrow(new BusinessLogicException(USER_NOT_FOUND));
 
         //when
@@ -117,7 +117,7 @@ public class NotificationControllerTest {
     @Test
     void getNotification_failed_200() throws Exception {
         //given
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST,NICKNAME1);
 
         NotificationDto.SimpleResponse note1 = NotificationDto.SimpleResponse.builder()
                 .notificationId(ID1)
@@ -194,7 +194,7 @@ public class NotificationControllerTest {
     @DisplayName("해당 Notification 객체가 존재하지 않으면 404 반환")
     void deleteNotification_failed1() throws Exception {
         //given
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST,NICKNAME1);
         willThrow(new BusinessLogicException(NOTIFICATION_NOT_FOUND)).given(notificationService).deleteNotificationData(anyLong(), any());
         //when
         ResultActions perform = mockMvc.perform(delete("/notifications/1")
@@ -212,7 +212,7 @@ public class NotificationControllerTest {
     @DisplayName("해당 Notification에 대해 해당 유저의 권한이 없다면 403 Forbidden 반환")
     void deleteNotification_failed2() throws Exception {
         //given
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST,NICKNAME1);
         willThrow(new BusinessLogicException(NO_ACCESS_TO_THAT_OBJECT)).given(notificationService).deleteNotificationData(anyLong(), any());
         //when
         ResultActions perform = mockMvc.perform(delete("/notifications/1")
@@ -230,7 +230,7 @@ public class NotificationControllerTest {
     @DisplayName("로직이 정상적으로 실행된다면 203 반환")
     void deleteNotification_success() throws Exception {
         //given
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST,NICKNAME1);
         //when
         ResultActions perform = mockMvc.perform(delete("/notifications/1")
                 .header(JWT_HEADER, token));

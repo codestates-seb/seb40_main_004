@@ -21,7 +21,7 @@ public class EditUserProfileTest extends UserTest {
     @DisplayName("유효성 검사에 실패할 경우 400 badRequest")
     public void editUserProfile_failed1() throws Exception {
         //given
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST, NICKNAME1);
         UserDto.SimpleEditProfile request = UserDto.SimpleEditProfile.builder()
                 .infoMessage(CONTENT1)
                 .github(GITHUB_URL)
@@ -48,7 +48,7 @@ public class EditUserProfileTest extends UserTest {
         //given
         User dbUser = User.builder().build();
         User saved = userRepository.save(dbUser);
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, saved.getId(), ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, saved.getId(), ROLE_USER_LIST, NICKNAME1);
 
         entityManager.persist(User.builder().nickname(NICKNAME1).build());
 
@@ -76,7 +76,7 @@ public class EditUserProfileTest extends UserTest {
     @DisplayName("아이디가 존재하지 않을 경우 404 NOTFOUND")
     public void editUserProfile_failed3() throws Exception {
         //given
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST, NICKNAME1);
         UserDto.SimpleEditProfile request = UserDto.SimpleEditProfile.builder()
                 .infoMessage(CONTENT1)
                 .github(GITHUB_URL)
@@ -103,7 +103,7 @@ public class EditUserProfileTest extends UserTest {
         //given
         User dbUser = User.builder().build();
         User saved = userRepository.save(dbUser);
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, saved.getId(), ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, saved.getId(), ROLE_USER_LIST, NICKNAME1);
         UserDto.SimpleEditProfile request = UserDto.SimpleEditProfile.builder()
                 .infoMessage(CONTENT1)
                 .github(GITHUB_URL)

@@ -116,7 +116,7 @@ public class ArticleUploadTest {
         //id
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -154,7 +154,7 @@ public class ArticleUploadTest {
         //id
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -190,7 +190,7 @@ public class ArticleUploadTest {
         //id
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -226,7 +226,7 @@ public class ArticleUploadTest {
         //id
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -282,7 +282,7 @@ public class ArticleUploadTest {
         User user = userRepository.findById(id).get();
         Integer pointBefore = user.getPoint();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(

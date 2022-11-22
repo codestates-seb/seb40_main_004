@@ -44,7 +44,7 @@ class JwtTokenUtilTest {
     @DisplayName("액세스 토큰을 만들 때 사용된 인자값을 분해 시 그대로 반환한다.")
     public void test1() {
         //given
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_ADMIN_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_ADMIN_LIST, NICKNAME1);
 
         //when
         Claims userInfo = parseClaim(accessToken, SECRET_KEY.getBytes());
@@ -62,7 +62,7 @@ class JwtTokenUtilTest {
     @DisplayName("리프레시 토큰을 만들 때 사용된 인자값을 분해 시 그대로 반환한다.")
     public void test2() {
         //given
-        String refreshToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, ROLE_USER_ADMIN_LIST);
+        String refreshToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, ROLE_USER_ADMIN_LIST, NICKNAME1);
 
         //when
         Claims userInfo = parseClaim(refreshToken, REFRESH_KEY.getBytes());
@@ -99,7 +99,7 @@ class JwtTokenUtilTest {
     public void test5() throws Exception {
         //given
         Long backTime = -(14 * 24 * 60 * 60 * 1000L);
-        String expiredToken = jwtTokenUtil.createToken(EMAIL1, ID1, ROLE_USER_ADMIN_LIST, backTime, SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+        String expiredToken = jwtTokenUtil.createToken(EMAIL1, ID1, ROLE_USER_ADMIN_LIST, backTime, SECRET_KEY.getBytes(StandardCharsets.UTF_8), NICKNAME1);
 
         //when then
         assertThatThrownBy(
@@ -112,7 +112,7 @@ class JwtTokenUtilTest {
     public void test6() throws Exception {
         //given
         Long backTime = -(14 * 24 * 60 * 60 * 1000L);
-        String expiredToken = jwtTokenUtil.createToken(EMAIL1, ID1, ROLE_USER_ADMIN_LIST, backTime, REFRESH_KEY.getBytes(StandardCharsets.UTF_8));
+        String expiredToken = jwtTokenUtil.createToken(EMAIL1, ID1, ROLE_USER_ADMIN_LIST, backTime, REFRESH_KEY.getBytes(StandardCharsets.UTF_8), NICKNAME1);
 
         //when then
         assertThatThrownBy(

@@ -86,7 +86,7 @@ public class UpdateAnswerTest {
         answerRepository.save(answer);
         this.savedAnswer = answerRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
         this.savedFile = fileRepository.findFileByLocalPath("1").orElseThrow(() -> new AssertionError());
-        this.accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+        this.accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST, NICKNAME1);
         articleRepository.save(Article.builder().user(savedUser).category(info).articleStatus(ArticleStatus.POSTING).isClosed(false).build());
         this.validArticle = articleRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
     }
@@ -149,7 +149,7 @@ public class UpdateAnswerTest {
         article.getAnswers().add(answer);
         em.persist(answer);
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST, NICKNAME1);
         //when
         ResultActions perform = mockMvc.perform(patch("/articles/{article-id}/answers/{answer-id}", article.getId(), answer.getId())
                 .contentType(MediaType.APPLICATION_JSON)

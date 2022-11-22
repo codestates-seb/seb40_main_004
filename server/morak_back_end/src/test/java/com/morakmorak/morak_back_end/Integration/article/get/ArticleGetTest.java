@@ -334,7 +334,7 @@ public class ArticleGetTest {
         em.persist(user);
 
         User dbUser = userRepository.findUserByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("유저없음"));
-        String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST,NICKNAME1);
 
         Article dbArticle = articleRepository.findArticleByContent("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다.")
                 .orElseThrow(() -> new RuntimeException("게시글 없음"));
@@ -441,7 +441,7 @@ public class ArticleGetTest {
         em.persist(user);
 
         User dbUser = userRepository.findUserByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("유저없음"));
-        String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST,NICKNAME1);
 
         Article dbArticle = articleRepository.findArticleByContent("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다.")
                 .orElseThrow(() -> new RuntimeException("게시글 없음"));
@@ -542,7 +542,7 @@ public class ArticleGetTest {
                 .build();
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST,NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
