@@ -77,7 +77,6 @@ public class NotificationTest {
 
         for (int i=0; i<30; i++) {
             Notification notification = Notification.builder()
-                    .domainId((long) i)
                     .message(String.valueOf(i))
                     .isChecked(i % 2 == 0 ? Boolean.TRUE : Boolean.FALSE)
                     .domainType(DomainType.ARTICLE)
