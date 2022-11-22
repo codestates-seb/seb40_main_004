@@ -125,9 +125,12 @@ public class AnswerService {
                     AnswerLike answerLike = AnswerLike.builder().answer(dbAnswer).user(dbUser).build();
                     dbAnswer.getAnswerLike().add(answerLike);
                     dbUser.getAnswerLikes().add(answerLike);
+                    dbUser.addPoint(answerLike, pointCalculator);
 
                     if (dbAnswer.getAnswerLike().size() % 10 == 0) {
-                        NotificationGenerator.of(answerLike, dbAnswer.getAnswerLike().size());
+                        NotificationGenerator generator = NotificationGenerator.of(answerLike, dbAnswer.getAnswerLike().size());
+                        Notification notification = generator.generateNotification();
+                        notificationRepository.save(notification);
                     }
                 }
         );
