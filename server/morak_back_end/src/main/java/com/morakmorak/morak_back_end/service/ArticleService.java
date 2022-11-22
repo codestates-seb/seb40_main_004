@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.service;
 
+import com.morakmorak.morak_back_end.domain.NotificationGenerator;
 import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
@@ -47,7 +48,9 @@ public class ArticleService {
             Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
             List<FileDto.RequestFileWithId> files, Category category
     ) {
-        article.injectUserForMapping(userService.findVerifiedUserById(userInfo.getId()));
+        User dbUser = userService.findVerifiedUserById(userInfo.getId());
+
+        article.injectUserForMapping(dbUser);
 
         findDbFilesAndInjectWithArticle(article, files);
 
@@ -56,6 +59,8 @@ public class ArticleService {
         findDbCategoryAndInjectWithArticle(article, category);
 
         Article dbArticle = articleRepository.save(article);
+
+        dbUser.addPoint(dbArticle, pointCalculator);
 
         return articleMapper.articleToResponseSimpleArticle(dbArticle.getId());
     }
@@ -79,6 +84,8 @@ public class ArticleService {
         Article dbArticle = findVerifiedArticle(articleId);
         checkArticlePerMission(dbArticle, userInfo);
         dbArticle.changeArticleStatus(ArticleStatus.REMOVED);
+        User user = dbArticle.getUser();
+        user.minusPoint(dbArticle, pointCalculator);
         return true;
     }
 
@@ -186,6 +193,7 @@ public class ArticleService {
 
         articleLikeRepository.checkUserLiked(dbUser.getId(), dbArticle.getId()).ifPresentOrElse(
                 articleLike -> {
+                    dbUser.minusPoint(articleLike, pointCalculator);
                     articleLikeRepository.deleteById(articleLike.getId());
                 },
                 () -> {
@@ -193,6 +201,11 @@ public class ArticleService {
                     dbArticle.getArticleLikes().add(articleLike);
                     dbUser.getArticleLikes().add(articleLike);
 
+                    if (dbArticle.getArticleLikes().size() % 10 == 0) {
+                        NotificationGenerator.of(articleLike, dbArticle.getArticleLikes().size());
+                    }
+
+                    dbUser.addPoint(articleLike, pointCalculator);
                 }
         );
 
