@@ -69,13 +69,14 @@ package com.morakmorak.morak_back_end.domain;
 * */
 
 import com.morakmorak.morak_back_end.entity.*;
-import org.springframework.stereotype.Component;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-@Component
-public class NotificationMessageGenerator {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+class NotificationMessage {
     private final StringBuilder stringBuilder = new StringBuilder();
 
-    public String generateAnswerNotification(User sender, Answer answer) {
+    String generateMessage(User sender, Answer answer) {
         String message = stringBuilder.append("회원님께서 작성하신 ")
                 .append("\"")
                 .append(answer.getArticle().getTitle())
@@ -89,7 +90,7 @@ public class NotificationMessageGenerator {
         return message;
     }
 
-    public String generateCommentNotification(User sender, Comment comment) {
+    String generateMessage(User sender, Comment comment) {
         String message;
 
         if (comment.getAnswer() == null) {
@@ -116,7 +117,7 @@ public class NotificationMessageGenerator {
         return message;
     }
 
-    public String generateLikeNotification(ArticleLike articleLike, int count) {
+    String generateMessage(ArticleLike articleLike, int count) {
         verifyCount(count);
 
         String result = stringBuilder.append("회원님께서 작성하신 ")
@@ -132,7 +133,7 @@ public class NotificationMessageGenerator {
         return result;
     }
 
-    public String generateLikeNotification(AnswerLike answerLike, int count) {
+    String generateMessage(AnswerLike answerLike, int count) {
         verifyCount(count);
 
         String result = stringBuilder.append("회원님께서 작성하신 ")
@@ -148,7 +149,7 @@ public class NotificationMessageGenerator {
         return result;
     }
 
-    public String generateReviewNotification(Review review) {
+    String generateMessage(Review review) {
         Integer point = review.getPoint();
         User sender = review.getSender();
         String message;
