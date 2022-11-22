@@ -153,4 +153,11 @@ public class Article extends BaseTime {
             return true;
         }return false;
     }
+
+    public Boolean statusIsPosting() {
+        if (this.articleStatus == ArticleStatus.POSTING) {
+            return true;
+        }
+        return false;
+    }
 }

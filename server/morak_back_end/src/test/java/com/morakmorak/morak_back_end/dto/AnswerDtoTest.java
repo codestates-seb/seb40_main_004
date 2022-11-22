@@ -33,10 +33,10 @@ class AnswerDtoTest {
         Assertions.assertThat(validate).isNotEmpty();
     }
     @Test
-    @DisplayName("답변 내용의 길이가 10자 이상이면 예외가 발생하지 않는다.")
+    @DisplayName("답변 내용의 길이가 15자 이상이면 예외가 발생하지 않는다.")
     void contentLength_success_1() {
         //유효한 requestAnswer
-        AnswerDto.RequestPostAnswer request = AnswerDto.RequestPostAnswer.builder().content("10자 이상의 유효한 본문").build();
+        AnswerDto.RequestPostAnswer request = AnswerDto.RequestPostAnswer.builder().content("10자 이상의 유효한 본문일 때 예외가 발생하지 않습니다.").build();
         //when 유효성 검사 진행 시
         Set<ConstraintViolation<AnswerDto.RequestPostAnswer>> validate = validator.validate(request);
         //then 예외가 존재
