@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 정하승
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-20
+ * 최근 수정일: 2022-11-22
  * 개요: 가입하기 버튼에 인증번호 발송 페이지로 가는 링크 추가
  */
 
@@ -9,6 +9,8 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
+import { userEmailAtom, userNickName, userPassword } from '../../atomsHS';
 import { Button } from '../common/Button';
 import { Divider } from './Divider';
 import { SocialLoginBtn } from './SocialLoginBtn';
@@ -16,11 +18,17 @@ import { SocialLoginBtn } from './SocialLoginBtn';
 type SignUpProps = {
   email: string;
   password: string;
-  confirmPassword: string;
-  nickName: string;
+  confirmPassword?: string;
+  nickname: string;
 };
 
 export const SignUpForm = () => {
+  const [email, setEmail] = useRecoilState(userEmailAtom);
+  const [password, setPassword] = useRecoilState(userPassword);
+  const [nickname, setNickName] = useRecoilState(userNickName);
+  // const setEmail = useSetRecoilState(userEmailAtom);
+  // const setPassword = useSetRecoilState(userPassword);
+  // const setNickName = useSetRecoilState(userNickName);
   const router = useRouter();
   const {
     register,
@@ -33,7 +41,7 @@ export const SignUpForm = () => {
     email,
     password,
     confirmPassword,
-    nickName,
+    nickname,
   }) => {
     if (password !== confirmPassword) {
       console.log('비밀번호 다름');
@@ -45,18 +53,20 @@ export const SignUpForm = () => {
     }
 
     axios
-      .post('http://localhost:3000/users', {
+      .post(`/api/auth/mail`, {
         email,
         password,
         confirmPassword,
-        nickName,
+        nickname,
       })
       .then((res) => {
-        // console.log(res);
+        setEmail(email);
+        setPassword(password);
+        setNickName(nickname);
         router.push('/authentication-number');
       })
       .catch((error) => {
-        console.log(error);
+        console.log('auth error', error);
       });
   };
 
@@ -65,11 +75,11 @@ export const SignUpForm = () => {
       className="flex flex-col mx-auto justify-center items-start mt-3 space-y-3"
       onSubmit={handleSubmit(onValid)}
     >
-      <label htmlFor="nickName" className="font-bold">
+      <label htmlFor="nickname" className="font-bold">
         닉네임
       </label>
       <input
-        {...register('nickName', {
+        {...register('nickname', {
           required: true,
           minLength: {
             value: 2,
@@ -85,7 +95,7 @@ export const SignUpForm = () => {
         placeholder="닉네임을 입력해주세요."
       />
       <p className="font-bold text-red-500 text-sm text-center">
-        {errors.nickName?.message}
+        {errors.nickname?.message}
       </p>
       <label htmlFor="email" className="font-bold">
         이메일
@@ -118,8 +128,9 @@ export const SignUpForm = () => {
               '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다.',
           },
         })}
-        className="rounded-full w-96 h-10"
+        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3"
         type="password"
+        placeholder="비밀번호를 입력해주세요."
         autoComplete="off"
       />
       <p className="font-semibold text-red-500 relative right-0 text-sm">
@@ -132,15 +143,15 @@ export const SignUpForm = () => {
         {...register('confirmPassword', {
           required: true,
         })}
-        className="rounded-full w-96 h-10"
+        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3"
         type="password"
+        placeholder="한번 더 입력해주세요."
         autoComplete="off"
       />
       <p className="font-semibold text-red-500 text-sm text-center">
         {errors.confirmPassword?.message}
       </p>
       <section className="mx-auto rounded-full w-96 h-10 space-y-2">
-        {/* <input type="submit" value="가입하기" /> */}
         <Button>가입하기</Button>
       </section>
       <span className="mt-3 text-main-gray">

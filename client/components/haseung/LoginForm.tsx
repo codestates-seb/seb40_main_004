@@ -1,12 +1,15 @@
 /*
  * 책임 작성자: 정하승
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-16
+ * 최근 수정일: 2022-11-22
  */
 
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
+import { isLoggedInAtom } from '../../atomsYW';
 import { Button } from '../common/Button';
 
 type LoginProps = {
@@ -15,19 +18,24 @@ type LoginProps = {
 };
 
 export const LoginForm = () => {
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
   const onValid = ({ email, password }: LoginProps) => {
-    /* Sending a post request to the server. */
-    // console.log(email, password);
-    // fetch('http://localhost:3000/users', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ email, password }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => console.log('data', data.user));
     axios
-      .post('http://localhost:3000/users', { email, password })
-      .then((res) => console.log('res', res.data));
+      .post(`/api/auth/token`, {
+        email,
+        password,
+      })
+      .then((res) => {
+        if (res.data.authorization) {
+          localStorage.setItem('loginToken', JSON.stringify(res.data));
+        }
+      })
+      .then(() => {
+        setIsLoggedIn(!isLoggedIn);
+        alert('로그인 성공');
+        router.push('/');
+      });
   };
   const { register, handleSubmit } = useForm<LoginProps>();
   return (
