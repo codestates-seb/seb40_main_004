@@ -72,13 +72,13 @@ import com.morakmorak.morak_back_end.entity.*;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NotificationGenerator {
+public class NotificationMessageGenerator {
     private final StringBuilder stringBuilder = new StringBuilder();
 
-    public String generateAnswerNotification(User sender, Article article) {
+    public String generateAnswerNotification(User sender, Answer answer) {
         String message = stringBuilder.append("회원님께서 작성하신 ")
                 .append("\"")
-                .append(article.getTitle())
+                .append(answer.getArticle().getTitle())
                 .append("\"")
                 .append("에 ")
                 .append(sender.getNickname())
@@ -89,29 +89,28 @@ public class NotificationGenerator {
         return message;
     }
 
-    public String generateCommentNotification(User sender, Article article) {
-        String message = stringBuilder.append("회원님께서 작성하신 ")
-                .append("\"")
-                .append(article.getTitle())
-                .append("\"")
-                .append("에 ")
-                .append(sender.getNickname())
-                .append("님께서 댓글을 남기셨어요.")
-                .toString();
+    public String generateCommentNotification(User sender, Comment comment) {
+        String message;
 
-        cleanBuilder();
-        return message;
-    }
-
-    public String generateCommentNotification(User sender, Answer answer) {
-        String message = stringBuilder.append("회원님께서 작성하신 ")
-                .append("\"")
-                .append(answer.getArticle().getTitle())
-                .append("\"")
-                .append("의 답변에 ")
-                .append(sender.getNickname())
-                .append("님께서 댓글을 남기셨어요.")
-                .toString();
+        if (comment.getAnswer() == null) {
+            message = stringBuilder.append("회원님께서 작성하신 ")
+                    .append("\"")
+                    .append(comment.getArticle().getTitle())
+                    .append("\"")
+                    .append("에 ")
+                    .append(sender.getNickname())
+                    .append("님께서 댓글을 남기셨어요.")
+                    .toString();
+        } else {
+            message = stringBuilder.append("회원님께서 작성하신 ")
+                    .append("\"")
+                    .append(comment.getAnswer().getArticle().getTitle())
+                    .append("\"")
+                    .append("의 답변에 ")
+                    .append(sender.getNickname())
+                    .append("님께서 댓글을 남기셨어요.")
+                    .toString();
+        }
 
         cleanBuilder();
         return message;
@@ -149,11 +148,35 @@ public class NotificationGenerator {
         return result;
     }
 
+    public String generateReviewNotification(Review review) {
+        Integer point = review.getPoint();
+        User sender = review.getSender();
+        String message;
+
+        if (review.getAnswer() == null) {
+            message = stringBuilder.append(sender.getNickname())
+                    .append("님께서 회원님께 ")
+                    .append(point)
+                    .append("포인트를 후원하셨어요!")
+                    .toString();
+        } else {
+            String title = review.getAnswer().getArticle().getTitle();
+            message = stringBuilder.append(sender.getNickname())
+                    .append("님께서 회원님이 작성하신 ")
+                    .append(title)
+                    .append("의 답변을 채택하셨어요!")
+                    .toString();
+        }
+
+        cleanBuilder();
+        return message;
+    }
+
     private void cleanBuilder() {
         stringBuilder.delete(0, stringBuilder.length());
     }
 
     private void verifyCount(int count) {
-        if (count % 10 != 0) throw new IllegalArgumentException("유효하지 않은 카운트");
+        if (count % 10 != 0) throw new IllegalArgumentException("카운트는 항상 10으로 나누어 떨어져야 합니다.");
     }
 }
