@@ -22,6 +22,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.hamcrest.Matchers.*;
 import static com.morakmorak.morak_back_end.util.CommentTestConstants.VALID_COMMENT;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
@@ -258,6 +260,35 @@ public class CommentTest {
         );
         //then
         Integer afterPoint = savedUser.getPoint();
-        Assertions.assertThat(beforePoint < afterPoint).isTrue();
+        assertThat(beforePoint < afterPoint).isTrue();
+    }
+
+    @Test
+    @DisplayName("댓글 작성 시 게시글 작성자에게 알림이 생성된다")
+    void postComment_success_3() throws Exception {
+        //given
+        CommentDto.Request request = CommentDto.Request.builder()
+                .content(VALID_COMMENT).build();
+
+        String json = objectMapper.writeValueAsString(request);
+        //when
+        ResultActions perform = mockMvc.perform(post("/articles/{article-id}/comments", savedArticle.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .header(JWT_HEADER, accessToken)
+        );
+        //then
+        StringBuilder stringBuilder = new StringBuilder();
+        String message = stringBuilder.append("회원님께서 작성하신 ")
+                .append("\"")
+                .append(savedArticle.getTitle())
+                .append("\"")
+                .append("에 ")
+                .append(savedUser.getNickname())
+                .append("님께서 댓글을 남기셨어요.")
+                .toString();
+
+        assertThat(savedArticle.getUser().getNotifications().size()).isEqualTo(1);
+        assertThat(savedArticle.getUser().getNotifications().get(0).getMessage()).isEqualTo(message);
     }
 }
