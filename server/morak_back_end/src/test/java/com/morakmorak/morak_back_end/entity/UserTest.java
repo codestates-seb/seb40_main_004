@@ -142,4 +142,19 @@ class UserTest {
         //then
         assertThat(user.getPoint()).isEqualTo(10);
     }
+
+    @Test
+    @DisplayName("pointCalculator가 반환하는 값만큼 point가 감소한다.")
+    void minusPoint() {
+        //given
+        User user = User.builder().build();
+        Article article = Article.builder().title(CONTENT1).build();
+        given(pointCalculator.calculatePaymentPoint(article)).willReturn(10);
+
+        //when
+        user.minusPoint(article, pointCalculator);
+
+        //then
+        assertThat(user.getPoint()).isEqualTo(-10);
+    }
 }
