@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.service;
 
+import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
@@ -38,6 +39,7 @@ public class ArticleService {
     private final BookmarkRepository bookmarkRepository;
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
+    private final PointCalculator pointCalculator;
 
     private final ReportRepository reportRepository;
 

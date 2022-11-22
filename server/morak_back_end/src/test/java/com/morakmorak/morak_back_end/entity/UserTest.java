@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.entity;
 
+import com.morakmorak.morak_back_end.domain.PointCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class ResponseSimpleUserDtoTest {
+class UserTest {
     @Mock
     PasswordEncoder passwordEncoder;
+
+    @Mock
+    PointCalculator pointCalculator;
 
     private String ENCODED_PASSWORD;
 
@@ -94,5 +98,48 @@ class ResponseSimpleUserDtoTest {
 
         //then
         assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("user의 avatar가 변경된다.")
+    void injectAvatar() {
+        //given
+        User user = User.builder().build();
+        Avatar avatar = Avatar.builder().remotePath(CONTENT1).build();
+
+        //when
+        user.injectAvatar(avatar);
+
+        //then
+        assertThat(user.getAvatar().getRemotePath()).isEqualTo(CONTENT1);
+    }
+
+    @Test
+    @DisplayName("user의 articles에 article이 추가된다")
+    void addArticle() {
+        //given
+        User user = User.builder().build();
+        Article article = Article.builder().title(CONTENT1).build();
+
+        //when
+        user.addArticle(article);
+
+        //then
+        assertThat(user.getArticles().get(0).getTitle().equals(CONTENT1)).isTrue();
+    }
+
+    @Test
+    @DisplayName("pointCalculator가 반환하는 값만큼 point가 더해진다.")
+    void addPoint() {
+        //given
+        User user = User.builder().build();
+        Article article = Article.builder().title(CONTENT1).build();
+        given(pointCalculator.calculatePaymentPoint(article)).willReturn(10);
+
+        //when
+        user.addPoint(article, pointCalculator);
+
+        //then
+        assertThat(user.getPoint()).isEqualTo(10);
     }
 }

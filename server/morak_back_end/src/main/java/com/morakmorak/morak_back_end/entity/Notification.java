@@ -21,7 +21,8 @@ public class Notification extends BaseTime {
 
     private String message;
 
-    private Boolean isChecked;
+    @Builder.Default
+    private Boolean isChecked = Boolean.FALSE;
 
     private Long domainId;
 
@@ -33,6 +34,14 @@ public class Notification extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static Notification of(String messsage, String uri, User receiver) {
+        return Notification.builder()
+                .message(messsage)
+                .uri(uri)
+                .user(receiver)
+                .build();
+    }
 
     public void mapUserAndNotification() {
         this.user.getNotifications().add(this);
