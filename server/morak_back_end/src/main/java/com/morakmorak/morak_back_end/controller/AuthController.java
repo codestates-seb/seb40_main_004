@@ -24,15 +24,15 @@ public class AuthController {
 
     @PostMapping("/token")
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthDto.ResponseToken postLogin(@RequestBody AuthDto.RequestLogin requestLogin) {
+    public AuthDto.ResponseToken postLogin(@Valid @RequestBody AuthDto.RequestLogin requestLogin) {
         User user = userMapper.toLoginEntity(requestLogin);
         return authService.loginUser(user);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthDto.ResponseToken postJoin(@RequestBody @Valid AuthDto.RequestJoin requestJoin) {
-        User user = userMapper.toJoinEntity(requestJoin);
+    public AuthDto.ResponseToken postJoin(@Valid @RequestBody AuthDto.RequestJoin requestJoin) {
+d         User user = userMapper.toJoinEntity(requestJoin);
         return authService.joinUser(user, requestJoin.getAuthKey());
     }
 
@@ -50,7 +50,7 @@ public class AuthController {
 
     @PostMapping("/mail")
     @ResponseStatus(HttpStatus.CREATED)
-    public Boolean postAuthMail(@RequestBody EmailDto.RequestSendMail request) {
+    public Boolean postAuthMail(@Valid @RequestBody EmailDto.RequestSendMail request) {
         return authService.sendAuthenticationMailForJoin(request.getEmail());
     }
 

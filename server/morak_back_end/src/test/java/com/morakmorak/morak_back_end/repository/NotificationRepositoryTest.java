@@ -55,7 +55,6 @@ public class NotificationRepositoryTest {
                     .user(user)
                     .isChecked(Boolean.TRUE)
                     .message(CONTENT1)
-                    .domainId(ID1)
                     .build();
 
             notice.mapUserAndNotification();

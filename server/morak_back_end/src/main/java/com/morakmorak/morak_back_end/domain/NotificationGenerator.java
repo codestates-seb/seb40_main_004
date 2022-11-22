@@ -102,6 +102,10 @@ public final class NotificationGenerator {
 
         if (!StringUtils.hasText(message) || !StringUtils.hasText(uri) || receiver == null) throw new IllegalArgumentException("유효하지 않은 요청");
 
-        return Notification.of(message, uri, receiver);
+
+        Notification notification = Notification.of(message, uri, receiver);
+        receiver.addNotification(notification);
+
+        return notification;
     }
 }

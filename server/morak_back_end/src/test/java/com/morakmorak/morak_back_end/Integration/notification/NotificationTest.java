@@ -4,11 +4,12 @@ import com.morakmorak.morak_back_end.controller.NotificationController;
 import com.morakmorak.morak_back_end.dto.NotificationDto;
 import com.morakmorak.morak_back_end.dto.ResponseMultiplePaging;
 import com.morakmorak.morak_back_end.dto.UserDto;
-import com.morakmorak.morak_back_end.entity.Notification;
-import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.DomainType;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
+import com.morakmorak.morak_back_end.service.AnswerService;
+import com.morakmorak.morak_back_end.service.ArticleService;
 import com.morakmorak.morak_back_end.service.NotificationService;
 import com.morakmorak.morak_back_end.util.SecurityTestConstants;
 import com.morakmorak.morak_back_end.util.TestConstants;
@@ -63,6 +64,12 @@ public class NotificationTest {
     @Autowired
     NotificationRepository notificationRepository;
 
+    @Autowired
+    ArticleService articleService;
+
+    @Autowired
+    AnswerService answerService;
+
     private final String BASE_URL = "localhost:8080.com";
 
     User user;
@@ -77,7 +84,6 @@ public class NotificationTest {
 
         for (int i=0; i<30; i++) {
             Notification notification = Notification.builder()
-                    .domainId((long) i)
                     .message(String.valueOf(i))
                     .isChecked(i % 2 == 0 ? Boolean.TRUE : Boolean.FALSE)
                     .domainType(DomainType.ARTICLE)
@@ -172,5 +178,141 @@ public class NotificationTest {
         //then
         perform.andExpect(status().isNoContent());
         assertThat(result).isEmpty();
+    }
+
+    @Test
+    @DisplayName("작성한 글에 좋아요가 10개 달리면 알림이 생성된다")
+    void article_notification() throws Exception {
+        //given
+        User author = User.builder().nickname(NICKNAME1).build();
+        Article article = Article.builder().user(author).title(CONTENT1).build();
+
+        em.persist(author);
+        em.persist(article);
+
+        //when
+        for (int i=0; i<10; i++) {
+            User other = User.builder().nickname(NICKNAME2 + i).build();
+            em.persist(other);
+            articleService.pressLikeButton(article.getId(), UserDto.UserInfo.builder().id(other.getId()).build());
+        }
+
+        //then
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String result = stringBuilder.append("회원님께서 작성하신 ")
+                .append("\"")
+                .append(article.getTitle())
+                .append("\"")
+                .append("의 좋아요가 ")
+                .append(10)
+                .append("개를 돌파했어요.")
+                .toString();
+
+        assertThat(author.getNotifications().size()).isEqualTo(ONE);
+        assertThat(author.getNotifications().get(0).getMessage()).isEqualTo(result);
+    }
+
+    @Test
+    @DisplayName("작성한 글에 좋아요가 30개 달리면 알림이 생성된다")
+    void article_notification2() throws Exception {
+        //given
+        User author = User.builder().nickname(NICKNAME1).build();
+        Article article = Article.builder().user(author).title(CONTENT1).build();
+
+        em.persist(author);
+        em.persist(article);
+
+        //when
+        for (int i=0; i<30; i++) {
+            User other = User.builder().nickname(NICKNAME2 + i).build();
+            em.persist(other);
+            articleService.pressLikeButton(article.getId(), UserDto.UserInfo.builder().id(other.getId()).build());
+        }
+
+        //then
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String result = stringBuilder.append("회원님께서 작성하신 ")
+                .append("\"")
+                .append(article.getTitle())
+                .append("\"")
+                .append("의 좋아요가 ")
+                .append(30)
+                .append("개를 돌파했어요.")
+                .toString();
+
+        assertThat(author.getNotifications().size()).isEqualTo(THREE);
+        assertThat(author.getNotifications().get(2).getMessage()).isEqualTo(result);
+    }
+
+    @Test
+    @DisplayName("작성한 답글에 좋아요가 10개 달리면 알림이 생성된다")
+    void article_notification3() throws Exception {
+        //given
+        User author = User.builder().nickname(NICKNAME1).build();
+        Article article = Article.builder().user(author).title(CONTENT1).build();
+        Answer answer = Answer.builder().user(author).article(article).content(CONTENT2).build();
+
+        em.persist(author);
+        em.persist(article);
+        em.persist(answer);
+
+        //when
+        for (int i=0; i<30; i++) {
+            User other = User.builder().nickname(NICKNAME2 + i).build();
+            em.persist(other);
+            answerService.pressLikeButton(answer.getId(), UserDto.UserInfo.builder().id(other.getId()).build());
+        }
+
+        //then
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String result = stringBuilder.append("회원님께서 작성하신 ")
+                .append("\"")
+                .append(answer.getArticle().getTitle())
+                .append("\"")
+                .append("의 답변에 대한 좋아요가 ")
+                .append(10)
+                .append("개를 돌파했어요.")
+                .toString();
+
+        assertThat(author.getNotifications().size()).isEqualTo(THREE);
+        assertThat(author.getNotifications().get(0).getMessage()).isEqualTo(result);
+    }
+
+    @Test
+    @DisplayName("작성한 답글에 좋아요가 100개 달리면 알림이 생성된다")
+    void article_notification4() throws Exception {
+        //given
+        User author = User.builder().nickname(NICKNAME1).build();
+        Article article = Article.builder().user(author).title(CONTENT1).build();
+        Answer answer = Answer.builder().user(author).article(article).content(CONTENT2).build();
+
+        em.persist(author);
+        em.persist(article);
+        em.persist(answer);
+
+        //when
+        for (int i=0; i<100; i++) {
+            User other = User.builder().nickname(NICKNAME2 + i).build();
+            em.persist(other);
+            answerService.pressLikeButton(answer.getId(), UserDto.UserInfo.builder().id(other.getId()).build());
+        }
+
+        //then
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String result = stringBuilder.append("회원님께서 작성하신 ")
+                .append("\"")
+                .append(answer.getArticle().getTitle())
+                .append("\"")
+                .append("의 답변에 대한 좋아요가 ")
+                .append(100)
+                .append("개를 돌파했어요.")
+                .toString();
+
+        assertThat(author.getNotifications().size()).isEqualTo(10);
+        assertThat(author.getNotifications().get(9).getMessage()).isEqualTo(result);
     }
 }

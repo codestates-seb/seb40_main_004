@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.service;
 
+import com.morakmorak.morak_back_end.domain.NotificationGenerator;
 import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
@@ -12,6 +13,7 @@ import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.repository.article.ArticleLikeRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
+import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,14 +42,16 @@ public class ArticleService {
     private final CommentMapper commentMapper;
     private final TagMapper tagMapper;
     private final PointCalculator pointCalculator;
-
+    private final NotificationRepository notificationRepository;
     private final ReportRepository reportRepository;
 
     public ArticleDto.ResponseSimpleArticle upload(
             Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
             List<FileDto.RequestFileWithId> files, Category category
     ) {
-        article.injectUserForMapping(userService.findVerifiedUserById(userInfo.getId()));
+        User dbUser = userService.findVerifiedUserById(userInfo.getId());
+
+        article.injectUserForMapping(dbUser);
 
         findDbFilesAndInjectWithArticle(article, files);
 
@@ -56,6 +60,8 @@ public class ArticleService {
         findDbCategoryAndInjectWithArticle(article, category);
 
         Article dbArticle = articleRepository.save(article);
+
+        dbUser.addPoint(dbArticle, pointCalculator);
 
         return articleMapper.articleToResponseSimpleArticle(dbArticle.getId());
     }
@@ -79,6 +85,8 @@ public class ArticleService {
         Article dbArticle = findVerifiedArticle(articleId);
         checkArticlePerMission(dbArticle, userInfo);
         dbArticle.changeArticleStatus(ArticleStatus.REMOVED);
+        User user = dbArticle.getUser();
+        user.minusPoint(dbArticle, pointCalculator);
         return true;
     }
 
@@ -186,6 +194,7 @@ public class ArticleService {
 
         articleLikeRepository.checkUserLiked(dbUser.getId(), dbArticle.getId()).ifPresentOrElse(
                 articleLike -> {
+                    dbUser.minusPoint(articleLike, pointCalculator);
                     articleLikeRepository.deleteById(articleLike.getId());
                 },
                 () -> {
@@ -193,6 +202,13 @@ public class ArticleService {
                     dbArticle.getArticleLikes().add(articleLike);
                     dbUser.getArticleLikes().add(articleLike);
 
+                    if (dbArticle.getArticleLikes().size() % 10 == 0) {
+                        NotificationGenerator generator = NotificationGenerator.of(articleLike, dbArticle.getArticleLikes().size());
+                        Notification notification = generator.generateNotification();
+                        notificationRepository.save(notification);
+                    }
+
+                    dbUser.addPoint(articleLike, pointCalculator);
                 }
         );
 

@@ -255,4 +255,45 @@ public class ArticleUploadTest {
         userRepository.deleteAll();
     }
 
+    @Test
+    @DisplayName("게시글 작성시 작성한 유저의 포인트가 증가한다.")
+    public void upload_suc2() throws Exception {
+        //given
+        Tag tag = tagRepository.findTagByName(TagName.JAVA).orElseThrow();
+        Category category = categoryRepository.findCategoryByName(CategoryName.INFO).orElseThrow();
+        File file1 = fileRepository.findFileByLocalPath("1").orElseThrow();
+        File file2 = fileRepository.findFileByLocalPath("2").orElseThrow();
+
+
+        ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
+                .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(tag.getId()).name(TagName.JAVA).build()))
+                .fileId(List.of(FileDto.RequestFileWithId.builder()
+                        .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
+                        .fileId(file2.getId()).build()))
+                .category(category.getName())
+                .thumbnail(1L)
+                .build();
+
+        String content = objectMapper.writeValueAsString(requestUploadArticle);
+        //id
+        Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
+        User user = userRepository.findById(id).get();
+        Integer pointBefore = user.getPoint();
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(JWT_HEADER, accessToken)
+                        .content(content)
+        );
+
+        //then
+        Integer pointAfter = user.getPoint();
+        Assertions.assertThat(pointBefore < pointAfter).isTrue();
+    }
 }

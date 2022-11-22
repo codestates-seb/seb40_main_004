@@ -1,12 +1,16 @@
 package com.morakmorak.morak_back_end.service;
 
+import com.morakmorak.morak_back_end.domain.NotificationGenerator;
+import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.Comment;
+import com.morakmorak.morak_back_end.entity.Notification;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.CommentRepository;
+import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ArticleService articleService;
     private final UserService userService;
+    private final NotificationRepository notificationRepository;
+    private final PointCalculator pointCalculator;
 
     public CommentDto.Response makeComment(Long userId, Long articleId, Comment commentNotSaved) {
         User verifiedUser = userService.findVerifiedUserById(userId);
@@ -30,6 +36,12 @@ public class CommentService {
 
         commentNotSaved.injectUser(verifiedUser).injectArticle(verifiedArticle);
         Comment savedComment = commentRepository.save(commentNotSaved);
+
+        NotificationGenerator generator = NotificationGenerator.of(verifiedUser, savedComment);
+        Notification notification = generator.generateNotification();
+        verifiedUser.addPoint(savedComment, pointCalculator);
+
+        notificationRepository.save(notification);
         return CommentDto.Response.of(Optional.of(savedComment));
     }
 
@@ -61,6 +73,7 @@ public class CommentService {
         Comment foundComment = findVerifiedCommentById(commentId);
         if (foundComment.hasPermissionWith(verifiedUser) && verifiedArticle.statusIsPosting()) {
             commentRepository.deleteById(commentId);
+            verifiedUser.minusPoint(foundComment, pointCalculator);
             return true;
         } else {
             throw new BusinessLogicException(ErrorCode.CANNOT_ACCESS_COMMENT);

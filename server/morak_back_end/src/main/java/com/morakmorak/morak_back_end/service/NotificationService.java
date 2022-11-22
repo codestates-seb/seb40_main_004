@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.service;
 
+import com.morakmorak.morak_back_end.domain.NotificationGenerator;
 import com.morakmorak.morak_back_end.dto.NotificationDto;
 import com.morakmorak.morak_back_end.dto.ResponseMultiplePaging;
 import com.morakmorak.morak_back_end.entity.Notification;

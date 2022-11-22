@@ -1,10 +1,13 @@
 package com.morakmorak.morak_back_end.Integration.article.delete;
 
 import com.morakmorak.morak_back_end.entity.Article;
+import com.morakmorak.morak_back_end.entity.Category;
 import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,6 +52,7 @@ public class ArticleDeleteTest {
                 .title("삭제할 title입니다. 삭제가 되는지 확인해 보도록  하겠습니다.")
                 .content("삭제할 content입니다. 삭제가 되는지 확인해 보도록  하겠습니다. ")
                 .user(saveUser)
+                .category(new Category(CategoryName.QNA))
                 .build();
 
         articleRepository.save(article);
@@ -113,5 +117,28 @@ public class ArticleDeleteTest {
         );
         //then
         perform.andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제시 글 작성자의 포인트가 감소한다. ")
+    public void delete_suc1() throws Exception{
+        //given
+        Article article = articleRepository.findArticleByContent("삭제할 content입니다. 삭제가 되는지 확인해 보도록  하겠습니다. ").orElseThrow();
+
+        Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
+        User user = userRepository.findById(id).get();
+        Integer beforePoint = user.getPoint();
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                delete("/articles/" + article.getId())
+
+                        .header(JWT_HEADER, accessToken)
+        );
+        Integer afterPoint = user.getPoint();
+        //then
+        Assertions.assertThat(beforePoint > afterPoint).isTrue();
     }
 }
