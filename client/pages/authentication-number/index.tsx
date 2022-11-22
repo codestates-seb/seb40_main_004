@@ -55,9 +55,6 @@ const AuthenticateNumber = () => {
             인증하기
           </button>
         </form>
-        {/* <p className="flex justify-start mt-3 text-red-500">
-          인증번호를 입력해주세요.
-        </p> */}
       </article>
     </main>
   );
