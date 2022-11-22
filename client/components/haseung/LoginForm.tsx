@@ -16,17 +16,11 @@ type LoginProps = {
 
 export const LoginForm = () => {
   const onValid = ({ email, password }: LoginProps) => {
-    /* Sending a post request to the server. */
-    // console.log(email, password);
-    // fetch('http://localhost:3000/users', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ email, password }),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => console.log('data', data.user));
     axios
-      .post('http://localhost:3000/users', { email, password })
+      .post(`/api/auth/token`, {
+        email,
+        password,
+      })
       .then((res) => console.log('res', res.data));
   };
   const { register, handleSubmit } = useForm<LoginProps>();
