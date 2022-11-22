@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.service;
 
+import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.AnswerDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
@@ -41,6 +42,9 @@ class AnswerServiceTest {
 
     @Mock
     AnswerLikeRepository answerLikeRepository;
+
+    @Mock
+    PointCalculator pointCalculator;
 
     @Test
     @DisplayName("답변글의 좋아요를 누를때 회원이 좋아요를 처음누르는거면 201코드와 json을 리턴한다.")

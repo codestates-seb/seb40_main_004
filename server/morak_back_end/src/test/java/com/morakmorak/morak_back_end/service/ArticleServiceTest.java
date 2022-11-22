@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.service;
 
+import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
@@ -26,6 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
+import static com.morakmorak.morak_back_end.util.ArticleTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -59,6 +61,9 @@ public class ArticleServiceTest {
     @Mock
     ReportRepository reportRepository;
 
+    @Mock
+    PointCalculator pointCalculator;
+
     @Test
     @DisplayName("게시글 등록 서비스로직 성공 테스트")
     public void upload_suc() throws Exception {
@@ -77,9 +82,9 @@ public class ArticleServiceTest {
         //when
         ArticleDto.ResponseSimpleArticle upload = articleService.upload(
                 article, UserDto.UserInfo.builder().id(1L).build(),
-                ArticleTestConstants.REQUEST_TAG_WITH_ID_AND_NAMES,
-                ArticleTestConstants.REQUEST_FILE_WITH_IDS,
-                ArticleTestConstants.REQUEST_STRING_CATEGORY);
+                REQUEST_TAG_WITH_ID_AND_NAMES,
+                REQUEST_FILE_WITH_IDS,
+                REQUEST_STRING_CATEGORY);
         //then
         assertThat(upload.getArticleId()).isEqualTo(1L);
     }
@@ -92,10 +97,10 @@ public class ArticleServiceTest {
         given(userService.findVerifiedUserById(any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
         //when
         //then
-        assertThatThrownBy(() -> articleService.upload(ArticleTestConstants.ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
-                ArticleTestConstants.REQUEST_TAG_WITH_ID_AND_NAMES,
-                ArticleTestConstants.REQUEST_FILE_WITH_IDS,
-                ArticleTestConstants.REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
+        assertThatThrownBy(() -> articleService.upload(ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
+                REQUEST_TAG_WITH_ID_AND_NAMES,
+                REQUEST_FILE_WITH_IDS,
+                REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
 
     }
     @Test
@@ -107,10 +112,10 @@ public class ArticleServiceTest {
         //when
 
         //then
-        assertThatThrownBy(() -> articleService.upload(ArticleTestConstants.ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
-                ArticleTestConstants.REQUEST_TAG_WITH_ID_AND_NAMES,
-                ArticleTestConstants.REQUEST_FILE_WITH_IDS,
-                ArticleTestConstants.REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
+        assertThatThrownBy(() -> articleService.upload(ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
+                REQUEST_TAG_WITH_ID_AND_NAMES,
+                REQUEST_FILE_WITH_IDS,
+                REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
     }
     @Test
     @DisplayName("게시글 등록시 존재하지 않는 태그를 적용할 경우")
@@ -130,9 +135,9 @@ public class ArticleServiceTest {
 
         //then
         assertThatThrownBy(() -> articleService.upload(ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
-                ArticleTestConstants.REQUEST_TAG_WITH_ID_AND_NAMES,
-                ArticleTestConstants.REQUEST_FILE_WITH_IDS,
-                ArticleTestConstants.REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
+                REQUEST_TAG_WITH_ID_AND_NAMES,
+                REQUEST_FILE_WITH_IDS,
+                REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
      }
      @Test
      @DisplayName("게시글 등록시 존재하지 않는 카테고리를 적용할 경우")
@@ -154,9 +159,9 @@ public class ArticleServiceTest {
 
          //then
          assertThatThrownBy(() -> articleService.upload(ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
-                 ArticleTestConstants.REQUEST_TAG_WITH_ID_AND_NAMES,
-                 ArticleTestConstants.REQUEST_FILE_WITH_IDS,
-                 ArticleTestConstants.REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
+                 REQUEST_TAG_WITH_ID_AND_NAMES,
+                 REQUEST_FILE_WITH_IDS,
+                 REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
 
       }
 
