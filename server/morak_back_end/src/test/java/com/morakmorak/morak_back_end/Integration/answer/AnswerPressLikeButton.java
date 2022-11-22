@@ -7,6 +7,7 @@ import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.AnswerService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -154,5 +155,62 @@ public class AnswerPressLikeButton {
 
         //then
         perform.andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("답글에 좋아요를 누른 유저의 포인트가 증가한다.")
+    public void pressLikeButton_suc3() throws Exception {
+        //give
+        Answer answer = Answer.builder().content("내용입니다. 잘부탁드립니다. 제발 문제가 안생기길 바랍니다.")
+                .build();
+        em.persist(answer);
+
+        User user = User.builder().email(EMAIL1).nickname(NICKNAME1).build();
+        em.persist(user);
+
+        Answer dbAnswer = answerRepository.findAnswerByContent(answer.getContent()).orElseThrow(() -> new RuntimeException("게시글없음"));
+        User dbUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new RuntimeException("유저없음"));
+        Integer beforePoint = dbUser.getPoint();
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/1/answers/"+dbAnswer.getId()+"/likes")
+                        .header(JWT_HEADER, accessToken)
+        );
+        //then
+        Integer afterPoint = dbUser.getPoint();
+        Assertions.assertThat(afterPoint > beforePoint).isTrue();
+    }
+
+    @Test
+    @DisplayName("좋아요 취소 시 포인트가 감산된다.")
+    public void pressLikeButton_suc4() throws Exception {
+        //give
+        Answer answer = Answer.builder().content("내용입니다. 잘부탁드립니다. 제발 문제가 안생기길 바랍니다.")
+                .build();
+        em.persist(answer);
+
+        User user = User.builder().email(EMAIL1).nickname(NICKNAME1).build();
+        em.persist(user);
+
+        AnswerLike answerLike = AnswerLike.builder().user(user).answer(answer).build();
+        em.persist(answerLike);
+
+        Answer dbAnswer = answerRepository.findAnswerByContent(answer.getContent()).orElseThrow(() -> new RuntimeException("답변없음"));
+        User dbUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new RuntimeException("유저없음"));
+        Integer beforePoint = dbUser.getPoint();
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/1/answers/"+dbAnswer.getId()+"/likes")
+                        .header(JWT_HEADER, accessToken)
+        );
+        //then
+        Integer afterPoint = dbUser.getPoint();
+        Assertions.assertThat(afterPoint < beforePoint).isTrue();
     }
 }
