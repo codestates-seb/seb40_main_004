@@ -5,10 +5,10 @@
  * 개요: 질문 리스트를 표시합니다.
  */
 
-import { CreatedDate } from '../../components/hyejung/QuestionContent/CreatedDate';
-import { QuestionTitle } from '../../components/hyejung/QuestionContent/QuestionTitle';
-import { TagList } from '../../components/hyejung/QuestionContent/TagList';
-import { UserNickname } from '../../components/hyejung/QuestionContent/UserNickname';
+import { CreatedDate } from '../hyejung/CreatedDate';
+import { QuestionTitle } from '../hyejung/QuestionTitle';
+import { TagList } from '../hyejung/TagList';
+import { UserNickname } from '../hyejung/UserNickname';
 
 export const QuestionList = () => {
   return (
@@ -17,10 +17,10 @@ export const QuestionList = () => {
         <article key={i}>
           <QuestionTitle title="리액트 쿼리 질문드립니다." />
           <div className="flex justify-start space-x-2">
-            <UserNickname name="김코딩" id={1} />
+            <UserNickname nickname="김코딩" userId={1} grade="BRONZE" />
             <CreatedDate createdAt="1분전" />
           </div>
-          <TagList tags={['java', 'react', 'ts']} />
+          <TagList tags={[{ tagId: 1, name: 'REACT' }]} />
         </article>
       ))}
     </section>
