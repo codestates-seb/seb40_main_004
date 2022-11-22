@@ -1,7 +1,7 @@
 package com.morakmorak.morak_back_end.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.JobType;
 import com.morakmorak.morak_back_end.entity.enums.UserStatus;
@@ -10,12 +10,9 @@ import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import io.netty.util.internal.StringUtil;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +44,8 @@ public class User {
 
     private String infoMessage;
 
-    private Integer point;
+    @Builder.Default
+    private Integer point = 0;
 
     private String provider;
 
@@ -127,11 +125,11 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Report> reports = new ArrayList<>();
 
-    @OneToMany(mappedBy = "questioner", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.PERSIST)
     @Builder.Default
     private List<Review> writtenReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "answerer", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.PERSIST)
     @Builder.Default
     private List<Review> receivedReviews = new ArrayList<>();
 
@@ -186,5 +184,9 @@ public class User {
 
     public void addArticle(Article article) {
         this.articles.add(article);
+    }
+
+    public void addPoint(Object object, PointCalculator pointCalculator) {
+        this.point += pointCalculator.calculatePaymentPoint(object);
     }
 }
