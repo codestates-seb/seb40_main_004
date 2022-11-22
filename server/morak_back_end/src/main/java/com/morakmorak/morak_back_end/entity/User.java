@@ -189,4 +189,8 @@ public class User {
     public void addPoint(Object object, PointCalculator pointCalculator) {
         this.point += pointCalculator.calculatePaymentPoint(object);
     }
+
+    public void minusPoint(Object object, PointCalculator pointCalculator) {
+        this.point -= pointCalculator.calculatePaymentPoint(object);
+    }
 }
