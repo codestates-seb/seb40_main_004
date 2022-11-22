@@ -69,7 +69,7 @@ public class BookmarkTest {
                 .build();
         userRepository.save(dbUser1);
         this.savedUser1 = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
-        this.accessTokenForUser1 = jwtTokenUtil.createAccessToken(EMAIL1, savedUser1.getId(), ROLE_USER_LIST);
+        this.accessTokenForUser1 = jwtTokenUtil.createAccessToken(EMAIL1, savedUser1.getId(), ROLE_USER_LIST, NICKNAME1);
 
         Article dbArticle1 = Article.builder().user(savedUser1).build();
         articleRepository.save(dbArticle1);
@@ -89,7 +89,7 @@ public class BookmarkTest {
         User save=userRepository.save(dbUser2);
 
         this.savedUser2 = userRepository.findUserByEmail(EMAIL2).orElseThrow(() -> new AssertionError());
-        this.accessTokenForUser2 = jwtTokenUtil.createAccessToken(EMAIL2, savedUser2.getId(), ROLE_USER_LIST);
+        this.accessTokenForUser2 = jwtTokenUtil.createAccessToken(EMAIL2, savedUser2.getId(), ROLE_USER_LIST, NICKNAME1);
         Article dbArticle2 = Article.builder().user(savedUser2).build();
         savedUser2.getArticles().add(dbArticle2);
         articleRepository.save(dbArticle2);

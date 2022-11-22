@@ -234,7 +234,7 @@ public class AuthTest extends RedisContainerTest {
     @DisplayName("로그아웃을 요청했을 때 삭제하려는 토큰이 존재하지 않으면 404 NOT FOUND 반환")
     public void test7() throws Exception {
         //given
-        String refreshToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, List.of(ROLE_USER));
+        String refreshToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, List.of(ROLE_USER), NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(delete("/auth/token")
@@ -248,7 +248,7 @@ public class AuthTest extends RedisContainerTest {
     @DisplayName("로그아웃을 요청했을 때 로직이 정상적으로 수행되었을 경우 204 No Content 반환")
     public void test8() throws Exception {
         //given
-        String bearerToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, List.of(ROLE_USER));
+        String bearerToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, List.of(ROLE_USER), NICKNAME1);
         String tokenValue = bearerToken.split(" ")[1];
         redisRepositoryImpl.saveData(tokenValue, User.builder().build(), REFRESH_TOKEN_EXPIRE_COUNT);
 
@@ -265,7 +265,7 @@ public class AuthTest extends RedisContainerTest {
     @DisplayName("토큰 재발행을 요청했을 때 해당 토큰이 데이터베이스에 존재하지 않을 경우 404 Not Found 반환")
     public void test9() throws Exception {
         //given
-        String bearerToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, List.of(ROLE_USER));
+        String bearerToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, List.of(ROLE_USER), NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(put("/auth/token")
@@ -280,7 +280,7 @@ public class AuthTest extends RedisContainerTest {
     @DisplayName("토큰 재발행을 요청했을 때 해당 토큰이 유효하지 않은 형태의 토큰이라면 401 UnAuthorized 반환")
     public void test10() throws Exception {
         //given
-        String invalid_bearer_token = jwtTokenUtil.createRefreshToken(null, ID1, List.of(ROLE_USER));
+        String invalid_bearer_token = jwtTokenUtil.createRefreshToken(null, ID1, List.of(ROLE_USER), NICKNAME1);
         String invalid_token = invalid_bearer_token.split(" ")[1];
         redisRepositoryImpl.saveData(invalid_token, User.builder().build(), REFRESH_TOKEN_EXPIRE_COUNT);
         //when
@@ -301,7 +301,7 @@ public class AuthTest extends RedisContainerTest {
                 .email(EMAIL1)
                 .build();
 
-        String bearerToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, List.of(ROLE_USER));
+        String bearerToken = jwtTokenUtil.createRefreshToken(EMAIL1, ID1, List.of(ROLE_USER), NICKNAME1);
         String tokenValue = bearerToken.split(" ")[1];
         redisRepositoryImpl.saveData(tokenValue, user, REFRESH_TOKEN_EXPIRE_COUNT);
 
@@ -400,7 +400,7 @@ public class AuthTest extends RedisContainerTest {
                 .originalPassword(PASSWORD1)
                 .build();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         String json = objectMapper.writeValueAsString(request);
 
@@ -433,7 +433,7 @@ public class AuthTest extends RedisContainerTest {
                 .originalPassword(PASSWORD1)
                 .build();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         String json = objectMapper.writeValueAsString(request);
 
@@ -468,7 +468,7 @@ public class AuthTest extends RedisContainerTest {
                 .password(PASSWORD2)
                 .build();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         String json = objectMapper.writeValueAsString(request);
 
@@ -501,7 +501,7 @@ public class AuthTest extends RedisContainerTest {
                 .password(PASSWORD1)
                 .build();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         String json = objectMapper.writeValueAsString(request);
 

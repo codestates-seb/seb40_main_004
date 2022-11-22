@@ -46,8 +46,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .stream().map(e -> e.getRole().getRoleName().toString())
                 .collect(Collectors.toList());
 
-        String accessToken = jwtTokenUtil.createAccessToken(dbUser.getEmail(), dbUser.getId(), roles);
-        String refreshToken = jwtTokenUtil.createRefreshToken(dbUser.getEmail(), dbUser.getId(), roles);
+        String accessToken = jwtTokenUtil.createAccessToken(dbUser.getEmail(), dbUser.getId(), roles, dbUser.getNickname());
+        String refreshToken = jwtTokenUtil.createRefreshToken(dbUser.getEmail(), dbUser.getId(), roles, dbUser.getNickname());
 
         String refreshTokenValue = refreshToken.split(" ")[1];
 

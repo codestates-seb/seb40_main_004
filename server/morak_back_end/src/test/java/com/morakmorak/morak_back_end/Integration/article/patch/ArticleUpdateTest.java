@@ -32,8 +32,7 @@ import java.util.List;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ROLE_USER_LIST;
-import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
-import static com.morakmorak.morak_back_end.util.TestConstants.NAME1;
+import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -147,7 +146,7 @@ public class ArticleUpdateTest {
         //id
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST,NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -186,7 +185,7 @@ public class ArticleUpdateTest {
         //id
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST,NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -223,7 +222,7 @@ public class ArticleUpdateTest {
         //id
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST,NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -252,7 +251,7 @@ public class ArticleUpdateTest {
         //id
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST,NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(

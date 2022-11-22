@@ -43,7 +43,7 @@ public class PatchProfileTest extends UserControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         BDDMockito.given(userService.editUserProfile(any(User.class), any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST,NICKNAME1);
 
         // when
         ResultActions perform = mockMvc.perform(patch("/users/profiles")
@@ -84,7 +84,7 @@ public class PatchProfileTest extends UserControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         BDDMockito.given(userService.editUserProfile(any(User.class), any())).willThrow(new BusinessLogicException(ErrorCode.NICKNAME_EXISTS));
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST,NICKNAME1);
 
         // when
         ResultActions perform = mockMvc.perform(patch("/users/profiles")
@@ -125,7 +125,7 @@ public class PatchProfileTest extends UserControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         BDDMockito.given(userService.editUserProfile(any(User.class), any())).willThrow(new BusinessLogicException(ErrorCode.ONLY_TEST_CODE));
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST,NICKNAME1);
 
         // when
         ResultActions perform = mockMvc.perform(patch("/users/profiles")
@@ -166,7 +166,7 @@ public class PatchProfileTest extends UserControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         BDDMockito.given(userService.editUserProfile(any(User.class), any())).willReturn(request);
-        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST);
+        String token = jwtTokenUtil.createAccessToken(EMAIL1, ID1, ROLE_USER_LIST,NICKNAME1);
 
         // when
         ResultActions perform = mockMvc.perform(patch("/users/profiles")

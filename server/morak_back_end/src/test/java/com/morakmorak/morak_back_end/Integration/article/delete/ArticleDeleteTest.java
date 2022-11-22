@@ -66,7 +66,7 @@ public class ArticleDeleteTest {
 
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST,NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -86,7 +86,7 @@ public class ArticleDeleteTest {
 
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL2, ID2, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL2, ID2, ROLE_USER_LIST,NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -107,7 +107,7 @@ public class ArticleDeleteTest {
 
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -129,7 +129,7 @@ public class ArticleDeleteTest {
         User user = userRepository.findById(id).get();
         Integer beforePoint = user.getPoint();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST,NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(

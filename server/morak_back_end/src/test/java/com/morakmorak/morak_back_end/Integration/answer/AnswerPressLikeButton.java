@@ -73,7 +73,7 @@ public class AnswerPressLikeButton {
         Answer dbAnswer = answerRepository.findAnswerByContent(answer.getContent()).orElseThrow(() -> new RuntimeException("게시글없음"));
         User dbUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new RuntimeException("유저없음"));
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -104,7 +104,7 @@ public class AnswerPressLikeButton {
         Answer dbAnswer = answerRepository.findAnswerByContent(answer.getContent()).orElseThrow(() -> new RuntimeException("답변없음"));
         User dbUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new RuntimeException("유저없음"));
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -128,7 +128,7 @@ public class AnswerPressLikeButton {
 
         User dbUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new RuntimeException("유저없음"));
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -172,7 +172,7 @@ public class AnswerPressLikeButton {
         User dbUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new RuntimeException("유저없음"));
         Integer beforePoint = dbUser.getPoint();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -202,7 +202,7 @@ public class AnswerPressLikeButton {
         User dbUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new RuntimeException("유저없음"));
         Integer beforePoint = dbUser.getPoint();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(

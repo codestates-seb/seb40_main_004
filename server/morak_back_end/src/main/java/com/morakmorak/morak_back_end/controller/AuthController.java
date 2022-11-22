@@ -32,7 +32,7 @@ public class AuthController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AuthDto.ResponseToken postJoin(@Valid @RequestBody AuthDto.RequestJoin requestJoin) {
-d         User user = userMapper.toJoinEntity(requestJoin);
+        User user = userMapper.toJoinEntity(requestJoin);
         return authService.joinUser(user, requestJoin.getAuthKey());
     }
 
@@ -50,13 +50,13 @@ d         User user = userMapper.toJoinEntity(requestJoin);
 
     @PostMapping("/mail")
     @ResponseStatus(HttpStatus.CREATED)
-    public Boolean postAuthMail(@Valid @RequestBody EmailDto.RequestSendMail request) {
+    public Boolean postAuthMail(@RequestBody EmailDto.RequestSendMail request) {
         return authService.sendAuthenticationMailForJoin(request.getEmail());
     }
 
     @PutMapping("/mail")
     @ResponseStatus(HttpStatus.OK)
-    public AuthDto.ResponseAuthKey putAuthMailKey(@RequestBody EmailDto.RequestVerifyAuthKey request) {
+    public AuthDto.ResponseAuthKey putAuthMailKey(@Valid @RequestBody EmailDto.RequestVerifyAuthKey request) {
         return authService.authenticateEmail(request.getEmail(), request.getAuthKey());
     }
 
