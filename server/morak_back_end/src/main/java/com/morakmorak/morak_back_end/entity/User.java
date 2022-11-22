@@ -193,4 +193,8 @@ public class User {
     public void minusPoint(Object object, PointCalculator pointCalculator) {
         this.point -= pointCalculator.calculatePaymentPoint(object);
     }
+
+    public void addNotification(Notification notification) {
+        this.notifications.add(notification);
+    }
 }
