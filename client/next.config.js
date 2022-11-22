@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+const withPlugins = require('next-compose-plugins');
+
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
@@ -16,6 +18,24 @@ const withTM = require('next-transpile-modules')([
   '@fullcalendar/react',
 ]);
 
-module.exports = nextConfig;
+module.exports = withPlugins([withTM], nextConfig);
 
-module.exports = withTM({});
+/* proxy 설정 */
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: `/api/auth`,
+        destination: 'https://0371-39-116-11-157.jp.ngrok.io/auth/',
+      },
+      {
+        source: `/api/auth/mail`,
+        destination: 'https://0371-39-116-11-157.jp.ngrok.io/auth/mail',
+      },
+      {
+        source: `/api/auth/token`,
+        destination: 'https://0371-39-116-11-157.jp.ngrok.io/auth/token',
+      },
+    ];
+  },
+};

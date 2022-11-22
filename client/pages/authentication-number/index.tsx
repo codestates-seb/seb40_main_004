@@ -1,14 +1,38 @@
 /*
  * 책임 작성자: 정하승
  * 최초 작성일: 2022-11-15
- * 최근 수정일: 2022-11-15
+ * 최근 수정일: 2022-11-22
  */
 
-import Link from 'next/link';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userAuthKey, userEmailAtom } from '../../atomsHS';
 import { AuthenticationTimer } from '../../components/haseung/AuthenticationTimer';
 import { Intro } from '../../components/haseung/Intro';
 
+type VerificationNumber = {
+  authKey: string;
+};
+
 const AuthenticateNumber = () => {
+  const { register, handleSubmit } = useForm<VerificationNumber>();
+  const email = useRecoilValue(userEmailAtom);
+
+  const [authKey, setAuthKey] = useRecoilState(userAuthKey);
+  // const setAuthKey = useSetRecoilState(userAuthKey);
+  const router = useRouter();
+  const onValid = ({ authKey }: VerificationNumber) => {
+    axios
+      .put(`/api/auth/mail`, { email, authKey })
+      .then((res) => {
+        console.log('res', res);
+        setAuthKey(res.data.authKey);
+      })
+      .catch((error) => console.error('error', error));
+    router.push('/selectStatus');
+  };
   return (
     <main className="flex justify-center text-lg">
       <article className="text-center mt-10">
@@ -20,20 +44,20 @@ const AuthenticateNumber = () => {
           <span>인증번호</span>
           <AuthenticationTimer />
         </section>
-        <input
-          type="text"
-          placeholder="1234"
-          className="placeholder:px-3 flex justify-center items-center w-[400px] h-12 mt-10 rounded-full"
-        />
-
-        <p className="flex justify-start mt-3 text-red-500">
-          인증번호를 입력해주세요.
-        </p>
-        <Link href="/selectStatus">
+        <form onSubmit={handleSubmit(onValid)}>
+          <input
+            {...register('authKey', { required: true })}
+            type="text"
+            placeholder="1234"
+            className="placeholder:px-3 flex justify-center items-center w-[400px] h-12 mt-10 rounded-full"
+          />
           <button className="bg-main-yellow font-semibold hover:bg-main-orange placeholder:px-3 flex justify-center items-center w-[400px] h-12 mt-10 rounded-full">
             인증하기
           </button>
-        </Link>
+        </form>
+        {/* <p className="flex justify-start mt-3 text-red-500">
+          인증번호를 입력해주세요.
+        </p> */}
       </article>
     </main>
   );

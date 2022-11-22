@@ -6,7 +6,10 @@
 
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { useRecoilState } from 'recoil';
+import { isLoggedInAtom } from '../../atomsYW';
 import { Button } from '../common/Button';
 
 type LoginProps = {
@@ -15,13 +18,24 @@ type LoginProps = {
 };
 
 export const LoginForm = () => {
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
   const onValid = ({ email, password }: LoginProps) => {
     axios
       .post(`/api/auth/token`, {
         email,
         password,
       })
-      .then((res) => console.log('res', res.data));
+      .then((res) => {
+        if (res.data.authorization) {
+          localStorage.setItem('loginToken', JSON.stringify(res.data));
+        }
+      })
+      .then(() => {
+        setIsLoggedIn(!isLoggedIn);
+        alert('로그인 성공');
+        router.push('/');
+      });
   };
   const { register, handleSubmit } = useForm<LoginProps>();
   return (
