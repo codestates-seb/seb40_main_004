@@ -6,7 +6,7 @@
 
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { TagButton } from '../hyejung/TagButton';
+import { TagButton } from '../hyejung/BtnTag';
 
 export const SearchWithTagButton = () => {
   return (

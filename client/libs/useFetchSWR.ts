@@ -2,7 +2,7 @@ import { client } from './client';
 import useSWR from 'swr';
 
 const fetcher = async (url: string) =>
-  await client.get(url).then((res) => res.data[0]);
+  await client.get(url).then((res) => res.data);
 
 export const useFetch = (url: string) => {
   const { data, error } = useSWR(url, fetcher);
