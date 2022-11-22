@@ -21,11 +21,11 @@ export const userNickName = atom({
 });
 
 export const accessTokenAtom = atom({
-  key: 'access_token',
+  key: 'accessToken',
   default: {},
 });
 
 export const refreshTokenAtom = atom({
-  key: 'refresh_token',
+  key: 'refreshToken',
   default: {},
 });
