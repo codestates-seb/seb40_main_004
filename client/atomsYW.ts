@@ -1,6 +1,11 @@
 import { atom } from 'recoil';
+import { curUser } from './components/yeonwoo/BtnUser';
 
-export const isLoggedInAtom = atom({
-  key: 'isLoggedIn',
-  default: false,
+export const curUserAtom = atom<curUser>({
+  key: 'curUser',
+  default: {
+    email: '',
+    userId: 0,
+    nickname: '',
+  },
 });
