@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { curUser } from './components/yeonwoo/BtnUser';
+import { curUser } from './interfaces';
 
 export const curUserAtom = atom<curUser>({
   key: 'curUser',

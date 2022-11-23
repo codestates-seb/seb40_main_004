@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-14
+ * 최근 수정일: 2022-11-23
  */
 
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -10,12 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
 import { curUserAtom } from '../../atomsYW';
-
-export interface curUser {
-  email: string;
-  userId: number;
-  nickname: string;
-}
+import { curUser } from '../../interfaces';
 
 export const BtnUser = () => {
   const curUser = useRecoilValue<curUser>(curUserAtom);
