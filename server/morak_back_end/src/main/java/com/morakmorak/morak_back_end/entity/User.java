@@ -51,6 +51,7 @@ public class User {
 
     private Boolean isJobSeeker;
 
+    @Enumerated(EnumType.STRING)
     private JobType jobType;
 
     private Boolean gender;
@@ -133,6 +134,7 @@ public class User {
     @Builder.Default
     private List<Review> receivedReviews = new ArrayList<>();
 
+    @JsonManagedReference(value = "user")
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     @Builder.Default
     private List<ArticleLike> articleLikes = new ArrayList<>();
@@ -192,6 +194,10 @@ public class User {
 
     public void minusPoint(Object object, PointCalculator pointCalculator) {
         this.point -= pointCalculator.calculatePaymentPoint(object);
+    }
+
+    public void addAvatar(Avatar avatar) {
+        this.avatar = avatar;
     }
 
     public void addNotification(Notification notification) {

@@ -4,7 +4,9 @@ import com.morakmorak.morak_back_end.domain.RandomKeyGenerator;
 import com.morakmorak.morak_back_end.domain.TokenGenerator;
 import com.morakmorak.morak_back_end.domain.UserPasswordManager;
 import com.morakmorak.morak_back_end.config.RedisRepositoryTestImpl;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.repository.user.RoleRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRoleRepository;
@@ -47,9 +49,12 @@ public class AuthServiceTest {
     @Mock
     RandomKeyGenerator randomKeyGenerator;
 
+    @Mock
+    UserMapper userMapper;
+
     @BeforeEach
     void init() {
-        ReflectionTestUtils.setField(authService, "refreshTokenStore", new RedisRepositoryTestImpl<User>());
+        ReflectionTestUtils.setField(authService, "refreshTokenStore", new RedisRepositoryTestImpl<UserDto.Redis>());
         ReflectionTestUtils.setField(authService, "mailAuthKeyStore", new RedisRepositoryTestImpl<String>());
     }
 }

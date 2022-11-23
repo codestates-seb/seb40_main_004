@@ -96,6 +96,7 @@ public class UserDto {
         }
     }
 
+    @ToString
     @Builder
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -143,5 +144,15 @@ public class UserDto {
             this.activities = activities;
             this.reviews = reviews;
         }
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class Redis {
+        private Long userId;
+        private String email;
+        private String nickname;
     }
 }

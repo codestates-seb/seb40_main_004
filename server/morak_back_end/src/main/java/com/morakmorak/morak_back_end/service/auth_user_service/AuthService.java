@@ -4,10 +4,12 @@ import com.morakmorak.morak_back_end.domain.RandomKeyGenerator;
 import com.morakmorak.morak_back_end.domain.TokenGenerator;
 import com.morakmorak.morak_back_end.domain.UserPasswordManager;
 import com.morakmorak.morak_back_end.dto.AuthDto;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.UserRole;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.repository.user.RoleRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
@@ -33,9 +35,10 @@ public class AuthService {
     private final TokenGenerator tokenGenerator;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
-    private final RedisRepository<User> refreshTokenStore;
+    private final RedisRepository<UserDto.Redis> refreshTokenStore;
     private final RedisRepository<String> mailAuthKeyStore;
     private final MailSender mailSenderImpl;
+    private final UserMapper userMapper;
     private final RandomKeyGenerator randomKeyGenerator;
 
     public AuthDto.ResponseToken loginUser(User user) {
@@ -47,7 +50,8 @@ public class AuthService {
 
         String accessToken = tokenGenerator.generateAccessToken(dbUser);
         String refreshToken = tokenGenerator.generateRefreshToken(dbUser);
-        saveRefreshToken(refreshToken, dbUser);
+        UserDto.Redis redisUser = userMapper.userToRedisUser(dbUser);
+        saveRefreshToken(refreshToken, redisUser);
 
         return AuthDto
                 .ResponseToken
@@ -69,7 +73,9 @@ public class AuthService {
 
         String refreshToken = tokenGenerator.generateRefreshToken(user);
         String accessToken = tokenGenerator.generateAccessToken(user);
-        saveRefreshToken(refreshToken, user);
+
+        UserDto.Redis redisUser = userMapper.userToRedisUser(user);
+        saveRefreshToken(refreshToken, redisUser);
 
         return AuthDto
                 .ResponseToken
@@ -90,10 +96,11 @@ public class AuthService {
         tokenGenerator.tokenValidation(bearerToken);
 
         String token = getTokenValue(bearerToken);
-        User findUser = findAndDeleteRefreshTokenOrThrowException(token);
+        UserDto.Redis redisUser = findAndDeleteRefreshTokenOrThrowException(token);
 
-        String refreshToken = tokenGenerator.generateRefreshToken(findUser);
-        String accessToken = tokenGenerator.generateAccessToken(findUser);
+        User user = userMapper.redisUserToUser(redisUser);
+        String refreshToken = tokenGenerator.generateRefreshToken(user);
+        String accessToken = tokenGenerator.generateAccessToken(user);
 
         return AuthDto.ResponseToken
                 .builder()
@@ -178,15 +185,15 @@ public class AuthService {
         return token;
     }
 
-    private void saveRefreshToken(String refreshToken, User user) {
+    private void saveRefreshToken(String refreshToken, UserDto.Redis user) {
         String tokenValue = getTokenValue(refreshToken);
         if (!refreshTokenStore.saveData(tokenValue, user, REFRESH_TOKEN_EXPIRE_COUNT)) {
             throw new BusinessLogicException(UNABLE_TO_GENERATE_TOKEN);
         }
     }
 
-    private User findAndDeleteRefreshTokenOrThrowException(String token) {
-        return refreshTokenStore.getDataAndDelete(token, User.class).orElseThrow(() -> new BusinessLogicException(TOKEN_NOT_FOUND));
+    private UserDto.Redis findAndDeleteRefreshTokenOrThrowException(String token) {
+        return refreshTokenStore.getDataAndDelete(token, UserDto.Redis.class).orElseThrow(() -> new BusinessLogicException(TOKEN_NOT_FOUND));
     }
 
     private User findUserByEmailOrThrowException(String email) {

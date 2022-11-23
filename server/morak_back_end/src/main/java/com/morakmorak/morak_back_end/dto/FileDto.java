@@ -13,4 +13,12 @@ public class FileDto {
         private Long fileId;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor (access = AccessLevel.PROTECTED)
+    public static class ResponseFileDto {
+        private Long fileId;
+        private String preSignedUrl;
+    }
 }

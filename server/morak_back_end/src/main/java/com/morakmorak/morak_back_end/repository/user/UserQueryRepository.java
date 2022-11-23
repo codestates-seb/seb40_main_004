@@ -64,9 +64,9 @@ public class UserQueryRepository {
                             user.id, user.email, user.nickname, user.jobType, user.grade, user.point, user.github, user.blog, user.avatar.id, user.avatar.remotePath, user.avatar.originalFilename
                     ))
                     .from(user)
+                    .leftJoin(user.avatar, avatar)
                     .where(user.id.eq(userId))
                     .fetchOne();
-
     }
 
     public Page<User> getRankData(Pageable pageable) {

@@ -32,6 +32,10 @@ public class File extends BaseTime{
     @JoinColumn(name = "article_id")
     private Article article;
 
+    public File(String remotePath) {
+        this.remotePath = remotePath;
+    }
+
     public void injectArticleForFile(Article article) {
         this.article = article;
         article.getFiles().add(this);

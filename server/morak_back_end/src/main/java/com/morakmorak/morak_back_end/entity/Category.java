@@ -19,6 +19,7 @@ public class Category extends BaseTime {
     @Column(name = "category_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private CategoryName name;
 
     @OneToMany(mappedBy = "category")

@@ -74,7 +74,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "    (select review_badge.badge_id, count(*) as cnt\n" +
                     "     from review_badge\n" +
                     "     inner join review r on r.review_id = review_badge.review_id\n" +
-                    "     where r.answerer_id = :id\n" +
+                    "     where r.receiver_id = :id\n" +
                     "     group by review_badge.badge_id\n" +
                     "     order by cnt desc\n" +
                     "     limit 3) as b,\n" +

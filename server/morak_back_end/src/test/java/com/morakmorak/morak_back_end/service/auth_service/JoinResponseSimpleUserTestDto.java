@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.service.auth_service;
 
 import com.morakmorak.morak_back_end.dto.AuthDto;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.UserRole;
@@ -98,6 +99,11 @@ public class JoinResponseSimpleUserTestDto extends AuthServiceTest {
                 .password(PASSWORD1)
                 .build();
 
+        UserDto.Redis redisUser = UserDto.Redis.builder()
+                .userId(ID1)
+                .email(EMAIL1)
+                .build();
+
         Role role = Role.builder().roleName(RoleName.valueOf(ROLE_USER)).build();
 
         UserRole userRole = UserRole.builder()
@@ -109,6 +115,7 @@ public class JoinResponseSimpleUserTestDto extends AuthServiceTest {
         given(userRoleRepository.save(ArgumentMatchers.any(UserRole.class))).willReturn(userRole);
         given(tokenGenerator.generateAccessToken(requestUser)).willReturn(BEARER_ACCESS_TOKEN);
         given(tokenGenerator.generateRefreshToken(requestUser)).willReturn(BEARER_REFRESH_TOKEN);
+        given(userMapper.userToRedisUser(requestUser)).willReturn(redisUser);
 
         //when
         AuthDto.ResponseToken responseToken = authService.joinUser(requestUser, REDIS_AUTH_KEY_NOT_EMPTY);

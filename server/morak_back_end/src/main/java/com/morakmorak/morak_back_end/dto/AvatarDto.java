@@ -7,6 +7,7 @@ import lombok.*;
 public class AvatarDto {
     @Getter
     @Builder
+    @ToString
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SimpleResponse {
@@ -27,5 +28,14 @@ public class AvatarDto {
                             .remotePath(avatar.getRemotePath())
                             .build();
         }
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class ResponseS3Url {
+        private Long avatarId;
+        private String preSignedUrl;
     }
 }

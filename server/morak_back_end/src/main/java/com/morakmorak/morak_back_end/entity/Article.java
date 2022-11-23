@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
@@ -94,6 +95,7 @@ public class Article extends BaseTime {
 
     @Builder.Default
     @OneToMany(mappedBy = "article")
+    @JsonManagedReference(value = "article")
     private List<ArticleLike> articleLikes = new ArrayList<>();
 
     @Builder.Default
