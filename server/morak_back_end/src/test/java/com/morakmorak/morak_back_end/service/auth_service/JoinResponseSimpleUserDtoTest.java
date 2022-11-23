@@ -13,15 +13,13 @@ import org.mockito.ArgumentMatchers;
 
 import java.util.Optional;
 
-import static com.morakmorak.morak_back_end.security.util.SecurityConstants.REFRESH_TOKEN_EXPIRE_COUNT;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.Matchers.any;
 import static org.mockito.BDDMockito.given;
 
-public class JoinResponseSimpleUserTestDto extends AuthServiceTest {
+public class JoinResponseSimpleUserDtoTest extends AuthServiceTest {
     @Test
     @DisplayName("유저 회원가입 / 요청값과 동일한 메일을 가진 유저가 이미 존재하다면 BusinessLogicException이 발생한다")
     public void test4() {

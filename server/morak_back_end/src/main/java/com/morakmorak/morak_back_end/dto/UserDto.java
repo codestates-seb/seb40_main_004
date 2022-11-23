@@ -117,7 +117,7 @@ public class UserDto {
         private List<TagQueryDto> tags;
         private List<BadgeQueryDto> reviewBadges;
         private List<ArticleDto.ResponseListTypeArticle> articles;
-        private List<ActivityQueryDto> activities;
+        private List<ActivityDto.Response> activities;
         private List<ReviewDto.Response> reviews;
 
         @QueryProjection
@@ -137,7 +137,7 @@ public class UserDto {
                     .build();
         }
 
-        public void addRestInfo(List<TagQueryDto> tags, List<BadgeQueryDto> reviewBadges, List<ArticleDto.ResponseListTypeArticle> articles, List<ActivityQueryDto> activities, List<ReviewDto.Response> reviews) {
+        public void addRestInfo(List<TagQueryDto> tags, List<BadgeQueryDto> reviewBadges, List<ArticleDto.ResponseListTypeArticle> articles, List<ActivityDto.Response> activities, List<ReviewDto.Response> reviews) {
             this.tags = tags;
             this.reviewBadges = reviewBadges;
             this.articles = articles;
