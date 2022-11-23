@@ -7,13 +7,8 @@
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import { useSetRecoilState } from 'recoil';
-import { isLoggedInAtom } from '../../atomsYW';
 
 export const BtnLogin = () => {
-  const setIsLoggedIn = useSetRecoilState(isLoggedInAtom);
-  const onClick = () => setIsLoggedIn(true);
-
   return (
     <Link href="/login">
       <button className="ml-6 flex gap-2 items-center">

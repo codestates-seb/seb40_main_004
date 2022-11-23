@@ -14,14 +14,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { isLoggedInAtom } from '../../atomsYW';
+import { curUserAtom } from '../../atomsYW';
 
 export const BtnDropdown = () => {
-  const setIsLoggedIn = useSetRecoilState(isLoggedInAtom);
+  const setCurUser = useSetRecoilState(curUserAtom);
   const [dropdown, setDropdown] = useState(false);
 
   const onClickLogout = () => {
-    setIsLoggedIn(false);
+    setCurUser({
+      email: '',
+      userId: 0,
+      nickname: '',
+    });
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
   };
 
   return (

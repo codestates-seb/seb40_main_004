@@ -5,7 +5,7 @@
  */
 
 import { useRecoilValue } from 'recoil';
-import { isLoggedInAtom } from '../../atomsYW';
+import { curUserAtom } from '../../atomsYW';
 import { BtnUser } from '../yeonwoo/BtnUser';
 import { BtnLogin } from '../yeonwoo/BtnLogin';
 import { Logo } from '../yeonwoo/Logo';
@@ -14,7 +14,7 @@ import { SearchBar } from '../yeonwoo/SearchBar';
 import { BtnDropdown } from '../yeonwoo/BtnDropdown';
 
 export const Header = () => {
-  const isLogined = useRecoilValue(isLoggedInAtom);
+  const curUser = useRecoilValue(curUserAtom);
   return (
     <header className="flex items-center justify-between max-w-[1280px] mx-auto">
       <div className="flex items-center w-6/12">
@@ -25,7 +25,7 @@ export const Header = () => {
         <SearchBar />
       </div>
       <div className="flex items-center w-3/12 justify-end">
-        {isLogined ? (
+        {curUser.nickname ? (
           <div className="flex gap-6">
             <BtnUser />
             <BtnDropdown />
