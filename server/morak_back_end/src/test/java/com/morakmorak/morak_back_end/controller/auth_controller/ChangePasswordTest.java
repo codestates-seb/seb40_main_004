@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.controller.article_controller.auth_controller;
+package com.morakmorak.morak_back_end.controller.auth_controller;
 
 import com.morakmorak.morak_back_end.dto.AuthDto;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
