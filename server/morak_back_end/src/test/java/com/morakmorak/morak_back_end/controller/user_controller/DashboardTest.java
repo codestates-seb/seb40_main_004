@@ -82,28 +82,28 @@ public class DashboardTest extends UserControllerTest {
                 .userInfo(simpleUserDto)
                 .build();
 
-        ActivityQueryDtoTestImpl activities1 = ActivityQueryDtoTestImpl.builder()
-                .answerCount(1)
-                .commentCount(1)
-                .articleCount(1)
-                .total(3)
-                .date("2022-01-01")
+        ActivityDto.Response activities1 = ActivityDto.Response.builder()
+                .answerCount(1L)
+                .commentCount(1L)
+                .articleCount(1L)
+                .total(3L)
+                .createdDate(LocalDate.of(2022,1,1))
                 .build();
 
-        ActivityQueryDtoTestImpl activities2 = ActivityQueryDtoTestImpl.builder()
-                .answerCount(1)
-                .commentCount(1)
-                .articleCount(1)
-                .total(3)
-                .date("2022-01-01")
+        ActivityDto.Response activities2 = ActivityDto.Response.builder()
+                .answerCount(1L)
+                .commentCount(1L)
+                .articleCount(1L)
+                .total(3L)
+                .createdDate(LocalDate.of(2022,1,1))
                 .build();
 
-        ActivityQueryDtoTestImpl activities3 = ActivityQueryDtoTestImpl.builder()
-                .answerCount(1)
-                .commentCount(1)
-                .articleCount(1)
-                .total(3)
-                .date("2022-01-01")
+        ActivityDto.Response activities3 = ActivityDto.Response.builder()
+                .answerCount(1L)
+                .commentCount(1L)
+                .articleCount(1L)
+                .total(3L)
+                .createdDate(LocalDate.of(2022,1,1))
                 .build();
 
         TagQueryDtoTestImpl tag1 = TagQueryDtoTestImpl
@@ -234,7 +234,7 @@ public class DashboardTest extends UserControllerTest {
                                         fieldWithPath("activities[].answerCount").type(NUMBER).description("일일 답변 작성 수"),
                                         fieldWithPath("activities[].commentCount").type(NUMBER).description("일일 댓글 작성 수"),
                                         fieldWithPath("activities[].total").type(NUMBER).description("일일 토탈 게시글/댓글 작성 수"),
-                                        fieldWithPath("activities[].date").type(STRING).description("해당일"),
+                                        fieldWithPath("activities[].createdDate").type(STRING).description("해당일"),
                                         fieldWithPath("reviews").type(ARRAY).description("받은 리뷰 목록"),
                                         fieldWithPath("reviews[].reviewId").type(NUMBER).description("리뷰 아이디 db 시퀀스값"),
                                         fieldWithPath("reviews[].content").type(STRING).description("리뷰 내용"),
