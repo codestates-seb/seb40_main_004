@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 
+const BASE_URL = 'https://b3a0-39-116-11-157.jp.ngrok.io';
+
 const withPlugins = require('next-compose-plugins');
 const nextConfig = {
   reactStrictMode: true,
@@ -11,15 +13,15 @@ const nextConfig = {
     return [
       {
         source: `/api/auth`,
-        destination: 'https://0371-39-116-11-157.jp.ngrok.io/auth/',
+        destination: BASE_URL + '/auth/',
       },
       {
         source: `/api/auth/mail`,
-        destination: 'https://0371-39-116-11-157.jp.ngrok.io/auth/mail',
+        destination: BASE_URL + '/auth/mail',
       },
       {
         source: `/api/auth/token`,
-        destination: 'https://0371-39-116-11-157.jp.ngrok.io/auth/token',
+        destination: BASE_URL + '/auth/token',
       },
     ];
   },

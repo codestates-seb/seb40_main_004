@@ -8,11 +8,10 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { isLoggedInAtom } from '../../atomsYW';
+import { useSetRecoilState } from 'recoil';
 import { Button } from '../common/Button';
 import jwt_decode from 'jwt-decode';
-import { accessTokenAtom, refreshTokenAtom } from '../../atomsHS';
+import { curUserAtom } from '../../atomsYW';
 
 type LoginProps = {
   email: string;
@@ -27,9 +26,7 @@ type DecodedProps = {
 
 export const LoginForm = () => {
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
-  const setAccessToken = useSetRecoilState(accessTokenAtom);
-  const setRefreshToken = useSetRecoilState(refreshTokenAtom);
+  const setCurUser = useSetRecoilState(curUserAtom);
   const onValid = ({ email, password }: LoginProps) => {
     axios
       .post(`/api/auth/token`, {
@@ -42,6 +39,7 @@ export const LoginForm = () => {
         const refreshToken = res.data.refreshToken;
         const decoded: DecodedProps = jwt_decode(accessToken);
         localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
 
         // console.log('accessToken', accessToken);
         // console.log('refreshToken', refreshToken);
@@ -52,13 +50,11 @@ export const LoginForm = () => {
         //   userId: decoded.id, //userId
         // });
 
-        setAccessToken({
+        setCurUser({
           email: decoded.sub,
           userId: decoded.id,
           nickname: decoded.nickname,
         });
-        setRefreshToken(refreshToken);
-        setIsLoggedIn(!isLoggedIn);
         router.push('/');
       })
       .catch((err) => {
