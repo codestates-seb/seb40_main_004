@@ -49,20 +49,18 @@ export interface ArticleDetail {
   comments: Comment[];
 }
 
-// 임의 지정
+// 백엔드 소통 O but 확인 필요
 export interface Answer {
-  id: string;
-  author: string;
+  answerId: number;
   authorId: string;
-  level: string;
-  createdAt: string;
-  likes: number;
-  profileImg: string;
   content: string;
-  selection: boolean;
-  isLiked: boolean;
-  isBookmarked: boolean;
-  comments: Comment[];
+  createdAt: string;
+  isPicked: boolean;
+  answerLikeCount: number;
+  commentCount: number;
+  commentPreview: CommentProps;
+  avatar: Avatar;
+  userInfo: UserInfo;
 }
 
 // 임의 지정
