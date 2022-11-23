@@ -1,21 +1,25 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-16
+ * 최근 수정일: 2022-11-23
  * 개요:
    - 질문/답변에 대한 코멘트 리스트를 렌더링합니다.
  */
 
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Comment } from './Comment';
 import { TextArea } from './TextArea';
 import useSWR from 'swr';
-
 import { CommentProps } from '../../../libs/interfaces';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 export const CommentList = () => {
+  const router = useRouter();
+  const { articleId } = router.query;
   const [isOpen, setIsOpen] = useState(false);
-  const { data } = useSWR('/articles');
+  const { data } = useSWR(`/articles/${articleId}`);
   const comments = data.article.comments;
 
   return (
@@ -35,7 +39,10 @@ export const CommentList = () => {
             />
           ))}
           <TextArea />
-          <button onClick={() => setIsOpen(false)}>닫기</button>
+          <button onClick={() => setIsOpen(false)}>
+            {`닫기 `}
+            <FontAwesomeIcon icon={faChevronUp} />
+          </button>
         </>
       ) : (
         <>
@@ -49,7 +56,10 @@ export const CommentList = () => {
             userInfo={comments[0].userInfo}
             avatar={comments[0].avatar}
           />
-          <button onClick={() => setIsOpen(true)}>펼치기</button>
+          <button onClick={() => setIsOpen(true)}>
+            {`펼치기 `}
+            <FontAwesomeIcon icon={faChevronDown} />
+          </button>
         </>
       )}
     </div>

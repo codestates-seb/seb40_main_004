@@ -33,12 +33,12 @@ export const QuestionContent = () => {
   const { articleId } = router.query;
 
   // api 연결 이후 /articles/{id} 로 요청을 보낼 수 있습니다.
-  const { data } = useSWR('/articles');
+  const { data } = useSWR(`/articles/${articleId}`);
   const article = data.article;
 
   return (
-    <main className="flex flex-col w-full pb-6 mb-16 border-b">
-      {article ? (
+    <main className="flex flex-col w-full pb-6 border-b">
+      {data ? (
         <>
           <section className="flex flex-col space-y-4 border-b pb-3">
             <QuestionTitle title={article.title} />
@@ -56,7 +56,7 @@ export const QuestionContent = () => {
 
               <div className="flex space-x-1">
                 <BtnLike isLiked={article.isLiked} />
-                <span className="text-xl pr-3">14</span>
+                <span className="text-xl pr-3">{article.likes}</span>
                 <BtnBookmark isBookmarked={article.isBookMarked} />
               </div>
             </div>

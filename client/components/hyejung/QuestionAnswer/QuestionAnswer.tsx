@@ -12,8 +12,12 @@ import { ProfileImage } from '../ProfileImage';
 import { AnswerMainText } from './AnswerMainText';
 import { BtnLike } from '../BtnLike';
 import { BtnBookmark } from '../BtnBookmark';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
 
-export const QusetionAnswer = () => {
+import { Answer } from '../../../libs/interfaces';
+
+export const QusetionAnswer = ({ answer }: Answer) => {
   return (
     <main className="flex flex-col w-full mt-6 bg-[#FCFCFC] border rounded-[20px]">
       <section className="flex pb-3 items-center justify-between bg-main-gray p-4 rounded-t-[20px] border-b">
@@ -52,4 +56,18 @@ export const QusetionAnswer = () => {
       </section>
     </main>
   );
+};
+
+export const QuestionAnswerList = () => {
+  const router = useRouter();
+  const { articleId } = router.query;
+
+  const { data: answers } = useSWR(
+    `/articles/${articleId}/answers?page={1}&size={5}`,
+  );
+  const answersData = answers;
+
+  return answersData.map((answer) => (
+    <QusetionAnswer key={answer.answerId} answer={answer} />
+  ));
 };
