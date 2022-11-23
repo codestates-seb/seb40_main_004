@@ -11,16 +11,23 @@ import {
   faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import Link from 'next/link';
 import { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { curUserAtom } from '../../atomsYW';
 
 export const BtnDropdown = () => {
-  const setCurUser = useSetRecoilState(curUserAtom);
+  const [curUser, setCurUser] = useRecoilState(curUserAtom);
   const [dropdown, setDropdown] = useState(false);
 
-  const onClickLogout = () => {
+  const onClickLogout = async () => {
+    await axios.delete('/api/auth/token', {
+      headers: {
+        RefreshToken: localStorage.getItem('refreshToken'),
+        'ngrok-skip-browser-warning': '111',
+      },
+    });
     setCurUser({
       email: '',
       userId: 0,
@@ -28,6 +35,10 @@ export const BtnDropdown = () => {
     });
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+  };
+
+  const onClickDashboard = () => {
+    console.log(curUser);
   };
 
   return (
@@ -43,7 +54,10 @@ export const BtnDropdown = () => {
               <span className="text-lg font-semibold">✨ 260 모락</span>
             </li>
             <Link href="/dashboard">
-              <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer mt-2 py-1 px-4 rounded-xl text-[15px]">
+              <li
+                className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer mt-2 py-1 px-4 rounded-xl text-[15px]"
+                onClick={onClickDashboard}
+              >
                 <FontAwesomeIcon icon={faUser} size="sm" />
                 <span className="ml-2">대시보드</span>
               </li>
