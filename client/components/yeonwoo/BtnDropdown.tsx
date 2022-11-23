@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-16
+ * 최근 수정일: 2022-11-23
  */
 
 import { faUser } from '@fortawesome/free-regular-svg-icons';
@@ -14,14 +14,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { isLoggedInAtom } from '../../atomsYW';
+import { curUserAtom } from '../../atomsYW';
 
 export const BtnDropdown = () => {
-  const setIsLoggedIn = useSetRecoilState(isLoggedInAtom);
+  const setCurUser = useSetRecoilState(curUserAtom);
   const [dropdown, setDropdown] = useState(false);
 
   const onClickLogout = () => {
-    setIsLoggedIn(false);
+    setCurUser({
+      email: '',
+      userId: 0,
+      nickname: '',
+    });
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
   };
 
   return (
