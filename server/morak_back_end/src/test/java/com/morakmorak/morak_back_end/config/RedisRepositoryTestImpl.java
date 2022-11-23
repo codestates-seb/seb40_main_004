@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.config;
 
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 
@@ -33,6 +34,7 @@ public class RedisRepositoryTestImpl<T> implements RedisRepository<T> {
         if (classType.equals(String.class) && key.equals(REDIS_AUTH_KEY_NOT_EMPTY)) return (Optional<T>) Optional.of(EMAIL1);
         if (classType.equals(String.class) && key.equals(REDIS_EMAIL_NOT_EMPTY)) return (Optional<T>) Optional.of(AUTH_KEY);
         if (classType.equals(User.class)) return (Optional<T>) Optional.of(User.builder().build());
+        if (classType.equals(UserDto.Redis.class)) return (Optional<T>) Optional.of(UserDto.Redis.builder().build());
 
         return Optional.empty();
     }

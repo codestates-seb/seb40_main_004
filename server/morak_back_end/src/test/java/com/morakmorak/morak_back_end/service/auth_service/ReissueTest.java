@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.service.auth_service;
 
 import com.morakmorak.morak_back_end.dto.AuthDto;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.RefreshToken;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
@@ -38,7 +39,9 @@ public class ReissueTest extends AuthServiceTest {
     @DisplayName("토큰 재발행/ 유효한 RefreshToken을 전달 받은 경우 새로운 AccessToken과 RefreshToken을 발행한다.")
     public void test11() {
         //given
+        User user = User.builder().build();
         given(tokenGenerator.tokenValidation(BEARER_REDIS_TOKEN_NOT_EMPTY)).willReturn(Boolean.TRUE);
+        given(userMapper.redisUserToUser(any(UserDto.Redis.class))).willReturn(user);
         given(tokenGenerator.generateRefreshToken(any(User.class))).willReturn(BEARER_REFRESH_TOKEN);
         given(tokenGenerator.generateAccessToken(any(User.class))).willReturn(BEARER_ACCESS_TOKEN);
 
