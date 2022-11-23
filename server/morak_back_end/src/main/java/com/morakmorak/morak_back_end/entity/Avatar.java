@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
