@@ -25,6 +25,12 @@ public interface UserMapper {
 
     UserDto.SimpleEditProfile userToEditProfile(User user);
 
+    @Mapping(source = "id", target = "userId")
+    UserDto.Redis userToRedisUser(User user);
+
+    @Mapping(source = "userId", target = "id")
+    User redisUserToUser(UserDto.Redis dto);
+
     default List<UserDto.ResponseRanking> toResponseRankDto(List<User> user) {
         return user.stream().map(
                 e ->
