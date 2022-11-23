@@ -22,16 +22,21 @@ export const BtnLike = ({ isLiked, answerId }: BtnLikeProps) => {
   const [isLike, setIsLike] = useState(isLiked);
 
   const onClickLike = () => {
+    console.log(articleId);
     let url = '';
     if (answerId) {
       url = `/articles/${articleId}/answers/${answerId}/likes`;
     } else {
-      url = `/articles/${articleId}/like`;
+      url = `/articles/${articleId}/likes`;
     }
+    console.log(url);
     client
       .post(url)
       .then((res) => setIsLike(res.data.isLiked))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        alert('로그인이 필요한 서비스입니다.');
+      });
   };
 
   return (

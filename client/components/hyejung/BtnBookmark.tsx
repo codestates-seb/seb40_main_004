@@ -23,7 +23,10 @@ export const BtnBookmark = ({ isBookmarked }: BtnBookmarkProps) => {
     client
       .post(`/articles/${articleId}/bookmarks`)
       .then((res) => setIsMarked(res.data.scrappedByThisUser))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        alert('로그인이 필요한 서비스입니다.');
+        console.error(err);
+      });
   };
 
   return (
