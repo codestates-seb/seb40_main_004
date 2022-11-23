@@ -19,12 +19,11 @@ public class ArticleDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class RequestUploadArticle {
         @NotBlank
-        @Size(min = 15)
+        @Size(min = 5)
         private String title;
         @Size(min = 5)
         private String content;
         private List<TagDto.SimpleTag> tags = new ArrayList<>();
-        @EnumValid
         private CategoryName category;
         private List<FileDto.RequestFileWithId> fileId = new ArrayList<>();
         private Long thumbnail;
