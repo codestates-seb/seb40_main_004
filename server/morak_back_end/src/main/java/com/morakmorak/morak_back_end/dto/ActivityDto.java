@@ -16,15 +16,6 @@ public class ActivityDto {
         Long total;
         String createdDate;
 
-        @QueryProjection
-        public ActivityDto(Long articleCount, Long answerCount, Long commentCount,String createdAt) {
-                this.articleCount = articleCount;
-                this.answerCount = answerCount;
-                this.commentCount = commentCount;
-                this.total = articleCount + answerCount + commentCount;
-                this.createdDate = createdAt;
-        }
-
         @Builder
         public ActivityDto(Long articleCount, Long answerCount, Long commentCount, Long total, LocalDate createdDate) {
                 this.articleCount = articleCount;
@@ -32,5 +23,31 @@ public class ActivityDto {
                 this.commentCount = commentCount;
                 this.total = total;
                 this.createdDate = createdDate.toString();
+        }
+
+        @Getter
+        @Builder
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        public static class Temporary {
+                Long count;
+                LocalDate createdDate;
+
+                @QueryProjection
+                public Temporary(Long count, LocalDate createdDate) {
+                        this.count = count;
+                        this.createdDate = createdDate;
+                }
+        }
+
+        @Getter
+        @Builder
+        @AllArgsConstructor(access = AccessLevel.PRIVATE)
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        public static class Response {
+                Long articleCount;
+                Long answerCount;
+                Long commentCount;
+                Long total;
+                LocalDate createdDate;
         }
 }
