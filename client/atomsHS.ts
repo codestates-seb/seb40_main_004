@@ -19,3 +19,13 @@ export const userNickName = atom({
   key: 'nickName',
   default: '',
 });
+
+export const accessTokenAtom = atom({
+  key: 'accessToken',
+  default: {},
+});
+
+export const refreshTokenAtom = atom({
+  key: 'refreshToken',
+  default: {},
+});

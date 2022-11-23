@@ -63,7 +63,7 @@ export const SignUpForm = () => {
         setEmail(email);
         setPassword(password);
         setNickName(nickname);
-        router.push('/authentication-number');
+        router.push('/signup-email');
       })
       .catch((error) => {
         console.log('auth error', error);

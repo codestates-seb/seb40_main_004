@@ -31,7 +31,7 @@ const AuthenticateNumber = () => {
         setAuthKey(res.data.authKey);
       })
       .catch((error) => console.error('error', error));
-    router.push('/selectStatus');
+    router.push('/signup-status');
   };
   return (
     <main className="flex justify-center text-lg">

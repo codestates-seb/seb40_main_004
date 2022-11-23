@@ -8,18 +8,28 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { isLoggedInAtom } from '../../atomsYW';
 import { Button } from '../common/Button';
+import jwt_decode from 'jwt-decode';
+import { accessTokenAtom, refreshTokenAtom } from '../../atomsHS';
 
 type LoginProps = {
   email: string;
   password: string;
 };
 
+type DecodedProps = {
+  sub: string;
+  id: number;
+  nickname: string;
+};
+
 export const LoginForm = () => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInAtom);
+  const setAccessToken = useSetRecoilState(accessTokenAtom);
+  const setRefreshToken = useSetRecoilState(refreshTokenAtom);
   const onValid = ({ email, password }: LoginProps) => {
     axios
       .post(`/api/auth/token`, {
@@ -27,14 +37,32 @@ export const LoginForm = () => {
         password,
       })
       .then((res) => {
-        if (res.data.authorization) {
-          localStorage.setItem('loginToken', JSON.stringify(res.data));
-        }
-      })
-      .then(() => {
-        setIsLoggedIn(!isLoggedIn);
         alert('로그인 성공');
+        const accessToken = res.data.accessToken;
+        const refreshToken = res.data.refreshToken;
+        const decoded: DecodedProps = jwt_decode(accessToken);
+        localStorage.setItem('accessToken', accessToken);
+
+        // console.log('accessToken', accessToken);
+        // console.log('refreshToken', refreshToken);
+        // console.log('decode', decoded);
+
+        // console.log({
+        //   email: decoded.sub, //email
+        //   userId: decoded.id, //userId
+        // });
+
+        setAccessToken({
+          email: decoded.sub,
+          userId: decoded.id,
+          nickname: decoded.nickname,
+        });
+        setRefreshToken(refreshToken);
+        setIsLoggedIn(!isLoggedIn);
         router.push('/');
+      })
+      .catch((err) => {
+        console.error(err);
       });
   };
   const { register, handleSubmit } = useForm<LoginProps>();
