@@ -13,13 +13,15 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { curUserAtom } from '../../atomsYW';
+import { useSetRecoilState } from 'recoil';
+import { isLoginAtom } from '../../atomsYW';
 
 export const BtnDropdown = () => {
-  const [curUser, setCurUser] = useRecoilState(curUserAtom);
   const [dropdown, setDropdown] = useState(false);
+  const setIsLogin = useSetRecoilState(isLoginAtom);
+  const router = useRouter();
 
   const onClickLogout = async () => {
     await axios.delete('/api/auth/token', {
@@ -28,17 +30,17 @@ export const BtnDropdown = () => {
         'ngrok-skip-browser-warning': '111',
       },
     });
-    setCurUser({
-      email: '',
-      userId: 0,
-      nickname: '',
-    });
+    localStorage.removeItem('email');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('nickname');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
+    setIsLogin(false);
+    router.push('/');
   };
 
   const onClickDashboard = () => {
-    console.log(curUser);
+    console.log(localStorage.getItem('userId'));
   };
 
   return (
