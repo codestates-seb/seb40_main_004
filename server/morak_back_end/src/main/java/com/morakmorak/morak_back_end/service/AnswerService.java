@@ -144,7 +144,7 @@ public class AnswerService {
     }
 
     public Page<Answer> getAllAnswers(Long articleId, int page, int size) {
-        return answerRepository.findAllByArticleId(articleId, PageRequest.of(page, size, Sort.by("articleId").descending()));
+        return answerRepository.findAllByArticleId(articleId, PageRequest.of(page, size, Sort.by("createdAt").descending()));
     }
 
     private Answer injectAllInto(Answer answerNotSaved, User verifiedUser, Article verifiedArticle, List<File> fileList) {
