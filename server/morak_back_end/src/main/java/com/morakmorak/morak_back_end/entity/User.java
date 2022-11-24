@@ -196,8 +196,12 @@ public class User {
         this.point -= pointCalculator.calculatePaymentPoint(object);
     }
 
-    public void addAvatar(Avatar avatar) {
+    public void setAvatar(Avatar avatar) {
         this.avatar = avatar;
+    }
+
+    public void deleteAvatar() {
+        this.avatar = null;
     }
 
     public void addNotification(Notification notification) {
