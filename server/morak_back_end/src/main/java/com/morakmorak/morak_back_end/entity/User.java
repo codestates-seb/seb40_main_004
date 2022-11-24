@@ -203,4 +203,10 @@ public class User {
     public void addNotification(Notification notification) {
         this.notifications.add(notification);
     }
+    public void sendPoint(Integer pointToSend) {
+        this.point -=point;
+    }
+    public void receivePoint(Integer pointToReceive) {
+        this.point +=point;
+    }
 }

@@ -38,6 +38,7 @@ public class Article extends BaseTime {
     private String title;
 
     @ToString.Include
+    @Column(length = 20000)
     private String content;
 
     @ToString.Include
@@ -161,5 +162,9 @@ public class Article extends BaseTime {
             return true;
         }
         return false;
+    }
+
+    public void injectReview(Review review) {
+        this.reviews.add(review);
     }
 }
