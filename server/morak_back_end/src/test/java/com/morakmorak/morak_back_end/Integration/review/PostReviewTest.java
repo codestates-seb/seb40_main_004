@@ -165,9 +165,9 @@ public class PostReviewTest {
     }
 
     @Test
-    @DisplayName("글쓴이가 아닌 유저가 채택 요청 보내는 경우 401 반환")
+    @DisplayName("글쓴이가 아닌 유저(권한 없는 유저)가 채택 요청 보내는 경우 401 반환")
     void checkReviewSenderPermission_failed_4() throws Exception {
-        //user1은 글쓴이가 아닌데, user1의 답변 채택 요청 전송
+        //user1은 글쓴이가 아닌데, user1의 답변 채택 요청 전송(그러면 본인 채택 로직이 먼저 캐치함)
         ReviewDto.RequestPostReview request = ReviewDto.RequestPostReview.builder().content("15글자 이상의 정성스러운 답변").badges(validBadges).build();
         String json = objectMapper.writeValueAsString(request);
         String accessTokenForUser1 = jwtTokenUtil.createAccessToken(EMAIL2, user1.getId(), ROLE_USER_LIST, user.getNickname());
