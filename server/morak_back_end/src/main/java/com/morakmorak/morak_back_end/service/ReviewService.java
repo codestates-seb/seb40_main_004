@@ -91,7 +91,7 @@ public class ReviewService {
     }
 
     public void checkReceiverIsSameUser(Long senderId, Long receiverId) {
-        if (senderId == receiverId) {
+        if (senderId.equals(receiverId)) {
             throw new BusinessLogicException(ErrorCode.UNABLE_TO_REVIEW);
         }
     }
