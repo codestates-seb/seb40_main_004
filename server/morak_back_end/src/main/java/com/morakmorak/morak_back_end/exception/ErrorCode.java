@@ -34,6 +34,8 @@ public enum ErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "This request requires admin confirmation."),
     CANNOT_ACCESS_COMMENT(CONFLICT,"unable to access comment"),
     UNABLE_TO_ANSWER(CONFLICT,"unable to post answer, article is already closed"),
+    UNABLE_TO_REVIEW(CONFLICT,"unable to post review, article is already closed or status is not posting"),
+    BADGE_NOT_FOUND(NOT_FOUND,"badge not found"),
     COMMENT_NOT_FOUND(NOT_FOUND,"comment not found"),
 
     NOTIFICATION_NOT_FOUND(NOT_FOUND, "notification not found"),
