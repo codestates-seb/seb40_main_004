@@ -2,7 +2,9 @@ package com.morakmorak.morak_back_end.repository.user;
 
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.ActivityType;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,6 +71,66 @@ public class UserQueryRepository {
                     .leftJoin(user.avatar, avatar)
                     .where(user.id.eq(userId))
                     .fetchOne();
+    }
+
+    public List<ActivityDto.Temporary> getUserArticlesDataBetween(LocalDate startDate,
+                                                             LocalDate endDate,
+                                                                  Long userId) {
+
+        return jpaQueryFactory.select(new QActivityDto_Temporary(article.count(), article.createDate))
+                .from(article)
+                .where(article.user.id.eq(userId))
+                .groupBy(article.createDate)
+                .having(article.createDate.between(startDate, endDate))
+                .fetch();
+    }
+
+    public List<ActivityDto.Temporary> getUserAnswersDataBetween(LocalDate startDate,
+                                                                  LocalDate endDate,
+                                                                 Long userId) {
+        return jpaQueryFactory.select(new QActivityDto_Temporary(answer.count(), answer.createDate))
+                .from(answer)
+                .where(answer.user.id.eq(userId))
+                .groupBy(answer.createDate)
+                .having(answer.createDate.between(startDate, endDate))
+                .fetch();
+    }
+
+    public List<ActivityDto.Temporary> getUserCommentsDataBetween(LocalDate startDate,
+                                                                  LocalDate endDate,
+                                                                  Long userId) {
+        return jpaQueryFactory.select(new QActivityDto_Temporary(comment.count(), comment.createDate))
+                .from(comment)
+                .where(comment.user.id.eq(userId))
+                .groupBy(comment.createDate)
+                .having(comment.createDate.between(startDate, endDate))
+                .fetch();
+    }
+
+    public List<ActivityDto.Article> getWrittenArticleHistoryOn(LocalDate date,
+                                                                Long userId) {
+        return jpaQueryFactory.select(new QActivityDto_Article(article.id, article.title, article.articleLikes.size().longValue(),
+                article.comments.size().longValue(), article.createDate))
+                .from(article)
+                .where(article.user.id.eq(userId).and(article.createDate.eq(date)))
+                .fetch();
+    }
+
+    public List<ActivityDto.Article> getWrittenAnswerHistoryOn(LocalDate date,
+                                                                Long userId) {
+        return jpaQueryFactory.select(new QActivityDto_Article(answer.article.id, answer.article.title, answer.article.articleLikes.size().longValue(),
+                        answer.article.comments.size().longValue(), answer.article.createDate))
+                .from(answer)
+                .where(answer.user.id.eq(userId).and(answer.createDate.eq(date)))
+                .fetch();
+    }
+
+    public List<ActivityDto.Comment> getWrittenCommentHistoryOn(LocalDate date,
+                                                                Long userId) {
+        return jpaQueryFactory.select(new QActivityDto_Comment(comment.article.id, comment.content, article.createDate))
+                .from(comment)
+                .where(comment.user.id.eq(userId).and(comment.createDate.eq(date)))
+                .fetch();
     }
 
     public Page<User> getRankData(Pageable pageable) {

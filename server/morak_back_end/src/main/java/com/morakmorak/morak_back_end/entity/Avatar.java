@@ -28,4 +28,7 @@ public class Avatar extends BaseTime{
     @OneToOne(mappedBy = "avatar", cascade = CascadeType.PERSIST)
     private User user;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

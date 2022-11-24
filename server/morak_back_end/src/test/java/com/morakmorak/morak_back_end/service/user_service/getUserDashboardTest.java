@@ -40,8 +40,6 @@ public class getUserDashboardTest extends UserServiceTest {
     @DisplayName("")
     void findUserDashboard_success() {
         //given
-        int year = LocalDate.now().getYear();
-
         UserDto.ResponseSimpleUserDto simpleUserDto = UserDto.ResponseSimpleUserDto.builder()
                 .userId(ID1)
                 .grade(Grade.VIP)
@@ -55,12 +53,12 @@ public class getUserDashboardTest extends UserServiceTest {
                 .userInfo(simpleUserDto)
                 .build();
 
-        ActivityQueryDtoTestImpl activities1 = ActivityQueryDtoTestImpl.builder()
-                .answerCount(1)
-                .commentCount(1)
-                .articleCount(1)
-                .total(3)
-                .date("2022-01-01")
+        ActivityDto.Response activities1 = ActivityDto.Response.builder()
+                .answerCount(1L)
+                .commentCount(1L)
+                .articleCount(1L)
+                .total(3L)
+                .createdDate(LocalDate.of(2022,1,1))
                 .build();
 
         TagQueryDtoTestImpl tag1 = TagQueryDtoTestImpl
@@ -118,13 +116,20 @@ public class getUserDashboardTest extends UserServiceTest {
                 .reviews(List.of(review1))
                 .build();
 
+        LocalDate january1st = LocalDate.now().withDayOfYear(1);
+        LocalDate december31st = LocalDate.now().withDayOfYear(365);
+        ActivityDto.Temporary activityDto = ActivityDto.Temporary.builder().count(1L).build();
+
+
         given(userQueryRepository.getUserDashboardBasicInfo(ID1)).willReturn(dashBoard);
         given(userQueryRepository.getUserDashboardBasicInfo(ID1)).willReturn(UserDto.ResponseDashBoard.builder().email(EMAIL1).build());
         given(userQueryRepository.get50RecentQuestions(ID1)).willReturn(List.of(Article.builder().id(ID1).build()));
         given(userQueryRepository.getReceivedReviews(ID1)).willReturn(List.of(review1));
         given(userRepository.getUsersTop3Badges(ID1)).willReturn(List.of(badge1));
         given(userRepository.getUsersTop3Tags(ID1)).willReturn(List.of(tag1));
-        given(userRepository.getUserActivitiesOnThisYear(Date.valueOf(year + "-01-01"), Date.valueOf(year+1 + "-01-01"), ID1)).willReturn(List.of(ActivityQueryDtoTestImpl.builder().answerCount(1).build()));
+        given(userQueryRepository.getUserArticlesDataBetween(january1st, december31st, ID1)).willReturn(List.of(activityDto));
+        given(userQueryRepository.getUserAnswersDataBetween(january1st, december31st, ID1)).willReturn(List.of(activityDto));
+        given(userQueryRepository.getUserCommentsDataBetween(january1st, december31st, ID1)).willReturn(List.of(activityDto));
         given(articleMapper.articleToResponseSearchResultArticle(any(Article.class), anyInt(), anyInt(), any(List.class), anyInt())).willReturn(question1);
 
         //when
