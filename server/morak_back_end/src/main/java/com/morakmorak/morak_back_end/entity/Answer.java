@@ -24,7 +24,7 @@ public class Answer extends BaseTime{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id")
     private Long id;
-
+    @Column(length = 20000)
     private String content;
     @Builder.Default
     private Boolean isPicked = false;
@@ -107,5 +107,9 @@ public class Answer extends BaseTime{
 
     public boolean hasPermissionWith(User userWhoAccess) {
         return this.user.getId() == userWhoAccess.getId() ? true : false;
+    }
+
+    public void injectReview(Review newReview) {
+        this.review = newReview;
     }
 }
