@@ -93,6 +93,10 @@ public class UserDto {
                     .remotePath(remotePath)
                     .build();
         }
+
+        public void setRank(Integer rank) {
+            this.rank = rank;
+        }
     }
 
     @ToString
@@ -111,6 +115,7 @@ public class UserDto {
         private String github;
         private String blog;
         private String infoMessage;
+        private Long rank;
 
         private AvatarDto.SimpleResponse avatar;
         private List<TagQueryDto> tags;
@@ -144,6 +149,10 @@ public class UserDto {
             this.articles = articles;
             this.activities = activities;
             this.reviews = reviews;
+        }
+
+        public void addRank(Long rank) {
+            this.rank = rank;
         }
     }
 
