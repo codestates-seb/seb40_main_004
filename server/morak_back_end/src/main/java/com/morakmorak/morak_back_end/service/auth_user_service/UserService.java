@@ -23,8 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.morakmorak.morak_back_end.entity.enums.ActivityType.*;
-import static com.morakmorak.morak_back_end.exception.ErrorCode.NICKNAME_EXISTS;
-import static com.morakmorak.morak_back_end.exception.ErrorCode.USER_NOT_FOUND;
+import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +53,25 @@ public class UserService {
         Page<User> userRankPage = userQueryRepository.getRankData(request);
         List<UserDto.ResponseRanking> result = userMapper.toResponseRankDto(userRankPage.getContent());
         return new ResponseMultiplePaging<>(result, userRankPage);
+    }
+
+    public ActivityDto.Detail findActivityHistoryOn(LocalDate date, Long userId) {
+        findVerifiedUserById(userId);
+
+        if (date.getYear() != LocalDate.now().getYear()) throw new BusinessLogicException(INVALID_DATE_RANGE);
+
+        List<ActivityDto.Article> articles = userQueryRepository.getWrittenArticleHistoryOn(date, userId);
+        List<ActivityDto.Article> answers = userQueryRepository.getWrittenAnswerHistoryOn(date, userId);
+        List<ActivityDto.Comment> comments = userQueryRepository.getWrittenCommentHistoryOn(date, userId);
+
+        long totalSize = articles.size() + answers.size() + comments.size();
+
+        return ActivityDto.Detail.builder()
+                .articles(articles)
+                .answers(answers)
+                .comments(comments)
+                .total(totalSize)
+                .build();
     }
 
     public UserDto.ResponseDashBoard findUserDashboard(Long userId) {

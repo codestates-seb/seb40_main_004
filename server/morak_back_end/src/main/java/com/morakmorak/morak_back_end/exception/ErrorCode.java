@@ -39,6 +39,9 @@ public enum ErrorCode {
     NOTIFICATION_NOT_FOUND(NOT_FOUND, "notification not found"),
     NO_ACCESS_TO_THAT_OBJECT(FORBIDDEN, "no access to that object"),
 
+    INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "invalid date format"),
+    INVALID_DATE_RANGE(REQUESTED_RANGE_NOT_SATISFIABLE, "invalid date range"),
+
     /*
     * The error code expresses the dto validation exception of spring framework in web mvc test.
     * @author : YangEunChan

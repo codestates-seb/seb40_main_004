@@ -130,5 +130,4 @@ public class ArticleDto {
     public static class ResponseReportArticle {
         private Long reportId;
     }
-
 }

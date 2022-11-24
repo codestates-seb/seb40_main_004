@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.service.user_service;
 
+import com.morakmorak.morak_back_end.dto.ActivityDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.*;
@@ -9,6 +10,7 @@ import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.repository.user.UserQueryRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
@@ -55,52 +59,90 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("해당 유저가 존재하지 않을 때 BusinessLogicException 발생")
-    void editUserProfile_failed() {
+    @DisplayName("상세 활동 내역을 조회하려는 유저를 찾을 수 없으면 BusinessLogicException이 발생한다")
+    void findActivity_failed() {
         //given
-        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
+        LocalDate date = LocalDate.parse("2022-01-01");
 
         //when //then
-        assertThatThrownBy(() -> userService.editUserProfile(requestUser, ID1)).isInstanceOf(BusinessLogicException.class);
+        assertThatThrownBy(() -> userService.findActivityHistoryOn(date, ID1)).isInstanceOf(BusinessLogicException.class);
     }
 
     @Test
-    @DisplayName("해당 닉네임이 이미 존재할 때 BusinessLogicException 발생")
-    void editUserProfile_failed2() {
+    @DisplayName("조회 범위가 올해가 아닐 경우 예외 발생(1)")
+    void findActivity_failed2() {
         //given
-        User dbUser = User.builder().build();
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(dbUser));
-        given(userRepository.findUserByNickname(anyString())).willReturn(Optional.of(dbUser));
+        LocalDate date = LocalDate.parse("2002-01-01");
 
-        //when then
-        assertThatThrownBy(() -> userService.editUserProfile(requestUser, ID1)).isInstanceOf(BusinessLogicException.class);
+        //when //then
+        assertThatThrownBy(() -> userService.findActivityHistoryOn(date, ID1)).isInstanceOf(BusinessLogicException.class);
     }
 
     @Test
-    @DisplayName("로직이 정상적으로 수행된 경우 수정이 반영된 값을 반환")
-    void editUserProfile_failed3() {
+    @DisplayName("조회 범위가 올해가 아닐 경우 예외 발생(2)")
+    void findActivity_failed3() {
         //given
-        UserDto.SimpleEditProfile response = UserDto.SimpleEditProfile.builder()
-                .blog(requestUser.getBlog())
-                .nickname(requestUser.getNickname())
-                .github(requestUser.getGithub())
-                .jobType(requestUser.getJobType())
-                .infoMessage(requestUser.getInfoMessage())
-                .build();
+        LocalDate date = LocalDate.parse("2032-01-01");
 
-        User dbUser = User.builder().build();
-        given(userRepository.findById(ID1)).willReturn(Optional.of(dbUser));
-        given(userRepository.findUserByNickname(requestUser.getNickname())).willReturn(Optional.empty());
-        given(userMapper.userToEditProfile(any(User.class))).willReturn(response);
+        //when //then
+        assertThatThrownBy(() -> userService.findActivityHistoryOn(date, ID1)).isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    @DisplayName("해당 날짜에 아무런 데이터가 없더라도 예외가 발생하지 않는다.")
+    void findActivity_success() {
+        //given
+        LocalDate date = LocalDate.parse("2022-01-01");
+
+        given(userRepository.findById(ID1)).willReturn(Optional.of(User.builder().build()));
+        given(userQueryRepository.getWrittenCommentHistoryOn(date, ID1)).willReturn(List.of());
+        given(userQueryRepository.getWrittenArticleHistoryOn(date,ID1)).willReturn(List.of());
+        given(userQueryRepository.getWrittenAnswerHistoryOn(date ,ID1)).willReturn(List.of());
 
         //when
-        UserDto.SimpleEditProfile result = userService.editUserProfile(requestUser, ID1);
+        ActivityDto.Detail result = userService.findActivityHistoryOn(date, ID1);
 
         //then
-        assertThat(result.getBlog()).isEqualTo(requestUser.getBlog());
-        assertThat(result.getGithub()).isEqualTo(requestUser.getGithub());
-        assertThat(result.getNickname()).isEqualTo(requestUser.getNickname());
-        assertThat(result.getJobType()).isEqualTo(requestUser.getJobType());
-        assertThat(result.getInfoMessage()).isEqualTo(requestUser.getInfoMessage());
+        assertThat(result.getAnswers()).isEmpty();
+        assertThat(result.getComments()).isEmpty();
+        assertThat(result.getArticles()).isEmpty();
+        assertThat(result.getTotal()).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("반환 값을 조합하여 ActivityDto.Detail 객체를 반환한다")
+    void findActivity_success2() {
+        //given
+        LocalDate date = LocalDate.parse("2022-01-01");
+
+        ActivityDto.Article article = ActivityDto.Article.builder()
+                .articleId(1L)
+                .title(CONTENT1)
+                .createdDate(LocalDate.now())
+                .commentCount(10L)
+                .likeCount(10L)
+                .build();
+
+        ActivityDto.Comment comment = ActivityDto.Comment.builder()
+                .articleId(1L)
+                .content(CONTENT2)
+                .build();
+
+
+        given(userRepository.findById(ID1)).willReturn(Optional.of(User.builder().build()));
+        given(userQueryRepository.getWrittenCommentHistoryOn(date, ID1)).willReturn(List.of(comment));
+        given(userQueryRepository.getWrittenArticleHistoryOn(date,ID1)).willReturn(List.of(article));
+        given(userQueryRepository.getWrittenAnswerHistoryOn(date ,ID1)).willReturn(List.of(article));
+
+        //when
+        ActivityDto.Detail result = userService.findActivityHistoryOn(date, ID1);
+
+        //then
+        assertThat(result.getAnswers().get(0).getTitle()).isEqualTo(CONTENT1);
+        assertThat(result.getComments().get(0).getArticleId()).isEqualTo(1L);
+        assertThat(result.getArticles().get(0).getCommentCount()).isEqualTo(10L);
+        assertThat(result.getArticles().get(0).getTitle()).isEqualTo(CONTENT1);
+        assertThat(result.getArticles().get(0).getLikeCount()).isEqualTo(10L);
+        assertThat(result.getTotal()).isEqualTo(3);
     }
 }

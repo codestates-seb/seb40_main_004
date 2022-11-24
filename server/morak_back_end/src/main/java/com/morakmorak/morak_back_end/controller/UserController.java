@@ -1,7 +1,10 @@
 package com.morakmorak.morak_back_end.controller;
 
+import com.morakmorak.morak_back_end.dto.ActivityDto;
 import com.morakmorak.morak_back_end.dto.ResponseMultiplePaging;
 import com.morakmorak.morak_back_end.dto.UserDto;
+import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.resolver.RequestUser;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
@@ -14,6 +17,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 @RestController
 @RequestMapping("/users")
@@ -43,6 +48,17 @@ public class UserController {
                                                                           @Param("size") Integer size) {
         PageRequest pageRequest = getPageRequest(q, page, size);
         return userService.getUserRankList(pageRequest);
+    }
+
+    @GetMapping("/{user-id}/dashboard/activities/{date}")
+    @ResponseStatus(HttpStatus.OK)
+    public ActivityDto.Detail getUserActivityDetail(@PathVariable(name = "user-id") Long userId,
+                                                    @PathVariable(name = "date") String date) {
+        try {
+            return userService.findActivityHistoryOn(LocalDate.parse(date), userId);
+        } catch (DateTimeParseException e) {
+            throw new BusinessLogicException(ErrorCode.INVALID_DATE_FORMAT);
+        }
     }
 
     private PageRequest getPageRequest(String sort, Integer page, Integer size) {

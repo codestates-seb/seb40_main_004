@@ -107,6 +107,32 @@ public class UserQueryRepository {
                 .fetch();
     }
 
+    public List<ActivityDto.Article> getWrittenArticleHistoryOn(LocalDate date,
+                                                                Long userId) {
+        return jpaQueryFactory.select(new QActivityDto_Article(article.id, article.title, article.articleLikes.size().longValue(),
+                article.comments.size().longValue(), article.createDate))
+                .from(article)
+                .where(article.user.id.eq(userId).and(article.createDate.eq(date)))
+                .fetch();
+    }
+
+    public List<ActivityDto.Article> getWrittenAnswerHistoryOn(LocalDate date,
+                                                                Long userId) {
+        return jpaQueryFactory.select(new QActivityDto_Article(answer.article.id, answer.article.title, answer.article.articleLikes.size().longValue(),
+                        answer.article.comments.size().longValue(), answer.article.createDate))
+                .from(answer)
+                .where(answer.user.id.eq(userId).and(answer.createDate.eq(date)))
+                .fetch();
+    }
+
+    public List<ActivityDto.Comment> getWrittenCommentHistoryOn(LocalDate date,
+                                                                Long userId) {
+        return jpaQueryFactory.select(new QActivityDto_Comment(comment.article.id, comment.content, article.createDate))
+                .from(comment)
+                .where(comment.user.id.eq(userId).and(comment.createDate.eq(date)))
+                .fetch();
+    }
+
     public Page<User> getRankData(Pageable pageable) {
         List<String> sortTypes = getSortTypes(pageable);
 
