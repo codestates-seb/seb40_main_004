@@ -65,7 +65,7 @@ public class UserQueryRepository {
 
     public UserDto.ResponseDashBoard getUserDashboardBasicInfo(Long userId) {
             return jpaQueryFactory.select(new QUserDto_ResponseDashBoard(
-                            user.id, user.email, user.nickname, user.jobType, user.grade, user.point, user.github, user.blog, user.avatar.id, user.avatar.remotePath, user.avatar.originalFilename
+                            user.id, user.email, user.nickname, user.jobType, user.grade, user.point, user.github, user.blog, user.avatar.id, user.avatar.remotePath, user.avatar.originalFilename, user.infoMessage
                     ))
                     .from(user)
                     .leftJoin(user.avatar, avatar)
