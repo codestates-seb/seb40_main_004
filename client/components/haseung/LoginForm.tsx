@@ -8,10 +8,10 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useSetRecoilState } from 'recoil';
 import { Button } from '../common/Button';
 import jwt_decode from 'jwt-decode';
-import { curUserAtom } from '../../atomsYW';
+import { useSetRecoilState } from 'recoil';
+import { isLoginAtom } from '../../atomsYW';
 
 type LoginProps = {
   email: string;
@@ -25,8 +25,8 @@ type DecodedProps = {
 };
 
 export const LoginForm = () => {
+  const setIsLogin = useSetRecoilState(isLoginAtom);
   const router = useRouter();
-  const setCurUser = useSetRecoilState(curUserAtom);
   const onValid = ({ email, password }: LoginProps) => {
     axios
       .post(`/api/auth/token`, {
@@ -50,11 +50,10 @@ export const LoginForm = () => {
         //   userId: decoded.id, //userId
         // });
 
-        setCurUser({
-          email: decoded.sub,
-          userId: decoded.id,
-          nickname: decoded.nickname,
-        });
+        localStorage.setItem('email', decoded.sub);
+        localStorage.setItem('userId', String(decoded.id));
+        localStorage.setItem('nickname', decoded.nickname);
+        setIsLogin(true);
         router.push('/');
       })
       .catch((err) => {
