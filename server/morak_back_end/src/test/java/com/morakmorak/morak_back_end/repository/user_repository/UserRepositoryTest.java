@@ -35,6 +35,7 @@ import javax.persistence.EntityManager;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -290,5 +291,108 @@ public class UserRepositoryTest {
         assertThat(result.get(3).getCount()).isEqualTo(1);
         assertThat(result.get(4).getCount()).isEqualTo(1);
         assertThat(result.get(5).getCount()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("해당 일자의 article 작성 기록을 모두 가져온다")
+    void getWriteArticleHistoryOn() {
+        //given
+        BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDate.now()));
+        User user = User.builder().build();
+        userRepository.save(user);
+
+        for (int i=0; i<5; i++) {
+            Article article = Article.builder().title(CONTENT1).build();
+            Comment comment1 = Comment.builder().article(article).build();
+            Comment comment2 = Comment.builder().article(article).build();
+            ArticleLike articleLike = ArticleLike.builder().article(article).user(other).build();
+            article.injectUserForMapping(user);
+            articleLike.mapUserAndArticleWithLike();;
+            comment1.injectArticle(article);
+            comment2.injectArticle(article);
+
+            entityManager.persist(article);
+            entityManager.persist(articleLike);
+            entityManager.persist(comment1);
+            entityManager.persist(comment2);
+        }
+
+        //when
+        List<ActivityDto.Article> result = userQueryRepository.getWrittenArticleHistoryOn(LocalDate.now(), user.getId());
+
+        //then
+        assertThat(result.size()).isEqualTo(5);
+        assertThat(result.get(0).getTitle()).isEqualTo(CONTENT1);
+        assertThat(result.get(0).getLikeCount()).isEqualTo(1L);
+        assertThat(result.get(0).getCommentCount()).isEqualTo(2L);
+    }
+
+    @Test
+    @DisplayName("해당 일자의 answer 작성 기록을 모두 가져온다")
+    void getWrittenAnswerHistoryOn() {
+        //given
+        BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDate.now()));
+        User user = User.builder().build();
+        userRepository.save(user);
+
+        for (int i=0; i<5; i++) {
+            Article article = Article.builder().title(CONTENT1).user(other).build();
+            Answer answer = Answer.builder().article(article).user(user).build();
+            Comment comment1 = Comment.builder().article(article).build();
+            Comment comment2 = Comment.builder().article(article).build();
+            ArticleLike articleLike = ArticleLike.builder().article(article).user(other).build();
+            article.injectUserForMapping(other);
+            answer.injectUser(user);
+            articleLike.mapUserAndArticleWithLike();;
+
+            entityManager.persist(article);
+            entityManager.persist(articleLike);
+            entityManager.persist(comment1);
+            entityManager.persist(comment2);
+        }
+
+        //when
+        List<ActivityDto.Article> result = userQueryRepository.getWrittenAnswerHistoryOn(LocalDate.now(), user.getId());
+
+        //then
+        assertThat(result.size()).isEqualTo(5);
+        assertThat(result.get(0).getTitle()).isEqualTo(CONTENT1);
+        assertThat(result.get(0).getLikeCount()).isEqualTo(1L);
+        assertThat(result.get(0).getCommentCount()).isEqualTo(2L);
+    }
+
+    @Test
+    @DisplayName("해당 일자의 comment 작성 기록을 모두 가져온다")
+    void getWrittenCommentHistoryOn() {
+        //given
+        BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDate.now()));
+        User user = User.builder().build();
+        userRepository.save(user);
+
+        List<Long> articleIds = new ArrayList<>();
+
+        for (int i=0; i<5; i++) {
+            Article article = Article.builder().title(CONTENT1).build();
+            Comment comment1 = Comment.builder().user(user).content(CONTENT2).article(article).build();
+            Comment comment2 = Comment.builder().user(user).content(CONTENT2).article(article).build();
+            ArticleLike articleLike = ArticleLike.builder().article(article).user(other).build();
+            articleLike.mapUserAndArticleWithLike();;
+            comment1.injectArticle(article);
+            comment2.injectArticle(article);
+
+            entityManager.persist(article);
+            entityManager.persist(articleLike);
+            entityManager.persist(comment1);
+            entityManager.persist(comment2);
+
+            articleIds.add(article.getId());
+        }
+
+        //when
+        List<ActivityDto.Comment> result = userQueryRepository.getWrittenCommentHistoryOn(LocalDate.now(), user.getId());
+
+        //then
+        assertThat(result.size()).isEqualTo(10);
+        assertThat(result.get(0).getContent()).isEqualTo(CONTENT2);
     }
 }
