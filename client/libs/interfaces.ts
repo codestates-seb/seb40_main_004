@@ -1,24 +1,20 @@
-// 백엔드 소통 O
 export interface Tags {
   tagId: number;
   name: string;
 }
 
-// 백엔드 소통 O
 export interface UserInfo {
   userId: number;
   nickname: string;
   grade: string;
 }
 
-// 백엔드 소통 O
 export interface Avatar {
   avatarId: number;
   fileName: string;
   remotePath: string;
 }
 
-// 백엔드 소통 O
 export interface CommentProps {
   commentId: number;
   articleId: number;
@@ -29,7 +25,6 @@ export interface CommentProps {
   avatar: Avatar;
 }
 
-// 백엔드 소통 O
 export interface ArticleDetail {
   articleId: number;
   category: string;
@@ -49,7 +44,6 @@ export interface ArticleDetail {
   comments: Comment[];
 }
 
-// 백엔드 소통 O but 확인 필요
 export interface Answer {
   answerId: number;
   authorId: string;
@@ -61,6 +55,18 @@ export interface Answer {
   commentPreview: CommentProps;
   avatar: Avatar;
   userInfo: UserInfo;
+}
+
+export interface PageInfo {
+  page: number;
+  size: number;
+  totalElements: number;
+  sort: { empty: boolean; unsorted: boolean; sorted: boolean };
+}
+
+export interface AnswerListProps {
+  data: Answer[];
+  pageInfo: PageInfo;
 }
 
 // 임의 지정
