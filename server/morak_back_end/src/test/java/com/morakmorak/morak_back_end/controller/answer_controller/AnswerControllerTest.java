@@ -64,7 +64,6 @@ public class AnswerControllerTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
     @MockBean
@@ -351,4 +350,5 @@ public class AnswerControllerTest {
                                 parameterWithName("answer-id").description("답변글의 아이디 입니다.")
                         )));
     }
+
 }
