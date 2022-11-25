@@ -57,6 +57,45 @@ include::{snippets}/대시보드_조회_실패_404/http-request.adoc[]
 include::{snippets}/대시보드_조회_실패_404//http-response.adoc[]
 
 ***
+== 대시보드 상세 조회
+=== 성공 200
+
+.http-request
+include::{snippets}/대시보드_상세조회_성공_200/http-request.adoc[]
+
+.http-response
+include::{snippets}/대시보드_상세조회_성공_200//http-response.adoc[]
+
+.response-fields
+include::{snippets}/대시보드_상세조회_성공_200//response-fields.adoc[]
+
+=== 실패 400
+잘못된 날짜 형식
+
+.http-request
+include::{snippets}/대시보드_상세조회_실패_400/http-request.adoc[]
+
+.http-response
+include::{snippets}/대시보드_상세조회_실패_400//http-response.adoc[]
+
+=== 실패 404
+해당 유저의 정보를 불러올 수 없음
+
+.http-request
+include::{snippets}/대시보드_상세조회_실패_404/http-request.adoc[]
+
+.http-response
+include::{snippets}/대시보드_상세조회_실패_404//http-response.adoc[]
+
+=== 실패 416
+
+.http-request
+include::{snippets}/대시보드_상세조회_실패_416/http-request.adoc[]
+
+.http-response
+include::{snippets}/대시보드_상세조회_실패_416//http-response.adoc[]
+
+***
 == 프로필 변경
 === 성공 200
 

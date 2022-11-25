@@ -49,7 +49,7 @@ include::{snippets}/회원가입_성공_201//request-fields.adoc[]
 include::{snippets}/회원가입_성공_201//http-response.adoc[]
 
 .response-fields
-include::{snippets}/회원가입_성공_201//response-body.adoc[]
+include::{snippets}/회원가입_성공_201//response-fields.adoc[]
 
 
 
