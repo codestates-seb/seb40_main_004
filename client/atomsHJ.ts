@@ -27,3 +27,16 @@ export const supportPayloadAtom = atom({
 });
 
 // 채택/후원 관련 atoms 끝
+
+export const isAnswerPostAtom = atom({
+  key: 'isAnswerPost',
+  default: {
+    isAnswerPost: false,
+    answerId: '',
+  },
+});
+
+export const articleAuthorIdAtom = atom({
+  key: 'articleAuthorId',
+  default: '',
+});
