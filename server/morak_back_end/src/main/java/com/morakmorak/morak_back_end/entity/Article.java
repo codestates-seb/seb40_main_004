@@ -73,10 +73,6 @@ public class Article extends BaseTime {
     @OneToMany(mappedBy = "article", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<ArticleTag> articleTags = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "vote_id")
-    private Vote vote;
-
     @Builder.Default
     @OneToMany(mappedBy = "article", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<File> files = new ArrayList<>();
