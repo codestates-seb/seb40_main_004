@@ -108,12 +108,14 @@ public class DashboardTest extends UserControllerTest {
 
         TagQueryDtoTestImpl tag1 = TagQueryDtoTestImpl
                 .builder()
+                .ranking(1L)
                 .tagId(ID1)
                 .name(TagName.NODE.toString())
                 .build();
 
         TagQueryDtoTestImpl tag2 = TagQueryDtoTestImpl
                 .builder()
+                .ranking(2L)
                 .tagId(ID2)
                 .name(TagName.JAVA.toString())
                 .build();
@@ -226,10 +228,12 @@ public class DashboardTest extends UserControllerTest {
                                         fieldWithPath("avatar.filename").type(STRING).description("프로필 이미지 파일명"),
                                         fieldWithPath("avatar.remotePath").type(STRING).description("프로필 이미지 url"),
                                         fieldWithPath("tags").type(ARRAY).description("기술 태그 목록"),
+                                        fieldWithPath("tags[].tag_Id").type(NUMBER).description("태그 db 시퀀스값"),
                                         fieldWithPath("tags[].tagId").type(NUMBER).description("태그 db 시퀀스값"),
+                                        fieldWithPath("tags[].ranking").type(NUMBER).description("태그 db 시퀀스값"),
                                         fieldWithPath("tags[].name").type(STRING).description("태그 이름"),
                                         fieldWithPath("reviewBadges").type(ARRAY).description("리뷰 배지 목록"),
-                                        fieldWithPath("reviewBadges[].badgeId").type(NUMBER).description("리뷰 배지 db 시퀀스값"),
+                                        fieldWithPath("reviewBadges[].badge_Id").type(NUMBER).description("리뷰 배지 db 시퀀스값"),
                                         fieldWithPath("reviewBadges[].name").type(STRING).description("배지 이름"),
                                         fieldWithPath("activities").type(ARRAY).description("연간 활동량 목록"),
                                         fieldWithPath("activities[].articleCount").type(NUMBER).description("일일 게시글 작성수"),

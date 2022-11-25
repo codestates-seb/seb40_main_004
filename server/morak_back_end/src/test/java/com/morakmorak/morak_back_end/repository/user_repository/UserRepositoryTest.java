@@ -2,10 +2,12 @@ package com.morakmorak.morak_back_end.repository.user_repository;
 
 import com.morakmorak.morak_back_end.config.JpaQueryFactoryConfig;
 import com.morakmorak.morak_back_end.dto.ActivityDto;
+import com.morakmorak.morak_back_end.dto.TagQueryDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.JobType;
+import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.user.UserQueryRepository;
@@ -394,5 +396,45 @@ public class UserRepositoryTest {
         //then
         assertThat(result.size()).isEqualTo(10);
         assertThat(result.get(0).getContent()).isEqualTo(CONTENT2);
+    }
+    
+    @Test
+    @DisplayName("유저의 활동 내역이 없어도 예외가 발생하지 않는다")
+    void getTopTags() {
+        //given
+        User user = User.builder().build();
+        Article build = Article.builder().build();
+        Tag build1 = Tag.builder().name(TagName.C).build();
+        ArticleTag build2 = ArticleTag.builder().article(build).tag(build1).build();
+
+        Article a = Article.builder().build();
+        Tag b = Tag.builder().name(TagName.JAVA).build();
+        ArticleTag c = ArticleTag.builder().article(build).tag(build1).build();
+
+        Article a1 = Article.builder().build();
+        Tag b1 = Tag.builder().name(TagName.AWS).build();
+        ArticleTag c1 = ArticleTag.builder().article(build).tag(build1).build();
+
+
+        build2.mapArticleAndTagWithArticleTag();
+        user.addArticle(build);
+        c.mapArticleAndTagWithArticleTag();
+        c1.mapArticleAndTagWithArticleTag();
+        entityManager.persist(user);
+        entityManager.persist(build);
+        entityManager.persist(build2);
+
+        entityManager.persist(a);
+        entityManager.persist(b);
+        entityManager.persist(c);
+
+        entityManager.persist(a1);
+        entityManager.persist(b1);
+        entityManager.persist(c1);
+
+        entityManager.persist(build1);
+        
+        //when //then
+        List<TagQueryDto> result = userRepository.getUsersTop3Tags(user.getId());
     }
 }

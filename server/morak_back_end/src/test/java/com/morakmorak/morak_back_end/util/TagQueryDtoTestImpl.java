@@ -10,9 +10,10 @@ import lombok.*;
 public class TagQueryDtoTestImpl implements TagQueryDto {
     private Long tagId;
     private String name;
+    private Long ranking;
 
     @Override
-    public Long getTagId() {
+    public Long getTag_Id() {
         return tagId;
     }
 

@@ -26,6 +26,7 @@ public class Answer extends BaseTime{
     private Long id;
 
     private String content;
+
     @Builder.Default
     private Boolean isPicked = false;
 
@@ -40,10 +41,6 @@ public class Answer extends BaseTime{
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "review_id")
     private Review review;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote_id")
-    private Vote vote;
 
     @CreatedDate
     @DateTimeFormat(pattern = "yyyy-MM-dd")

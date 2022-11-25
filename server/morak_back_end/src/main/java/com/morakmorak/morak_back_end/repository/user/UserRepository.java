@@ -51,35 +51,38 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(
             nativeQuery = true,
-            value = "select tag.tag_id, tag.name\n" +
-                    "from\n" +
-                    "     (select at.tag_id, count(*) as cnt\n" +
-                    "     from (select article_id from article where article.user_id = :id) as a,\n" +
-                    "          (select answer.article_id as article_id2 from answer where answer.user_id = :id) as b,\n" +
-                    "     article_tag as at\n" +
-                    "     where at.article_id = a.article_id or at.article_id = b.article_id2\n" +
-                    "     group by at.tag_id\n" +
-                    "     order by cnt desc\n" +
-                    "     limit 3" +
-                    "     ) as tag_ids,\n" +
-                    "    tag\n" +
-                    "where tag_ids.tag_id = tag.tag_id"
+            value = "select rank() over (order by count(*) desc) as ranking, a.tag_id, a.name\n" +
+                    "from (select tag.tag_id, tag.name\n" +
+                    "      from tag\n" +
+                    "               inner join article_tag on article_tag.tag_id = tag.tag_id\n" +
+                    "               inner join article on article.article_id = article_tag.article_id\n" +
+                    "               inner join user on user.user_id = article.user_id\n" +
+                    "      where user.user_id = :id\n" +
+                    "      group by tag_id\n" +
+                    "      union all\n" +
+                    "      select t.tag_id, t.name\n" +
+                    "      from tag as t\n" +
+                    "               inner join article_tag as at on at.tag_id = t.tag_id\n" +
+                    "               inner join article as a on a.article_id = at.article_id\n" +
+                    "               inner join answer on answer.article_id = a.article_id\n" +
+                    "               inner join user as u on u.user_id = answer.user_id\n" +
+                    "      where u.user_id = :id\n" +
+                    "      group by t.tag_id) as a\n" +
+                    "group by a.tag_id, a.name\n" +
+                    "limit 3;"
     )
     List<TagQueryDto> getUsersTop3Tags(@Param("id") Long id);
 
     @Query(
             nativeQuery = true,
-            value = "select ba.badge_id as badge_id, ba.name as name\n" +
-                    "from\n" +
-                    "    (select review_badge.badge_id, count(*) as cnt\n" +
-                    "     from review_badge\n" +
-                    "     inner join review r on r.review_id = review_badge.review_id\n" +
-                    "     where r.receiver_id = :id\n" +
-                    "     group by review_badge.badge_id\n" +
-                    "     order by cnt desc\n" +
-                    "     limit 3) as b,\n" +
-                    "    badge as ba\n" +
-                    "where ba.badge_id = b.badge_id;\n"
+            value = "select rank() over (order by count(*)), b.badge_id, b.name\n" +
+                    "from badge as b\n" +
+                    "inner join review_badge as rb on rb.badge_id = b.badge_id\n" +
+                    "inner join review as r on r.review_id = rb.review_id\n" +
+                    "inner join user as u on r.receiver_id = u.user_id\n" +
+                    "where u.user_id = 2\n" +
+                    "group by b.badge_id, b.name\n" +
+                    "limit 3;"
     )
     List<BadgeQueryDto> getUsersTop3Badges(@Param("id") Long id);
 

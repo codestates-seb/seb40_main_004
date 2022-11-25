@@ -74,20 +74,8 @@ public class User {
     private Avatar avatar;
 
     @Builder.Default
-    @OneToMany(mappedBy = "user")
-    private List<UserSkillStack> userSkillStacks = new ArrayList<>();
-
-    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Answer> answers = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "user")
-    private List<ChatIn> chatIns = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "user")
-    private List<Chat> chats = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
@@ -109,10 +97,6 @@ public class User {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Deposit> deposits = new ArrayList<>();
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote_id")
-    private Vote vote;
 
     @Builder.Default
     @OneToMany(mappedBy = "user")

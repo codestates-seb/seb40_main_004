@@ -587,7 +587,7 @@ include::{snippets}/답변글_좋아요_두번_누를때_취소_성공_200/path-
 include::{snippets}/답변글_좋아요_두번_누를때_취소_성공_200/http-response.adoc[]
 
 .response-fields
-include::{snippets}/답변글_좋아요_두번_누를때_취소_성공_200/response-filed.adoc[]
+include::{snippets}/답변글_좋아요_두번_누를때_취소_성공_200/response-fields.adoc[]
 
 === 실패 로그인하지 않은 회원이 답변글 좋아요를 누를때 404
 

@@ -5,8 +5,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<meta name="application-name" content="morakmorak">
-<meta name="author" content="YANGEUNCHAN">
 <title>인증 관련 API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -438,98 +436,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 </head>
-<body class="article toc2 toc-left">
+<body class="article">
 <div id="header">
-<h1>인증 관련 API</h1>
-<div class="details">
-<span id="author" class="author">YANGEUNCHAN</span><br>
-<span id="revnumber">version 0.0.1-SNAPSHOT</span>
-</div>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_회원가입">1. 회원가입</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_201">1.1. 성공 201</a></li>
-<li><a href="#_실패_400_유효성_검사">1.2. 실패 400_유효성 검사</a></li>
-<li><a href="#_실패_404_인증키">1.3. 실패 404_인증키</a></li>
-<li><a href="#_실패_409_중복_이메일">1.4. 실패 409_중복_이메일</a></li>
-<li><a href="#_실패_409_중복_닉네임">1.5. 실패 409_중복_닉네임</a></li>
-</ul>
-</li>
-<li><a href="#_이메일_인증_메일_전송">2. 이메일 인증 메일 전송</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_201_2">2.1. 성공 201</a></li>
-<li><a href="#_실패_409_시간_제한">2.2. 실패 409_시간 제한</a></li>
-<li><a href="#_실패_409_이미_존재하는_이메일">2.3. 실패 409_이미 존재하는 이메일</a></li>
-</ul>
-</li>
-<li><a href="#_이메일_인증">3. 이메일 인증</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_200">3.1. 성공 200</a></li>
-<li><a href="#_실패_404_존재하지_않음">3.2. 실패 404_존재하지_않음</a></li>
-</ul>
-</li>
-<li><a href="#_닉네임_중복_확인">4. 닉네임 중복 확인</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_200_2">4.1. 성공 200</a></li>
-<li><a href="#_실패_400_유효성_검사_2">4.2. 실패 400_유효성 검사</a></li>
-<li><a href="#_실패_409_닉네임_중복">4.3. 실패 409_닉네임 중복</a></li>
-</ul>
-</li>
-<li><a href="#_로그인">5. 로그인</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_201_3">5.1. 성공 201</a></li>
-<li><a href="#_실패_401_잘못된_입력값">5.2. 실패 401 잘못된 입력값</a></li>
-</ul>
-</li>
-<li><a href="#_로그아웃">6. 로그아웃</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_204">6.1. 성공 204</a></li>
-<li><a href="#_실패_404">6.2. 실패 404</a></li>
-</ul>
-</li>
-<li><a href="#_리프레시_토큰_갱신">7. 리프레시 토큰 갱신</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_201_4">7.1. 성공 201</a></li>
-<li><a href="#_실패_401_유효하지_않은_토큰">7.2. 실패 401_유효하지 않은 토큰</a></li>
-<li><a href="#_실패_404_존재하지_않는_토큰">7.3. 실패 404_존재하지 않는 토큰</a></li>
-</ul>
-</li>
-<li><a href="#_비밀번호_변경">8. 비밀번호 변경</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_200_3">8.1. 성공 200</a></li>
-<li><a href="#_실패_409_잘못된_패스워드">8.2. 실패 409_잘못된 패스워드</a></li>
-<li><a href="#_실패_409_잘못된_패스워드_2">8.3. 실패 409_잘못된 패스워드</a></li>
-</ul>
-</li>
-<li><a href="#_비밀번호_찾기_이메일_인증">9. 비밀번호 찾기_이메일 인증</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_201_이메일_전송">9.1. 성공 201_이메일 전송</a></li>
-<li><a href="#_실패_404_존재하지_않는_이메일">9.2. 실패 404_존재하지 않는 이메일</a></li>
-<li><a href="#_실패_409_5분내_요청_이력">9.3. 실패 409_5분내_요청_이력</a></li>
-</ul>
-</li>
-<li><a href="#_비밀번호_찾기_임시패스워드_발급">10. 비밀번호 찾기_임시패스워드 발급</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_200_이메일_전송">10.1. 성공 200_이메일 전송</a></li>
-<li><a href="#_실패_400_유효성_검사_3">10.2. 실패 400_유효성 검사</a></li>
-<li><a href="#_실패_404_존재하지_않는_인증키">10.3. 실패 404_존재하지 않는 인증키</a></li>
-</ul>
-</li>
-<li><a href="#_회원탈퇴">11. 회원탈퇴</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_204_2">11.1. 성공 204</a></li>
-<li><a href="#_실패_400_유효성_검사_4">11.2. 실패 400_유효성 검사</a></li>
-<li><a href="#_실패_409_잘못된_패스워드_3">11.3. 실패 409_잘못된 패스워드</a></li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
+<h1 id="_인증_관련_api" class="sect0">인증 관련 API</h1>
 <div class="paragraph">
 <p>본 REST API 문서에서 사용하는 HTTP 상태 코드는 가능한한 표준 HTTP와 REST 규약을 따릅니다.</p>
 </div>
@@ -595,8 +506,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>2022.11.11</p>
 </div>
 <hr>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_회원가입">1. 회원가입</h2>
 <div class="sectionbody">
@@ -605,7 +514,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 116
 Host: docs.api.com
@@ -658,7 +567,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -678,22 +587,40 @@ Content-Length: 84
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">response-fields</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
-  "accessToken" : "Bearer AccessToken",
-  "refreshToken" : "Bearer RefreshToken"
-}</code></pre>
-</div>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. response-fields</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>accessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set client&#8217;s local storage</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refreshToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">set client&#8217;s cookie</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_실패_400_유효성_검사">1.2. 실패 400_유효성 검사</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 116
 Host: docs.api.com
@@ -707,7 +634,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. request-fields</caption>
+<caption class="title">Table 3. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -746,7 +673,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 400 Bad Request
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -776,7 +703,7 @@ Content-Length: 124
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 116
 Host: docs.api.com
@@ -790,7 +717,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. request-fields</caption>
+<caption class="title">Table 4. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -829,7 +756,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 404 Not Found
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -857,7 +784,7 @@ Content-Length: 126
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 116
 Host: docs.api.com
@@ -871,7 +798,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. request-fields</caption>
+<caption class="title">Table 5. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -910,7 +837,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 409 Conflict
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 409 Conflict
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -938,7 +865,7 @@ Content-Length: 100
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 116
 Host: docs.api.com
@@ -952,7 +879,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. request-fields</caption>
+<caption class="title">Table 6. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -991,7 +918,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 409 Conflict
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 409 Conflict
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1025,65 +952,7 @@ Content-Length: 106
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/mail HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 31
-Host: docs.api.com
-
-{
-  "email" : "user@test.com"
-}</code></pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. request-fields</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">the same email can only be verified once every 5 minutes.</p></td>
-</tr>
-</tbody>
-</table>
-<div class="listingblock">
-<div class="title">http-response</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json;charset=UTF-8
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-Strict-Transport-Security: max-age=31536000 ; includeSubDomains
-X-Frame-Options: DENY
-Content-Length: 4
-
-true</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_실패_409_시간_제한">2.2. 실패 409_시간 제한</h3>
-<div class="listingblock">
-<div class="title">http-request</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/mail HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/mail HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 31
 Host: docs.api.com
@@ -1118,7 +987,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 409 Conflict
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1130,23 +999,18 @@ Pragma: no-cache
 Expires: 0
 Strict-Transport-Security: max-age=31536000 ; includeSubDomains
 X-Frame-Options: DENY
-Content-Length: 165
+Content-Length: 4
 
-{
-  "status" : 409,
-  "code" : "AUTH_KEY_ALREADY_EXISTS",
-  "message" : "auth key already exists, you can only request once every 5 minutes",
-  "validation" : null
-}</code></pre>
+true</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_실패_409_이미_존재하는_이메일">2.3. 실패 409_이미 존재하는 이메일</h3>
+<h3 id="_실패_409_시간_제한">2.2. 실패 409_시간 제한</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/mail HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/mail HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 31
 Host: docs.api.com
@@ -1174,6 +1038,69 @@ Host: docs.api.com
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">the same email can only be verified once every 5 minutes.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">http-response</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 409 Conflict
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains
+X-Frame-Options: DENY
+Content-Length: 165
+
+{
+  "status" : 409,
+  "code" : "AUTH_KEY_ALREADY_EXISTS",
+  "message" : "auth key already exists, you can only request once every 5 minutes",
+  "validation" : null
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_실패_409_이미_존재하는_이메일">2.3. 실패 409_이미 존재하는 이메일</h3>
+<div class="listingblock">
+<div class="title">http-request</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/mail HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 31
+Host: docs.api.com
+
+{
+  "email" : "user@test.com"
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 9. request-fields</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이미 존재하는 이메일</p></td>
 </tr>
 </tbody>
@@ -1181,7 +1108,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 409 Conflict
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 409 Conflict
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1215,7 +1142,7 @@ Content-Length: 100
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">PUT /auth/mail HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /auth/mail HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 57
 Host: docs.api.com
@@ -1227,7 +1154,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. request-fields</caption>
+<caption class="title">Table 10. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1256,7 +1183,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1276,7 +1203,7 @@ Content-Length: 29
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. response-fields</caption>
+<caption class="title">Table 11. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1303,7 +1230,7 @@ Content-Length: 29
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">PUT /auth/mail HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /auth/mail HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 57
 Host: docs.api.com
@@ -1315,7 +1242,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. request-fields</caption>
+<caption class="title">Table 12. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1344,7 +1271,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 404 Not Found
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1378,7 +1305,7 @@ Content-Length: 126
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/nickname HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/nickname HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 30
 Host: docs.api.com
@@ -1389,7 +1316,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. request-fields</caption>
+<caption class="title">Table 13. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1413,7 +1340,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1436,7 +1363,7 @@ true</code></pre>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/nickname HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/nickname HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 33
 Host: docs.api.com
@@ -1447,7 +1374,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. request-fields</caption>
+<caption class="title">Table 14. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1471,7 +1398,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 400 Bad Request
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1501,7 +1428,7 @@ Content-Length: 130
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/nickname HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/nickname HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 30
 Host: docs.api.com
@@ -1512,7 +1439,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. request-fields</caption>
+<caption class="title">Table 15. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1536,7 +1463,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 409 Conflict
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 409 Conflict
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1569,7 +1496,7 @@ Content-Length: 106
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/token HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/token HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 62
 Host: docs.api.com
@@ -1581,7 +1508,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. request-fields</caption>
+<caption class="title">Table 16. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1610,7 +1537,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1631,7 +1558,7 @@ Content-Length: 84
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. response-fields</caption>
+<caption class="title">Table 17. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1663,7 +1590,7 @@ Content-Length: 84
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/token HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/token HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 62
 Host: docs.api.com
@@ -1675,7 +1602,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 17. request-fields</caption>
+<caption class="title">Table 18. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1704,7 +1631,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 401 Unauthorized
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 401 Unauthorized
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1729,7 +1656,7 @@ Content-Length: 100
 <div class="listingblock">
 <div class="title">response-fields</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
+<pre class="highlight nowrap"><code>{
   "status" : 401,
   "code" : "INVALID_USER",
   "message" : "INVALID_USER",
@@ -1749,7 +1676,7 @@ Content-Length: 100
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">DELETE /auth/token HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /auth/token HTTP/1.1
 RefreshToken: Bearer RefreshToken
 Host: docs.api.com</code></pre>
 </div>
@@ -1757,7 +1684,7 @@ Host: docs.api.com</code></pre>
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 204 No Content
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 204 No Content
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1776,7 +1703,7 @@ X-Frame-Options: DENY</code></pre>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">DELETE /auth/token HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /auth/token HTTP/1.1
 RefreshToken: Bearer RefreshToken
 Host: docs.api.com</code></pre>
 </div>
@@ -1784,7 +1711,7 @@ Host: docs.api.com</code></pre>
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 404 Not Found
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1809,7 +1736,7 @@ Content-Length: 106
 <div class="listingblock">
 <div class="title">response-fields</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
+<pre class="highlight nowrap"><code>{
   "status" : 404,
   "code" : "TOKEN_NOT_FOUND",
   "message" : "TOKEN_NOT_FOUND",
@@ -1828,7 +1755,7 @@ Content-Length: 106
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">PUT /auth/token HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /auth/token HTTP/1.1
 RefreshToken: Bearer RefreshToken
 Host: docs.api.com</code></pre>
 </div>
@@ -1836,7 +1763,7 @@ Host: docs.api.com</code></pre>
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1857,7 +1784,7 @@ Content-Length: 84
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 18. response-fields</caption>
+<caption class="title">Table 19. response-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1889,7 +1816,7 @@ Content-Length: 84
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">PUT /auth/token HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /auth/token HTTP/1.1
 RefreshToken: Bearer RefreshToken
 Host: docs.api.com</code></pre>
 </div>
@@ -1897,7 +1824,7 @@ Host: docs.api.com</code></pre>
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 401 Unauthorized
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 401 Unauthorized
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1922,7 +1849,7 @@ Content-Length: 106
 <div class="listingblock">
 <div class="title">response-fields</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
+<pre class="highlight nowrap"><code>{
   "status" : 401,
   "code" : "EXPIRED_EXCEPTION",
   "message" : "expired token",
@@ -1936,7 +1863,7 @@ Content-Length: 106
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">PUT /auth/token HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PUT /auth/token HTTP/1.1
 RefreshToken: Bearer RefreshToken
 Host: docs.api.com</code></pre>
 </div>
@@ -1944,7 +1871,7 @@ Host: docs.api.com</code></pre>
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 404 Not Found
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -1969,7 +1896,7 @@ Content-Length: 106
 <div class="listingblock">
 <div class="title">response-fields</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
+<pre class="highlight nowrap"><code>{
   "status" : 404,
   "code" : "TOKEN_NOT_FOUND",
   "message" : "TOKEN_NOT_FOUND",
@@ -1989,7 +1916,7 @@ Content-Length: 106
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">PATCH /auth/password HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /auth/password HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: AccessToken
 Content-Length: 75
@@ -1998,71 +1925,6 @@ Host: docs.api.com
 {
   "originalPassword" : "passWORD123!",
   "newPassword" : "passWORD321!"
-}</code></pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 19. request-fields</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>originalPassword</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">변경 전 패스워드</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>newPassword</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유효성 검사 실패 패스워드</p></td>
-</tr>
-</tbody>
-</table>
-<div class="listingblock">
-<div class="title">http-response</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json;charset=UTF-8
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-Strict-Transport-Security: max-age=31536000 ; includeSubDomains
-X-Frame-Options: DENY
-Content-Length: 4
-
-true</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_실패_409_잘못된_패스워드">8.2. 실패 409_잘못된 패스워드</h3>
-<div class="listingblock">
-<div class="title">http-request</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">PATCH /auth/password HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Authorization: AccessToken
-Content-Length: 74
-Host: docs.api.com
-
-{
-  "originalPassword" : "passWORD123!",
-  "newPassword" : "PASSWORD123"
 }</code></pre>
 </div>
 </div>
@@ -2096,7 +1958,72 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 400 Bad Request
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains
+X-Frame-Options: DENY
+Content-Length: 4
+
+true</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_실패_409_잘못된_패스워드">8.2. 실패 409_잘못된 패스워드</h3>
+<div class="listingblock">
+<div class="title">http-request</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /auth/password HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Authorization: AccessToken
+Content-Length: 74
+Host: docs.api.com
+
+{
+  "originalPassword" : "passWORD123!",
+  "newPassword" : "PASSWORD123"
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 21. request-fields</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>originalPassword</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">변경 전 패스워드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>newPassword</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유효성 검사 실패 패스워드</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">http-response</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -2126,7 +2053,7 @@ Content-Length: 133
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">PATCH /auth/password HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">PATCH /auth/password HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: AccessToken
 Content-Length: 75
@@ -2139,7 +2066,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 21. request-fields</caption>
+<caption class="title">Table 22. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2168,7 +2095,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 409 Conflict
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 409 Conflict
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -2202,65 +2129,7 @@ Content-Length: 144
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/password/support HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 31
-Host: docs.api.com
-
-{
-  "email" : "user@test.com"
-}</code></pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 22. request-fields</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">user email</p></td>
-</tr>
-</tbody>
-</table>
-<div class="listingblock">
-<div class="title">http-response</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json;charset=UTF-8
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-Strict-Transport-Security: max-age=31536000 ; includeSubDomains
-X-Frame-Options: DENY
-Content-Length: 4
-
-true</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_실패_404_존재하지_않는_이메일">9.2. 실패 404_존재하지 않는 이메일</h3>
-<div class="listingblock">
-<div class="title">http-request</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/password/support HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/password/support HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 31
 Host: docs.api.com
@@ -2288,14 +2157,14 @@ Host: docs.api.com
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">존재하지 않는 유저 메일일 경우</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">user email</p></td>
 </tr>
 </tbody>
 </table>
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 404 Not Found
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -2307,23 +2176,18 @@ Pragma: no-cache
 Expires: 0
 Strict-Transport-Security: max-age=31536000 ; includeSubDomains
 X-Frame-Options: DENY
-Content-Length: 104
+Content-Length: 4
 
-{
-  "status" : 404,
-  "code" : "USER_NOT_FOUND",
-  "message" : "USER_NOT_FOUND",
-  "validation" : null
-}</code></pre>
+true</code></pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_실패_409_5분내_요청_이력">9.3. 실패 409_5분내_요청_이력</h3>
+<h3 id="_실패_404_존재하지_않는_이메일">9.2. 실패 404_존재하지 않는 이메일</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/password/support HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/password/support HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 31
 Host: docs.api.com
@@ -2351,6 +2215,69 @@ Host: docs.api.com
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">존재하지 않는 유저 메일일 경우</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">http-response</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains
+X-Frame-Options: DENY
+Content-Length: 104
+
+{
+  "status" : 404,
+  "code" : "USER_NOT_FOUND",
+  "message" : "USER_NOT_FOUND",
+  "validation" : null
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_실패_409_5분내_요청_이력">9.3. 실패 409_5분내_요청_이력</h3>
+<div class="listingblock">
+<div class="title">http-request</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/password/support HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 31
+Host: docs.api.com
+
+{
+  "email" : "user@test.com"
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 25. request-fields</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">5분 내에 해당 이메일로 인증키를 요청한 이력이 있을 경우</p></td>
 </tr>
 </tbody>
@@ -2358,7 +2285,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 409 Conflict
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 409 Conflict
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -2392,7 +2319,7 @@ Content-Length: 165
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/password/recovery HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/password/recovery HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 57
 Host: docs.api.com
@@ -2404,7 +2331,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 25. request-fields</caption>
+<caption class="title">Table 26. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2433,7 +2360,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -2456,7 +2383,7 @@ true</code></pre>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/password/recovery HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/password/recovery HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 51
 Host: docs.api.com
@@ -2468,7 +2395,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 26. request-fields</caption>
+<caption class="title">Table 27. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2497,7 +2424,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 400 Bad Request
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -2527,7 +2454,7 @@ Content-Length: 130
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /auth/password/recovery HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /auth/password/recovery HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 57
 Host: docs.api.com
@@ -2539,7 +2466,7 @@ Host: docs.api.com
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 27. request-fields</caption>
+<caption class="title">Table 28. request-fields</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2568,7 +2495,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 404 Not Found
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 404 Not Found
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -2602,70 +2529,7 @@ Content-Length: 126
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">DELETE /auth HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 33
-Host: docs.api.com
-
-{
-  "password" : "passWORD123!"
-}</code></pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 28. request-fields</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">올바르지 않은 (database 등록값과 다른) 패스워드</p></td>
-</tr>
-</tbody>
-</table>
-<div class="listingblock">
-<div class="title">http-response</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 400 Bad Request
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-Content-Type: application/json;charset=UTF-8
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-Strict-Transport-Security: max-age=31536000 ; includeSubDomains
-X-Frame-Options: DENY
-Content-Length: 101
-
-{
-  "status" : 400,
-  "code" : "ONLY_TEST_CODE",
-  "message" : "BAD_REQUEST",
-  "validation" : null
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_실패_400_유효성_검사_4">11.2. 실패 400_유효성 검사</h3>
-<div class="listingblock">
-<div class="title">http-request</div>
-<div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">DELETE /auth HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /auth HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 33
 Host: docs.api.com
@@ -2693,14 +2557,14 @@ Host: docs.api.com
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">패스워드 유효성 검사 실패 (null이거나 공백, 혹은 알 수 없는 문자열 오류)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">올바르지 않은 (database 등록값과 다른) 패스워드</p></td>
 </tr>
 </tbody>
 </table>
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 400 Bad Request
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -2724,11 +2588,11 @@ Content-Length: 101
 </div>
 </div>
 <div class="sect2">
-<h3 id="_실패_409_잘못된_패스워드_3">11.3. 실패 409_잘못된 패스워드</h3>
+<h3 id="_실패_400_유효성_검사_4">11.2. 실패 400_유효성 검사</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">DELETE /auth HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /auth HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Content-Length: 33
 Host: docs.api.com
@@ -2756,6 +2620,69 @@ Host: docs.api.com
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">패스워드 유효성 검사 실패 (null이거나 공백, 혹은 알 수 없는 문자열 오류)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="title">http-response</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+Strict-Transport-Security: max-age=31536000 ; includeSubDomains
+X-Frame-Options: DENY
+Content-Length: 101
+
+{
+  "status" : 400,
+  "code" : "ONLY_TEST_CODE",
+  "message" : "BAD_REQUEST",
+  "validation" : null
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_실패_409_잘못된_패스워드_3">11.3. 실패 409_잘못된 패스워드</h3>
+<div class="listingblock">
+<div class="title">http-request</div>
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /auth HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 33
+Host: docs.api.com
+
+{
+  "password" : "passWORD123!"
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 31. request-fields</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">올바르지 않은 (database 등록값과 다른) 패스워드</p></td>
 </tr>
 </tbody>
@@ -2763,7 +2690,7 @@ Host: docs.api.com
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 400 Bad Request
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -2792,10 +2719,8 @@ Content-Length: 101
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-11-21 03:50:23 +0900
+Last updated 2022-11-26 05:21:05 +0900
 </div>
 </div>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
 </body>
 </html>

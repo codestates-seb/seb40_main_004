@@ -1,0 +1,121 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= 이미지 업로드 관련 API
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: Table of Contents
+:source-highlighter: prettify
+:app-name: morakmorak
+:author: YANGEUNCHAN
+
+본 REST API 문서에서 사용하는 HTTP 상태 코드는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
+|===
+| `200 OK`
+| 상태를 성공적으로 처리함.
+| `201 CREATED`
+| 새 리소스를 성공적으로 생성함.
+| `204 NO CONTENT`
+| 기존 리소스를 성공적으로 제거하여 반환할 자원이 존재하지 않음.
+| `400 BAD REQUEST`
+| 잘못된 요청이므로 서버에서 처리할 수 없음.
+| `401 UNAUTHORIZED`
+| 인증에 실패함.
+| `403 FORBIDDEN`
+| 권한이 부족하여 요청을 수행할 수 없음.
+| `404 NOT FOUND`
+| 요청한 자원이 존재하지 않음.
+| `409 CONFLICT`
+| 서버의 규칙에 의해 해당 요청을 수행할 수 없음.
+|===
+
+YangEunChan
+
+2022.11.11
+
+***
+== 프로필 사진 업로드 URL 요청
+=== 성공 200
+
+.http-request
+include::{snippets}/avatar_업로드url_요청성공_200/http-request.adoc[]
+
+.http-response
+include::{snippets}/avatar_업로드url_요청성공_200//http-response.adoc[]
+
+.response-fields
+include::{snippets}/avatar_업로드url_요청성공_200//response-fields.adoc[]
+
+=== 실패 404
+
+데이터베이스에서 유저 정보를 찾을 수 없음.
+
+.http-request
+include::{snippets}/avatar_업로드url_요청실패_404/http-request.adoc[]
+
+.http-response
+include::{snippets}/avatar_업로드url_요청실패_404//http-response.adoc[]
+
+=== 실패 409
+AWS S3와의 연결 문제로 인한 실패.
+
+.http-request
+include::{snippets}/avatar_업로드url_요청실패_409/http-request.adoc[]
+
+.http-response
+include::{snippets}/avatar_업로드url_요청실패_409//http-response.adoc[]
+
+
+***
+== 게시글 이미지 업로드 URL 요청
+=== 성공 200
+
+.http-request
+include::{snippets}/file_업로드url_요청성공_200/http-request.adoc[]
+
+.http-response
+include::{snippets}/file_업로드url_요청성공_200//http-response.adoc[]
+
+.response-fields
+include::{snippets}/file_업로드url_요청성공_200//response-fields.adoc[]
+
+=== 실패 409
+AWS S3와의 연결 문제로 인한 실패.
+
+.http-request
+include::{snippets}/file_업로드url_요청실패_409/http-request.adoc[]
+
+.http-response
+include::{snippets}/file_업로드url_요청실패_409//http-response.adoc[]
+
+
+
+***
+== 프로필 이미지 삭제
+=== 성공 204
+
+.http-request
+include::{snippets}/avatar_삭제_요청성공_204/http-request.adoc[]
+
+.http-response
+include::{snippets}/avatar_삭제_요청성공_204//http-response.adoc[]
+
+=== 실패 404
+유저의 이미지에 대한 정보를 Database에서 찾을 수 없음.
+
+.http-request
+include::{snippets}/avatar_삭제_요청실패_404/http-request.adoc[]
+
+.http-response
+include::{snippets}/avatar_삭제_요청실패_404//http-response.adoc[]
+
+=== 실패 409
+AWS S3와의 연결 문제로 인한 실패.
+
+.http-request
+include::{snippets}/avatar_삭제_요청실패_409/http-request.adoc[]
+
+.http-response
+include::{snippets}/avatar_삭제_요청실패_409//http-response.adoc[]
