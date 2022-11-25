@@ -7,7 +7,23 @@ public enum TagName {
     JAVA("Java"),
     C("C"),
     NODE("Node.JS"),
-    SPRING("Spring");
+    SPRING("Spring"),
+    REACT("react.Js"),
+    JAVASCRIPT("javascript"),
+    CPLUSCPLUS("C++"),
+    CSHOP("C#"),
+    NEXT("next.js"),
+    NEST("nest.js"),
+    PYTHON("python"),
+    SWIFT("swift"),
+    KOTLIN("kotiln"),
+    CSS("css"),
+    HTML("html"),
+    AWS("aws"),
+    REDUX("redux"),
+    SCALA("scala"),
+    GO("go"),
+    TYPESCRIPT("typescript");
 
     private String name;
 
