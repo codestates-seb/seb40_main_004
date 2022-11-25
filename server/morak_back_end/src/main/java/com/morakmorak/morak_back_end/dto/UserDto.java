@@ -33,7 +33,6 @@ public class UserDto {
     public static class ResponseSimpleUserDto {
         private Long userId;
         private String nickname;
-        @EnumValid
         private Grade grade;
         public static ResponseSimpleUserDto of(User userFromComment) {
             return ResponseSimpleUserDto.builder()
@@ -94,6 +93,10 @@ public class UserDto {
                     .remotePath(remotePath)
                     .build();
         }
+
+        public void setRank(Integer rank) {
+            this.rank = rank;
+        }
     }
 
     @ToString
@@ -112,6 +115,7 @@ public class UserDto {
         private String github;
         private String blog;
         private String infoMessage;
+        private Long rank;
 
         private AvatarDto.SimpleResponse avatar;
         private List<TagQueryDto> tags;
@@ -121,7 +125,8 @@ public class UserDto {
         private List<ReviewDto.Response> reviews;
 
         @QueryProjection
-        public ResponseDashBoard(Long userId, String email, String nickname, JobType jobType, Grade grade, Integer point, String github, String blog, Long avatarId, String remotePath, String filename) {
+        public ResponseDashBoard(Long userId, String email, String nickname, JobType jobType, Grade grade, Integer point, String github, String blog, Long avatarId, String remotePath, String filename, String
+                                 infoMessage) {
             this.userId = userId;
             this.email = email;
             this.nickname = nickname;
@@ -135,6 +140,7 @@ public class UserDto {
                     .remotePath(remotePath)
                     .filename(filename)
                     .build();
+            this.infoMessage = infoMessage;
         }
 
         public void addRestInfo(List<TagQueryDto> tags, List<BadgeQueryDto> reviewBadges, List<ArticleDto.ResponseListTypeArticle> articles, List<ActivityDto.Response> activities, List<ReviewDto.Response> reviews) {
@@ -143,6 +149,10 @@ public class UserDto {
             this.articles = articles;
             this.activities = activities;
             this.reviews = reviews;
+        }
+
+        public void addRank(Long rank) {
+            this.rank = rank;
         }
     }
 

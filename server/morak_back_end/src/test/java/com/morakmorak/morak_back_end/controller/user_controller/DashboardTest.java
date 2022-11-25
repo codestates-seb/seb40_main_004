@@ -189,6 +189,7 @@ public class DashboardTest extends UserControllerTest {
                 .point(THREE)
                 .github(GITHUB_URL)
                 .blog(TISTORY_URL)
+                .rank(2L)
                 .infoMessage(CONTENT1)
                 .avatar(avatar)
                 .tags(List.of(tag1, tag2))
@@ -216,6 +217,7 @@ public class DashboardTest extends UserControllerTest {
                                         fieldWithPath("jobType").type(STRING).description("유저 직업"),
                                         fieldWithPath("grade").type(STRING).description("유저 등급"),
                                         fieldWithPath("point").type(NUMBER).description("유저 포인트"),
+                                        fieldWithPath("rank").type(NUMBER).description("유저 랭킹"),
                                         fieldWithPath("github").type(STRING).description("깃허브 주소"),
                                         fieldWithPath("blog").type(STRING).description("블로그 주소"),
                                         fieldWithPath("infoMessage").type(STRING).description("자기소개"),
