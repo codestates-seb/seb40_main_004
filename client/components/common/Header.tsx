@@ -10,11 +10,23 @@ import { Logo } from '../yeonwoo/Logo';
 import { Nav } from '../yeonwoo/Nav';
 import { SearchBar } from '../yeonwoo/SearchBar';
 import { BtnDropdown } from '../yeonwoo/BtnDropdown';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
+import { useEffect } from 'react';
 
 export const Header = () => {
-  const isLogin = useRecoilValue(isLoginAtom);
+  const [isLogin, setIsLogin] = useRecoilState(isLoginAtom);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (localStorage.getItem('refreshToken')) {
+        setIsLogin(true);
+      } else {
+        setIsLogin(false);
+      }
+    } else {
+      setIsLogin(false);
+    }
+  }, []);
   return (
     <header className="flex items-center justify-between max-w-[1280px] mx-auto">
       <div className="flex items-center w-6/12">
