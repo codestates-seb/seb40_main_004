@@ -10,11 +10,11 @@ import { CommentContainer } from './CommentList';
 import { Answer } from '../../libs/interfaces';
 import { elapsedTime } from '../../libs/elapsedTime';
 import { useEffect, useRef } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { articleAuthorIdAtom, isAnswerPostAtom } from '../../atomsHJ';
+import { useRecoilValue } from 'recoil';
+import { articleAuthorIdAtom } from '../../atomsHJ';
 import { client } from '../../libs/client';
 import { useRouter } from 'next/router';
-import { mutate, useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =
@@ -34,18 +34,6 @@ export const AnswerContent = ({ answer, userId, isClosed }: AnswerProps) => {
   const currUserId = localStorage.getItem('userId');
   const articleAuthorId = useRecoilValue(articleAuthorIdAtom);
 
-  const answerElement = useRef(null);
-  const [isAnswerPost, setIsAnswerPost] = useRecoilState(isAnswerPostAtom);
-  // useEffect(() => {
-  //   if (isAnswerPost.answerId === answerElement.current?.id) {
-  //     console.log('id');
-  //     setIsAnswerPost({
-  //       isAnswerPost: false,
-  //       answerId: '',
-  //     });
-  //   }
-  // }, [isAnswerPost]);
-
   const onDelete = () => {
     if (confirm('정말 답변을 삭제하시겠습니까..?')) {
       client
@@ -54,16 +42,15 @@ export const AnswerContent = ({ answer, userId, isClosed }: AnswerProps) => {
           alert('삭제가 완료되었습니다!');
           mutate(`/api/articles/${articleId}/answers?page=1&size=5`);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          console.error(err);
+          alert('답변 삭제에 실패했습니다.');
+        });
     }
   };
 
   return (
-    <main
-      className="flex flex-col w-full my-12 bg-[#FCFCFC] border rounded-[20px]"
-      ref={answerElement}
-      id={answer.answerId.toString()}
-    >
+    <main className="flex flex-col w-full my-12 bg-[#FCFCFC] border rounded-[20px]">
       <section className="flex pb-3 items-center justify-between bg-main-gray p-4 rounded-t-[20px] border-b">
         <div className="flex items-center space-x-2 text-white">
           <ProfileImage src={answer.avatar.remotePath || tempSrc} />

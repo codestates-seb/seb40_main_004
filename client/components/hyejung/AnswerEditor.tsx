@@ -8,9 +8,8 @@ import { useRouter } from 'next/router';
 
 import { useEffect } from 'react';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
-import { useRecoilState } from 'recoil';
-import { useSWRConfig } from 'swr';
-import { isAnswerPostAtom } from '../../atomsHJ';
+import { useSetRecoilState } from 'recoil';
+import { isAnswerPostedAtom } from '../../atomsHJ';
 import { client } from '../../libs/client';
 import { useFetch } from '../../libs/useFetchSWR';
 
@@ -100,7 +99,7 @@ export const AnswerEditor = () => {
     `/api/articles/${articleId}/answers?page=1&size=5`,
   );
 
-  const [isAnswerPost, setIsAnswerPost] = useRecoilState(isAnswerPostAtom);
+  const isAnswerPosted = useSetRecoilState(isAnswerPostedAtom);
 
   // form 데이터가 유효하다면 요청
   const onValid: SubmitHandler<FormValue> = async (data) => {
@@ -109,17 +108,17 @@ export const AnswerEditor = () => {
       data,
     );
     const newAnswers = response.data;
-    const newAnswerId = response.data.data.answerId;
-    mutate({ currAnswers, ...newAnswers }, { revalidate: false }).then(() => {
-      alert('답변이 성공적으로 등록되었습니다!');
-      console.log(response);
-      setIsAnswerPost({
-        isAnswerPost: true,
-        answerId: newAnswerId,
+    mutate({ currAnswers, ...newAnswers }, { revalidate: false })
+      .then(() => {
+        alert('답변이 성공적으로 등록되었습니다!');
+        isAnswerPosted(true);
+        setValue('content', '');
+        trigger('content');
+      })
+      .catch((err) => {
+        console.log(err);
+        alert('답변 등록에 실패했습니다...!');
       });
-      setValue('content', '');
-      trigger('content');
-    });
   };
 
   const onInvalid: SubmitErrorHandler<FormValue> = (data) => {

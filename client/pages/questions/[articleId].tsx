@@ -17,9 +17,9 @@ import { client } from '../../libs/client';
 import { AnswerListProps, ArticleDetail } from '../../libs/interfaces';
 import useSWR, { SWRConfig } from 'swr';
 import { useFetch } from '../../libs/useFetchSWR';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { articleAuthorIdAtom } from '../../atomsHJ';
-import { useEffect } from 'react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { articleAuthorIdAtom, isAnswerPostedAtom } from '../../atomsHJ';
+import { useEffect, useRef } from 'react';
 import { isLoginAtom } from '../../atomsYW';
 
 type QuestionDetailProps = {
@@ -45,6 +45,18 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
     setArticleAuthorId(articleData.userInfo.userId.toString());
   }, []);
 
+  const [isAnswerPosted, setIsAnswerPosted] =
+    useRecoilState(isAnswerPostedAtom);
+
+  const answerCountEl = useRef<null | HTMLDivElement>(null);
+
+  // 답변 작성 후 스크롤 상단으로 이동
+  useEffect(() => {
+    if (answerCountEl.current && isAnswerPosted)
+      answerCountEl.current.scrollIntoView({ behavior: 'smooth' });
+    setIsAnswerPosted(false);
+  }, [isAnswerPosted]);
+
   return (
     <>
       <Header />
@@ -53,7 +65,7 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
         <section className="flex w-full text-lg sm:text-xl space-x-2 items-center">
           {answerCount ? (
             <>
-              <div className="flex mt-10 space-x-2">
+              <div className="flex mt-10 space-x-2" ref={answerCountEl}>
                 <h2 className="text-main-yellow font-semibold text-xl sm:text-2xl">
                   A.
                 </h2>
