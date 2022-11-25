@@ -14,79 +14,77 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
-@RequestMapping("")
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/articles/{article-id}/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto.Response requestPostComment(@RequestBody @Valid CommentDto.Request request,
-                                                  @PathVariable("article-id") Long articleId,
-                                                  @RequestUser UserDto.UserInfo user) {
+    public List<CommentDto.Response> requestPostCommentOnArticle(@RequestBody @Valid CommentDto.Request request,
+                                                           @PathVariable("article-id") Long articleId,
+                                                           @RequestUser UserDto.UserInfo user) {
         Comment commentNotSaved = Comment.builder().content(request.getContent()).build();
-        CommentDto.Response madeComment = commentService.makeComment(user.getId(), articleId, commentNotSaved);
-        return madeComment;
+        return commentService.makeComment(user.getId(), articleId,commentNotSaved, true);
     }
 
     @PatchMapping("/articles/{article-id}/comments/{comment-id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<CommentDto.Response> requestUpdateComment(@RequestBody @Valid CommentDto.Request request,
+    public List<CommentDto.Response> requestUpdateCommentOnArticle(@RequestBody @Valid CommentDto.Request request,
                                                           @PathVariable("article-id") Long articleId,
                                                           @PathVariable("comment-id") Long commentId,
                                                           @RequestUser UserDto.UserInfo user) throws Exception {
 
-        return commentService.editComment(user.getId(), articleId, commentId, request.getContent());
+        return commentService.editComment(user.getId(), articleId, commentId, request.getContent(),true);
     }
 
     @DeleteMapping("/articles/{article-id}/comments/{comment-id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<CommentDto.Response> requestDeleteComment(@PathVariable("article-id") Long articleId,
+    public List<CommentDto.Response> requestDeleteOnArticle(@PathVariable("article-id") Long articleId,
                                                           @PathVariable("comment-id") Long commentId,
                                                           @RequestUser UserDto.UserInfo user) throws Exception {
-        commentService.deleteComment(user.getId(), articleId, commentId);
-        return commentService.findAllComments(articleId);
+        return commentService.deleteComment(user.getId(), articleId, commentId,true);
     }
+
     @GetMapping("/articles/{article-id}/comments")
     @ResponseStatus(HttpStatus.OK)
     public List<CommentDto.Response> requestGetCommentsByArticle(@PathVariable("article-id") Long articleId,
                                                                  @Positive @RequestParam(value = "page",defaultValue = "0") int page,
                                                                  @Positive @RequestParam(value = "size",defaultValue = "10") int size) {
-        return commentService.findAllComments(articleId);
+        return commentService.findAllComments(articleId, true);
     }
-    /*@PostMapping("/articles/{answer-id}/comments")
+
+    @PostMapping("/answers/{answer-id}/comments")
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentDto.Response requestPostComment(@RequestBody @Valid CommentDto.Request request,
-                                                  @PathVariable("article-id") Long articleId,
-                                                  @RequestUser UserDto.UserInfo user) {
+    public List<CommentDto.Response> requestPostCommentOnAnswer(@RequestBody @Valid CommentDto.Request request,
+                                                           @PathVariable("answer-id") Long answerId,
+                                                           @RequestUser UserDto.UserInfo user) {
         Comment commentNotSaved = Comment.builder().content(request.getContent()).build();
-        CommentDto.Response madeComment = commentService.makeComment(user.getId(), articleId, commentNotSaved);
-        return madeComment;
+        return commentService.makeComment(user.getId(), answerId, commentNotSaved,false);
     }
 
-    @PatchMapping("/articles/{answer-id}/comments/{comment-id}")
+    @PatchMapping("/answers/{answer-id}/comments/{comment-id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<CommentDto.Response> requestUpdateComment(@RequestBody @Valid CommentDto.Request request,
-                                                          @PathVariable("article-id") Long articleId,
+    public List<CommentDto.Response> requestUpdateCommentOnAnswer(@RequestBody @Valid CommentDto.Request request,
+                                                          @PathVariable("answer-id") Long articleId,
                                                           @PathVariable("comment-id") Long commentId,
                                                           @RequestUser UserDto.UserInfo user) throws Exception {
 
-        return commentService.editComment(user.getId(), articleId, commentId, request.getContent());
+        return commentService.editComment(user.getId(), articleId, commentId, request.getContent(),false);
     }
 
-    @DeleteMapping("/articles/{answer-id}/comments/{comment-id}")
+    @DeleteMapping("/answers/{answer-id}/comments/{comment-id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<CommentDto.Response> requestDeleteComment(@PathVariable("article-id") Long articleId,
+    public List<CommentDto.Response> requestDeleteCommentOnAnswer(@PathVariable("answer-id") Long answerId,
                                                           @PathVariable("comment-id") Long commentId,
                                                           @RequestUser UserDto.UserInfo user) throws Exception {
-        commentService.deleteComment(user.getId(), articleId, commentId);
-        return commentService.findAllComments(articleId);
+        return commentService.deleteComment(user.getId(), answerId, commentId,false);
+
     }
     @GetMapping("/answers/{answer-id}/comments")
     @ResponseStatus(HttpStatus.OK)
-    public List<CommentDto.Response> requestGetCommentsByAnswer(@PathVariable("article-id") Long articleId,
+    public List<CommentDto.Response> requestGetCommentsByAnswer(@PathVariable("answer-id") Long articleId,
                                                                  @Positive @RequestParam(value = "page",defaultValue = "0") int page,
                                                                  @Positive @RequestParam(value = "size",defaultValue = "10") int size) {
-        return commentService.findAllComments(articleId);
-    }*/
+        return commentService.findAllComments(articleId,false);
+    }
 }

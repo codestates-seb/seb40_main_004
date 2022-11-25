@@ -8,7 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+
 public class CommentDto {
+
     @Getter
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,13 +27,14 @@ public class CommentDto {
     public static class Response {
         private Long commentId;
         private Long articleId;
+        private Long answerId;
         private String content;
         private UserDto.ResponseSimpleUserDto userInfo;
         private AvatarDto.SimpleResponse avatar;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
 
-        public static CommentDto.Response of(Optional<Comment> savedComment) {
+        public static CommentDto.Response ofArticle(Optional<Comment> savedComment) {
             if (savedComment.isPresent()) {
                 return CommentDto.Response.builder()
                         .userInfo(UserDto.ResponseSimpleUserDto.of(savedComment.get().getUser()))
@@ -43,29 +46,26 @@ public class CommentDto {
                         .lastModifiedAt(savedComment.get().getLastModifiedAt())
                         .build();
             } else {
-                return null;
+                return Response.builder().build();
             }
+        }
+        public static CommentDto.Response ofAnswer(Comment savedComment) {
+
+                return CommentDto.Response.builder()
+                        .userInfo(UserDto.ResponseSimpleUserDto.of(savedComment.getUser()))
+                        .avatar(AvatarDto.SimpleResponse.of(savedComment.getUser().getAvatar()))
+                        .commentId(savedComment.getId())
+                        .articleId(savedComment.getArticle().getId())
+                        .content(savedComment.getContent())
+                        .createdAt(savedComment.getCreatedAt())
+                        .lastModifiedAt(savedComment.getLastModifiedAt())
+                        .build();
 
         }
-    }
-
-    @Getter
-    @Builder
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ResponseForAnswer {
-        private Long commentId;
-        private Long answerId;
-        private String content;
-        private UserDto.ResponseSimpleUserDto userInfo;
-        private AvatarDto.SimpleResponse avatar;
-        private LocalDateTime createdAt;
-        private LocalDateTime lastModifiedAt;
-
-        public static CommentDto.ResponseForAnswer of(List<Comment> commentsFromAnswer) {
+        public static CommentDto.Response previewOfAnswer(List<Comment> commentsFromAnswer) {
             if (commentsFromAnswer.size() != 0) {
                 Comment savedComment = commentsFromAnswer.get(0);
-                return ResponseForAnswer.builder()
+                return Response.builder()
                         .userInfo(UserDto.ResponseSimpleUserDto.of(savedComment.getUser()))
                         .avatar(AvatarDto.SimpleResponse.of(savedComment.getUser().getAvatar()))
                         .commentId(savedComment.getId())
@@ -75,10 +75,11 @@ public class CommentDto {
                         .lastModifiedAt(savedComment.getLastModifiedAt())
                         .build();
             } else {
-                return null;
+                return Response.builder().build();
             }
 
         }
-    }
 
+
+    }
 }
