@@ -82,4 +82,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "where ba.badge_id = b.badge_id;\n"
     )
     List<BadgeQueryDto> getUsersTop3Badges(@Param("id") Long id);
+
+    @Query(
+            nativeQuery = true,
+            value = "select ranked.ranking\n" +
+                    "from (\n" +
+                    "    select user_id, rank() over (order by user.point desc) as 'ranking'\n" +
+                    "    from user\n" +
+                    "     ) ranked\n" +
+                    "where ranked.user_id = :id"
+    )
+    Long getUserRank(@Param("id") Long id);
 }

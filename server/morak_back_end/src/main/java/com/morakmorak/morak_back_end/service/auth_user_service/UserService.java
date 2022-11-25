@@ -13,7 +13,9 @@ import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -26,6 +28,7 @@ import static com.morakmorak.morak_back_end.entity.enums.ActivityType.*;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
@@ -52,6 +55,8 @@ public class UserService {
     public ResponseMultiplePaging<UserDto.ResponseRanking> getUserRankList(PageRequest request) {
         Page<User> userRankPage = userQueryRepository.getRankData(request);
         List<UserDto.ResponseRanking> result = userMapper.toResponseRankDto(userRankPage.getContent());
+        reorderRank(request, result);
+
         return new ResponseMultiplePaging<>(result, userRankPage);
     }
 
@@ -84,6 +89,13 @@ public class UserService {
         List<BadgeQueryDto> usersTop3Badges = userRepository.getUsersTop3Badges(userId);
         List<TagQueryDto> usersTop3Tags = userRepository.getUsersTop3Tags(userId);
 
+        try {
+            Long userRank = userRepository.getUserRank(userId);
+            userDashboardBasicInfo.addRank(userRank);
+        } catch (NullPointerException e) {
+            throw new BusinessLogicException(USER_NOT_FOUND);
+        }
+
         List<ActivityDto.Temporary> annualArticlesData = userQueryRepository.getUserArticlesDataBetween(january1st, december31st, userId);
         List<ActivityDto.Temporary> annualAnswersData = userQueryRepository.getUserAnswersDataBetween(january1st, december31st, userId);
         List<ActivityDto.Temporary> annualCommentsData = userQueryRepository.getUserCommentsDataBetween(january1st, december31st, userId);
@@ -95,12 +107,8 @@ public class UserService {
 
         List<ArticleDto.ResponseListTypeArticle> questionsDto = convertQuestionsToDto(recentQuestions);
 
-        try {
-            userDashboardBasicInfo.addRestInfo(usersTop3Tags, usersTop3Badges, questionsDto, sortedActivityData, receivedReviews);
-            return userDashboardBasicInfo;
-        } catch (NullPointerException e) {
-            throw new BusinessLogicException(USER_NOT_FOUND);
-        }
+        userDashboardBasicInfo.addRestInfo(usersTop3Tags, usersTop3Badges, questionsDto, sortedActivityData, receivedReviews);
+        return userDashboardBasicInfo;
     }
 
     private List<ArticleDto.ResponseListTypeArticle> convertQuestionsToDto(List<Article> recentQuestions) {
@@ -153,5 +161,93 @@ public class UserService {
                     }
                 }
         );
+    }
+
+    private void reorderRank(PageRequest request, List<UserDto.ResponseRanking> result) {
+        int temp = 0;
+        int offset = (int) request.getOffset()+1;
+        int size = request.getPageSize();
+        String sort = request.getSort()
+                .stream().map(Sort.Order::getProperty)
+                .collect(Collectors.toList()).get(0);
+
+        switch (sort) {
+            case ("point") :
+                reorderByPoint(result, temp, offset, size);
+                break;
+            case ("articles") :
+                reorderByArticleCount(result, temp, offset, size);
+                break;
+            case ("answers") :
+                reorderByAnswerCount(result, temp, offset, size);
+                break;
+            case ("likes") :
+                reorderByLikeCount(result, temp, offset, size);
+                break;
+        }
+    }
+
+    private void reorderByPoint(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
+        for (int i = 0; i< size; i++) {
+            UserDto.ResponseRanking user = result.get(i);
+
+            if ( i != 0 && user.getPoint() == temp) {
+                UserDto.ResponseRanking prevUser = result.get(i - 1);
+                user.setRank(prevUser.getRank());
+                offset++;
+                continue;
+            }
+
+            temp = result.get(i).getPoint();
+            user.setRank(offset++);
+        }
+    }
+
+    private void reorderByArticleCount(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
+        for (int i = 0; i< size; i++) {
+            UserDto.ResponseRanking user = result.get(i);
+
+            if ( i != 0 && user.getArticleCount() == temp) {
+                UserDto.ResponseRanking prevUser = result.get(i - 1);
+                user.setRank(prevUser.getRank());
+                offset++;
+                continue;
+            }
+
+            temp = result.get(i).getArticleCount().intValue();
+            user.setRank(offset++);
+        }
+    }
+
+    private void reorderByAnswerCount(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
+        for (int i = 0; i< size; i++) {
+            UserDto.ResponseRanking user = result.get(i);
+
+            if ( i != 0 && user.getAnswerCount() == temp) {
+                UserDto.ResponseRanking prevUser = result.get(i - 1);
+                user.setRank(prevUser.getRank());
+                offset++;
+                continue;
+            }
+
+            temp = result.get(i).getAnswerCount().intValue();
+            user.setRank(offset++);
+        }
+    }
+
+    private void reorderByLikeCount(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
+        for (int i = 0; i< size; i++) {
+            UserDto.ResponseRanking user = result.get(i);
+
+            if ( i != 0 && user.getLikeCount() == temp) {
+                UserDto.ResponseRanking prevUser = result.get(i - 1);
+                user.setRank(prevUser.getRank());
+                offset++;
+                continue;
+            }
+
+            temp = result.get(i).getLikeCount().intValue();
+            user.setRank(offset++);
+        }
     }
 }

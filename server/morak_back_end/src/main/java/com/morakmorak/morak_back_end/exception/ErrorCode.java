@@ -44,6 +44,8 @@ public enum ErrorCode {
     INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "invalid date format"),
     INVALID_DATE_RANGE(REQUESTED_RANGE_NOT_SATISFIABLE, "invalid date range"),
 
+    CAN_NOT_ACCESS_S3(CONFLICT, "unable to access amazon s3, contract your administrator."),
+
     /*
     * The error code expresses the dto validation exception of spring framework in web mvc test.
     * @author : YangEunChan
