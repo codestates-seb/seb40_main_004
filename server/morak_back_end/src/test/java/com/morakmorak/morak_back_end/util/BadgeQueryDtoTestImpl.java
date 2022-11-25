@@ -7,11 +7,12 @@ import lombok.Builder;
 @Builder
 @AllArgsConstructor
 public class BadgeQueryDtoTestImpl implements BadgeQueryDto {
+    private Long ranking;
     private Long badgeId;
     private String name;
 
     @Override
-    public Long getBadgeId() {
+    public Long getBadge_Id() {
         return badgeId;
     }
 
