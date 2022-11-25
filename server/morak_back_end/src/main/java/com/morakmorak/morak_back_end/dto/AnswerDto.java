@@ -1,7 +1,6 @@
 package com.morakmorak.morak_back_end.dto;
 
 import com.morakmorak.morak_back_end.entity.Answer;
-import com.morakmorak.morak_back_end.entity.Comment;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -9,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class AnswerDto {
     @Getter
@@ -62,14 +60,14 @@ public class AnswerDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ResponseListTypeAnswer {
         private Long answerId;
-        private UserDto.ResponseSimpleUserDto userInfo;
-        private AvatarDto.SimpleResponse avatar;
         private String content;
-        private LocalDateTime createdAt;
         private Boolean isPicked;
-        private Integer answerLikeCount;
-        private CommentDto.ResponseForAnswer commentPreview;
         private Integer commentCount;
+        private Integer answerLikeCount;
+        private LocalDateTime createdAt;
+        private AvatarDto.SimpleResponse avatar;
+        private CommentDto.Response commentPreview;
+        private UserDto.ResponseSimpleUserDto userInfo;
 
         public static ResponseListTypeAnswer of(Answer answer) {
             return ResponseListTypeAnswer.builder()
@@ -80,7 +78,7 @@ public class AnswerDto {
                     .createdAt(answer.getCreatedAt())
                     .isPicked(answer.getIsPicked())
                     .answerLikeCount(answer.getAnswerLike().size())
-                    .commentPreview(CommentDto.ResponseForAnswer.of(answer.getComments()))
+                    .commentPreview(CommentDto.Response.previewOfAnswer(answer.getComments()))
                     .commentCount(answer.getComments().size())
                     .build();
         }

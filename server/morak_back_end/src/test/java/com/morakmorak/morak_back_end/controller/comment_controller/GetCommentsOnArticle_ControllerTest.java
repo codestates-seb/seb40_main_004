@@ -161,6 +161,7 @@ public class GetCommentsOnArticle_ControllerTest {
                                                 fieldWithPath("[].avatar.filename").type(JsonFieldType.STRING).description("파일 이름입니다"),
                                                 fieldWithPath("[].avatar.remotePath").type(JsonFieldType.STRING).description("유저 닉네임입니다"),
                                                 fieldWithPath("[].articleId").type(JsonFieldType.NUMBER).description("글 식별자입니다"),
+                                                fieldWithPath("[].answerId").type(JsonFieldType.NULL).description("게시글 댓글이므로 글 식별자는 비어있습니다."),
                                                 fieldWithPath("[].content").type(JsonFieldType.STRING).description("댓글 내용입니다"),
                                                 fieldWithPath("[].commentId").type(JsonFieldType.NUMBER).description("댓글 식별자입니다"),
                                                 fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("댓글 첫 작성일입니다."),
