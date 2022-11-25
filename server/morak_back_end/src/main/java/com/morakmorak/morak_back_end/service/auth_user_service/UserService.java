@@ -188,6 +188,8 @@ public class UserService {
     }
 
     private void reorderByPoint(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
+        if (result.size() < size) { size = result.size(); }
+
         for (int i = 0; i< size; i++) {
             UserDto.ResponseRanking user = result.get(i);
 
@@ -204,6 +206,8 @@ public class UserService {
     }
 
     private void reorderByArticleCount(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
+        if (result.size() < size) { size = result.size(); }
+
         for (int i = 0; i< size; i++) {
             UserDto.ResponseRanking user = result.get(i);
 
@@ -220,6 +224,8 @@ public class UserService {
     }
 
     private void reorderByAnswerCount(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
+        if (result.size() < size) { size = result.size(); }
+
         for (int i = 0; i< size; i++) {
             UserDto.ResponseRanking user = result.get(i);
 
@@ -236,6 +242,8 @@ public class UserService {
     }
 
     private void reorderByLikeCount(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
+        if (result.size() < size) { size = result.size(); }
+
         for (int i = 0; i< size; i++) {
             UserDto.ResponseRanking user = result.get(i);
 
