@@ -1,0 +1,159 @@
+buildscript {
+	ext {
+		queryDslVersion = "5.0.0"
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.7.5'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'java'
+	// restdocs
+	id 'org.asciidoctor.jvm.convert' version '3.3.2'
+	// querydsl
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+configurations {
+	asciidoctorExt
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//mockito-inline
+	testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.8.1'
+
+	//querydsl
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-core:${queryDslVersion}"
+
+	// mapstruct
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+	// s3
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.315'
+
+	// aop
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+	//jwtt (jwt 변환 라이브러리)
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+
+	// SpringSecurity Test
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	// test에서 SLF4J 사용 가능호도록
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// asciidoctorExtensions
+	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.6.RELEASE'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.6.RELEASE'
+
+	// embedded-redis
+	implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+
+	// testcontainers
+	testImplementation "org.testcontainers:junit-jupiter:1.17.3"
+
+	// java mail
+	implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
+
+	// selenium
+	implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.6.0'
+}
+
+test {
+	useJUnitPlatform()
+}
+
+ext {
+	snippetsDir = file('build/generated-snippets')
+}
+
+test {
+	outputs.dir snippetsDir
+}
+
+asciidoctor {
+	inputs.dir snippetsDir
+	configurations 'asciidoctorExt'
+	dependsOn test
+}
+
+task copyDocument(type: Copy) {
+	dependsOn asciidoctor
+	println "asciidoctor output: ${asciidoctor.outputDir}"
+	from file("build/docs/asciidoc/")
+	into file("src/main/resources/static/docs")
+}
+
+build {
+	dependsOn copyDocument
+}
+
+bootJar {
+	enabled = true
+	dependsOn copyDocument
+	from ("${asciidoctor.outputDir}") {
+		into 'static/docs'
+	}
+}
+
+// querydsl
+def querydslDir = "$buildDir/generated/'querydsl'"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+	main.java.srcDir querydslDir
+}
+
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
