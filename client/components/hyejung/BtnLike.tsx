@@ -12,7 +12,7 @@ import { client } from '../../libs/client';
 
 type BtnLikeProps = {
   isLiked: boolean;
-  answerId?: string;
+  answerId?: number;
 };
 export const BtnLike = ({ isLiked, answerId }: BtnLikeProps) => {
   // 좋아요 요청을 위한 articleId
@@ -22,14 +22,12 @@ export const BtnLike = ({ isLiked, answerId }: BtnLikeProps) => {
   const [isLike, setIsLike] = useState(isLiked);
 
   const onClickLike = () => {
-    console.log(articleId);
     let url = '';
     if (answerId) {
       url = `/articles/${articleId}/answers/${answerId}/likes`;
     } else {
       url = `/articles/${articleId}/likes`;
     }
-    console.log(url);
     client
       .post(url)
       .then((res) => setIsLike(res.data.isLiked))

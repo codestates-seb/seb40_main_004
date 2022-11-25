@@ -6,14 +6,13 @@
 
 import { QuestionTitle } from './QuestionTitle';
 import { CreatedDate } from './CreatedDate';
-import { CommentList } from './Comment/CommentList';
+import { CommentContainer } from './CommentList';
 import { TagList } from './TagList';
 import { BtnLike } from './BtnLike';
 import { BtnBookmark } from './BtnBookmark';
 import { UserNickname } from './UserNickname';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 type MainTextProps = {
   content: string;
@@ -79,7 +78,7 @@ export const QuestionContent = () => {
             <h3 className="text-xl font-bold">
               {article.comments.length} 코멘트
             </h3>
-            <CommentList />
+            <CommentContainer />
           </section>
         </>
       ) : (
