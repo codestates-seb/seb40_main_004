@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-24
- * 최근 수정일: 2022-11-24
+ * 최근 수정일: 2022-11-25
  */
 
 import { useFetch } from '../../libs/useFetchSWR';
@@ -24,16 +24,13 @@ type AnswerListContainerProps = {
 
 // 답변 리스트 컴포넌트
 export const AnswerList = ({ index }: AnswerListProps) => {
-  // 현재 질문 id
   const router = useRouter();
   const { articleId } = router.query;
 
-  // 게시글의 user 데이터와 채택 여부
   const { data: articleData } = useSWR(`/articles/${articleId}`);
   const userId = articleData.article.userInfo.userId;
   const isClosed = articleData.article.isClosed;
 
-  // 답변 데이터
   const {
     data: answers,
     isLoading,
@@ -73,7 +70,7 @@ export const AnswerListContainer = ({
   return (
     <>
       {pages}
-      {totalPages === cnt ? null : (
+      {totalPages + 1 === cnt ? null : (
         <article className="flex justify-center my-16">
           <button onClick={() => setCnt(cnt + 1)}>더보기</button>
         </article>

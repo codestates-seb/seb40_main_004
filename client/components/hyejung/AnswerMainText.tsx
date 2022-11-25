@@ -11,7 +11,7 @@ type AnswerTextProps = {
 export const AnswerMainText = ({ children }: AnswerTextProps) => {
   return (
     <main>
-      <div>{children.slice(2)}</div>
+      <div>{children}</div>
     </main>
   );
 };

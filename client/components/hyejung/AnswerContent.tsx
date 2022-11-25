@@ -6,9 +6,15 @@
 import { ProfileImage } from './ProfileImage';
 import { AnswerMainText } from './AnswerMainText';
 import { BtnLike } from './BtnLike';
-
+import { CommentContainer } from './CommentList';
 import { Answer } from '../../libs/interfaces';
 import { elapsedTime } from '../../libs/elapsedTime';
+import { useEffect, useRef } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { articleAuthorIdAtom, isAnswerPostAtom } from '../../atomsHJ';
+import { client } from '../../libs/client';
+import { useRouter } from 'next/router';
+import { mutate, useSWRConfig } from 'swr';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =
@@ -22,18 +28,53 @@ export type AnswerProps = {
 
 // 답변 컴포넌트
 export const AnswerContent = ({ answer, userId, isClosed }: AnswerProps) => {
+  const router = useRouter();
+  const { articleId } = router.query;
+
+  const currUserId = localStorage.getItem('userId');
+  const articleAuthorId = useRecoilValue(articleAuthorIdAtom);
+
+  const answerElement = useRef(null);
+  const [isAnswerPost, setIsAnswerPost] = useRecoilState(isAnswerPostAtom);
+  // useEffect(() => {
+  //   if (isAnswerPost.answerId === answerElement.current?.id) {
+  //     console.log('id');
+  //     setIsAnswerPost({
+  //       isAnswerPost: false,
+  //       answerId: '',
+  //     });
+  //   }
+  // }, [isAnswerPost]);
+
+  const onDelete = () => {
+    if (confirm('정말 답변을 삭제하시겠습니까..?')) {
+      client
+        .delete(`/api/articles/${articleId}/answers/${answer.answerId}`)
+        .then(() => {
+          alert('삭제가 완료되었습니다!');
+          mutate(`/api/articles/${articleId}/answers?page=1&size=5`);
+        })
+        .catch((err) => console.error(err));
+    }
+  };
+
   return (
-    <main className="flex flex-col w-full my-12 bg-[#FCFCFC] border rounded-[20px]">
+    <main
+      className="flex flex-col w-full my-12 bg-[#FCFCFC] border rounded-[20px]"
+      ref={answerElement}
+      id={answer.answerId.toString()}
+    >
       <section className="flex pb-3 items-center justify-between bg-main-gray p-4 rounded-t-[20px] border-b">
         <div className="flex items-center space-x-2 text-white">
           <ProfileImage src={answer.avatar.remotePath || tempSrc} />
-          <span className="text-xl font-bold">{answer.userInfo.nickname}</span>
-          <time className="text-white text-xs sm:text-sm">
+          <span className="text-sm sm:text-xl font-bold">
+            {answer.userInfo.nickname}
+          </span>
+          <time className="text-gray-200 text-xs sm:text-sm">
             {elapsedTime(answer.createdAt)}
           </time>
         </div>
-        {/* 답변 채택 여부 && 게시글이 유저 본인꺼인지 확인 후 표시 */}
-        {!isClosed && userId ? (
+        {!isClosed && articleAuthorId === currUserId ? (
           <button className="text-white font-bold text-xs sm:text-base">
             답변 채택하기
           </button>
@@ -43,11 +84,12 @@ export const AnswerContent = ({ answer, userId, isClosed }: AnswerProps) => {
       <section>
         <section className="p-6 flex flex-col space-y-2">
           <AnswerMainText>{answer.content}</AnswerMainText>
-          {/* 현재 유저 정보와 answer 의 userId 를 확인해서 조건부 렌더링 필요! */}
-          <article className="space-x-2 text-sm ml-auto">
-            <button>수정</button>
-            <button>삭제</button>
-          </article>
+          {answer.userInfo.userId.toString() === currUserId ? (
+            <article className="space-x-2 text-sm ml-auto">
+              <button>수정</button>
+              <button onClick={onDelete}>삭제</button>
+            </article>
+          ) : null}
         </section>
 
         <section className="space-y-3 pt-3 p-6">
@@ -60,7 +102,7 @@ export const AnswerContent = ({ answer, userId, isClosed }: AnswerProps) => {
             </div>
           </div>
           {/* 코멘트 api 가 아직 확정되지 않은 관계로 추후 작업 예정 */}
-          {/* <CommentContainer answerId={answer.answerId} /> */}
+          <CommentContainer answerId={answer.answerId} />
         </section>
       </section>
     </main>
