@@ -5,8 +5,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<meta name="application-name" content="[morakmorak]">
-<meta name="author" content="HuiyunJeong">
 <title>댓글 관련 API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -438,40 +436,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 </head>
-<body class="article toc2 toc-left">
+<body class="article">
 <div id="header">
-<h1>댓글 관련 API</h1>
-<div class="details">
-<span id="author" class="author">HuiyunJeong</span><br>
-<span id="revnumber">version 0.0.1-SNAPSHOT</span>
-</div>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_게시글에_대한_댓글_등록">1. 게시글에 대한 댓글 등록</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_201">1.1. 성공 201</a></li>
-<li><a href="#_실패_400">1.2. 실패 400</a></li>
-</ul>
-</li>
-<li><a href="#_게시글에_대한_댓글_수정">2. 게시글에 대한 댓글 수정</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_200">2.1. 성공 200</a></li>
-<li><a href="#_실패_409">2.2. 실패 409</a></li>
-</ul>
-</li>
-<li><a href="#_게시글에_대한_댓글_삭제">3. 게시글에 대한 댓글 삭제</a>
-<ul class="sectlevel2">
-<li><a href="#_성공_200_2">3.1. 성공 200</a></li>
-<li><a href="#_실패_409_2">3.2. 실패 409</a></li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div id="preamble">
-<div class="sectionbody">
+<h1 id="_댓글_관련_api" class="sect0">댓글 관련 API</h1>
 <div class="paragraph">
 <p>본 REST API 문서에서 사용하는 HTTP 상태 코드는 가능한한 표준 HTTP와 REST 규약을 따릅니다.</p>
 </div>
@@ -531,8 +500,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </tbody>
 </table>
 <hr>
-</div>
-</div>
 <div class="sect1">
 <h2 id="_게시글에_대한_댓글_등록">1. 게시글에 대한 댓글 등록</h2>
 <div class="sectionbody">
@@ -541,7 +508,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /articles/1/comments HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /articles/1/comments HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: AccessToken
 Content-Length: 52
@@ -555,7 +522,7 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -582,15 +549,15 @@ Content-Length: 356
     "filename" : "FILENAME",
     "remotePath" : "FILEPATH"
   },
-  "createdAt" : "2022-11-22T23:18:21.038757",
-  "lastModifiedAt" : "2022-11-22T23:18:21.038769"
+  "createdAt" : "2022-11-26T05:20:22.026856",
+  "lastModifiedAt" : "2022-11-26T05:20:22.026868"
 }</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">request-body</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
+<pre class="highlight nowrap"><code>{
   "content" : "유효한 댓글내용입니다."
 }</code></pre>
 </div>
@@ -639,7 +606,7 @@ Content-Length: 356
 <div class="listingblock">
 <div class="title">response-body</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
+<pre class="highlight nowrap"><code>{
   "commentId" : 1,
   "articleId" : 1,
   "content" : "냥냐냥냐",
@@ -653,8 +620,8 @@ Content-Length: 356
     "filename" : "FILENAME",
     "remotePath" : "FILEPATH"
   },
-  "createdAt" : "2022-11-22T23:18:21.038757",
-  "lastModifiedAt" : "2022-11-22T23:18:21.038769"
+  "createdAt" : "2022-11-26T05:20:22.026856",
+  "lastModifiedAt" : "2022-11-26T05:20:22.026868"
 }</code></pre>
 </div>
 </div>
@@ -736,7 +703,7 @@ Content-Length: 356
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">POST /articles/1/comments HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /articles/1/comments HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: AccessToken
 Content-Length: 22
@@ -750,7 +717,7 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="title">http-response</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code data-lang="http">HTTP/1.1 400 Bad Request
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
 Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
@@ -776,7 +743,7 @@ Content-Length: 130
 <div class="listingblock">
 <div class="title">request-body</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
+<pre class="highlight nowrap"><code>{
   "content" : null
 }</code></pre>
 </div>
@@ -825,7 +792,7 @@ Content-Length: 130
 <div class="listingblock">
 <div class="title">response-body</div>
 <div class="content">
-<pre class="prettyprint highlight nowrap"><code>{
+<pre class="highlight nowrap"><code>{
   "status" : 400,
   "code" : "400 BAD_REQUEST",
   "message" : null,
@@ -845,54 +812,54 @@ Content-Length: 130
 <h3 id="_성공_200">2.1. 성공 200</h3>
 <div class="paragraph">
 <div class="title">http-request</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer succeeded/http-request.adoc[]</p>
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer succeeded/http-request.adoc[]</p>
 </div>
 <div class="paragraph">
 <div class="title">http-response</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer succeeded/http-response.adoc[]</p>
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer succeeded/http-response.adoc[]</p>
 </div>
 <div class="paragraph">
 <div class="title">request-body</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer succeeded/request-body.adoc[]
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer succeeded/request-body.adoc[]
 .request-fields
-Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer succeeded/request-fields.adoc[]</p>
+Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer succeeded/request-fields.adoc[]</p>
 </div>
 <div class="paragraph">
 <div class="title">request-headers</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer succeeded/request-headers.adoc[]</p>
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer succeeded/request-headers.adoc[]</p>
 </div>
 <div class="paragraph">
 <div class="title">response-body</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer succeeded/response-body.adoc[]</p>
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer succeeded/response-body.adoc[]</p>
 </div>
 <div class="paragraph">
 <div class="title">response-fields</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer succeeded/response-fields.adoc[]</p>
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer succeeded/response-fields.adoc[]</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_실패_409">2.2. 실패 409</h3>
 <div class="paragraph">
 <div class="title">http-request</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer failed because the requested Answer is already picked/http-request.adoc[]</p>
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer failed because the requested Answer is already picked/http-request.adoc[]</p>
 </div>
 <div class="paragraph">
 <div class="title">http-response</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer failed because the requested Answer is already picked/http-response.adoc[]</p>
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer failed because the requested Answer is already picked/http-response.adoc[]</p>
 </div>
 <div class="paragraph">
 <div class="title">request-body</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer failed because the requested Answer is already picked/request-body.adoc[]
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer failed because the requested Answer is already picked/request-body.adoc[]
 .request-fields
-Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer failed because the requested Answer is already picked/request-fields.adoc[]</p>
+Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer failed because the requested Answer is already picked/request-fields.adoc[]</p>
 </div>
 <div class="paragraph">
 <div class="title">request-headers</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer failed because the requested Answer is already picked/request-headers.adoc[]</p>
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer failed because the requested Answer is already picked/request-headers.adoc[]</p>
 </div>
 <div class="paragraph">
 <div class="title">response-body</div>
-<p>Unresolved directive in Comment.adoc - include::./build/generated-snippets/task update answer failed because the requested Answer is already picked/response-body.adoc[]</p>
+<p>Unresolved directive in Comment.adoc - include::/Users/eunchanyang/Desktop/java/real_final/seb40_main_004/server/morak_back_end/build/generated-snippets/task update answer failed because the requested Answer is already picked/response-body.adoc[]</p>
 </div>
 </div>
 </div>
@@ -917,7 +884,5 @@ Version 0.0.1-SNAPSHOT<br>
 Last updated 2022-11-22 09:12:08 +0900
 </div>
 </div>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
 </body>
 </html>
