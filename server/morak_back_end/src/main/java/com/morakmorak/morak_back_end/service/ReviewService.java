@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 
 @Transactional
 @Service
@@ -28,22 +29,21 @@ public class ReviewService {
     private final NotificationRepository notificationRepository;
 
     public ReviewDto.ResponseDetailReview createReview(Long articleId, Long userId, Long answerId, List<BadgeDto.SimpleBadge> badgeDtoList, Review reviewWithoutBadges) {
-        User verifiedUser = userService.findVerifiedUserById(userId);
+        User verifiedRequestUser = userService.findVerifiedUserById(userId);
         Article verifiedArticle = articleService.findVerifiedArticle(articleId);
         Answer verifiedAnswer = answerService.findVerifiedAnswerById(answerId);
+        User articleAuthor = verifiedArticle.getUser();
         User receiver = verifiedAnswer.getUser();
+        checkRequestUserIsAuthor(verifiedArticle, verifiedRequestUser);
+        checkReceiverIsSameUser(verifiedRequestUser.getId(), receiver.getId());
+        checkRemainingPoints(verifiedRequestUser, reviewWithoutBadges.getPoint());
 
-        checkRemainingPoints(verifiedUser, reviewWithoutBadges.getPoint());
-
-        checkReceiverIsSameUser(userId, receiver.getId());
-
-        if (checkReviewSenderPermission(verifiedArticle, verifiedUser) &&
-                checkReviewPrequisites(verifiedArticle)) {
+        if (checkReviewPrequisites(verifiedArticle)) {
 
             injectBadgesOnReview(reviewWithoutBadges, badgeDtoList);
-            donatePoint(verifiedUser, receiver, reviewWithoutBadges.getPoint());
+            donatePoint(verifiedRequestUser, receiver, reviewWithoutBadges.getPoint());
             reviewWithoutBadges.mapAnswer(verifiedAnswer).mapArticle(verifiedArticle).changeAnswerArticleStatus();
-            Review reviewNotSaved = reviewWithoutBadges.addSender(verifiedUser).addReciever(receiver);
+            Review reviewNotSaved = reviewWithoutBadges.addSender(verifiedRequestUser).addReciever(receiver);
 
             NotificationGenerator generator = NotificationGenerator.of(reviewNotSaved);
             Notification notification = generator.generateNotification();
@@ -67,7 +67,7 @@ public class ReviewService {
 
         return ReviewDto.ResponseSimpleReview.of(reviewRepository.save(reviewNotSaved));
     }
-    public Boolean checkReviewSenderPermission(Article verifiedArticle, User verifiedUser) {
+    public Boolean checkRequestUserIsAuthor(Article verifiedArticle, User verifiedUser) {
         if (!verifiedArticle.getUser().getId().equals(verifiedUser.getId())) {
             throw new BusinessLogicException(ErrorCode.INVALID_USER);
         }
@@ -91,7 +91,7 @@ public class ReviewService {
     }
 
     public void checkReceiverIsSameUser(Long senderId, Long receiverId) {
-        if (senderId.equals(receiverId)) {
+        if (Objects.equals(senderId,receiverId)) {
             throw new BusinessLogicException(ErrorCode.UNABLE_TO_REVIEW);
         }
     }

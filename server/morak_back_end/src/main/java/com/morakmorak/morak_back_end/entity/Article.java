@@ -38,7 +38,6 @@ public class Article extends BaseTime {
     private String title;
 
     @ToString.Include
-    @Column(length = 20000)
     private String content;
 
     @ToString.Include

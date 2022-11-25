@@ -40,20 +40,21 @@ import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TO
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @WebMvcTest({CommentController.class, ExceptionController.class})
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 @Import(SecurityTestConfig.class)
-public class UpdateCommentControllerTest {
+public class GetCommentsOnArticle_ControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -98,17 +99,15 @@ public class UpdateCommentControllerTest {
                 .article(dbArticle)
                 .content(VALID_CONTENT)
                 .build();
-
     }
 
     @Test
-    @DisplayName("댓글 수정 시 유효한 데이터가 인입되었다면 200을 반환한다.")
-    void updateComment_success_1() throws Exception {
-        //given 유효한 댓글 수정 요청
+    @DisplayName("게시글에서 댓글 조회시 적절한 요청이었다면, 삭제처리 후 200 및 댓글리스트를 반환한다.")
+    void getComment_success_1() throws Exception {
         CommentDto.Request request = CommentDto.Request.builder()
                 .content(VALID_COMMENT).build();
 
-        CommentDto.Response exampleComment = CommentDto.Response.builder()
+        CommentDto.Response deletedComment = CommentDto.Response.builder()
                 .userInfo(UserDto.ResponseSimpleUserDto.of(dbComment.getUser()))
                 .avatar(AvatarDto.SimpleResponse.of(dbComment.getUser().getAvatar()))
                 .commentId(dbComment.getId())
@@ -118,13 +117,24 @@ public class UpdateCommentControllerTest {
                 .lastModifiedAt(LocalDateTime.now())
                 .build();
 
+        CommentDto.Response exampleComment = CommentDto.Response.builder()
+                .userInfo(UserDto.ResponseSimpleUserDto.of(dbComment.getUser()))
+                .avatar(AvatarDto.SimpleResponse.of(dbComment.getUser().getAvatar()))
+                .commentId(2L)
+                .articleId(dbComment.getArticle().getId())
+                .content("살아남을 코멘트입니다.")
+                .createdAt(LocalDateTime.now())
+                .lastModifiedAt(LocalDateTime.now())
+                .build();
+
         List<CommentDto.Response> commentList = new ArrayList<>();
         commentList.add(exampleComment);
 
         String json = objectMapper.writeValueAsString(request);
-        BDDMockito.given(commentService.editComment(any(),any(),any(),anyString())).willReturn(commentList);
+        BDDMockito.given(commentService.findAllComments(any(),anyBoolean())).willReturn(commentList);
+
         //when 유효한 input
-        ResultActions perform = mockMvc.perform(patch("/articles/{article-id}/comments/{comment-id}", dbArticle.getId(), dbComment.getId())
+        ResultActions perform = mockMvc.perform(get("/articles/{article-id}/comments", dbArticle.getId(), dbComment.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .header(JWT_HEADER, ACCESS_TOKEN)
@@ -132,7 +142,7 @@ public class UpdateCommentControllerTest {
         perform.andExpect(status().isOk())
                 .andDo(
                         document(
-                                "update comment succeeded",
+                                "게시글에서 댓글 조회 성공_200",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
@@ -151,6 +161,7 @@ public class UpdateCommentControllerTest {
                                                 fieldWithPath("[].avatar.filename").type(JsonFieldType.STRING).description("파일 이름입니다"),
                                                 fieldWithPath("[].avatar.remotePath").type(JsonFieldType.STRING).description("유저 닉네임입니다"),
                                                 fieldWithPath("[].articleId").type(JsonFieldType.NUMBER).description("글 식별자입니다"),
+                                                fieldWithPath("[].answerId").type(JsonFieldType.NULL).description("게시글 댓글이므로 글 식별자는 비어있습니다."),
                                                 fieldWithPath("[].content").type(JsonFieldType.STRING).description("댓글 내용입니다"),
                                                 fieldWithPath("[].commentId").type(JsonFieldType.NUMBER).description("댓글 식별자입니다"),
                                                 fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("댓글 첫 작성일입니다."),
@@ -162,14 +173,14 @@ public class UpdateCommentControllerTest {
     }
 
     @Test
-    @DisplayName("댓글 수정 시 수정 권한이 없다면 409를 반환한다.")
-    void updateComment_failed_1() throws Exception {
+    @DisplayName("게시글에서 댓글 조회 삭제 권한이 없다면 409를 반환한다.")
+    void deleteComment_failed_1() throws Exception {
         CommentDto.Request request = CommentDto.Request.builder()
                 .content(VALID_COMMENT).build();
         String json = objectMapper.writeValueAsString(request);
-        BDDMockito.given(commentService.editComment(any(), any(), any(), anyString())).willThrow(new BusinessLogicException(ErrorCode.CANNOT_ACCESS_COMMENT));
-        //when 권한 없는 유저가 수정 요청을 보냈을 때
-        ResultActions perform = mockMvc.perform(patch("/articles/{article-id}/comments/{comment-id}", dbArticle.getId(), dbComment.getId())
+        BDDMockito.given(commentService.findAllComments(any(),anyBoolean())).willThrow(new BusinessLogicException(ErrorCode.CANNOT_ACCESS_COMMENT));
+
+        ResultActions perform = mockMvc.perform(get("/articles/{article-id}/comments", dbArticle.getId(), dbComment.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .header(JWT_HEADER, ACCESS_TOKEN)
@@ -179,7 +190,7 @@ public class UpdateCommentControllerTest {
                 .andExpect(status().isConflict())
                 .andDo(
                         document(
-                                "update comment failed by unauthorized user",
+                                "게시글에서 댓글 조회 실패_409",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(

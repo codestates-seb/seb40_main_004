@@ -1,7 +1,6 @@
 package com.morakmorak.morak_back_end.service;
 
 import com.morakmorak.morak_back_end.domain.PointCalculator;
-import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.Comment;
 import com.morakmorak.morak_back_end.entity.User;
@@ -10,7 +9,6 @@ import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.CommentRepository;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
-import com.morakmorak.morak_back_end.util.TestConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.morakmorak.morak_back_end.util.TestConstants.*;
+import static com.morakmorak.morak_back_end.util.TestConstants.CONTENT1;
+import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME1;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -52,7 +51,7 @@ class CommentServiceTest {
         given(userService.findVerifiedUserById(any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
         //when
         //then
-        Assertions.assertThatThrownBy(() -> commentService.makeComment(USERID,ARTICLEID,comment))
+        Assertions.assertThatThrownBy(() -> commentService.makeComment(USERID,ARTICLEID,comment,true))
                 .isInstanceOf(BusinessLogicException.class);
     }
     @Test
@@ -68,7 +67,7 @@ class CommentServiceTest {
         given(commentRepository.save(comment)).willReturn(comment);
 
         //when
-        CommentDto.Response target = commentService.makeComment(1L, 1L, comment);
+ commentService.makeComment(1L, 1L, comment,true);
 
         //then
         verify(commentRepository, times(1)).save(comment);

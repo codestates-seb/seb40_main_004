@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
-import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.repository.BookmarkRepository;
+import com.morakmorak.morak_back_end.repository.CategoryRepository;
+import com.morakmorak.morak_back_end.repository.FileRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
@@ -23,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -122,29 +122,18 @@ public class GetAnswersTest {
         );
         //then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0:1].answerId").value(answer.getId().intValue()))
-                .andExpect(jsonPath("$.data[0:1].content").exists())
-                .andExpect(jsonPath("$.data[0:1].answerLikeCount").exists())
-                .andExpect(jsonPath("$.data[0:1].isPicked").value(false))
-                .andExpect(jsonPath("$.data[0:1].commentCount").value(0))
-                .andExpect(jsonPath("$.data[0:1].commentPreview.commentId").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.answerId").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.content").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.userId").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.nickname").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.grade").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.avatarId").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.filename").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.remotePath").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.lastModifiedAt").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.createdAt").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].createdAt").exists())
-                .andExpect(jsonPath("$.data[0:1].userInfo.userId").value(user.getId().intValue()))
-                .andExpect(jsonPath("$.data[0:1].userInfo.nickname").exists())
-                .andExpect(jsonPath("$.data[0:1].userInfo.grade").exists())
-                .andExpect(jsonPath("$.data[0:1].avatar.avatarId").value(avatar.getId().intValue()))
-                .andExpect(jsonPath("$.data[0:1].avatar.filename").exists())
-                .andExpect(jsonPath("$.data[0:1].avatar.remotePath").exists())
+                .andExpect(jsonPath("$.data[0].answerId").value(answer.getId().intValue()))
+                .andExpect(jsonPath("$.data[0].content").exists())
+                .andExpect(jsonPath("$.data[0].answerLikeCount").exists())
+                .andExpect(jsonPath("$.data[0].isPicked").value(false))
+                .andExpect(jsonPath("$.data[0].commentCount").value(0))
+                .andExpect(jsonPath("$.data[0].createdAt").exists())
+                .andExpect(jsonPath("$.data[0].userInfo.userId").value(user.getId().intValue()))
+                .andExpect(jsonPath("$.data[0].userInfo.nickname").exists())
+                .andExpect(jsonPath("$.data[0].userInfo.grade").exists())
+                .andExpect(jsonPath("$.data[0].avatar.avatarId").value(avatar.getId().intValue()))
+                .andExpect(jsonPath("$.data[0].avatar.filename").exists())
+                .andExpect(jsonPath("$.data[0].avatar.remotePath").exists())
                 .andExpect(jsonPath("$.pageInfo.page").value(1))
                 .andExpect(jsonPath("$.pageInfo.size").value(5))
                 .andExpect(jsonPath("$.pageInfo.totalElements").value(1))

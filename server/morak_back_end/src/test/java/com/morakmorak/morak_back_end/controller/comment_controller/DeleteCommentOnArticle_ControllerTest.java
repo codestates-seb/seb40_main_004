@@ -40,6 +40,7 @@ import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TO
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -52,7 +53,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 @Import(SecurityTestConfig.class)
-public class DeleteCommentControllerTest {
+public class DeleteCommentOnArticle_ControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -130,7 +131,7 @@ public class DeleteCommentControllerTest {
         commentList.add(exampleComment);
 
         String json = objectMapper.writeValueAsString(request);
-        BDDMockito.given(commentService.findAllComments(any())).willReturn(commentList);
+        BDDMockito.given(commentService.deleteComment(any(), any(), any(),anyBoolean())).willReturn(commentList);
 
         //when 유효한 input
         ResultActions perform = mockMvc.perform(delete("/articles/{article-id}/comments/{comment-id}", dbArticle.getId(), dbComment.getId())
@@ -160,6 +161,7 @@ public class DeleteCommentControllerTest {
                                                 fieldWithPath("[].avatar.filename").type(JsonFieldType.STRING).description("파일 이름입니다"),
                                                 fieldWithPath("[].avatar.remotePath").type(JsonFieldType.STRING).description("유저 닉네임입니다"),
                                                 fieldWithPath("[].articleId").type(JsonFieldType.NUMBER).description("글 식별자입니다"),
+                                                fieldWithPath("[].answerId").type(JsonFieldType.NULL).description("비어있는 답글 식별자입니다"),
                                                 fieldWithPath("[].content").type(JsonFieldType.STRING).description("댓글 내용입니다"),
                                                 fieldWithPath("[].commentId").type(JsonFieldType.NUMBER).description("댓글 식별자입니다"),
                                                 fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("댓글 첫 작성일입니다."),
@@ -200,7 +202,7 @@ public class DeleteCommentControllerTest {
         commentList.add(exampleComment);
 
         String json = objectMapper.writeValueAsString(request);
-        BDDMockito.given(commentService.findAllComments(any())).willReturn(commentList);
+        BDDMockito.given(commentService.deleteComment(any(), any(), any(),anyBoolean())).willReturn(commentList);
 
         //when 유효한 input
         ResultActions perform = mockMvc.perform(delete("/articles/{article-id}/comments/{comment-id}", dbArticle.getId(), dbComment.getId())
@@ -230,6 +232,7 @@ public class DeleteCommentControllerTest {
                                                 fieldWithPath("[].avatar.filename").type(JsonFieldType.STRING).description("파일 이름입니다"),
                                                 fieldWithPath("[].avatar.remotePath").type(JsonFieldType.STRING).description("유저 닉네임입니다"),
                                                 fieldWithPath("[].articleId").type(JsonFieldType.NUMBER).description("글 식별자입니다"),
+                                                fieldWithPath("[].answerId").type(JsonFieldType.NULL).description("비어있는 답글 식별자입니다"),
                                                 fieldWithPath("[].content").type(JsonFieldType.STRING).description("댓글 내용입니다"),
                                                 fieldWithPath("[].commentId").type(JsonFieldType.NUMBER).description("댓글 식별자입니다"),
                                                 fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("댓글 첫 작성일입니다."),
@@ -245,7 +248,7 @@ public class DeleteCommentControllerTest {
         CommentDto.Request request = CommentDto.Request.builder()
                 .content(VALID_COMMENT).build();
         String json = objectMapper.writeValueAsString(request);
-        BDDMockito.given(commentService.deleteComment(any(), any(), any())).willThrow(new BusinessLogicException(ErrorCode.CANNOT_ACCESS_COMMENT));
+        BDDMockito.given(commentService.deleteComment(any(), any(), any(),anyBoolean())).willThrow(new BusinessLogicException(ErrorCode.CANNOT_ACCESS_COMMENT));
 
         //when 권한 없는 유저가 삭제 요청을 보냈을 때
         ResultActions perform = mockMvc.perform(delete("/articles/{article-id}/comments/{comment-id}", dbArticle.getId(), dbComment.getId())

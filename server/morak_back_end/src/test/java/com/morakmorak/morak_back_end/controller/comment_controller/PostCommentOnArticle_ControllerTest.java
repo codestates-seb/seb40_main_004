@@ -26,11 +26,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -43,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 @Import(SecurityTestConfig.class)
-class PostCommentControllerTest {
+class PostCommentOnArticle_ControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -64,6 +66,7 @@ class PostCommentControllerTest {
                 .content(null).build();
         //when 잘못된 dto json 인입
         String json = objectMapper.writeValueAsString(request);
+//        BDDMockito.given(commentService.makeComment(any(),any(),any(),anyBoolean())).willThrow()
         //when
         ResultActions perform =
                 mockMvc.perform(
@@ -78,7 +81,7 @@ class PostCommentControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(
                         document(
-                                "task post comment failed caused by invalid dto",
+                                "댓글 게시글에등록 실패_400",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
@@ -98,7 +101,7 @@ class PostCommentControllerTest {
         CommentDto.Request request = CommentDto.Request.builder()
                 .content(VALID_CONTENT).build();
 
-        CommentDto.Response response = CommentDto.Response.builder()
+        CommentDto.Response exampleComment = CommentDto.Response.builder()
                 .userInfo(UserDto.ResponseSimpleUserDto.builder()
                         .userId(1L)
                         .nickname("NICKNAME")
@@ -116,9 +119,12 @@ class PostCommentControllerTest {
                 .lastModifiedAt(LocalDateTime.now())
                 .build();
 
+        List<CommentDto.Response> response = new ArrayList<>();
+        response.add(exampleComment);
+
         //when 적절한 json 인입
         String json = objectMapper.writeValueAsString(request);
-        BDDMockito.given(commentService.makeComment(any(), any(), any())).willReturn(response);
+        BDDMockito.given(commentService.makeComment(any(), any(), any(), anyBoolean())).willReturn(response);
         ResultActions perform =
                 mockMvc.perform(
                         post("/articles/{article-id}/comments", 1L)
@@ -129,7 +135,7 @@ class PostCommentControllerTest {
         //then
         perform.andExpect(status().isCreated())
                 .andDo(document(
-                        "task post comment success",
+                        "댓글 게시글에 등록 성공_201",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
@@ -139,17 +145,18 @@ class PostCommentControllerTest {
                                 fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용")),
                         responseFields(
                                 List.of(
-                                        fieldWithPath("userInfo.userId").type(JsonFieldType.NUMBER).description("유저 식별자입니다"),
-                                        fieldWithPath("userInfo.nickname").type(JsonFieldType.STRING).description("유저 닉네임입니다"),
-                                        fieldWithPath("userInfo.grade").type(JsonFieldType.STRING).description("유저 등급입니다"),
-                                        fieldWithPath("avatar.avatarId").type(JsonFieldType.NUMBER).description("프로필사진 식별자입니다"),
-                                        fieldWithPath("avatar.filename").type(JsonFieldType.STRING).description("파일 이름입니다"),
-                                        fieldWithPath("avatar.remotePath").type(JsonFieldType.STRING).description("유저 닉네임입니다"),
-                                        fieldWithPath("articleId").type(JsonFieldType.NUMBER).description("글 식별자입니다"),
-                                        fieldWithPath("content").type(JsonFieldType.STRING).description("댓글 내용입니다"),
-                                        fieldWithPath("commentId").type(JsonFieldType.NUMBER).description("댓글 식별자입니다"),
-                                        fieldWithPath("createdAt").type(JsonFieldType.STRING).description("댓글 첫 작성일입니다."),
-                                        fieldWithPath("lastModifiedAt").type(JsonFieldType.STRING).description("댓글 최신 수정일입니다")
+                                        fieldWithPath("[].userInfo.userId").type(JsonFieldType.NUMBER).description("유저 식별자입니다"),
+                                        fieldWithPath("[].userInfo.nickname").type(JsonFieldType.STRING).description("유저 닉네임입니다"),
+                                        fieldWithPath("[].userInfo.grade").type(JsonFieldType.STRING).description("유저 등급입니다"),
+                                        fieldWithPath("[].avatar.avatarId").type(JsonFieldType.NUMBER).description("프로필사진 식별자입니다"),
+                                        fieldWithPath("[].avatar.filename").type(JsonFieldType.STRING).description("파일 이름입니다"),
+                                        fieldWithPath("[].avatar.remotePath").type(JsonFieldType.STRING).description("유저 닉네임입니다"),
+                                        fieldWithPath("[].articleId").type(JsonFieldType.NUMBER).description("글 식별자입니다"),
+                                        fieldWithPath("[].answerId").type(JsonFieldType.NULL).description("비어있는 답글 식별자입니다"),
+                                        fieldWithPath("[].content").type(JsonFieldType.STRING).description("댓글 내용입니다"),
+                                        fieldWithPath("[].commentId").type(JsonFieldType.NUMBER).description("댓글 식별자입니다"),
+                                        fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("댓글 첫 작성일입니다."),
+                                        fieldWithPath("[].lastModifiedAt").type(JsonFieldType.STRING).description("댓글 최신 수정일입니다")
                                 )
                         )
                 ));

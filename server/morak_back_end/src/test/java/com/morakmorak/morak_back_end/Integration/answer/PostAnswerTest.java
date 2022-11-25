@@ -7,11 +7,10 @@ import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
-import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.FileRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,10 +29,8 @@ import java.util.List;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ROLE_USER_LIST;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -165,17 +162,6 @@ public class PostAnswerTest {
                 .andExpect(jsonPath("$.data[0:1].answerLikeCount").exists())
                 .andExpect(jsonPath("$.data[0:1].isPicked").value(false))
                 .andExpect(jsonPath("$.data[0:1].commentCount").value(0))
-                .andExpect(jsonPath("$.data[0:1].commentPreview.commentId").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.answerId").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.content").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.userId").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.nickname").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.userInfo.grade").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.avatarId").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.filename").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.avatar.remotePath").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.lastModifiedAt").isEmpty())
-                .andExpect(jsonPath("$.data[0:1].commentPreview.createdAt").isEmpty())
                 .andExpect(jsonPath("$.data[0:1].createdAt").exists())
                 .andExpect(jsonPath("$.data[0:1].userInfo.userId").value(user.getId().intValue()))
                 .andExpect(jsonPath("$.data[0:1].userInfo.nickname").exists())

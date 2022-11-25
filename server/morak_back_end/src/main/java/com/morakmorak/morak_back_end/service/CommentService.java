@@ -3,10 +3,7 @@ package com.morakmorak.morak_back_end.service;
 import com.morakmorak.morak_back_end.domain.NotificationGenerator;
 import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.CommentDto;
-import com.morakmorak.morak_back_end.entity.Article;
-import com.morakmorak.morak_back_end.entity.Comment;
-import com.morakmorak.morak_back_end.entity.Notification;
-import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.CommentRepository;
@@ -26,57 +23,119 @@ import java.util.stream.Collectors;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ArticleService articleService;
+    private final AnswerService answerService;
     private final UserService userService;
     private final NotificationRepository notificationRepository;
     private final PointCalculator pointCalculator;
 
-    public CommentDto.Response makeComment(Long userId, Long articleId, Comment commentNotSaved) {
+    public List<CommentDto.Response> makeComment(Long userId, Long targetId, Comment commentNotSaved, boolean isArticle) {
         User verifiedUser = userService.findVerifiedUserById(userId);
-        Article verifiedArticle = articleService.findVerifiedArticle(articleId);
 
-        commentNotSaved.injectUser(verifiedUser).injectArticle(verifiedArticle);
+        if (isArticle) {
+            Long articleId = targetId;
+            Article verifiedArticle = articleService.findVerifiedArticle(articleId);
+
+            commentNotSaved.injectUser(verifiedUser).injectArticle(verifiedArticle);
+            Comment savedComment = commentRepository.save(commentNotSaved);
+
+            sendNotificationByComment(verifiedUser, savedComment);
+            verifiedUser.addPoint(savedComment, pointCalculator);
+
+            return findAllCommentsBy(verifiedArticle);
+        }
+        Long answerId = targetId;
+        Answer verifiedAnswer = answerService.findVerifiedAnswerById(answerId);
+        commentNotSaved.injectUser(verifiedUser).injectAnswer(verifiedAnswer);
         Comment savedComment = commentRepository.save(commentNotSaved);
 
-        NotificationGenerator generator = NotificationGenerator.of(verifiedUser, savedComment);
-        Notification notification = generator.generateNotification();
+        sendNotificationByComment(verifiedUser, savedComment);
         verifiedUser.addPoint(savedComment, pointCalculator);
 
-        notificationRepository.save(notification);
-        return CommentDto.Response.of(Optional.of(savedComment));
+        return findAllCommentsBy(verifiedAnswer);
+
     }
 
-    public List<CommentDto.Response> editComment(Long userId, Long articleId, Long commentId, String newContent) throws Exception {
+    public List<CommentDto.Response> editComment(Long userId, Long targetId, Long commentId, String newContent, boolean isArticle) throws Exception {
         User verifiedUser = userService.findVerifiedUserById(userId);
-        Article verifiedArticle = articleService.findVerifiedArticle(articleId);
         Comment foundComment = findVerifiedCommentById(commentId);
+        checkUserPermission(foundComment, verifiedUser);
 
-        if (foundComment.hasPermissionWith(verifiedUser) && verifiedArticle.statusIsPosting()) {
+        if (isArticle) {
+            Long articleId = targetId;
+            Article verifiedArticle = articleService.findVerifiedArticle(articleId);
+            checkArticleStatus(verifiedArticle);
             foundComment.updateContent(newContent);
-            return findAllComments(articleId);
-        } else {
-            throw new BusinessLogicException(ErrorCode.CANNOT_ACCESS_COMMENT);
+            return findAllCommentsBy(verifiedArticle);
+        }
+        Long answerId = targetId;
+        Answer verifiedAnswer = answerService.findVerifiedAnswerById(answerId);
+        checkArticleStatus(verifiedAnswer.getArticle());
+        foundComment.updateContent(newContent);
+        return findAllCommentsBy(verifiedAnswer);
+    }
+
+    private void checkUserPermission(Comment comment, User requestUser) {
+        if (!comment.hasPermissionWith(requestUser)) {
+            throw new BusinessLogicException(ErrorCode.INVALID_USER);
         }
     }
 
+    public List<CommentDto.Response> deleteComment(Long userId, Long targetId, Long commentId, boolean isArticle) throws Exception {
+        User verifiedUser = userService.findVerifiedUserById(userId);
+        Comment foundComment = findVerifiedCommentById(commentId);
+        checkUserPermission(foundComment, verifiedUser);
 
+        if (isArticle) {
+            Long articleId = targetId;
+            Article verifiedArticle = articleService.findVerifiedArticle(articleId);
+            checkArticleStatus(verifiedArticle);
+            commentRepository.deleteById(commentId);
+            verifiedUser.minusPoint(foundComment, pointCalculator);
+            return findAllCommentsBy(verifiedArticle);
+        }
+        Long answerId = targetId;
+        Answer verifiedAnswer = answerService.findVerifiedAnswerById(answerId);
+        checkArticleStatus(verifiedAnswer.getArticle());
+        commentRepository.deleteById(commentId);
+        verifiedUser.minusPoint(foundComment, pointCalculator);
+        return findAllCommentsBy(verifiedAnswer);
+    }
+
+    public List<CommentDto.Response> findAllComments(Long targetId, boolean isArticle) {
+        if (isArticle) {
+            Long articleId = targetId;
+            Article verifiedArticle = articleService.findVerifiedArticle(articleId);
+            checkArticleStatus(verifiedArticle);
+            return findAllCommentsBy(verifiedArticle);
+        }
+        Long answerId = targetId;
+        Answer verifiedAnswer = answerService.findVerifiedAnswerById(answerId);
+        checkArticleStatus(verifiedAnswer.getArticle());
+        return findAllCommentsBy(verifiedAnswer);
+    }
+
+    public List<CommentDto.Response> findAllCommentsBy(Article article) {
+        return commentRepository.findAllCommentsByArticleId(article.getId()).stream().map(comment -> CommentDto.Response.ofArticle(Optional.of(comment))).collect(Collectors.toList());
+    }
+
+    public List<CommentDto.Response> findAllCommentsBy(Answer answer) {
+        return commentRepository.findAllCommentsByAnswerId(answer.getId()).stream().map(comment -> CommentDto.Response.ofAnswer(comment)).collect(Collectors.toList());
+    }
+
+    private void sendNotificationByComment(User receiver, Comment comment) {
+        NotificationGenerator generator = NotificationGenerator.of(receiver, comment);
+        Notification notification = generator.generateNotification();
+        notificationRepository.save(notification);
+    }
     public Comment findVerifiedCommentById(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(() -> new BusinessLogicException(ErrorCode.COMMENT_NOT_FOUND));
     }
 
-    public List<CommentDto.Response> findAllComments(Long articleId) {
-        return commentRepository.findAllCommentsByArticleId(articleId).stream().map(comment -> CommentDto.Response.of(Optional.of(comment))).collect(Collectors.toList());
-    }
-
-    public boolean deleteComment(Long userId, Long articleId, Long commentId) throws Exception {
-        User verifiedUser = userService.findVerifiedUserById(userId);
-        Article verifiedArticle = articleService.findVerifiedArticle(articleId);
-        Comment foundComment = findVerifiedCommentById(commentId);
-        if (foundComment.hasPermissionWith(verifiedUser) && verifiedArticle.statusIsPosting()) {
-            commentRepository.deleteById(commentId);
-            verifiedUser.minusPoint(foundComment, pointCalculator);
-            return true;
-        } else {
-            throw new BusinessLogicException(ErrorCode.CANNOT_ACCESS_COMMENT);
+    private void checkArticleStatus(Article article) {
+        if (!article.statusIsPosting()) {
+            throw new BusinessLogicException(ErrorCode.NO_ACCESS_TO_THAT_OBJECT);
         }
     }
+
+
 }

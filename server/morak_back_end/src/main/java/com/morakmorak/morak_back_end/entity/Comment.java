@@ -78,4 +78,9 @@ public class Comment extends BaseTime{
         this.content = newContent;
         return this;
     }
+    public Comment injectAnswer(Answer verifiedAnswer) {
+        this.answer = verifiedAnswer;
+        answer.getComments().add(this);
+        return this;
+    }
 }

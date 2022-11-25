@@ -39,8 +39,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -49,9 +49,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -3877,8 +3876,9 @@ public class searchArticleTest {
                                         fieldWithPath("avatar.avatarId").type(JsonFieldType.NUMBER).description("아바타 파일의 아이디 입니다."),
                                         fieldWithPath("avatar.filename").type(JsonFieldType.STRING).description("아바타 파일의 이름입니다."),
                                         fieldWithPath("avatar.remotePath").type(JsonFieldType.STRING).description("아바타 파일의 경로입니다."),
-                                        fieldWithPath("comments[].commentId").type(JsonFieldType.NUMBER).description("댓글의 아이디 입니다.."),
-                                        fieldWithPath("comments[].articleId").type(JsonFieldType.NUMBER).description("댓글이 올라가있는 게시글의 아이디 입니다.."),
+                                        fieldWithPath("comments[].commentId").type(JsonFieldType.NUMBER).description("댓글의 아이디 입니다."),
+                                        fieldWithPath("comments[].articleId").type(JsonFieldType.NUMBER).description("댓글이 올라가있는 게시글의 아이디 입니다."),
+                                        fieldWithPath("comments[].answerId").type(JsonFieldType.NULL).description("게시글의 댓글이므로 답변글 필드는 null입니다."),
                                         fieldWithPath("comments[].content").type(JsonFieldType.STRING).description("댓글의 내용입니다."),
                                         fieldWithPath("comments[].createdAt").type(JsonFieldType.STRING).description("댓글이 작성된 날짜 입니다."),
                                         fieldWithPath("comments[].lastModifiedAt").type(JsonFieldType.STRING).description("댓글이 마지막으로 수정된 날짜 입니다."),
@@ -4202,6 +4202,7 @@ public class searchArticleTest {
                                         fieldWithPath("avatar.remotePath").type(JsonFieldType.STRING).description("아바타 파일의 경로입니다."),
                                         fieldWithPath("comments[].commentId").type(JsonFieldType.NUMBER).description("댓글의 아이디 입니다.."),
                                         fieldWithPath("comments[].articleId").type(JsonFieldType.NUMBER).description("댓글이 올라가있는 게시글의 아이디 입니다.."),
+                                        fieldWithPath("comments[].answerId").type(JsonFieldType.NULL).description("답변글 필드는 비어있어야 합니다."),
                                         fieldWithPath("comments[].content").type(JsonFieldType.STRING).description("댓글의 내용입니다."),
                                         fieldWithPath("comments[].createdAt").type(JsonFieldType.STRING).description("댓글이 작성된 날짜 입니다."),
                                         fieldWithPath("comments[].lastModifiedAt").type(JsonFieldType.STRING).description("댓글이 마지막으로 수정된 날짜 입니다."),

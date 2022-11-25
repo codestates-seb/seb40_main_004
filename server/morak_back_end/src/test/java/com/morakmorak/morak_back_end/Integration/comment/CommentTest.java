@@ -6,12 +6,11 @@ import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.Avatar;
 import com.morakmorak.morak_back_end.entity.Comment;
 import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.repository.CommentRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.user.AvatarRepository;
-import com.morakmorak.morak_back_end.repository.CommentRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,11 +22,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.hamcrest.Matchers.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import static com.morakmorak.morak_back_end.util.CommentTestConstants.VALID_COMMENT;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,6 +56,8 @@ public class CommentTest {
     CommentRepository commentRepository;
     @Autowired
     AvatarRepository avatarRepository;
+    @PersistenceContext
+    EntityManager em;
 
     User savedUser;
     Article savedArticle;
@@ -72,8 +76,9 @@ public class CommentTest {
                 .password(PASSWORD1)
                 .avatar(dbAvatar)
                 .build();
-        userRepository.save(dbUser);
-        this.savedUser = userRepository.findUserByEmail(EMAIL1).orElseThrow(() -> new AssertionError());
+        em.persist(dbUser);
+
+        this.savedUser = dbUser;
         this.accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         avatarRepository.save(dbAvatar);
@@ -117,14 +122,15 @@ public class CommentTest {
         );
         //then 201 created 반환
         perform.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.userInfo.userId").exists())
-                .andExpect(jsonPath("$.userInfo.nickname").exists())
-                .andExpect(jsonPath("$.avatar.avatarId").exists())
-                .andExpect(jsonPath("$.avatar.filename").exists())
-                .andExpect(jsonPath("$.avatar.remotePath").exists())
-                .andExpect(jsonPath("$.articleId").exists())
-                .andExpect(jsonPath("$.content").exists())
-                .andExpect(jsonPath("$.commentId").exists());
+                .andExpect(jsonPath("$[0].userInfo.userId").exists())
+                .andExpect(jsonPath("$[0].userInfo.nickname").exists())
+                .andExpect(jsonPath("$[0].userInfo.grade").isEmpty())
+                .andExpect(jsonPath("$[0].avatar.avatarId").exists())
+                .andExpect(jsonPath("$[0].avatar.filename").exists())
+                .andExpect(jsonPath("$[0].avatar.remotePath").exists())
+                .andExpect(jsonPath("$[0].articleId").exists())
+                .andExpect(jsonPath("$[0].content").exists())
+                .andExpect(jsonPath("$[0].commentId").exists());
     }
     @Test
     @DisplayName("댓글 수정 시 유효한 데이터가 인입되었다면 200을 반환한다.")
@@ -158,7 +164,7 @@ public class CommentTest {
                 .andExpect(jsonPath("$[0].lastModifiedAt").exists());
     }
     @Test
-    @DisplayName("댓글 수정 시 수정 권한이 없다면 409를 반환한다.")
+    @DisplayName("댓글 수정 시 수정 권한이 없다면 401 반환한다.")
     void updateComment_failed_1() throws Exception {
         //given 새로운 유저 등장
         CommentDto.Request request = CommentDto.Request.builder()
@@ -185,10 +191,10 @@ public class CommentTest {
         );
         //then 409 conflict 발생
         perform
-                .andExpect(status().isConflict());
+                .andExpect(status().isUnauthorized());
     }
     @Test
-    @DisplayName("댓글 삭제 시 권한이 없다면 409를 반환한다.")
+    @DisplayName("댓글 삭제 시 권한이 없다면 401 반환한다.")
     void deleteComment_failed_1() throws Exception {
         //given 새로운 유저 등장
         commentRepository.save(Comment.builder().user(savedUser).article(savedArticle).build());
@@ -210,7 +216,7 @@ public class CommentTest {
         );
         //then 409 conflict 발생
         perform
-                .andExpect(status().isConflict());
+                .andExpect(status().isUnauthorized());
     }
     @Test
     @DisplayName("댓글 수정 시 유효한 데이터가 인입되었다면 200을 반환한다.")
