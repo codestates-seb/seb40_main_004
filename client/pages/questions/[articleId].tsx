@@ -21,6 +21,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { articleAuthorIdAtom, isAnswerPostedAtom } from '../../atomsHJ';
 import { useEffect, useRef } from 'react';
 import { isLoginAtom } from '../../atomsYW';
+import { BtnTopDown } from '../../components/common/BtnTopDown';
 
 type QuestionDetailProps = {
   articleId: string;
@@ -61,6 +62,7 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
     <>
       <Header />
       <main className="max-w-[900px] mx-auto min-h-[80vh] bg-white p-[60px] shadow-sm border-[1px] border-gray-200">
+        <BtnTopDown />
         <QuestionContent />
         <section className="flex w-full text-lg sm:text-xl space-x-2 items-center">
           {answerCount ? (
