@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 정하승
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-14
+ * 최근 수정일: 2022-11-24
  */
 
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
@@ -9,10 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NextPage } from 'next';
 import { Button } from '../../components/common/Button';
 import { Header } from '../../components/common/Header';
-import LoadMoreButton from '../../components/haseung/LoadMoreButton';
+import { LoadMoreButton } from '../../components/haseung/LoadMoreButton';
 import { QuestionList } from '../../components/haseung/QuestionList';
 import { SearchWithTagButton } from '../../components/haseung/SearchWithTagButton';
-import { TagButton } from '../../components/hyejung/TagButton';
+import { BtnTag } from '../../components/hyejung/BtnTag';
 
 const Questions: NextPage = () => {
   return (

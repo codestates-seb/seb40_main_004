@@ -5,10 +5,6 @@ import 'react-quill/dist/quill.snow.css';
 import '@fullcalendar/common/main.css';
 import '@fullcalendar/daygrid/main.css';
 
-if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
-  require('../mocks');
-}
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>

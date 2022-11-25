@@ -6,11 +6,11 @@
    - 질문/답변에 대한 코멘트를 렌더링합니다.
  */
 
-import { UserNickname } from '../UserNickname';
-import { CreatedDate } from '../CreatedDate';
-import { ProfileImage } from '../ProfileImage';
+import { UserNickname } from './UserNickname';
+import { CreatedDate } from './CreatedDate';
+import { ProfileImage } from './ProfileImage';
 
-import { CommentProps } from '../../../libs/interfaces';
+import { CommentProps } from '../../libs/interfaces';
 /*
   commentId: number;
   articleId: number;

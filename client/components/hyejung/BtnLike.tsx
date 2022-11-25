@@ -12,7 +12,7 @@ import { client } from '../../libs/client';
 
 type BtnLikeProps = {
   isLiked: boolean;
-  answerId?: string;
+  answerId?: number;
 };
 export const BtnLike = ({ isLiked, answerId }: BtnLikeProps) => {
   // 좋아요 요청을 위한 articleId
@@ -26,12 +26,15 @@ export const BtnLike = ({ isLiked, answerId }: BtnLikeProps) => {
     if (answerId) {
       url = `/articles/${articleId}/answers/${answerId}/likes`;
     } else {
-      url = `/articles/${articleId}/like`;
+      url = `/articles/${articleId}/likes`;
     }
     client
       .post(url)
       .then((res) => setIsLike(res.data.isLiked))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        alert('로그인이 필요한 서비스입니다.');
+      });
   };
 
   return (

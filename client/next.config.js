@@ -7,7 +7,10 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['images.unsplash.com'],
+    domains: [
+      'images.unsplash.com',
+      'morakmorak.s3.ap-northeast-2.amazonaws.com',
+    ],
   },
   async rewrites() {
     return [
@@ -22,6 +25,10 @@ const nextConfig = {
       {
         source: `/api/auth/token`,
         destination: BASE_URL + '/auth/token',
+      },
+      {
+        source: '/api/:path*',
+        destination: BASE_URL + '/:path*',
       },
     ];
   },

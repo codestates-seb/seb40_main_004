@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-21
+ * 최근 수정일: 2022-11-25
  * 개요
    - 질문 상세 페이지입니다.
    - 각 질문에 대한 정보, 본문, 답변과 댓글이 렌더링됩니다.
@@ -11,29 +11,71 @@ import { GetServerSideProps, NextPage } from 'next';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
 import { QuestionContent } from '../../components/hyejung/QuestionContent';
-import { QusetionAnswer } from '../../components/hyejung/QuestionAnswer/QuestionAnswer';
-import { AnswerEditor } from '../../components/hyejung/QuestionAnswer/AnswerEditor';
+import { AnswerListContainer } from '../../components/hyejung/AnswerContainer';
+import { AnswerEditor } from '../../components/hyejung/AnswerEditor';
 import { client } from '../../libs/client';
-import { ArticleDetail } from '../../libs/interfaces';
-import { SWRConfig } from 'swr';
+import { AnswerListProps, ArticleDetail } from '../../libs/interfaces';
+import useSWR, { SWRConfig } from 'swr';
+import { useFetch } from '../../libs/useFetchSWR';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { articleAuthorIdAtom } from '../../atomsHJ';
+import { useEffect } from 'react';
+import { isLoginAtom } from '../../atomsYW';
 
-const QuestionDetail: NextPage = () => {
+type QuestionDetailProps = {
+  articleId: string;
+};
+
+const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
+  const { data } = useSWR(`/articles/${articleId}`);
+  const articleData = data.article;
+
+  const {
+    data: answers,
+    isLoading,
+    isError,
+  } = useFetch(`/api/articles/${articleId}/answers?page=1&size=5`);
+  const answerData = answers?.data;
+  const answerCount = answers?.pageInfo.totalElements;
+  if (isError) console.log(isError);
+
+  const setArticleAuthorId = useSetRecoilState(articleAuthorIdAtom);
+
+  useEffect(() => {
+    setArticleAuthorId(articleData.userInfo.userId.toString());
+  }, []);
+
   return (
     <>
       <Header />
-      <main className="max-w-[1280px] mx-auto min-h-[80vh] bg-white p-[60px] ">
+      <main className="max-w-[900px] mx-auto min-h-[80vh] bg-white p-[60px] shadow-sm border-[1px] border-gray-200">
         <QuestionContent />
-
         <section className="flex w-full text-lg sm:text-xl space-x-2 items-center">
-          <h2 className="text-main-yellow font-semibold text-2xl sm:text-3xl">
-            A.
-          </h2>
-          <h2>1개의 답변이 달렸습니다.</h2>
+          {answerCount ? (
+            <>
+              <div className="flex mt-10 space-x-2">
+                <h2 className="text-main-yellow font-semibold text-xl sm:text-2xl">
+                  A.
+                </h2>
+                <h2 className="font-semibold text-xl sm:text-2xl">
+                  {answerCount} 개의 답변이 달렸습니다.
+                </h2>
+              </div>
+            </>
+          ) : (
+            <div className="text-center">Loading...</div>
+          )}
         </section>
-        {/* <QusetionAnswer /> */}
-        <article className="flex justify-center mt-5">
-          <button>더보기</button>
-        </article>
+        {answerData || !isLoading ? (
+          <AnswerListContainer
+            initialAnswers={answerData}
+            totalPages={answers.pageInfo.totalPages}
+          />
+        ) : (
+          <div className="flex justify-center my-20 text-main-gray">
+            아직 작성된 답변이 없네요...🥲
+          </div>
+        )}
         <article className="mt-10 border-b">
           <h2 className="text-xl sm:text-2xl font-bold pb-2">
             ✨ 당신의 지식을 공유해주세요!
@@ -46,35 +88,37 @@ const QuestionDetail: NextPage = () => {
   );
 };
 
-const Page: NextPage<{ article: ArticleDetail; id: string }> = ({
-  article,
-  id,
-}) => {
+const Page: NextPage<{
+  article: ArticleDetail;
+  id: string;
+  answer?: AnswerListProps | null;
+}> = ({ article, id }) => {
+  const keyArticle = `/articles/${id}`;
   return (
-    // 이 페이지 안에서 사용할 article 데이터를 캐시 초기값으로 설정합니다.
-    // /articles 도 마찬가지로 추후 /articles/{id} 로 수정합니다.
+    // 질문 본문에 대한 캐시 초기값 설정
     <SWRConfig
       value={{
         fallback: {
-          '/articles': {
+          [keyArticle]: {
             article,
           },
         },
       }}
     >
-      <QuestionDetail />
+      <QuestionDetail articleId={id} />
     </SWRConfig>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // 추후 api를 동적으로 요청할 경우 이 id를 /articles/{id} 와 같이 작성합니당~
   const id = ctx.params?.articleId;
-  const response = await client.get('/articles');
-  const article = response.data;
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  // 질문 본문 요청
+  const resArticle = await client.get(`${BASE_URL}/articles/${id}`);
+  const article = resArticle.data;
 
   // article 데이터가 존재하지 않으면 일단 404 페이지로 이동
-  // (destination은 임시로 작성했습니다.^_^)
   if (!article) {
     return {
       redirect: {
