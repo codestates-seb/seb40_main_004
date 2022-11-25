@@ -7,11 +7,18 @@
 import { NextPage } from 'next';
 import { Footer } from '../components/common/Footer';
 import { Header } from '../components/common/Header';
-import { Calendar } from '../components/yeonwoo/Calendar';
 import { CarouselMain } from '../components/yeonwoo/CarouselMain';
 import { CheerUp } from '../components/yeonwoo/CheerUp';
 import { HallOfFame } from '../components/yeonwoo/HallOfFame';
 import { ListLately } from '../components/yeonwoo/ListLately';
+import dynamic from 'next/dynamic';
+
+const Calendar = dynamic(
+  () => import('../components/yeonwoo/Calendar').then((mod) => mod.Calendar),
+  {
+    ssr: false,
+  },
+);
 
 const Home: NextPage = () => {
   return (
