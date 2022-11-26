@@ -2,10 +2,8 @@ package com.morakmorak.morak_back_end.service;
 
 import com.morakmorak.morak_back_end.domain.NotificationGenerator;
 import com.morakmorak.morak_back_end.domain.PointCalculator;
-import com.morakmorak.morak_back_end.dto.AnswerDto;
-import com.morakmorak.morak_back_end.dto.UserDto;
+import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.dto.ResponseMultiplePaging;
 import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.File;
@@ -41,9 +39,8 @@ public class AnswerService {
     private final AnswerMapper answerMapper;
     private final NotificationRepository notificationRepository;
     private final PointCalculator pointCalculator;
-
-    private int size = 5;
-    private int page = 0;
+    int page = 0;
+    int size = 5;
 
     public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> postAnswer(Long articleId, Long userId, Answer answerNotSaved, List<File> fileList) throws Exception {
         User verifiedUser = userService.findVerifiedUserById(userId);
@@ -107,6 +104,7 @@ public class AnswerService {
     public Answer findVerifiedAnswerById(Long answerId) {
         return answerRepository.findById(answerId).orElseThrow(() -> new BusinessLogicException(ErrorCode.ANSWER_NOT_FOUND));
     }
+
     public AnswerDto.ResponseAnswerLike pressLikeButton(Long answerId, UserDto.UserInfo userInfo) {
 
         Optional.ofNullable(userInfo).orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
@@ -159,4 +157,20 @@ public class AnswerService {
         });
     }
 
+    public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> readAllAnswersForUser(Long articleId, Long userId, int page, int size) {
+        User verifiedUser = userService.findVerifiedUserById(userId);
+        Article verifiedArticle = articleService.findVerifiedArticle(articleId);
+        Page<Answer> answersInPage = getAllAnswers(articleId, page, size);
+        List<AnswerDto.ResponseListTypeAnswer> answers =
+                answersInPage.getContent().stream().map(answer -> {
+                            Boolean isPicked = answer.getIsPicked();
+                            Boolean isLiked = answerLikeRepository.checkUserLiked(userId, answer.getId()).isPresent();
+                            Integer answerLikeCount = answer.getAnswerLike().size();
+                            CommentDto.Response commentPreview = CommentDto.Response.previewOfAnswer(answer.getComments());
+                            Integer commentCount = answer.getComments().size();
+                            return answerMapper.answerToResponseListTypeAnswer(answer, isPicked, isLiked, answerLikeCount, commentPreview, commentCount);
+                        }
+                ).collect(Collectors.toList());
+        return new ResponseMultiplePaging<>(answers, answersInPage);
+    }
 }

@@ -60,17 +60,21 @@ public class AnswerController {
 
     @GetMapping("/answers")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> getAllAnswers(@Positive @RequestParam(value = "page", defaultValue = "0") int page,
+    public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> getAllAnswers(@Positive @RequestParam(value = "page", defaultValue = "1") int page,
                                                                                   @Positive @RequestParam(value = "size", defaultValue = "5") int size,
-                                                                                  @PathVariable("article-id") Long articleId) {
+                                                                                  @PathVariable("article-id") Long articleId,
+                                                                                  @RequestUser UserDto.UserInfo user) {
+        if (user != null) {
+            return answerService.readAllAnswersForUser(articleId,user.getId(),page-1,size);
+        }
         return answerService.readAllAnswers(articleId,page-1,size);
     }
 
     @DeleteMapping("/answers/{answer-id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> deleteAnswer(@PathVariable("article-id") Long articleId,
-                                                                              @PathVariable("answer-id") Long answerId,
-                                                                              @RequestUser UserDto.UserInfo user) {
+                                                                                 @PathVariable("answer-id") Long answerId,
+                                                                                 @RequestUser UserDto.UserInfo user) {
         return answerService.deleteAnswer(articleId, answerId, user.getId());
     }
 
@@ -82,5 +86,4 @@ public class AnswerController {
 
         return new ResponseEntity(responseAnswerLike, HttpStatus.OK);
     }
-
 }
