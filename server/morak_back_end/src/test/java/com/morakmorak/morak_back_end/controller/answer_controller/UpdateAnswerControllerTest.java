@@ -180,7 +180,7 @@ public class UpdateAnswerControllerTest {
         perform.andExpect(status().isConflict())
                 .andDo(
                         document(
-                                "task update answer failed because the requested Answer is already picked.",
+                                "답변 수정 실패_채택된 답변_409",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(

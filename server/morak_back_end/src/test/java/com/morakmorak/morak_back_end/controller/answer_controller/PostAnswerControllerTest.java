@@ -59,7 +59,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 @Import(SecurityTestConfig.class)
-public class AnswerControllerTest {
+public class PostAnswerControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -95,7 +95,7 @@ public class AnswerControllerTest {
         perform.andExpect(status().isConflict())
                 .andDo(
                         document(
-                                "task post answer failed caused by invalid article category",
+                                "답변등록실패_잘못된 카테고리_409",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
@@ -153,7 +153,7 @@ public class AnswerControllerTest {
         perform.andExpect(status().isCreated())
                 .andDo(
                         document(
-                                "task post answer succeeded",
+                                "답변 등록 성공_201",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
@@ -228,7 +228,7 @@ public class AnswerControllerTest {
                 .andExpect(jsonPath("$.isLiked").value(true))
                 .andExpect(jsonPath("$.likeCount").value(1))
                 .andDo(document(
-                        "다변글_좋아요_처음누를때_성공_200",
+                        "답변_좋아요_처음누를때_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
