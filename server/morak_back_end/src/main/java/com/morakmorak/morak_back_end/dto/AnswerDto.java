@@ -102,11 +102,11 @@ public class AnswerDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ResponseUserAnswerList {
         private Long answerId;
-        private UserDto.ResponseSimpleUserDto userInfo;
         private String content;
         private Boolean isPicked;
         private Integer answerLikeCount;
         private Integer commentCount;
         private LocalDateTime createdAt;
+        private UserDto.ResponseSimpleUserDto userInfo;
     }
 }

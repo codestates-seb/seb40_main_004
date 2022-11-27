@@ -54,7 +54,7 @@ public class AnswerService {
 
             verifiedUser.addPoint(savedAnswer, pointCalculator);
             notificationRepository.save(notification);
-            return readAllAnswers(articleId, page, size);
+            return readAllAnswersForUser(articleId, userId, page, size);
         } else {
             throw new BusinessLogicException(ErrorCode.UNABLE_TO_ANSWER);
         }
@@ -70,17 +70,18 @@ public class AnswerService {
                 && verifiedArticle.statusIsPosting()) {
             attachFilesToAnswer(verifiedAnswer, answerChanges.getFiles());
             verifiedAnswer.updateAnswer(answerChanges);
-            return readAllAnswers(articleId, page, size);
+            return readAllAnswersForUser(articleId, userId, page, size);
         } else {
             throw new BusinessLogicException(ErrorCode.UNABLE_TO_ANSWER);
         }
     }
 
 
-    public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> readAllAnswers(Long articleId, int page, int size) {
+    public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> readAllAnswers(Long articleId,  int page, int size) {
         Page<Answer> answersInPage = getAllAnswers(articleId, page, size);
         List<AnswerDto.ResponseListTypeAnswer> answers =
                 answersInPage.getContent().stream().map(AnswerDto.ResponseListTypeAnswer::of).collect(Collectors.toList());
+        List<Answer> answersP = answersInPage.getContent();
         return new ResponseMultiplePaging<>(answers, answersInPage);
     }
 
@@ -95,7 +96,7 @@ public class AnswerService {
             answerRepository.deleteById(answerId);
 
             verifiedUser.minusPoint(verifiedAnswer, pointCalculator);
-            return readAllAnswers(articleId, page, size);
+            return readAllAnswersForUser(articleId, userId, page, size);
         } else {
             throw new BusinessLogicException(ErrorCode.UNABLE_TO_ANSWER);
         }
@@ -158,8 +159,11 @@ public class AnswerService {
     }
 
     public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> readAllAnswersForUser(Long articleId, Long userId, int page, int size) {
-        User verifiedUser = userService.findVerifiedUserById(userId);
-        Article verifiedArticle = articleService.findVerifiedArticle(articleId);
+        if (userId == -1L) {
+            return readAllAnswers(articleId, page, size);
+        }
+        userService.findVerifiedUserById(userId);
+        articleService.findVerifiedArticle(articleId);
         Page<Answer> answersInPage = getAllAnswers(articleId, page, size);
         List<AnswerDto.ResponseListTypeAnswer> answers =
                 answersInPage.getContent().stream().map(answer -> {
