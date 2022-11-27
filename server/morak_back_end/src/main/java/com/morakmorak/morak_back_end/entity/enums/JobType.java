@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public enum JobType {
     DEVELOPER,
+    JOB_SEEKER,
+    NON_NORMAL,
     PM,
     DESIGNER,
 }
