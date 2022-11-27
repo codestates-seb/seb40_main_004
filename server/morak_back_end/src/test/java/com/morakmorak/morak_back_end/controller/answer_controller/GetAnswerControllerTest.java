@@ -7,6 +7,7 @@ import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.AnswerService;
 import com.morakmorak.morak_back_end.service.FileService;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -34,33 +36,35 @@ import java.util.List;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.TestConstants.NOW_TIME;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest({AnswerController.class, ExceptionController.class})
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 @Import(SecurityTestConfig.class)
+@WithMockUser
 public class GetAnswerControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
     @MockBean
     AnswerService answerService;
     @MockBean
     FileService fileService;
+    @MockBean
+    AnswerMapper answerMapper;
 
     UserDto.ResponseSimpleUserDto dtoUserInfo;
+
     AvatarDto.SimpleResponse dtoAvatar;
 
     @BeforeEach
@@ -73,12 +77,11 @@ public class GetAnswerControllerTest {
                 AvatarDto.SimpleResponse.builder().avatarId(1L)
                         .remotePath("remotePath").filename("fileName").build();
     }
+
     @Test
     @DisplayName("비로그인 유저의 유효한 답변 조회 요청인 경우 200 ok 반환")
     void getAnswer_success_1() throws Exception {
         //given
-
-
         List<AnswerDto.ResponseListTypeAnswer> dtoResponseListTypeAnswer = new ArrayList<>();
         AnswerDto.ResponseListTypeAnswer responseListTypeAnswer = AnswerDto.ResponseListTypeAnswer.builder()
                 .answerId(1L)
@@ -86,25 +89,30 @@ public class GetAnswerControllerTest {
                 .userInfo(dtoUserInfo)
                 .avatar(dtoAvatar)
                 .isPicked(false)
+                .isLiked(true)
                 .content("contentcontentcontentcontentcontent")
                 .commentCount(10)
                 .commentPreview(CommentDto.Response.builder().commentId(1L).answerId(1L).content("멋진 코딩실력을 가졌군요! 부럽다!").avatar(dtoAvatar).userInfo(dtoUserInfo).createdAt(NOW_TIME).lastModifiedAt(NOW_TIME).build())
                 .createdAt(NOW_TIME)
                 .build();
+
         dtoResponseListTypeAnswer.add(responseListTypeAnswer);
+
         List<Answer> answers = new ArrayList<>();
         answers.add(Answer.builder().id(1L).build());
-        PageRequest pageable = PageRequest.of(0, 1, Sort.by("answerId").descending());
-        Page<Answer> answerInPage = new PageImpl<>(answers, pageable, 1L);
+        PageRequest pageable = PageRequest.of(0, 5,Sort.by("createdAt").descending());
+        Page<Answer> answerInPage = new PageImpl<>(answers, pageable, 1);
+
         ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> answerResponseMultiplePaging =
                 new ResponseMultiplePaging<>(dtoResponseListTypeAnswer, answerInPage);
-        BDDMockito.given(answerService.readAllAnswers(any(),anyInt(),anyInt())).willReturn(answerResponseMultiplePaging);
+        BDDMockito.given(answerService.readAllAnswers(anyLong(), anyInt(), anyInt())).willReturn(answerResponseMultiplePaging);
+        BDDMockito.given(answerService.readAllAnswersForUser(anyLong(), any(), anyInt(), anyInt())).willReturn(answerResponseMultiplePaging);
 
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/1/answers")
-                        .param("page","1")
-                        .param("size","5")
+                        .param("page", "1")
+                        .param("size", "5")
         );
 
         //then
@@ -121,6 +129,8 @@ public class GetAnswerControllerTest {
                                                 fieldWithPath("data[].content").type(JsonFieldType.STRING).description("답변 내용입니다."),
                                                 fieldWithPath("data[].answerLikeCount").type(JsonFieldType.NUMBER).description("답변의 좋아요수입니다."),
                                                 fieldWithPath("data[].isPicked").type(JsonFieldType.BOOLEAN).description("답변이 채택 되었다면 true를 반환합니다."),
+                                                fieldWithPath("data[].isLiked").type(JsonFieldType.BOOLEAN).description("유저가 좋아요한 답변이라면 true를 반환합니다."),
+                                                fieldWithPath("data[].isPicked").type(JsonFieldType.NULL).description("비로그인 유저에게는 좋아요 여부가 조회되지 않습니다."),
                                                 fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("답변의 댓글 갯수입니다."),
                                                 fieldWithPath("data[].commentPreview.commentId").type(JsonFieldType.NUMBER).description("답변의 댓글 식별자입니다."),
                                                 fieldWithPath("data[].commentPreview.answerId").type(JsonFieldType.NUMBER).description("답변의 댓글이 소속된 답변입니다."),
@@ -156,7 +166,7 @@ public class GetAnswerControllerTest {
 
     @Test
     @DisplayName("회원의 유효한 답변 조회 요청 시 200 반환")
-    void getAnswers_success_2() throws Exception {
+    void getAnswers_ForUser_success_2() throws Exception {
         //회원이 보내는 요청
         //받는 답변 하나는 좋아요 하나는 안좋아요
         List<AnswerDto.ResponseListTypeAnswer> dtoAnswerList = new ArrayList<>();
@@ -194,18 +204,17 @@ public class GetAnswerControllerTest {
         answers.add(Answer.builder().id(1L).build());
 
         PageRequest pageable = PageRequest.of(0, 5, Sort.by("createdAt").descending());
-        Page<Answer> answerInPage = new PageImpl<>(answers, pageable,2 );
-
+        Page<Answer> answerInPage = new PageImpl<>(answers, pageable, 2);
         ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> answerResponseMultiplePaging =
                 new ResponseMultiplePaging<>(dtoAnswerList, answerInPage);
 
-        BDDMockito.given(answerService.readAllAnswersForUser(any(),any(),anyInt(),anyInt())).willReturn(answerResponseMultiplePaging);
-
+        BDDMockito.given(answerMapper.answerToResponseListTypeAnswer(any(), anyBoolean(), anyBoolean(), anyInt(),any(),anyInt())).willReturn(responseLiked);
+        BDDMockito.given(answerService.readAllAnswersForUser(any(), any(), anyInt(), anyInt())).willReturn(answerResponseMultiplePaging);
         ResultActions perform = mockMvc.perform(
                 get("/articles/1/answers")
-                        .param("page","1")
-                        .param("size","5")
-                        .header(JWT_HEADER,ACCESS_TOKEN)
+                        .param("page", "1")
+                        .param("size", "5")
+                        .header(JWT_HEADER, ACCESS_TOKEN)
         );
 
         //then

@@ -4,13 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
-import com.morakmorak.morak_back_end.repository.BookmarkRepository;
 import com.morakmorak.morak_back_end.repository.CategoryRepository;
 import com.morakmorak.morak_back_end.repository.FileRepository;
-import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
-import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
-import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.ArticleService;
 import org.junit.jupiter.api.DisplayName;
@@ -54,13 +50,7 @@ public class GetAnswersTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ArticleRepository articleRepository;
-    @Autowired
-    private BookmarkRepository bookmarkRepository;
-    @Autowired
-    private AnswerRepository answerRepository;
+
     @PersistenceContext
     EntityManager em;
 
@@ -109,6 +99,8 @@ public class GetAnswersTest {
         user.getAnswers().add(answer);
         article.getAnswers().add(answer);
         em.persist(answer);
+        em.persist(user);
+        List<Answer> list = user.getAnswers();
 
         //when
         ResultActions perform = mockMvc.perform(
