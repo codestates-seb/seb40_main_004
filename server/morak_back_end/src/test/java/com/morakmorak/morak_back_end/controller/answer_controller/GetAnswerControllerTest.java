@@ -37,11 +37,15 @@ import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TO
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.TestConstants.NOW_TIME;
 import static org.mockito.ArgumentMatchers.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest({AnswerController.class, ExceptionController.class})
@@ -100,7 +104,7 @@ public class GetAnswerControllerTest {
 
         List<Answer> answers = new ArrayList<>();
         answers.add(Answer.builder().id(1L).build());
-        PageRequest pageable = PageRequest.of(0, 5,Sort.by("createdAt").descending());
+        PageRequest pageable = PageRequest.of(0, 5, Sort.by("createdAt").descending());
         Page<Answer> answerInPage = new PageImpl<>(answers, pageable, 1);
 
         ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> answerResponseMultiplePaging =
@@ -110,7 +114,7 @@ public class GetAnswerControllerTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                get("/articles/1/answers")
+                get("/articles/{article-id}/answers", 1L)
                         .param("page", "1")
                         .param("size", "5")
         );
@@ -122,6 +126,9 @@ public class GetAnswerControllerTest {
                                 "비회원_답변 조회 성공_200",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("article-id").description("게시글의 아이디 입니다.")
+                                ),
                                 responseFields(
                                         List.of(
                                                 fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("답변을 리스트 형태로 보여줍니다."),
@@ -129,8 +136,7 @@ public class GetAnswerControllerTest {
                                                 fieldWithPath("data[].content").type(JsonFieldType.STRING).description("답변 내용입니다."),
                                                 fieldWithPath("data[].answerLikeCount").type(JsonFieldType.NUMBER).description("답변의 좋아요수입니다."),
                                                 fieldWithPath("data[].isPicked").type(JsonFieldType.BOOLEAN).description("답변이 채택 되었다면 true를 반환합니다."),
-                                                fieldWithPath("data[].isLiked").type(JsonFieldType.BOOLEAN).description("유저가 좋아요한 답변이라면 true를 반환합니다."),
-                                                fieldWithPath("data[].isPicked").type(JsonFieldType.NULL).description("비로그인 유저에게는 좋아요 여부가 조회되지 않습니다."),
+                                                fieldWithPath("data[].isLiked").type(JsonFieldType.BOOLEAN).description("비로그인 유저에게는 좋아요가 false로 반환됩니다."),
                                                 fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("답변의 댓글 갯수입니다."),
                                                 fieldWithPath("data[].commentPreview.commentId").type(JsonFieldType.NUMBER).description("답변의 댓글 식별자입니다."),
                                                 fieldWithPath("data[].commentPreview.answerId").type(JsonFieldType.NUMBER).description("답변의 댓글이 소속된 답변입니다."),
@@ -208,10 +214,10 @@ public class GetAnswerControllerTest {
         ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> answerResponseMultiplePaging =
                 new ResponseMultiplePaging<>(dtoAnswerList, answerInPage);
 
-        BDDMockito.given(answerMapper.answerToResponseListTypeAnswer(any(), anyBoolean(), anyBoolean(), anyInt(),any(),anyInt())).willReturn(responseLiked);
+        BDDMockito.given(answerMapper.answerToResponseListTypeAnswer(any(), anyBoolean(), anyBoolean(), anyInt(), any(), anyInt())).willReturn(responseLiked);
         BDDMockito.given(answerService.readAllAnswersForUser(any(), any(), anyInt(), anyInt())).willReturn(answerResponseMultiplePaging);
         ResultActions perform = mockMvc.perform(
-                get("/articles/1/answers")
+                get("/articles/{article-id}/answers", 1L)
                         .param("page", "1")
                         .param("size", "5")
                         .header(JWT_HEADER, ACCESS_TOKEN)
@@ -224,6 +230,12 @@ public class GetAnswerControllerTest {
                                 "회원_답변 조회 성공_200",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
+                                requestHeaders(
+                                        headerWithName(JWT_HEADER).description("access token")
+                                ),
+                                pathParameters(
+                                        parameterWithName("article-id").description("게시글의 아이디입니다.")
+                                ),
                                 responseFields(
                                         List.of(
                                                 fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("답변을 리스트 형태로 보여줍니다."),
