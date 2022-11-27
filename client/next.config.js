@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 
-const BASE_URL = 'https://b3a0-39-116-11-157.jp.ngrok.io';
+// const BASE_URL = 'https://b3a0-39-116-11-157.jp.ngrok.io';
+const BASE_URL = 'http://13.125.113.82:8080';
 
 const withPlugins = require('next-compose-plugins');
 const nextConfig = {
