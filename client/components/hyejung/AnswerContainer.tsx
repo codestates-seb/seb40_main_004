@@ -38,6 +38,8 @@ export const AnswerList = ({ index }: AnswerListProps) => {
   } = useFetch(`/api/articles/${articleId}/answers?page=${index}&size=5`);
   const answerData = answers?.data;
 
+  if (isError) alert(isError);
+
   if (!isLoading) {
     return answerData.map((answer: Answer) => (
       <AnswerContent
@@ -45,6 +47,7 @@ export const AnswerList = ({ index }: AnswerListProps) => {
         answer={answer}
         userId={userId}
         isClosed={isClosed}
+        pageInfo={index}
       />
     ));
   } else {
@@ -71,7 +74,7 @@ export const AnswerListContainer = ({
     <>
       {pages}
       {totalPages + 1 === cnt ? null : (
-        <article className="flex justify-center my-16">
+        <article className="flex justify-center">
           <button onClick={() => setCnt(cnt + 1)}>더보기</button>
         </article>
       )}

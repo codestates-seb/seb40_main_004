@@ -9,9 +9,9 @@ import { BtnLike } from './BtnLike';
 import { CommentContainer } from './CommentList';
 import { Answer } from '../../libs/interfaces';
 import { elapsedTime } from '../../libs/elapsedTime';
-import { useEffect, useRef } from 'react';
-import { useRecoilValue } from 'recoil';
-import { articleAuthorIdAtom } from '../../atomsHJ';
+import { useEffect, useRef, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { articleAuthorIdAtom, isAnswerEditAtom } from '../../atomsHJ';
 import { client } from '../../libs/client';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
@@ -24,15 +24,30 @@ export type AnswerProps = {
   answer: Answer;
   userId: number;
   isClosed: boolean;
+  pageInfo: number;
 };
 
 // 답변 컴포넌트
-export const AnswerContent = ({ answer, userId, isClosed }: AnswerProps) => {
+export const AnswerContent = ({
+  answer,
+  userId,
+  isClosed,
+  pageInfo,
+}: AnswerProps) => {
   const router = useRouter();
   const { articleId } = router.query;
 
+  const answerElement = useRef<null | HTMLDivElement>(null);
+  const isAnswerEdit = useRecoilValue(isAnswerEditAtom);
+
   const currUserId = localStorage.getItem('userId');
   const articleAuthorId = useRecoilValue(articleAuthorIdAtom);
+  useEffect(() => {
+    if (isAnswerEdit.answerId === answer.answerId && answerElement.current)
+      answerElement.current.scrollIntoView({ behavior: 'smooth' });
+  }, [isAnswerEdit]);
+
+  const setIsAnswerEdit = useSetRecoilState(isAnswerEditAtom);
 
   const onDelete = () => {
     if (confirm('정말 답변을 삭제하시겠습니까..?')) {
@@ -49,9 +64,21 @@ export const AnswerContent = ({ answer, userId, isClosed }: AnswerProps) => {
     }
   };
 
+  const onEdit = () => {
+    setIsAnswerEdit({
+      isEdit: true,
+      answerId: answer.answerId,
+      answerPage: pageInfo,
+      payload: answer.content,
+    });
+  };
+
   return (
-    <main className="flex flex-col w-full my-12 bg-[#FCFCFC] border rounded-[20px]">
-      <section className="flex pb-3 items-center justify-between bg-main-gray p-4 rounded-t-[20px] border-b">
+    <main
+      className="flex flex-col w-full mb-12 bg-[#FCFCFC] border rounded-[20px]"
+      ref={answerElement}
+    >
+      <section className="flex items-center justify-between bg-main-gray px-4 pt-1.5 sm:px-4 sm:pb-2 sm:pt-3 rounded-t-[20px] border-b">
         <div className="flex items-center space-x-2 text-white">
           <ProfileImage src={answer.avatar.remotePath || tempSrc} />
           <span className="text-sm sm:text-xl font-bold">
@@ -73,7 +100,7 @@ export const AnswerContent = ({ answer, userId, isClosed }: AnswerProps) => {
           <AnswerMainText>{answer.content}</AnswerMainText>
           {answer.userInfo.userId.toString() === currUserId ? (
             <article className="space-x-2 text-sm ml-auto">
-              <button>수정</button>
+              <button onClick={onEdit}>수정</button>
               <button onClick={onDelete}>삭제</button>
             </article>
           ) : null}
