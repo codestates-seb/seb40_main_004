@@ -84,7 +84,7 @@ public class UpdateAnswerTest {
         Answer answer = Answer.builder().user(savedUser).content("유효한 15자 이상의 기나긴 내용입니다 아하하").build();
         savedUser.getAnswers().add(answer);
         answerRepository.save(answer);
-        this.savedAnswer = answerRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
+        this.savedAnswer = answerRepository.findTopByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
         this.savedFile = fileRepository.findFileByLocalPath("1").orElseThrow(() -> new AssertionError());
         this.accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST, NICKNAME1);
         articleRepository.save(Article.builder().user(savedUser).category(info).articleStatus(ArticleStatus.POSTING).isClosed(false).build());

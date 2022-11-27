@@ -59,7 +59,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureRestDocs
 @Import(SecurityTestConfig.class)
-public class AnswerControllerTest {
+public class PostAnswerControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -95,7 +95,7 @@ public class AnswerControllerTest {
         perform.andExpect(status().isConflict())
                 .andDo(
                         document(
-                                "task post answer failed caused by invalid article category",
+                                "답변등록실패_잘못된 카테고리_409",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
@@ -128,7 +128,8 @@ public class AnswerControllerTest {
                 .answerLikeCount(3)
                 .userInfo(dtoUserInfo)
                 .avatar(dtoAvatar)
-                .isPicked(false)
+                .isPicked(true)
+                .isLiked(false)
                 .content("contentcontentcontentcontentcontent")
                 .commentCount(10)
                 .commentPreview(CommentDto.Response.builder().commentId(1L).answerId(1L).content("멋진 코딩실력을 가졌군요! 부럽다!").avatar(dtoAvatar).userInfo(dtoUserInfo).createdAt(NOW_TIME).lastModifiedAt(NOW_TIME).build())
@@ -153,7 +154,7 @@ public class AnswerControllerTest {
         perform.andExpect(status().isCreated())
                 .andDo(
                         document(
-                                "task post answer succeeded",
+                                "답변 등록 성공_201",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestHeaders(
@@ -170,6 +171,7 @@ public class AnswerControllerTest {
                                                 fieldWithPath("data[].content").type(JsonFieldType.STRING).description("답변 내용입니다."),
                                                 fieldWithPath("data[].answerLikeCount").type(JsonFieldType.NUMBER).description("답변의 좋아요수입니다."),
                                                 fieldWithPath("data[].isPicked").type(JsonFieldType.BOOLEAN).description("답변이 채택 되었다면 true를 반환합니다."),
+                                                fieldWithPath("data[].isLiked").type(JsonFieldType.BOOLEAN).description("유저가 좋아요한 답변이라면 true를 반환합니다."),
                                                 fieldWithPath("data[].commentCount").type(JsonFieldType.NUMBER).description("답변의 댓글 갯수입니다."),
                                                 fieldWithPath("data[].commentPreview.commentId").type(JsonFieldType.NUMBER).description("답변의 댓글 식별자입니다."),
                                                 fieldWithPath("data[].commentPreview.answerId").type(JsonFieldType.NUMBER).description("답변의 댓글이 소속된 답변입니다."),
@@ -228,7 +230,7 @@ public class AnswerControllerTest {
                 .andExpect(jsonPath("$.isLiked").value(true))
                 .andExpect(jsonPath("$.likeCount").value(1))
                 .andDo(document(
-                        "다변글_좋아요_처음누를때_성공_200",
+                        "답변_좋아요_처음누를때_성공_200",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
