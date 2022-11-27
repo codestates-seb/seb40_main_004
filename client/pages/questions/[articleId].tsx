@@ -61,13 +61,13 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
   return (
     <>
       <Header />
-      <main className="max-w-[900px] mx-auto min-h-[80vh] bg-white p-[60px] shadow-sm border-[1px] border-gray-200">
+      <main className="max-w-[900px] mx-auto min-h-[80vh] bg-white p-[45px] sm:p-[60px] shadow-sm border-[1px] border-gray-200">
         <BtnTopDown />
         <QuestionContent />
         <section className="flex w-full text-lg sm:text-xl space-x-2 items-center">
           {answerCount ? (
-            <>
-              <div className="flex mt-10 space-x-2" ref={answerCountEl}>
+            <div className="flex flex-col w-full">
+              <div className="flex my-8 space-x-2" ref={answerCountEl}>
                 <h2 className="text-main-yellow font-semibold text-xl sm:text-2xl">
                   A.
                 </h2>
@@ -75,21 +75,18 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
                   {answerCount} 개의 답변이 달렸습니다.
                 </h2>
               </div>
-            </>
+              <AnswerListContainer
+                initialAnswers={answerData}
+                totalPages={answers.pageInfo.totalPages}
+              />
+            </div>
           ) : (
-            <div className="text-center">Loading...</div>
+            <div className="flex justify-center my-20 text-main-gray w-full text-base">
+              아직 작성된 답변이 없네요...🥲
+            </div>
           )}
         </section>
-        {answerData || !isLoading ? (
-          <AnswerListContainer
-            initialAnswers={answerData}
-            totalPages={answers.pageInfo.totalPages}
-          />
-        ) : (
-          <div className="flex justify-center my-20 text-main-gray">
-            아직 작성된 답변이 없네요...🥲
-          </div>
-        )}
+
         <article className="mt-10 border-b">
           <h2 className="text-xl sm:text-2xl font-bold pb-2">
             ✨ 당신의 지식을 공유해주세요!
