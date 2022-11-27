@@ -78,6 +78,7 @@ public class AnswerDto {
                     .content(answer.getContent())
                     .createdAt(answer.getCreatedAt())
                     .isPicked(answer.getIsPicked())
+                    .isLiked(false)
                     .answerLikeCount(answer.getAnswerLike().size())
                     .commentPreview(CommentDto.Response.previewOfAnswer(answer.getComments()))
                     .commentCount(answer.getComments().size())

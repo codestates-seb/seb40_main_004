@@ -114,6 +114,7 @@ public class GetAnswersTest {
                 .andExpect(jsonPath("$.data[0].content").exists())
                 .andExpect(jsonPath("$.data[0].answerLikeCount").exists())
                 .andExpect(jsonPath("$.data[0].isPicked").value(false))
+                .andExpect(jsonPath("$.data[0].isLiked").value(false))
                 .andExpect(jsonPath("$.data[0].commentCount").value(0))
                 .andExpect(jsonPath("$.data[0].createdAt").exists())
                 .andExpect(jsonPath("$.data[0].userInfo.userId").value(user.getId().intValue()))
