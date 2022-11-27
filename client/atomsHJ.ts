@@ -37,3 +37,13 @@ export const articleAuthorIdAtom = atom({
   key: 'articleAuthorId',
   default: '',
 });
+
+export const isAnswerEditAtom = atom({
+  key: 'isAnswerEdit',
+  default: {
+    isEdit: false,
+    answerId: 0,
+    answerPage: 0,
+    payload: '',
+  },
+});
