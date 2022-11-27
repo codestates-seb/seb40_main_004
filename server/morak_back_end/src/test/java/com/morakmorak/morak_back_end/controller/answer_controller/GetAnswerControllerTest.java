@@ -37,11 +37,15 @@ import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TO
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.TestConstants.NOW_TIME;
 import static org.mockito.ArgumentMatchers.*;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest({AnswerController.class, ExceptionController.class})
@@ -122,6 +126,9 @@ public class GetAnswerControllerTest {
                                 "비회원_답변 조회 성공_200",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("article-id").description("게시글의 아이디 입니다.")
+                                ),
                                 responseFields(
                                         List.of(
                                                 fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("답변을 리스트 형태로 보여줍니다."),
@@ -224,6 +231,12 @@ public class GetAnswerControllerTest {
                                 "회원_답변 조회 성공_200",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
+                                requestHeaders(
+                                        headerWithName(JWT_HEADER).description("access token")
+                                ),
+                                pathParameters(
+                                        parameterWithName("article-id").description("게시글의 아이디입니다.")
+                                ),
                                 responseFields(
                                         List.of(
                                                 fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("답변을 리스트 형태로 보여줍니다."),
