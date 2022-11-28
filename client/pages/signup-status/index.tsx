@@ -20,7 +20,12 @@ const selectStatus = () => {
   const onSelectedStatusClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     axios
-      .post(`/api/auth`, { email, authKey, password, nickname })
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/auth`, {
+        email,
+        authKey,
+        password,
+        nickname,
+      })
       .then((res) => console.log('res1', res))
       .catch((error) => console.error('error', error));
     router.push('/login');

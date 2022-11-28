@@ -29,7 +29,7 @@ export const LoginForm = () => {
   const router = useRouter();
   const onValid = ({ email, password }: LoginProps) => {
     axios
-      .post(`/api/auth/token`, {
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/auth/token`, {
         email,
         password,
       })

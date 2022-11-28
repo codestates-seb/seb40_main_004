@@ -26,9 +26,6 @@ export const SignUpForm = () => {
   const [email, setEmail] = useRecoilState(userEmailAtom);
   const [password, setPassword] = useRecoilState(userPassword);
   const [nickname, setNickName] = useRecoilState(userNickName);
-  // const setEmail = useSetRecoilState(userEmailAtom);
-  // const setPassword = useSetRecoilState(userPassword);
-  // const setNickName = useSetRecoilState(userNickName);
   const router = useRouter();
   const {
     register,
@@ -53,7 +50,7 @@ export const SignUpForm = () => {
     }
 
     axios
-      .post(`/api/auth/mail`, {
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/auth/mail`, {
         email,
         password,
         confirmPassword,

@@ -21,11 +21,10 @@ const AuthenticateNumber = () => {
   const email = useRecoilValue(userEmailAtom);
 
   const [authKey, setAuthKey] = useRecoilState(userAuthKey);
-  // const setAuthKey = useSetRecoilState(userAuthKey);
   const router = useRouter();
   const onValid = ({ authKey }: VerificationNumber) => {
     axios
-      .put(`/api/auth/mail`, { email, authKey })
+      .put(`${process.env.NEXT_PUBLIC_API_URL}/auth/mail`, { email, authKey })
       .then((res) => {
         console.log('res', res);
         setAuthKey(res.data.authKey);
