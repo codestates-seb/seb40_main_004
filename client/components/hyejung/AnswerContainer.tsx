@@ -1,14 +1,13 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-24
- * 최근 수정일: 2022-11-25
+ * 최근 수정일: 2022-11-28
  */
 
 import { useFetch } from '../../libs/useFetchSWR';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import { CommentContainer } from './CommentList';
 import { AnswerProps } from './AnswerContent';
 import { Answer } from '../../libs/interfaces';
 import { AnswerContent } from './AnswerContent';
@@ -27,9 +26,9 @@ export const AnswerList = ({ index }: AnswerListProps) => {
   const router = useRouter();
   const { articleId } = router.query;
 
-  const { data: articleData } = useSWR(`/articles/${articleId}`);
-  const userId = articleData.article.userInfo.userId;
-  const isClosed = articleData.article.isClosed;
+  const { data } = useSWR(`/articles/${articleId}`);
+  const article = data.article;
+  const isClosed = article.isClosed;
 
   const {
     data: answers,
@@ -45,7 +44,6 @@ export const AnswerList = ({ index }: AnswerListProps) => {
       <AnswerContent
         key={answer.answerId}
         answer={answer}
-        userId={userId}
         isClosed={isClosed}
         pageInfo={index}
       />
@@ -74,7 +72,7 @@ export const AnswerListContainer = ({
     <>
       {pages}
       {totalPages + 1 === cnt ? null : (
-        <article className="flex justify-center">
+        <article className="flex justify-center text-base">
           <button onClick={() => setCnt(cnt + 1)}>더보기</button>
         </article>
       )}

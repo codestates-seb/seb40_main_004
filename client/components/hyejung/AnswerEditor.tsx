@@ -1,10 +1,9 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-27
+ * 최근 수정일: 2022-11-28
  */
 import { useRouter } from 'next/router';
-
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -19,18 +18,21 @@ import { QuillEditor } from './QuillEditor';
 type FormValue = {
   content: string;
 };
-
 export const AnswerEditor = () => {
+  // 현재 게시글 id
   const router = useRouter();
   const { articleId } = router.query;
 
   const isAnswerPosted = useSetRecoilState(isAnswerPostedAtom);
-  const [isAnserEdit, setIsAnswerEdit] = useRecoilState(isAnswerEditAtom);
   const isLogin = useRecoilValue(isLoginAtom);
+  const [isAnserEdit, setIsAnswerEdit] = useRecoilState(isAnswerEditAtom);
+  const [fileIdList, setFileIdList] = useState<any>([]);
 
+  // 답변글 등록 후 업데이트(mutate)를 위해 캐시 데이터 요청
   const { data: currAnswers, mutate } = useFetch(
     `/api/articles/${articleId}/answers?page=1&size=5`,
   );
+
   const { register, handleSubmit, watch, setValue, trigger } =
     useForm<FormValue>({
       mode: 'onChange',
@@ -71,9 +73,11 @@ export const AnswerEditor = () => {
 
   // 데이터 요청 관련 함수
   const postAnswer = async (data: FormValue) => {
+    const content = data.content;
+    const payload = { content, fileIdList };
     const response = await client.post(
       `/api/articles/${articleId}/answers`,
-      data,
+      payload,
     );
     const newAnswers = response.data;
     mutate({ currAnswers, ...newAnswers }, { revalidate: false })
@@ -82,6 +86,7 @@ export const AnswerEditor = () => {
         isAnswerPosted(true);
         setValue('content', '');
         trigger('content');
+        setFileIdList([]);
       })
       .catch((err) => {
         console.log(err);
@@ -119,37 +124,49 @@ export const AnswerEditor = () => {
     alert(data.content?.message);
   };
 
-  // Quill 에디터 관련 코드
+  // Quill 에디터 & 이미지 업로드 관련 코드
   const quillRef = useRef<any>(null);
   const imageHandler = useCallback(async () => {
+    // 현재 입력창에 올라올 파일에 대해 어트리뷰트를 추가해줍니다.
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
     document.body.appendChild(input);
 
+    // 이미지 업로드 이벤트가 발생할 경우 아래 코드가 실행됩니다.
     input.click();
     input.onchange = async () => {
       if (input.files) {
+        // 올라온 파일을 blob 형태 객체로 추출합니다.
         const file = input.files[0];
 
-        // 서버로부터 받아온 s3 업로드용 url 과 fielId
-        const { preSignedUrl } = await getFileUrl();
-        // 해당 url 로 put 요청 보내기
+        // s3 이미지 업로드를 위한 코드
+        const { preSignedUrl, fileId } = await getFileUrl();
         await uploadImg(preSignedUrl, file);
-
         const imageUrl = preSignedUrl.split('png')[0] + 'png';
 
+        fileIdList.push({ fileId });
+        const newFiledIdList = fileIdList;
+        setFileIdList(newFiledIdList);
+
+        // 에디터 창에 이미지를 미리보기위한 코드입니다.0.5초 뒤 로드됩니다.
+        // s3 업로드 후 딜레이가 있어서 바로 조회시 403 오류가 발생합니다.
         const range = quillRef.current.getEditorSelection();
         setTimeout(() => {
           quillRef.current
             .getEditor()
             .insertEmbed(range.index, 'image', imageUrl);
           quillRef.current.getEditor().setSelection(range.index + 1);
-          // document.body!.querySelector(':scope > input').remove();
+          const myInput = document.body.querySelector(
+            ':scope > input',
+          ) as HTMLInputElement;
+          myInput.remove();
         }, 500);
       }
     };
   }, []);
+
+  // 리액트 퀼 모듈 설정을 위한 코드입니다.
   const modules = useMemo(
     () => ({
       toolbar: {

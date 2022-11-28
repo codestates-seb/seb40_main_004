@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-24
+ * 최근 수정일: 2022-11-28
  */
 import { ProfileImage } from './ProfileImage';
 import { AnswerMainText } from './AnswerMainText';
@@ -9,7 +9,7 @@ import { BtnLike } from './BtnLike';
 import { CommentContainer } from './CommentList';
 import { Answer } from '../../libs/interfaces';
 import { elapsedTime } from '../../libs/elapsedTime';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { articleAuthorIdAtom, isAnswerEditAtom } from '../../atomsHJ';
 import { client } from '../../libs/client';
@@ -22,26 +22,25 @@ const tempSrc =
 
 export type AnswerProps = {
   answer: Answer;
-  userId: number;
   isClosed: boolean;
   pageInfo: number;
 };
 
 // 답변 컴포넌트
-export const AnswerContent = ({
-  answer,
-  userId,
-  isClosed,
-  pageInfo,
-}: AnswerProps) => {
+export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
   const router = useRouter();
   const { articleId } = router.query;
 
   const answerElement = useRef<null | HTMLDivElement>(null);
   const isAnswerEdit = useRecoilValue(isAnswerEditAtom);
 
-  const currUserId = localStorage.getItem('userId');
+  let currUserId: any = '';
+  if (typeof window !== 'undefined') {
+    currUserId = localStorage.getItem('userId');
+  }
+
   const articleAuthorId = useRecoilValue(articleAuthorIdAtom);
+
   useEffect(() => {
     if (isAnswerEdit.answerId === answer.answerId && answerElement.current)
       answerElement.current.scrollIntoView({ behavior: 'smooth' });
@@ -108,14 +107,14 @@ export const AnswerContent = ({
 
         <section className="space-y-3 pt-3 p-6">
           <div className="flex justify-between items-center border-b pb-2">
-            <h3 className="text-xl font-bold">{answer.commentCount} 코멘트</h3>
-            <div className="flex space-x-1">
+            <div className="flex ml-auto">
               {/* 답변글에서 유저의 좋아요 여부를 확인할 수 있는 api가 아직 수정중. */}
-              <BtnLike isLiked={false} answerId={answer.answerId} />
-              <span className="text-xl pr-3">{answer.answerLikeCount}</span>
+              <div className="space-x-1">
+                <BtnLike isLiked={false} answerId={answer.answerId} />
+                <span className="text-xl pr-3">{answer.answerLikeCount}</span>
+              </div>
             </div>
           </div>
-          {/* 코멘트 api 가 아직 확정되지 않은 관계로 추후 작업 예정 */}
           <CommentContainer answerId={answer.answerId} />
         </section>
       </section>
