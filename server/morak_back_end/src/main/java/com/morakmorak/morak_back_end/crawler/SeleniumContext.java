@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,9 +20,12 @@ import java.util.Collections;
 public class SeleniumContext {
     private final JobRepository jobRepository;
 
+    @Value("${webdriver.chrome.location}")
+    private String location;
+
     @Bean
     public WebDriver setupWebDriver() {
-        System.setProperty("webdriver.chrome.driver", "/Users/eunchanyang/Desktop/java/chromeDriver");
+        System.setProperty("webdriver.chrome.driver", location);
 
         ChromeOptions options = new ChromeOptions();
 
