@@ -4,6 +4,7 @@ import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -15,6 +16,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
+@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
 class AnswerRepositoryTest {
 
     @Autowired

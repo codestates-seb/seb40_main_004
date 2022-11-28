@@ -1,13 +1,16 @@
 package com.morakmorak.morak_back_end.service.auth_user_service;
 
 import com.morakmorak.morak_back_end.dto.*;
+import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.ActivityType;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
+import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.user.UserQueryRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +39,8 @@ public class UserService {
     private final ArticleMapper articleMapper;
     private final TagMapper tagMapper;
     private final UserMapper userMapper;
+    private final AnswerRepository answerRepository;
+    private final AnswerMapper answerMapper;
 
     public User findVerifiedUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
@@ -82,7 +87,7 @@ public class UserService {
     public UserDto.ResponseDashBoard findUserDashboard(Long userId) {
         LocalDate january1st = LocalDate.now().withDayOfYear(1);
         LocalDate december31st = LocalDate.now().withDayOfYear(365);
-        
+
         UserDto.ResponseDashBoard userDashboardBasicInfo = userQueryRepository.getUserDashboardBasicInfo(userId);
         List<Article> recentQuestions = userQueryRepository.get50RecentQuestions(userId);
         List<ReviewDto.Response> receivedReviews = userQueryRepository.getReceivedReviews(userId);
@@ -151,7 +156,7 @@ public class UserService {
 
     private void putAnnualData(List<ActivityDto.Temporary> temporaryList, Map<LocalDate, Map<ActivityType, Long>> annualData, ActivityType activityType) {
         temporaryList.forEach(
-                e ->  {
+                e -> {
                     if (!annualData.containsKey(e.getCreatedDate())) {
                         Map<ActivityType, Long> map = new HashMap<>();
                         map.put(activityType, e.getCount());
@@ -165,35 +170,37 @@ public class UserService {
 
     private void reorderRank(PageRequest request, List<UserDto.ResponseRanking> result) {
         int temp = 0;
-        int offset = (int) request.getOffset()+1;
+        int offset = (int) request.getOffset() + 1;
         int size = request.getPageSize();
         String sort = request.getSort()
                 .stream().map(Sort.Order::getProperty)
                 .collect(Collectors.toList()).get(0);
 
         switch (sort) {
-            case ("point") :
+            case ("point"):
                 reorderByPoint(result, temp, offset, size);
                 break;
-            case ("articles") :
+            case ("articles"):
                 reorderByArticleCount(result, temp, offset, size);
                 break;
-            case ("answers") :
+            case ("answers"):
                 reorderByAnswerCount(result, temp, offset, size);
                 break;
-            case ("likes") :
+            case ("likes"):
                 reorderByLikeCount(result, temp, offset, size);
                 break;
         }
     }
 
     private void reorderByPoint(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
-        if (result.size() < size) { size = result.size(); }
+        if (result.size() < size) {
+            size = result.size();
+        }
 
-        for (int i = 0; i< size; i++) {
+        for (int i = 0; i < size; i++) {
             UserDto.ResponseRanking user = result.get(i);
 
-            if ( i != 0 && user.getPoint() == temp) {
+            if (i != 0 && user.getPoint() == temp) {
                 UserDto.ResponseRanking prevUser = result.get(i - 1);
                 user.setRank(prevUser.getRank());
                 offset++;
@@ -206,12 +213,14 @@ public class UserService {
     }
 
     private void reorderByArticleCount(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
-        if (result.size() < size) { size = result.size(); }
+        if (result.size() < size) {
+            size = result.size();
+        }
 
-        for (int i = 0; i< size; i++) {
+        for (int i = 0; i < size; i++) {
             UserDto.ResponseRanking user = result.get(i);
 
-            if ( i != 0 && user.getArticleCount() == temp) {
+            if (i != 0 && user.getArticleCount() == temp) {
                 UserDto.ResponseRanking prevUser = result.get(i - 1);
                 user.setRank(prevUser.getRank());
                 offset++;
@@ -224,12 +233,14 @@ public class UserService {
     }
 
     private void reorderByAnswerCount(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
-        if (result.size() < size) { size = result.size(); }
+        if (result.size() < size) {
+            size = result.size();
+        }
 
-        for (int i = 0; i< size; i++) {
+        for (int i = 0; i < size; i++) {
             UserDto.ResponseRanking user = result.get(i);
 
-            if ( i != 0 && user.getAnswerCount() == temp) {
+            if (i != 0 && user.getAnswerCount() == temp) {
                 UserDto.ResponseRanking prevUser = result.get(i - 1);
                 user.setRank(prevUser.getRank());
                 offset++;
@@ -242,12 +253,14 @@ public class UserService {
     }
 
     private void reorderByLikeCount(List<UserDto.ResponseRanking> result, int temp, int offset, int size) {
-        if (result.size() < size) { size = result.size(); }
+        if (result.size() < size) {
+            size = result.size();
+        }
 
-        for (int i = 0; i< size; i++) {
+        for (int i = 0; i < size; i++) {
             UserDto.ResponseRanking user = result.get(i);
 
-            if ( i != 0 && user.getLikeCount() == temp) {
+            if (i != 0 && user.getLikeCount() == temp) {
                 UserDto.ResponseRanking prevUser = result.get(i - 1);
                 user.setRank(prevUser.getRank());
                 offset++;
@@ -258,4 +271,21 @@ public class UserService {
             user.setRank(offset++);
         }
     }
+
+    public ResponseMultiplePaging<AnswerDto.ResponseUserAnswerList> getUserAnswerList(Long userId, int page, int size) {
+        findVerifiedUserById(userId);
+        Page<Answer> userAnswersInPage = answerRepository.findByUserId(userId, PageRequest.of(page, size,Sort.by("createdAt").descending()));
+        Page<Answer> test = userAnswersInPage;
+        List<AnswerDto.ResponseUserAnswerList> userAnswers =
+                userAnswersInPage.getContent().stream().map(
+                        userAnswer -> {
+                            Boolean isPicked = userAnswer.getIsPicked();
+                            Integer answerLikeCount = userAnswer.getAnswerLike().size();
+                            Integer commentCount = userAnswer.getComments().size();
+                            return answerMapper.answerToResponseUserAnswerList(userAnswer, isPicked, answerLikeCount, commentCount);
+                        }
+                ).collect(Collectors.toList());
+        return new ResponseMultiplePaging<>(userAnswers, userAnswersInPage);
+    }
+
 }

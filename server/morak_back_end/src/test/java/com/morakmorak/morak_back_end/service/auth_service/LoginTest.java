@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.service.auth_service;
 
 import com.morakmorak.morak_back_end.dto.AuthDto;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import org.junit.jupiter.api.DisplayName;
@@ -58,10 +59,18 @@ public class LoginTest extends AuthServiceTest{
                 .password(PASSWORD1)
                 .build();
 
+        UserDto.Redis redisUser = UserDto.Redis.builder()
+                .email(EMAIL1)
+                .avatarPath("http://image/image.jpg")
+                .userId(ID1)
+                .nickname(NICKNAME1)
+                .build();
+
         given(userRepository.findUserByEmail(requestUser.getEmail())).willReturn(Optional.of(dbUser));
         given(userPasswordManager.comparePasswordWithUser(dbUser, requestUser)).willReturn(Boolean.TRUE);
         given(tokenGenerator.generateAccessToken(dbUser)).willReturn(BEARER_ACCESS_TOKEN);
         given(tokenGenerator.generateRefreshToken(dbUser)).willReturn(BEARER_REFRESH_TOKEN);
+        given(userMapper.userToRedisUser(dbUser)).willReturn(redisUser);
 
         //when
         AuthDto.ResponseToken responseToken = authService.loginUser(requestUser);

@@ -8,9 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
-    Optional<Answer> findByUserId(Long id);
+    Page<Answer> findByUserId(Long userId,Pageable pageable);
 
     Page<Answer> findAllByArticleId(Long articleId, Pageable pageable);
 
     Optional<Answer> findAnswerByContent(String content);
+
+    Optional<Answer> findTopByUserId(Long id);
 }

@@ -15,6 +15,7 @@ import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
 })
 @AutoConfigureMockMvc
+@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
 public class UpdateAnswerTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -84,7 +86,7 @@ public class UpdateAnswerTest {
         Answer answer = Answer.builder().user(savedUser).content("유효한 15자 이상의 기나긴 내용입니다 아하하").build();
         savedUser.getAnswers().add(answer);
         answerRepository.save(answer);
-        this.savedAnswer = answerRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
+        this.savedAnswer = answerRepository.findTopByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
         this.savedFile = fileRepository.findFileByLocalPath("1").orElseThrow(() -> new AssertionError());
         this.accessToken = jwtTokenUtil.createAccessToken(EMAIL1, savedUser.getId(), ROLE_USER_LIST, NICKNAME1);
         articleRepository.save(Article.builder().user(savedUser).category(info).articleStatus(ArticleStatus.POSTING).isClosed(false).build());

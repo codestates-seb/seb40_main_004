@@ -62,12 +62,13 @@ public class AnswerDto {
         private Long answerId;
         private String content;
         private Boolean isPicked;
-        private Integer commentCount;
         private Integer answerLikeCount;
+        private Integer commentCount;
         private LocalDateTime createdAt;
+        private Boolean isLiked = false;
+        private UserDto.ResponseSimpleUserDto userInfo;
         private AvatarDto.SimpleResponse avatar;
         private CommentDto.Response commentPreview;
-        private UserDto.ResponseSimpleUserDto userInfo;
 
         public static ResponseListTypeAnswer of(Answer answer) {
             return ResponseListTypeAnswer.builder()
@@ -77,6 +78,7 @@ public class AnswerDto {
                     .content(answer.getContent())
                     .createdAt(answer.getCreatedAt())
                     .isPicked(answer.getIsPicked())
+                    .isLiked(false)
                     .answerLikeCount(answer.getAnswerLike().size())
                     .commentPreview(CommentDto.Response.previewOfAnswer(answer.getComments()))
                     .commentCount(answer.getComments().size())
@@ -95,4 +97,17 @@ public class AnswerDto {
         private Integer likeCount;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponseUserAnswerList {
+        private Long answerId;
+        private String content;
+        private Boolean isPicked;
+        private Integer answerLikeCount;
+        private Integer commentCount;
+        private LocalDateTime createdAt;
+        private UserDto.ResponseSimpleUserDto userInfo;
+    }
 }

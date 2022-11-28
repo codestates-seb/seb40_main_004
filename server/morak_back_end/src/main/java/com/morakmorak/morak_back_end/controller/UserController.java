@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.controller;
 
 import com.morakmorak.morak_back_end.dto.ActivityDto;
+import com.morakmorak.morak_back_end.dto.AnswerDto;
 import com.morakmorak.morak_back_end.dto.ResponseMultiplePaging;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
@@ -28,7 +30,7 @@ public class UserController {
     private final UserMapper userMapper;
 
     private final Integer MAX_SIZE = 50;
-    
+
     @GetMapping("/{user-id}/dashboard")
     @ResponseStatus(HttpStatus.OK)
     public UserDto.ResponseDashBoard getDashboard(@PathVariable(name = "user-id") Long id) {
@@ -64,9 +66,20 @@ public class UserController {
     private PageRequest getPageRequest(String sort, Integer page, Integer size) {
         Sort s;
         s = (!StringUtils.hasText(sort)) ? Sort.by("point") : Sort.by(sort);
-        page = Math.max(page-1, 0);
+        page = Math.max(page - 1, 0);
         size = Math.min(size, MAX_SIZE);
 
         return PageRequest.of(page, size, s);
     }
+
+
+    @GetMapping("/{user-id}/answers")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseMultiplePaging<AnswerDto.ResponseUserAnswerList> getUserAnswerList(@PathVariable ("user-id") Long userId,
+                                                                                      @Positive @RequestParam(value = "page", defaultValue = "1") int page,
+                                                                                      @Positive @RequestParam(value = "size", defaultValue = "50" ) int size
+                                                                                      ) {
+        return userService.getUserAnswerList(userId, page - 1, size);
+    }
+
 }

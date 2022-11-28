@@ -118,6 +118,7 @@ public class JoinTest extends AuthControllerTest {
         AuthDto.ResponseToken token = AuthDto.ResponseToken.builder()
                 .accessToken(BEARER_ACCESS_TOKEN)
                 .refreshToken(BEARER_REFRESH_TOKEN)
+                .avatarPath("http://image/image.jpg.com")
                 .build();
 
         String json = objectMapper.writeValueAsString(request);
@@ -146,7 +147,8 @@ public class JoinTest extends AuthControllerTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("accessToken").description("set client's local storage"),
-                                        fieldWithPath("refreshToken").description("set client's cookie")
+                                        fieldWithPath("refreshToken").description("set client's cookie"),
+                                        fieldWithPath("avatarPath").description("profile image path")
                                 )
                         )
                 );
