@@ -58,6 +58,7 @@ public class AuthService {
                 .builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .avatarPath(redisUser.getAvatarPath())
                 .build();
     }
 
@@ -106,6 +107,7 @@ public class AuthService {
                 .builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .avatarPath(redisUser.getAvatarPath())
                 .build();
     }
 
