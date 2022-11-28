@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class CrawlingScheduler {
     private final Crawler crawler;
 
-    @Scheduled(cron = "0 4 * * * MON-SAT")
+    @Scheduled(cron = "0 0 4 * * MON-SAT")
     public void runCrawler() {
         crawler.process();
     }
