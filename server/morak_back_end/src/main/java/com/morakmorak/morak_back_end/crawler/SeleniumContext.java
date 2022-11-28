@@ -19,13 +19,16 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SeleniumContext {
 
-    @Value("${webdriver.chrome.location}")
-    private String chromeDriverPath;
     private final JobRepository jobRepository;
+
+    @Value("${webdriver.chrome.location}")
+    private String location;
 
     @Bean
     public WebDriver setupWebDriver() {
-        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+
+        System.setProperty("webdriver.chrome.driver", location);
+
 
         ChromeOptions options = new ChromeOptions();
 

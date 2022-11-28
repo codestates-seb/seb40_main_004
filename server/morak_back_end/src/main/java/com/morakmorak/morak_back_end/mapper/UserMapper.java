@@ -25,8 +25,14 @@ public interface UserMapper {
 
     UserDto.SimpleEditProfile userToEditProfile(User user);
 
-    @Mapping(source = "id", target = "userId")
-    UserDto.Redis userToRedisUser(User user);
+    default UserDto.Redis userToRedisUser(User user) {
+        return UserDto.Redis.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .avatarPath(user.getAvatar() != null ? user.getAvatar().getRemotePath() : null)
+                .build();
+    }
 
     @Mapping(source = "userId", target = "id")
     User redisUserToUser(UserDto.Redis dto);

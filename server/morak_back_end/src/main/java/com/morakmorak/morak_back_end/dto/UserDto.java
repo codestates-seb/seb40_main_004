@@ -164,5 +164,6 @@ public class UserDto {
         private Long userId;
         private String email;
         private String nickname;
+        private String avatarPath;
     }
 }
