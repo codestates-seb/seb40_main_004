@@ -1,28 +1,29 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-23
+ * 최근 수정일: 2022-11-28
  */
 
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { Comment } from './Comment';
 import { CommentTextArea } from './CommentTextArea';
-import useSWR from 'swr';
-import { CommentProps } from '../../libs/interfaces';
+import { CommentResp } from '../../libs/interfaces';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { client } from '../../libs/client';
+import { useFetch } from '../../libs/useFetchSWR';
+import { useRecoilState } from 'recoil';
+import { isCommentOpenAtom } from '../../atomsHJ';
 
 type CommentList = {
-  comments: CommentProps;
+  comments: CommentResp[];
+  setIsOpen: any;
+  isOpen: boolean;
 };
 
-const CommentList = ({ comments }: CommentList) => {
-  const [isOpen, setIsOpen] = useState(false);
+const CommentList = ({ comments, setIsOpen, isOpen }: CommentList) => {
   return isOpen ? (
     <>
-      {comments.map((comment: CommentProps) => (
+      {comments.map((comment: CommentResp) => (
         <Comment
           key={comment.commentId}
           commentId={comment.commentId}
@@ -65,34 +66,42 @@ type CommentContainerProps = {
 };
 
 export const CommentContainer = ({ answerId }: CommentContainerProps) => {
+  const [isOpen, setIsOpen] = useRecoilState(isCommentOpenAtom);
   // 현재 게시글 id
   const router = useRouter();
   const { articleId } = router.query;
 
-  // api 요청 로직 완료 전 임시 코멘트
-  const comments: any = [];
-
   // 답변 코멘트 || 질문 코멘트에 따른 요청 url
-  // const url = answerId
-  //   ? `/articles/${articleId}/answers/comments`
-  //   : `/articles/${articleId}/comments`;
+  const url = answerId
+    ? `/api/answers/${answerId}/comments`
+    : `/api/articles/${articleId}/comments`;
 
   // 코멘트 조회 요청 로직
-  // const fetcher = async (url: string) => await client.get(url);
-  // const { data } = useSWR(url, fetcher);
-  // const comments = data.article.comments;
+  let comments;
+  if (!answerId) {
+    comments = useFetch(url).data;
+  } else {
+    comments;
+  }
+  if (!comments) comments = [];
 
-  // 펼치기 상태
-
+  // 코멘트가 존재할때만 펼치기 기능이 있는 코멘트 리스트가 나옴!
   return (
-    <div className="space-y-8 pt-4">
-      {comments.length ? (
-        <CommentList comments={comments} />
-      ) : (
-        <div>
-          <CommentTextArea />
-        </div>
-      )}
-    </div>
+    <>
+      <h3 className="text-xl font-bold">{comments.length} 코멘트</h3>
+      <div className="space-y-8 pt-4">
+        {comments.length ? (
+          <CommentList
+            comments={comments}
+            setIsOpen={setIsOpen}
+            isOpen={isOpen}
+          />
+        ) : (
+          <div>
+            <CommentTextArea />
+          </div>
+        )}
+      </div>
+    </>
   );
 };

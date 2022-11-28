@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-21
+ * 최근 수정일: 2022-11-28
  */
 
 import { QuestionTitle } from './QuestionTitle';
@@ -31,9 +31,15 @@ export const QuestionContent = () => {
   const router = useRouter();
   const { articleId } = router.query;
 
-  // api 연결 이후 /articles/{id} 로 요청을 보낼 수 있습니다.
   const { data } = useSWR(`/articles/${articleId}`);
   const article = data.article;
+
+  let currUserId: any = '';
+  if (typeof window !== 'undefined') {
+    currUserId = localStorage.getItem('userId');
+  }
+  const authorId = article.userInfo.userId;
+  const isClosed = article.isClosed;
 
   return (
     <main className="flex flex-col w-full pb-6 border-b">
@@ -66,18 +72,16 @@ export const QuestionContent = () => {
             <div className="flex justify-between items-end space-y-3 sm:space-y-0 py-4 flex-col sm:flex-row">
               <TagList tags={article.tags} />
 
-              {/* 로그인 후 user state를 확인하여 보임/숨김 처리 필요! */}
-              <article className="space-x-2 text-sm w-[80px] flex justify-end">
-                <button>수정</button>
-                <button>삭제</button>
-              </article>
+              {!isClosed && authorId === currUserId ? null : (
+                <article className="space-x-2 text-sm w-[80px] flex justify-end">
+                  <button>수정</button>
+                  <button>삭제</button>
+                </article>
+              )}
             </div>
           </section>
 
           <section className="space-y-3 border-l pl-3">
-            <h3 className="text-xl font-bold">
-              {article.comments.length} 코멘트
-            </h3>
             <CommentContainer />
           </section>
         </>
