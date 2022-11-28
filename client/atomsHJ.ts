@@ -47,3 +47,8 @@ export const isAnswerEditAtom = atom({
     payload: '',
   },
 });
+
+export const isCommentOpenAtom = atom({
+  key: 'isCommentOpen',
+  default: false,
+});
