@@ -44,7 +44,7 @@ public class SeleniumContext {
 
     @Bean
     public WebDriverWait setupWebDriverWait()  {
-        return new WebDriverWait(setupWebDriver(), Duration.ofSeconds(20));
+        return new WebDriverWait(setupWebDriver(), Duration.ofSeconds(10));
     }
 
     @Bean
