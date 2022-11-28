@@ -74,6 +74,7 @@ public class ReissueTest extends AuthControllerTest {
                 .builder()
                 .accessToken(BEARER_ACCESS_TOKEN)
                 .refreshToken(BEARER_REFRESH_TOKEN)
+                .avatarPath("http://image/image.jpg/test")
                 .build();
 
         given(authService.reissueToken(BEARER_REFRESH_TOKEN)).willReturn(response);
@@ -96,7 +97,8 @@ public class ReissueTest extends AuthControllerTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("accessToken").description("set client's localStorage"),
-                                        fieldWithPath("refreshToken").description("set client's cookie")
+                                        fieldWithPath("refreshToken").description("set client's cookie"),
+                                        fieldWithPath("avatarPath").description("user profile image")
                                 )
                         )
                 );

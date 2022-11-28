@@ -74,6 +74,7 @@ public class LoginTest extends AuthControllerTest {
         AuthDto.ResponseToken responseToken = AuthDto.ResponseToken.builder()
                 .accessToken(BEARER_ACCESS_TOKEN)
                 .refreshToken(BEARER_REFRESH_TOKEN)
+                .avatarPath("http://image/image.jpg/test")
                 .build();
 
         given(authService.loginUser(any(User.class))).willReturn(responseToken);
@@ -98,7 +99,8 @@ public class LoginTest extends AuthControllerTest {
                                 ),
                                 responseFields(
                                         fieldWithPath("accessToken").description("accessToken, set client's LocalStorage"),
-                                        fieldWithPath("refreshToken").description("refreshToken, set client's Cookie")
+                                        fieldWithPath("refreshToken").description("refreshToken, set client's Cookie"),
+                                        fieldWithPath("avatarPath").description("profile image remote path")
                                 )
                         )
                 );
