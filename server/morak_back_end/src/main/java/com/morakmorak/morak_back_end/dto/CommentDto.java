@@ -51,11 +51,11 @@ public class CommentDto {
         }
         public static CommentDto.Response ofAnswer(Comment savedComment) {
 
-                return CommentDto.Response.builder()
+                return Response.builder()
                         .userInfo(UserDto.ResponseSimpleUserDto.of(savedComment.getUser()))
                         .avatar(AvatarDto.SimpleResponse.of(savedComment.getUser().getAvatar()))
                         .commentId(savedComment.getId())
-                        .articleId(savedComment.getArticle().getId())
+                        .answerId(savedComment.getAnswer().getId())
                         .content(savedComment.getContent())
                         .createdAt(savedComment.getCreatedAt())
                         .lastModifiedAt(savedComment.getLastModifiedAt())
