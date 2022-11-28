@@ -6,6 +6,7 @@ import com.morakmorak.morak_back_end.entity.enums.JobType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
 public class EditUserProfileTest extends UserTest {
     @Test
     @DisplayName("유효성 검사에 실패할 경우 400 badRequest")
