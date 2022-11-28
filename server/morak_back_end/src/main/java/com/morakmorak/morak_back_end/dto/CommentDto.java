@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.dto;
 
 import com.morakmorak.morak_back_end.entity.Comment;
 import lombok.*;
+import org.springframework.util.ObjectUtils;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -51,11 +52,11 @@ public class CommentDto {
         }
         public static CommentDto.Response ofAnswer(Comment savedComment) {
 
-                return CommentDto.Response.builder()
+                return Response.builder()
                         .userInfo(UserDto.ResponseSimpleUserDto.of(savedComment.getUser()))
                         .avatar(AvatarDto.SimpleResponse.of(savedComment.getUser().getAvatar()))
                         .commentId(savedComment.getId())
-                        .articleId(savedComment.getArticle().getId())
+                        .answerId(savedComment.getAnswer().getId())
                         .content(savedComment.getContent())
                         .createdAt(savedComment.getCreatedAt())
                         .lastModifiedAt(savedComment.getLastModifiedAt())
@@ -63,13 +64,13 @@ public class CommentDto {
 
         }
         public static CommentDto.Response previewOfAnswer(List<Comment> commentsFromAnswer) {
-            if (commentsFromAnswer.size() != 0) {
+            if (!ObjectUtils.isEmpty(commentsFromAnswer)) {
                 Comment savedComment = commentsFromAnswer.get(0);
                 return Response.builder()
                         .userInfo(UserDto.ResponseSimpleUserDto.of(savedComment.getUser()))
                         .avatar(AvatarDto.SimpleResponse.of(savedComment.getUser().getAvatar()))
                         .commentId(savedComment.getId())
-                        .answerId(savedComment.getArticle().getId())
+                        .answerId(savedComment.getAnswer().getId())
                         .content(savedComment.getContent())
                         .createdAt(savedComment.getCreatedAt())
                         .lastModifiedAt(savedComment.getLastModifiedAt())

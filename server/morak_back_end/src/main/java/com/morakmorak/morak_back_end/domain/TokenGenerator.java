@@ -11,11 +11,11 @@ public class TokenGenerator {
     private final JwtTokenUtil jwtTokenUtil;
 
     public String generateAccessToken(User user) {
-        return user.injectUserInformationForToken(jwtTokenUtil);
+        return user.injectUserInformationForAccessToken(jwtTokenUtil);
     }
 
     public String generateRefreshToken(User user) {
-        return user.injectUserInformationForToken(jwtTokenUtil);
+        return user.injectUserInformationForRefreshToken(jwtTokenUtil);
     }
 
     public boolean tokenValidation(String refreshToken) {
