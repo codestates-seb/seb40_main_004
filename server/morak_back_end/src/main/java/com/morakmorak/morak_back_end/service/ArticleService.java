@@ -44,7 +44,6 @@ public class ArticleService {
     private final PointCalculator pointCalculator;
     private final NotificationRepository notificationRepository;
     private final ReportRepository reportRepository;
-    private final AmazonS3StorageService amazonS3StorageService;
 
     public ArticleDto.ResponseSimpleArticle upload(
             Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
@@ -85,7 +84,6 @@ public class ArticleService {
     public Boolean deleteArticle(Long articleId, UserDto.UserInfo userInfo) {
         Article dbArticle = findVerifiedArticle(articleId);
         checkArticlePerMission(dbArticle, userInfo);
-        amazonS3StorageService.deleteFileOnArticle(articleId);
         dbArticle.changeArticleStatus(ArticleStatus.REMOVED);
         User user = dbArticle.getUser();
         user.minusPoint(dbArticle, pointCalculator);
@@ -176,7 +174,7 @@ public class ArticleService {
         if (dbArticle.getReports().size() >= 5) {
             String report = "이 글은 신고가 누적되 더이상 확인하실 수 없습니다.";
             return articleMapper.articleToResponseBlockedArticle(dbArticle, isLiked, isBookmarked,
-                    report, new ArrayList<>(), new ArrayList<>(), likes);
+                    report,new ArrayList<>(),new ArrayList<>(),likes);
         }
 
         ArticleDto.ResponseDetailArticle responseDetailArticle =
@@ -224,7 +222,7 @@ public class ArticleService {
 
     public ArticleDto.ResponseReportArticle reportArticle(Long articleId, UserDto.UserInfo userInfo, Report reportArticle) {
         Article dbArticle = findVerifiedArticle(articleId);
-
+        
         User dbUser = null;
 
         if (userInfo != null) {
@@ -232,13 +230,13 @@ public class ArticleService {
         } else {
             throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
         }
-
+        
         reportArticle.injectMappingUserAndArticle(dbUser, dbArticle);
         dbArticle.getReports().add(reportArticle);
         dbUser.getReports().add(reportArticle);
 
         Report dbReport = reportRepository.save(reportArticle);
 
-        return articleMapper.reportToResponseArticle(dbReport);
+       return articleMapper.reportToResponseArticle(dbReport);
     }
 }

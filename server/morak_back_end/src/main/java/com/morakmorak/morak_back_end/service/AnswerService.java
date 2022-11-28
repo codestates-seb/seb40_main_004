@@ -39,7 +39,6 @@ public class AnswerService {
     private final AnswerMapper answerMapper;
     private final NotificationRepository notificationRepository;
     private final PointCalculator pointCalculator;
-    private final AmazonS3StorageService amazonS3StorageService;
     int page = 0;
     int size = 5;
 
@@ -94,7 +93,6 @@ public class AnswerService {
 
         if (verifiedAnswer.hasPermissionWith(verifiedUser) && !verifiedAnswer.isPickedAnswer()
                 && verifiedArticle.statusIsPosting()) {
-            amazonS3StorageService.deleteFileOnAnswer(answerId);
             answerRepository.deleteById(answerId);
 
             verifiedUser.minusPoint(verifiedAnswer, pointCalculator);

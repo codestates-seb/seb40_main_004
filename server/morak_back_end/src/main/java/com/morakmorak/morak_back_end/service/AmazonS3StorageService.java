@@ -19,11 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.net.URL;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
@@ -92,6 +90,7 @@ public class AmazonS3StorageService {
         avatar.getUser().deleteAvatar();
         avatarRepository.deleteById(avatar.getId());
     }
+
     private String getPreSignedUrl(String filename) {
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime() + EXP_TIME;
@@ -111,38 +110,5 @@ public class AmazonS3StorageService {
             log.error("",e);
             throw new BusinessLogicException(CAN_NOT_ACCESS_S3);
         }
-    }
-    public void deleteFileOnAnswer(Long answerId) {
-        List<File> fileList = fileRepository.findByAnswerId(answerId);
-        if (ObjectUtils.isEmpty(fileList)) {
-            return;
-        }
-        fileList.stream().forEach(file -> {
-            try {
-                amazonS3.deleteObject(bucketName, file.getOriginalFilename());
-            } catch (AmazonServiceException e) {
-                log.error("", e);
-                throw new BusinessLogicException(CAN_NOT_ACCESS_S3);
-            }
-            file.detachFromAnswer();
-            fileRepository.deleteById(file.getId());
-        });
-    }
-
-    public void deleteFileOnArticle(Long articleId) {
-        List<File> fileList = fileRepository.findByArticleId(articleId);
-        if (ObjectUtils.isEmpty(fileList)) {
-            return;
-        }
-        fileList.stream().forEach(file -> {
-            try {
-                amazonS3.deleteObject(bucketName, file.getOriginalFilename());
-            } catch (AmazonServiceException e) {
-                log.error("", e);
-                throw new BusinessLogicException(CAN_NOT_ACCESS_S3);
-            }
-            file.detachFromArticle();
-            fileRepository.deleteById(file.getId());
-        });
     }
 }
