@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.security.resolver;
 
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
+import com.morakmorak.morak_back_end.security.util.SecurityConstants;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +34,8 @@ public class JwtArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String bearerToken = webRequest.getHeader(JWT_HEADER);
 
-        if (!StringUtils.hasText(bearerToken)) {
-            return null;
+        if (!StringUtils.hasText(bearerToken) || !bearerToken.startsWith(JWT_PREFIX)) {
+                return null;
         }
 
         Claims claims = jwtTokenUtil.parseAccessToken(bearerToken);
