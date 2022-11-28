@@ -27,6 +27,7 @@ public class AuthDto {
     public static class ResponseToken {
         private String accessToken;
         private String refreshToken;
+        private String avatarPath;
     }
 
     @Builder
