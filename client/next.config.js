@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const BASE_URL = 'https://b3a0-39-116-11-157.jp.ngrok.io';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const withPlugins = require('next-compose-plugins');
 const nextConfig = {

@@ -28,15 +28,27 @@ export const supportPayloadAtom = atom({
 
 // 채택/후원 관련 atoms 끝
 
-export const isAnswerPostAtom = atom({
-  key: 'isAnswerPost',
-  default: {
-    isAnswerPost: false,
-    answerId: '',
-  },
+export const isAnswerPostedAtom = atom({
+  key: 'isAnswerPosted',
+  default: false,
 });
 
 export const articleAuthorIdAtom = atom({
   key: 'articleAuthorId',
   default: '',
+});
+
+export const isAnswerEditAtom = atom({
+  key: 'isAnswerEdit',
+  default: {
+    isEdit: false,
+    answerId: 0,
+    answerPage: 0,
+    payload: '',
+  },
+});
+
+export const isCommentOpenAtom = atom({
+  key: 'isCommentOpen',
+  default: false,
 });

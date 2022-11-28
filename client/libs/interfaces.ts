@@ -15,7 +15,8 @@ export interface Avatar {
   remotePath: string;
 }
 
-export interface CommentProps {
+export interface CommentResp {
+  answerId?: number | null;
   commentId: number;
   articleId: number;
   content: string;
@@ -52,7 +53,7 @@ export interface Answer {
   isPicked: boolean;
   answerLikeCount: number;
   commentCount: number;
-  commentPreview: CommentProps;
+  commentPreview: CommentResp;
   avatar: Avatar;
   userInfo: UserInfo;
 }
