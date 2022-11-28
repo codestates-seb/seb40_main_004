@@ -28,8 +28,9 @@ public class JobKoreaCrawler implements Crawler {
     private final String JOB_RECRUITMENT_PERIOD = ".side .day";
     private final String JOB_HREF = ".coLink.devBoothItem";
     private final String NEXT_DAY_BTN = ".dateNext";
+    private final String PREV_MONTH_BTN = ".calMonthBtn .prev";
 
-    private final int RANGE = 60;
+    private final int RANGE = 140;
 
     private final WebDriver webDriver;
     private final WebDriverWait webDriverWait;
@@ -43,9 +44,10 @@ public class JobKoreaCrawler implements Crawler {
         webDriver.get(BASE_URL);
         WebElement filterCheckBox = selectElementAndWaitFindByCssSelector(JOB_FILTER_DEVELOPER_CHECKBOX, webDriver, webDriverWait);
         WebElement filterAcceptBtn = selectElementAndWaitFindByCssSelector(JOB_FILTER_ACCEPT_BTN, webDriver, webDriverWait);
-
         setDeveloperFilter(filterCheckBox, filterAcceptBtn);
 
+        WebElement prevMonthBtn = selectElementAndWaitFindByCssSelector(PREV_MONTH_BTN, webDriver, webDriverWait);
+        prevMonthBtn.click();
         List<WebElement> moreButtons = selectElementsAndWaitFindByCssSelector(JOB_CALENDAR_DAY_DIV_MORE_BTN, webDriver, webDriverWait);
         moreButtons.get(0).click();
 
