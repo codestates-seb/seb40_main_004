@@ -10,11 +10,18 @@ import { CommentContainer } from './CommentContainer';
 import { Answer } from '../../libs/interfaces';
 import { elapsedTime } from '../../libs/elapsedTime';
 import { useEffect, useRef } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { articleAuthorIdAtom, isAnswerEditAtom } from '../../atomsHJ';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  articleAuthorIdAtom,
+  isAnswerEditAtom,
+  reviewRequestAtom,
+} from '../../atomsHJ';
 import { client } from '../../libs/client';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
+import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =
@@ -30,6 +37,8 @@ export type AnswerProps = {
 export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
   const router = useRouter();
   const { articleId } = router.query;
+
+  console.log(answer);
 
   const answerElement = useRef<null | HTMLDivElement>(null);
   const isAnswerEdit = useRecoilValue(isAnswerEditAtom);
@@ -72,6 +81,21 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
     });
   };
 
+  const [reviewRequest, setReviewRequest] = useRecoilState(reviewRequestAtom);
+
+  const moveToReview = () => {
+    const newState = {
+      answerId: answer.answerId,
+      articleId: articleId as string,
+      targetUserName: answer.userInfo.nickname,
+    };
+    setReviewRequest({
+      ...reviewRequest,
+      ...newState,
+    });
+    router.push('/review');
+  };
+
   return (
     <main
       className="flex flex-col w-full mb-12 bg-[#FCFCFC] border rounded-[20px]"
@@ -88,8 +112,12 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
           </time>
         </div>
         {!isClosed && articleAuthorId === currUserId ? (
-          <button className="text-white font-bold text-xs sm:text-base">
-            답변 채택하기
+          <button
+            className="text-white font-bold text-xs sm:text-base space-x-2"
+            onClick={moveToReview}
+          >
+            <FontAwesomeIcon icon={voidCheck} className={'fa-lg'} />
+            <span>답변 채택하기</span>
           </button>
         ) : null}
       </section>
@@ -107,12 +135,12 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
 
         <section className="space-y-3 pt-3 p-6">
           <div className="flex justify-between items-center border-b pb-2">
-            <div className="flex ml-auto">
-              {/* 답변글에서 유저의 좋아요 여부를 확인할 수 있는 api가 아직 수정중. */}
-              <div className="space-x-1">
-                <BtnLike isLiked={answer.isLiked} answerId={answer.answerId} />
-                <span className="text-xl pr-3">{answer.answerLikeCount}</span>
-              </div>
+            <div className="ml-auto">
+              <BtnLike
+                isLiked={answer.isLiked}
+                answerId={answer.answerId}
+                likes={answer.answerLikeCount}
+              />
             </div>
           </div>
           <CommentContainer answerId={answer.answerId} />

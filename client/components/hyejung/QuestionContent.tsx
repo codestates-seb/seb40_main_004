@@ -1,33 +1,21 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-28
+ * 최근 수정일: 2022-11-29
  */
 
 import { QuestionTitle } from './QuestionTitle';
 import { CreatedDate } from './CreatedDate';
 import { CommentContainer } from './CommentContainer';
 import { TagList } from './TagList';
-import { BtnLike } from './BtnLike';
 import { BtnBookmark } from './BtnBookmark';
 import { UserNickname } from './UserNickname';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
-
-type MainTextProps = {
-  content: string;
-};
-
-// 본문 텍스트
-const QuestionMainText = ({ content }: MainTextProps) => {
-  return (
-    <main>
-      <p>{content}</p>
-    </main>
-  );
-};
+import { BtnLike } from './BtnLike';
+import { QuestionMainText } from './QuestionMainText';
 
 export const QuestionContent = () => {
   const router = useRouter();
@@ -37,6 +25,8 @@ export const QuestionContent = () => {
 
   const { data } = useSWR(`/articles/${articleId}`);
   const article = data.article;
+
+  console.log(article);
 
   let currUserId: any = '';
   if (typeof window !== 'undefined') {
@@ -62,17 +52,15 @@ export const QuestionContent = () => {
                   <CreatedDate createdAt={article.createdAt} />
                 </article>
               </section>
-
               <div className="flex space-x-1">
-                <BtnLike isLiked={article.isLiked} />
-                <span className="text-xl pr-3">{article.likes}</span>
+                <BtnLike isLiked={article.isLiked} likes={article.likes} />
                 <BtnBookmark isBookmarked={article.isBookMarked} />
               </div>
             </div>
           </section>
 
           <section className="p-6">
-            <QuestionMainText content={article.content} />
+            <QuestionMainText>{article.content}</QuestionMainText>
             <div className="flex justify-between items-end space-y-3 sm:space-y-0 py-4 flex-col sm:flex-row">
               <TagList tags={article.tags} />
 

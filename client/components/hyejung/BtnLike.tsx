@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-20
- * 최근 수정일: 2022-11-21
+ * 최근 수정일: 2022-11-29
  */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart as SolidHeart } from '@fortawesome/free-solid-svg-icons';
@@ -9,47 +9,48 @@ import { faHeart as VoidHeart } from '@fortawesome/free-regular-svg-icons';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { client } from '../../libs/client';
+import { mutate } from 'swr';
 
 type BtnLikeProps = {
   isLiked: boolean;
   answerId?: number;
+  likes: number;
 };
-export const BtnLike = ({ isLiked, answerId }: BtnLikeProps) => {
+export const BtnLike = ({ isLiked, answerId, likes }: BtnLikeProps) => {
   // 좋아요 요청을 위한 articleId
   const router = useRouter();
   const { articleId } = router.query;
 
   const [isLike, setIsLike] = useState(isLiked);
+  const [likeCnt, setLikeCnt] = useState(likes);
+
+  let url = answerId
+    ? `/api/articles/${articleId}/answers/${answerId}/likes`
+    : `/api/articles/${articleId}/likes`;
 
   const onClickLike = () => {
-    let url = '';
-    if (answerId) {
-      url = `/articles/${articleId}/answers/${answerId}/likes`;
-    } else {
-      url = `/articles/${articleId}/likes`;
-    }
     client
       .post(url)
-      .then((res) => setIsLike(res.data.isLiked))
+      .then((res) => {
+        console.log(res.data);
+        setIsLike(res.data.isLiked);
+        setLikeCnt(res.data.likeCount);
+      })
       .catch((err) => {
         console.error(err);
-        alert('로그인이 필요한 서비스입니다.');
       });
   };
 
   return (
-    <>
+    <div className="flex space-x-1">
       <button onClick={onClickLike}>
         {isLike ? (
-          <FontAwesomeIcon
-            icon={SolidHeart}
-            style={{ color: '#FF9F10' }}
-            className="fa-xl"
-          />
+          <FontAwesomeIcon icon={SolidHeart} style={{ color: '#FF9F10' }} />
         ) : (
-          <FontAwesomeIcon icon={VoidHeart} className="fa-xl" />
+          <FontAwesomeIcon icon={VoidHeart} />
         )}
       </button>
-    </>
+      <span className="text-xl pr-3">{likeCnt}</span>
+    </div>
   );
 };
