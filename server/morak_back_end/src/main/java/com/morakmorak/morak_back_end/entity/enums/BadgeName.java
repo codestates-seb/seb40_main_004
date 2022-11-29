@@ -15,7 +15,14 @@ public enum BadgeName {
     RELIABLE("믿음직한"),
     WITTY("재치있는"),
     PASSIONATE("열정적인"),
-    HELPFUL("도움이 되는");
+    HELPFUL("도움이 되는"),
+    WARM("따듯한"),
+    CONSIDERATE("사려 깊은"),
+    PROBLEMSOLVER("문제를 해결하는"),
+    CARING("배려심 있는"),
+    CREATIVE("창의적인"),
+    LOGICAL("논리적인"),
+    UNDERSTANDABLE("이해하기 쉬운");
 
 
     private String name;

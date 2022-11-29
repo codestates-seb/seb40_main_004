@@ -114,7 +114,7 @@ public class ArticleService {
             article.getArticleTags().remove(i);
         }
         tags.stream().forEach(tag -> {
-            Tag dbTag = tagRepository.findById(tag.getTagId())
+            Tag dbTag = tagRepository.findTagByName(tag.getName())
                     .orElseThrow(() -> new BusinessLogicException(ErrorCode.TAG_NOT_FOUND));
             ArticleTag newArticleTag = ArticleTag.builder().article(article).tag(dbTag).build();
             article.getArticleTags().add(newArticleTag);
