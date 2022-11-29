@@ -10,12 +10,13 @@ import { CommentContainer } from './CommentContainer';
 import { TagList } from './TagList';
 import { BtnBookmark } from './BtnBookmark';
 import { UserNickname } from './UserNickname';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
 import { BtnLike } from './BtnLike';
 import { QuestionMainText } from './QuestionMainText';
+import { client } from '../../libs/client';
 
 export const QuestionContent = () => {
   const router = useRouter();
@@ -34,6 +35,27 @@ export const QuestionContent = () => {
   }
   const authorId = article.userInfo.userId;
   const isClosed = article.isClosed;
+
+  const onDelete = () => {
+    if (confirm('게시글을 삭제하시겠습니까...?')) {
+      client
+        .delete(`/api/articles/${articleId}`)
+        .then((res) => {
+          console.log(res);
+          alert('게시글이 삭제되었습니다. 게시글 목록으로 돌아갑니다.');
+          router.replace(`/questions`);
+          mutate(`/articles/${articleId}`);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('답변 삭제에 실패했습니다.');
+        });
+    }
+  };
+
+  const onEdit = () => {
+    router.push(`/ask`);
+  };
 
   return (
     <main className="flex flex-col w-full pb-6 border-b">
@@ -66,8 +88,8 @@ export const QuestionContent = () => {
 
               {isLogin && !isClosed && authorId.toString() === currUserId ? (
                 <article className="space-x-2 text-sm w-[80px] flex justify-end">
-                  <button>수정</button>
-                  <button>삭제</button>
+                  <button onClick={onEdit}>수정</button>
+                  <button onClick={onDelete}>삭제</button>
                 </article>
               ) : null}
             </div>
