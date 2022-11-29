@@ -29,7 +29,7 @@ const SupportMorak: NextPage = () => {
   const reviewTags = useRecoilValue(reviewTagsAtom);
 
   useEffect(() => {
-    if (reviewTags[0]?.length === 0) router.replace('/review');
+    if (reviewTags?.length === 0) router.replace('/review');
   }, []);
 
   const [reviewRequest, setReviewRequest] = useRecoilState(reviewRequestAtom);

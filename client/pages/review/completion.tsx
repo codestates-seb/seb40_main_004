@@ -30,7 +30,7 @@ const Completion: NextPage = () => {
   const [reviewRequest, setReviewRequest] = useRecoilState(reviewRequestAtom);
 
   useEffect(() => {
-    if (reviewTags[0]?.length === 0) router.replace('/review');
+    if (reviewTags?.length === 0) router.replace('/review');
   }, []);
 
   const onClickSetSupportPayload = () => {
