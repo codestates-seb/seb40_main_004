@@ -13,7 +13,7 @@ import { HallOfFame } from '../components/yeonwoo/HallOfFame';
 import { ListLately } from '../components/yeonwoo/ListLately';
 import dynamic from 'next/dynamic';
 
-const Calendar = dynamic(
+const Calendar = dynamic<any>(
   () => import('../components/yeonwoo/Calendar').then((mod) => mod.Calendar),
   {
     ssr: false,
