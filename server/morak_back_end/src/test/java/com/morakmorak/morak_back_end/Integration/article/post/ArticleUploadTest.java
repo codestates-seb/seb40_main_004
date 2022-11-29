@@ -171,42 +171,6 @@ public class ArticleUploadTest {
     }
 
     @Test
-    @DisplayName("게시글 작성시 존재하지 않는 카테고리를 작성할 경우 TAG_NOT_FOUND 예외를 던지고 404 에러코를 반환한다. ")
-    public void upload_fail3() throws Exception{
-        //given
-        File file1 = fileRepository.findFileByLocalPath("1").orElseThrow();
-        File file2 = fileRepository.findFileByLocalPath("2").orElseThrow();
-
-
-        ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
-                .title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
-                .tags(List.of(TagDto.SimpleTag.builder()
-                        .tagId(2L).name(TagName.JAVA).build()))
-                .fileId(List.of(FileDto.RequestFileWithId.builder()
-                        .fileId(file1.getId()).build(), FileDto.RequestFileWithId.builder()
-                        .fileId(file2.getId()).build()))
-                .thumbnail(1L)
-                .category(CategoryName.INFO)
-                .build();
-        String content = objectMapper.writeValueAsString(requestUploadArticle);
-        //id
-        Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
-
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST, NICKNAME1);
-
-        //when
-        ResultActions perform = mockMvc.perform(
-                post("/articles")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(JWT_HEADER, accessToken)
-                        .content(content)
-        );
-
-//        then
-        perform.andExpect(status().isNotFound());
-    }
-
-    @Test
     @DisplayName("게시글 작성시 존재하지 않는 태그를 작성할 경우 TAG_NOT_FOUND 예외를 던지고 404 에러코를 반환한다. ")
     public void upload_fail1() throws Exception{
         //given

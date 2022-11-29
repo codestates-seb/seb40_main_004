@@ -49,7 +49,8 @@ public class Answer extends BaseTime{
     private LocalDate createDate;
 
     @Builder.Default
-    @OneToMany(mappedBy = "answer")
+    @OneToMany(mappedBy = "answer",
+            cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
@@ -57,7 +58,8 @@ public class Answer extends BaseTime{
     private List<Report> reports = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "answer")
+    @OneToMany(mappedBy = "answer",
+            cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<File> files = new ArrayList<>();
 
     @Builder.Default
