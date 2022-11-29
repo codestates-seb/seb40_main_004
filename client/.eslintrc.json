@@ -36,7 +36,7 @@
         "useTabs": false
       }
     ],
-    "indent": [["error", 2], "off"],
+    "indent": ["error", 2],
     "@typescript-eslint/no-empty-interface": "off",
     "no-empty-interface": "off"
   },
