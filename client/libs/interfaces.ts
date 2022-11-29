@@ -50,6 +50,7 @@ export interface Answer {
   authorId: string;
   content: string;
   createdAt: string;
+  isLiked: boolean;
   isPicked: boolean;
   answerLikeCount: number;
   commentCount: number;

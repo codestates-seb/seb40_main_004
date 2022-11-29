@@ -15,7 +15,7 @@ export const uploadImg = async (url: string, file: any) => {
       },
     })
     .then((res) => {
-      console.log(res);
+      // console.log(res);
     })
     .catch((err) => console.error(err));
 };
