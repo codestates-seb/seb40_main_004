@@ -37,10 +37,11 @@ export const LoginForm = () => {
         alert('로그인 성공');
         const accessToken = res.data.accessToken;
         const refreshToken = res.data.refreshToken;
+        const avatarPath = res.data.avatarPath;
         const decoded: DecodedProps = jwt_decode(accessToken);
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
-
+        localStorage.setItem('avatarPath', avatarPath);
         localStorage.setItem('email', decoded.sub);
         localStorage.setItem('userId', String(decoded.id));
         localStorage.setItem('nickname', decoded.nickname);
