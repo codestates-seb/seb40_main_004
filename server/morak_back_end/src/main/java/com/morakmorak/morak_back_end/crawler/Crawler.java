@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface Crawler {
-    void process();
+    void run();
     default boolean switchTapTo(int tab, WebDriver webDriver) {
         List<String> tabs = new ArrayList<>(webDriver.getWindowHandles());
 
