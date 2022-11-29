@@ -1,11 +1,11 @@
 /*
  * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-11-19
+ * 최초 작성일: 2022-11-27
+ * 최근 수정일: 2022-11-27
  */
 
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { wrap } from 'popmotion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,10 +13,9 @@ import {
   faChevronLeft,
   faChevronRight,
   faComment,
-  faHeart,
 } from '@fortawesome/free-solid-svg-icons';
-import { useRecoilValue } from 'recoil';
-import { userDashboardAtom } from '../../atomsYW';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const variants = {
   enter: (direction: number) => {
@@ -50,8 +49,41 @@ const swipePower = (offset: number, velocity: number) => {
   return Math.abs(offset) * velocity;
 };
 
-export const CarouselArticle = () => {
-  const { articles } = useRecoilValue(userDashboardAtom);
+export const CarouselAnswers = () => {
+  const router = useRouter();
+  const [userId, setUserId] = useState<string | string[] | undefined>('');
+  const [articles, setArticles] = useState([
+    {
+      answerId: 0,
+      content: '',
+      isPicked: false,
+      answerLikeCount: 0,
+      commentCount: 0,
+      createdAt: '',
+      userInfo: {
+        userId: 0,
+        nickname: '',
+        grade: '',
+      },
+    },
+  ]);
+  const getReview = async () =>
+    await axios
+      .get(`/api/users/${userId}/answers?page=1&size=50`, {
+        headers: {
+          'ngrok-skip-browser-warning': '111',
+        },
+      })
+      .then((res) => setArticles(res.data.data))
+      .catch((error) => console.log(error));
+
+  useEffect(() => {
+    setUserId(router.query.userId);
+  });
+
+  useEffect(() => {
+    getReview();
+  }, [userId]);
   const [[page, direction], setPage] = useState([0, 0]);
 
   // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
@@ -93,23 +125,19 @@ export const CarouselArticle = () => {
         >
           {articles.slice(articleIndex, articleIndex + 2).map((article) => (
             <motion.div
-              key={article.articleId}
+              key={article.answerId}
               className="bg-main-yellow bg-opacity-20 w-[793px] h-[190px] rounded-2xl p-8 relative mb-[72px]"
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <span className="text-2xl text-main-orange">Q. </span>
+                  <span className="text-2xl text-main-orange">A. </span>
                   <span className="hover:cursor-pointer text-2xl">
-                    {article.title.length > 30
-                      ? `${article.title.slice(0, 30)}...`
-                      : article.title}
+                    {article.content.length > 30
+                      ? `${article.content.slice(0, 30)}...`
+                      : article.content}
                   </span>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex gap-2">
-                    <FontAwesomeIcon icon={faHeart} size="xs" />
-                    <span className="text-xs">{article.likes}</span>
-                  </div>
                   <div className="flex gap-2">
                     <FontAwesomeIcon icon={faComment} size="xs" />
                     <span className="text-xs">{article.commentCount}</span>
@@ -130,14 +158,9 @@ export const CarouselArticle = () => {
                 }시 ${new Date(article.createdAt).getMinutes()}분`}</span>
               </div>
               <div className="flex justify-end gap-4 items-end h-16">
-                {article.tags.map((tag) => (
-                  <button
-                    className="bg-main-yellow rounded-full py-[6px] w-32"
-                    key={tag.tagId}
-                  >
-                    {tag.name}
-                  </button>
-                ))}
+                <button className="bg-main-yellow rounded-full py-[6px] w-32">
+                  {article.isPicked ? '채택 ✅' : '채택 ❎'}
+                </button>
               </div>
             </motion.div>
           ))}

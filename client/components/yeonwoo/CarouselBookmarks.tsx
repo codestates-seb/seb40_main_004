@@ -1,11 +1,11 @@
 /*
  * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-11-19
+ * 최초 작성일: 2022-11-27
+ * 최근 수정일: 2022-11-27
  */
 
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { wrap } from 'popmotion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,10 +13,9 @@ import {
   faChevronLeft,
   faChevronRight,
   faComment,
-  faHeart,
 } from '@fortawesome/free-solid-svg-icons';
-import { useRecoilValue } from 'recoil';
-import { userDashboardAtom } from '../../atomsYW';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const variants = {
   enter: (direction: number) => {
@@ -50,8 +49,59 @@ const swipePower = (offset: number, velocity: number) => {
   return Math.abs(offset) * velocity;
 };
 
-export const CarouselArticle = () => {
-  const { articles } = useRecoilValue(userDashboardAtom);
+export const CarouselBookmarks = () => {
+  const router = useRouter();
+  const [userId, setUserId] = useState<string | string[] | undefined>('');
+  const [articles, setArticles] = useState([
+    {
+      articleId: 0,
+      category: '',
+      title: '',
+      clicks: 0,
+      likes: 0,
+      isClosed: false,
+      tags: [
+        {
+          tagId: 0,
+          name: '',
+        },
+      ],
+      commentCount: 0,
+      answerCount: 0,
+      createdAt: '',
+      lastModifiedAt: '',
+      userInfo: {
+        userId: 0,
+        nickname: '',
+        grade: '',
+      },
+      avatar: {
+        avatarId: 0,
+        filename: '',
+        remotePath: '',
+      },
+    },
+  ]);
+  const getReview = async () =>
+    await axios
+      .get(
+        `/api/articles?category=INFO&keyword=${userId}&target=bookmark&sort=desc&page=1&size=50`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': '111',
+          },
+        },
+      )
+      .then((res) => setArticles(res.data.data))
+      .catch((error) => console.log(error));
+
+  useEffect(() => {
+    setUserId(router.query.userId);
+  });
+
+  useEffect(() => {
+    getReview();
+  }, [userId]);
   const [[page, direction], setPage] = useState([0, 0]);
 
   // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
@@ -98,7 +148,7 @@ export const CarouselArticle = () => {
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <span className="text-2xl text-main-orange">Q. </span>
+                  <span className="text-2xl text-main-orange">A. </span>
                   <span className="hover:cursor-pointer text-2xl">
                     {article.title.length > 30
                       ? `${article.title.slice(0, 30)}...`
@@ -106,10 +156,6 @@ export const CarouselArticle = () => {
                   </span>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex gap-2">
-                    <FontAwesomeIcon icon={faHeart} size="xs" />
-                    <span className="text-xs">{article.likes}</span>
-                  </div>
                   <div className="flex gap-2">
                     <FontAwesomeIcon icon={faComment} size="xs" />
                     <span className="text-xs">{article.commentCount}</span>
