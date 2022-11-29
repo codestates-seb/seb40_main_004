@@ -129,10 +129,10 @@ public class Review_User_Controller {
                 ));
     }
     @Test
-    @DisplayName("유효하지 않은 포인트 전송 시 400 반환")
+    @DisplayName("유효하지 않은 포인트 전송 시 422 반환")
     public void postReview_DashBoard_failed_1() throws Exception {
         ReviewDto.RequestPostReview request = ReviewDto.RequestPostReview.builder().content("15글자 이상의 정성스러운 답변").badges(validBadges).point(Optional.of(500)).build();
-        given(reviewService.createReview(any(), any(), any(), any())).willThrow(new BusinessLogicException(ErrorCode.BAD_REQUEST));
+        given(reviewService.createReview(any(), any(), any(), any())).willThrow(new BusinessLogicException(ErrorCode.UNPROCESSABLE_REQUEST));
         String json = objectMapper.writeValueAsString(request);
 
         ResultActions perform = mockMvc.perform(MockMvcRequestBuilders.post("/users/{user-id}/reviews",1L,1L)
@@ -141,9 +141,9 @@ public class Review_User_Controller {
                 .contentType(MediaType.APPLICATION_JSON)
         );
 
-        perform.andExpect(status().isBadRequest())
+        perform.andExpect(status().isUnprocessableEntity())
                 .andDo(document(
-                        "리뷰 작성 실패_잘못된 포인트_400",
+                        "리뷰 작성 실패_잘못된 포인트_422",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         HeaderDocumentation.requestHeaders(

@@ -42,20 +42,6 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         List<Article> result = queryFactory
                 .select(article)
                 .from(article)
-                .leftJoin(article.user, user)
-                .leftJoin(article.articleTags, articleTag)
-                .fetchJoin()
-                .leftJoin(articleTag.tag, tag)
-                .fetchJoin()
-                .leftJoin(article.category, QCategory.category)
-                .fetchJoin()
-                .leftJoin(article.user.answers, answer)
-                .leftJoin(article.user.comments, comment)
-                .leftJoin(articleTag.article.articleLikes, articleLike)
-                .leftJoin(article.bookmarks, bookmark)
-                .leftJoin(article.answers, answer)
-                .leftJoin(article.reviews, review)
-                .leftJoin(article.files, file)
                 .where(categoryEq(category),
                         keywordEq(keyword, target))
                 .offset(pageable.getOffset())
@@ -66,17 +52,6 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         Long count = queryFactory
                 .select(article.count())
                 .from(article)
-                .leftJoin(article.user, user)
-                .leftJoin(article.articleTags, articleTag)
-                .leftJoin(articleTag.tag, tag)
-                .leftJoin(article.category, QCategory.category)
-                .leftJoin(article.user.answers, answer)
-                .leftJoin(article.user.comments, comment)
-                .leftJoin(articleTag.article.articleLikes, articleLike)
-                .leftJoin(article.bookmarks, bookmark)
-                .leftJoin(article.answers, answer)
-                .leftJoin(article.reviews, review)
-                .leftJoin(article.files, file)
                 .where(categoryEq(category),
                         keywordEq(keyword, target))
                 .orderBy(sortEq(sort))
@@ -100,15 +75,15 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         }
         switch (target) {
             case "title":
-                return article.title.contains(keyword);
+                return article.title.startsWith(keyword);
             case "content":
-                return article.content.contains(keyword);
+                return article.content.startsWith(keyword);
             case "tag":
-            return article.articleTags.any().tag.name.in(TagName.valueOf(keyword));
+            return article.articleTags.any().tag.name.eq(TagName.valueOf(keyword));
             case "bookmark":
                  article.bookmarks.any().user.id.eq(Long.parseLong(keyword));
             case "titleAndContent":
-                return article.title.contains(keyword).or(article.content.contains(keyword));
+                return article.title.startsWith(keyword).or(article.content.startsWith(keyword));
             default:
                 return null;
         }
