@@ -182,20 +182,23 @@ export const Editor = () => {
         {...register('title')}
         onChange={handleTitleChange}
         type="text"
-        className="w-full border-2 px-2 py-1 justify-center leading-loose"
+        className="w-[97%] border-2 px-2 py-1 leading-loose mx-auto flex justify-center overflow-x-hidden"
         placeholder="제목을 입력해주세요!"
       />
       <label htmlFor="본문" className="font-bold ml-2 flex py-2 px-2">
         본문
       </label>
       <QuillEditor
-        className="h-96 mt-2 px-2"
+        className="h-96 w-[97%] mx-auto py-1"
         value={editorContent}
         modules={modules}
         onChange={editorChange}
         bounds="#editor"
         forwardRef={quillRef}
       />
+      <label htmlFor="태그" className="font-bold ml-2 flex py-2 mt-10 px-2">
+        태그
+      </label>
       <Select
         multiple
         options={options}
