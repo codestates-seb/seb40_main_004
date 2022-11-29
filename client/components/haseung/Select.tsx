@@ -56,7 +56,7 @@ export const Select = ({ multiple, tags, onChange, options }: SelectProps) => {
       onBlur={() => setIsOpen(false)}
       onClick={() => setIsOpen((prev) => !prev)}
       tabIndex={0}
-      className="relative w-80 top-20 min-h-[1.5em] flex justify-start ml-10 border-[0.05em] border-solid border-slate-800 gap-1 outline-none cursor-pointer hover:border-main-orange"
+      className="relative w-80 top-5 min-h-[1.5em] flex justify-start ml-10 border-[0.05em] border-solid border-slate-800 gap-1 outline-none cursor-pointer hover:border-main-orange"
     >
       <span className="flex-grow flex gap-2 flex-wrap">
         {multiple
