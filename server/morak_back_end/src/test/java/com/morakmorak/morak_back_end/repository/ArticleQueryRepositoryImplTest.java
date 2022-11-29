@@ -142,7 +142,7 @@ class ArticleQueryRepositoryImplTest {
         //given
         PageRequest pageRequest = PageRequest.of(0, 10);
         //when
-        Page<Article> articles = articleRepository.search(null, "제발", "content", "like-desc", pageRequest);
+        Page<Article> articles = articleRepository.search(null, "콘탠트입니다.", "content", "like-desc", pageRequest);
         //then
         assertThat(articles.getTotalPages()).isEqualTo(2);
         assertThat(articles.getTotalElements()).isEqualTo(20);
