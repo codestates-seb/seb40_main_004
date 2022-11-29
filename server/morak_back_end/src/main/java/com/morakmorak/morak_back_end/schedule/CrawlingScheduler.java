@@ -14,6 +14,6 @@ public class CrawlingScheduler {
 
     @Scheduled(cron = "0 0 4 * * MON-SAT")
     public void runCrawler() {
-        crawler.process();
+        crawler.run();
     }
 }
