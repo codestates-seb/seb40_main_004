@@ -60,7 +60,7 @@ class ArticleQueryRepositoryImplTest {
             }
             ArticleTag articleTagJava = ArticleTag.builder().tag(JAVA).build();
             Article article = Article.builder().title("테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~" + i)
-                    .content("콘탠트입니다. 제발 됬으면 좋겠습니다.")
+                    .content("탠탠트입니다. 제발 됬으면 좋겠습니다.")
                     .articleTags(List.of(articleTagJava))
                     .category(category)
                     .articleLikes(articleLikes)
@@ -142,10 +142,10 @@ class ArticleQueryRepositoryImplTest {
         //given
         PageRequest pageRequest = PageRequest.of(0, 10);
         //when
-        Page<Article> articles = articleRepository.search(null, "제발", "content", "like-desc", pageRequest);
+        Page<Article> articles = articleRepository.search(null, "탠탠트입니다.", "content", "like-desc", pageRequest);
         //then
-        assertThat(articles.getTotalPages()).isEqualTo(2);
-        assertThat(articles.getTotalElements()).isEqualTo(20);
+        assertThat(articles.getTotalPages()).isEqualTo(1);
+        assertThat(articles.getTotalElements()).isEqualTo(10);
         assertThat(articles.getSize()).isSameAs(10);
 
 
