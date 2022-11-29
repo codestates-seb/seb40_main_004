@@ -9,9 +9,12 @@ import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { client } from '../../libs/client';
 import { mutate } from 'swr';
 import { useFetch } from '../../libs/useFetchSWR';
+import { useRecoilValue } from 'recoil';
+import { isLoginAtom } from '../../atomsYW';
+import { useRef, useState } from 'react';
 
 type TextAreaProps = {
-  answerId?: string;
+  answerId?: number;
 };
 
 type FormValue = {
@@ -22,29 +25,37 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
   // router, id
   const router = useRouter();
   const { articleId } = router.query;
+  const isLogin = useRecoilValue(isLoginAtom);
 
-  const { register, handleSubmit } = useForm<FormValue>();
+  const { register, handleSubmit, watch, setValue } = useForm<FormValue>();
+
+  if (watch().content?.length >= 1 && !isLogin) {
+    if (confirm('로그인이 필요한 서비스 입니다. 바로 로그인 하시겠어요?')) {
+      router.push('/login');
+    }
+  }
 
   // answerId 가 있는 경우 댓글 코멘트 작성 api 로 요청
   let url = answerId
-    ? `/api/articles/${articleId}/answers/${answerId}/comments`
+    ? `/api/answers/${answerId}/comments`
     : `/api/articles/${articleId}/comments`;
-
-  let { data: currComments } = useFetch(url);
 
   // 데이터 요청 관련 함수
   const postComment = async (data: FormValue) => {
     const response = await client.post(url, data);
     mutate(url)
-      .then(() => {})
+      .then((res) => {
+        // console.log(res);
+      })
       .catch((err) => {
-        console.log(err);
         alert('코멘트 등록에 실패했습니다...!');
+        console.log(err);
       });
   };
 
   const onValid: SubmitHandler<FormValue> = (data) => {
     postComment(data);
+    setValue('content', '');
   };
 
   const onInvalid: SubmitErrorHandler<FormValue> = (data) => {

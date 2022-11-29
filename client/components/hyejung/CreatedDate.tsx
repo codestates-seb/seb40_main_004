@@ -11,8 +11,6 @@ import { elapsedTime } from '../../libs/elapsedTime';
 
 export const CreatedDate = ({ createdAt }: CreatedDateProps) => {
   return (
-    <time className="text-main-gray text-xs sm:text-sm">
-      {elapsedTime(createdAt)}
-    </time>
+    <time className="text-main-gray text-xs">{elapsedTime(createdAt)}</time>
   );
 };

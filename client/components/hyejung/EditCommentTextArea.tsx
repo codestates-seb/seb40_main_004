@@ -41,7 +41,7 @@ export const EditCommentTextArea = ({
 
   // 데이터 요청 관련 함수
   const patchComment = async (data: FormValue) => {
-    const response = await client.patch(url, data);
+    await client.patch(url, data);
     setIsEdit(false);
     mutate(mutateUrl);
   };

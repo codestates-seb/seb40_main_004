@@ -15,6 +15,8 @@ import { client } from '../../libs/client';
 import { mutate } from 'swr';
 import { useState } from 'react';
 import { EditCommentTextArea } from './EditCommentTextArea';
+import { useRecoilValue } from 'recoil';
+import { isLoginAtom } from '../../atomsYW';
 
 export const Comment = ({
   answerId,
@@ -55,6 +57,7 @@ export const Comment = ({
   };
 
   const [isEdit, setIsEdit] = useState(false);
+  const isLogin = useRecoilValue(isLoginAtom);
 
   const onEdit = () => {
     setIsEdit(true);
@@ -72,10 +75,10 @@ export const Comment = ({
     );
   else
     return (
-      <section className="flex w-full">
+      <section className="flex w-full pb-2">
         <ProfileImage src={avatar.remotePath} />
-        <section className="flex w-full flex-col pl-4 space-y-3">
-          <article className="w-full flex justify-between items-center">
+        <section className="flex w-full flex-col pl-4 space-y-2">
+          <article className="w-full flex space-x-3 items-center pb-2">
             <UserNickname
               nickname={userInfo.nickname}
               userId={userInfo.userId}
@@ -84,12 +87,12 @@ export const Comment = ({
             <CreatedDate createdAt={createdAt} />
           </article>
           <p className="text-xs sm:text-base">{content}</p>
-          {currUserId === authorId ? null : (
+          {currUserId === authorId.toString() && isLogin ? (
             <article className="space-x-2 text-xs ml-auto">
               <button onClick={onEdit}>수정</button>
               <button onClick={onDelete}>삭제</button>
             </article>
-          )}
+          ) : null}
         </section>
       </section>
     );
