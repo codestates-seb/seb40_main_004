@@ -78,7 +78,8 @@ public class Article extends BaseTime {
     private List<File> files = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article",
+            cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
@@ -86,7 +87,8 @@ public class Article extends BaseTime {
     private List<Report> reports = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article",fetch = FetchType.LAZY,
+            cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
     @Builder.Default
