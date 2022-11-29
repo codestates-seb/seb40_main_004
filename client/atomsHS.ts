@@ -19,3 +19,13 @@ export const userNickName = atom({
   key: 'nickName',
   default: '',
 });
+
+export const categoryAtom = atom({
+  key: 'category',
+  default: 'QNA',
+});
+
+export const tagIdAtom = atom({
+  key: 'tagId',
+  default: 0,
+});

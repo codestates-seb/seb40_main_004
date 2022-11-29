@@ -41,15 +41,6 @@ export const LoginForm = () => {
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
 
-        // console.log('accessToken', accessToken);
-        // console.log('refreshToken', refreshToken);
-        // console.log('decode', decoded);
-
-        // console.log({
-        //   email: decoded.sub, //email
-        //   userId: decoded.id, //userId
-        // });
-
         localStorage.setItem('email', decoded.sub);
         localStorage.setItem('userId', String(decoded.id));
         localStorage.setItem('nickname', decoded.nickname);

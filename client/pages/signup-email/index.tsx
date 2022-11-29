@@ -21,7 +21,6 @@ const AuthenticateNumber = () => {
   const email = useRecoilValue(userEmailAtom);
 
   const [authKey, setAuthKey] = useRecoilState(userAuthKey);
-  // const setAuthKey = useSetRecoilState(userAuthKey);
   const router = useRouter();
   const onValid = ({ authKey }: VerificationNumber) => {
     axios
