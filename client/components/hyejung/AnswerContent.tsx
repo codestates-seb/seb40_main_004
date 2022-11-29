@@ -6,7 +6,7 @@
 import { ProfileImage } from './ProfileImage';
 import { AnswerMainText } from './AnswerMainText';
 import { BtnLike } from './BtnLike';
-import { CommentContainer } from './CommentList';
+import { CommentContainer } from './CommentContainer';
 import { Answer } from '../../libs/interfaces';
 import { elapsedTime } from '../../libs/elapsedTime';
 import { useEffect, useRef } from 'react';
@@ -110,7 +110,7 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
             <div className="flex ml-auto">
               {/* 답변글에서 유저의 좋아요 여부를 확인할 수 있는 api가 아직 수정중. */}
               <div className="space-x-1">
-                <BtnLike isLiked={false} answerId={answer.answerId} />
+                <BtnLike isLiked={answer.isLiked} answerId={answer.answerId} />
                 <span className="text-xl pr-3">{answer.answerLikeCount}</span>
               </div>
             </div>

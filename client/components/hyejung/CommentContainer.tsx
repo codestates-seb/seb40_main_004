@@ -18,9 +18,15 @@ type CommentList = {
   comments: CommentResp[];
   setIsOpen: any;
   isOpen: boolean;
+  answerId?: number;
 };
 
-const CommentList = ({ comments, setIsOpen, isOpen }: CommentList) => {
+const CommentList = ({
+  comments,
+  setIsOpen,
+  isOpen,
+  answerId,
+}: CommentList) => {
   return isOpen ? (
     <>
       {comments.map((comment: CommentResp) => (
@@ -33,10 +39,11 @@ const CommentList = ({ comments, setIsOpen, isOpen }: CommentList) => {
           lastModifiedAt={comment.lastModifiedAt}
           userInfo={comment.userInfo}
           avatar={comment.avatar}
+          answerId={comment.answerId}
         />
       ))}
-      <CommentTextArea />
-      <button onClick={() => setIsOpen(false)}>
+      <CommentTextArea answerId={answerId} />
+      <button className="text-base" onClick={() => setIsOpen(false)}>
         {`닫기 `}
         <FontAwesomeIcon icon={faChevronUp} />
       </button>
@@ -52,8 +59,9 @@ const CommentList = ({ comments, setIsOpen, isOpen }: CommentList) => {
         lastModifiedAt={comments[0].lastModifiedAt}
         userInfo={comments[0].userInfo}
         avatar={comments[0].avatar}
+        answerId={comments[0].answerId}
       />
-      <button onClick={() => setIsOpen(true)}>
+      <button className="text-base" onClick={() => setIsOpen(true)}>
         {`펼치기 `}
         <FontAwesomeIcon icon={faChevronDown} />
       </button>
@@ -63,6 +71,7 @@ const CommentList = ({ comments, setIsOpen, isOpen }: CommentList) => {
 
 type CommentContainerProps = {
   answerId?: number;
+  comments?: CommentResp;
 };
 
 export const CommentContainer = ({ answerId }: CommentContainerProps) => {
@@ -77,28 +86,23 @@ export const CommentContainer = ({ answerId }: CommentContainerProps) => {
     : `/api/articles/${articleId}/comments`;
 
   // 코멘트 조회 요청 로직
-  let comments;
-  if (!answerId) {
-    comments = useFetch(url).data;
-  } else {
-    comments;
-  }
-  if (!comments) comments = [];
+  const { data: comments } = useFetch(url) || [];
 
   // 코멘트가 존재할때만 펼치기 기능이 있는 코멘트 리스트가 나옴!
   return (
     <>
-      <h3 className="text-xl font-bold">{comments.length} 코멘트</h3>
+      <h3 className="text-xl font-bold">{comments?.length || 0} 코멘트</h3>
       <div className="space-y-8 pt-4">
-        {comments.length ? (
+        {comments?.length ? (
           <CommentList
             comments={comments}
             setIsOpen={setIsOpen}
             isOpen={isOpen}
+            answerId={answerId}
           />
         ) : (
           <div>
-            <CommentTextArea />
+            <CommentTextArea answerId={answerId} />
           </div>
         )}
       </div>

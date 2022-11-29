@@ -6,13 +6,15 @@
 
 import { QuestionTitle } from './QuestionTitle';
 import { CreatedDate } from './CreatedDate';
-import { CommentContainer } from './CommentList';
+import { CommentContainer } from './CommentContainer';
 import { TagList } from './TagList';
 import { BtnLike } from './BtnLike';
 import { BtnBookmark } from './BtnBookmark';
 import { UserNickname } from './UserNickname';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
+import { useRecoilValue } from 'recoil';
+import { isLoginAtom } from '../../atomsYW';
 
 type MainTextProps = {
   content: string;
@@ -30,6 +32,8 @@ const QuestionMainText = ({ content }: MainTextProps) => {
 export const QuestionContent = () => {
   const router = useRouter();
   const { articleId } = router.query;
+
+  const isLogin = useRecoilValue(isLoginAtom);
 
   const { data } = useSWR(`/articles/${articleId}`);
   const article = data.article;
@@ -72,16 +76,16 @@ export const QuestionContent = () => {
             <div className="flex justify-between items-end space-y-3 sm:space-y-0 py-4 flex-col sm:flex-row">
               <TagList tags={article.tags} />
 
-              {!isClosed && authorId === currUserId ? null : (
+              {isLogin && !isClosed && authorId.toString() === currUserId ? (
                 <article className="space-x-2 text-sm w-[80px] flex justify-end">
                   <button>수정</button>
                   <button>삭제</button>
                 </article>
-              )}
+              ) : null}
             </div>
           </section>
 
-          <section className="space-y-3 border-l pl-3">
+          <section className="space-y-3 border-l pl-4">
             <CommentContainer />
           </section>
         </>
