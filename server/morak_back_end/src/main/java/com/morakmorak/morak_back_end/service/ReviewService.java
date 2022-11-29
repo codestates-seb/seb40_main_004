@@ -104,7 +104,7 @@ public class ReviewService {
 
     public void injectBadgesOnReview(Review review, List<BadgeDto.SimpleBadge> badgeDtoList) {
         badgeDtoList.stream().forEach(badgeDto -> {
-            Badge dbBadge = badgeRepository.findById(badgeDto.getBadgeId())
+            Badge dbBadge = badgeRepository.findBadgeByName(badgeDto.getName())
                     .orElseThrow(()-> new BusinessLogicException(ErrorCode.BADGE_NOT_FOUND));
             ReviewBadge reviewBadge = ReviewBadge.builder().review(review).badge(dbBadge).build();
             reviewBadge.mapBadgeAndReview();
