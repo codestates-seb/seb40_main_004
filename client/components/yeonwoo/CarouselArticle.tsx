@@ -15,45 +15,8 @@ import {
   faComment,
   faHeart,
 } from '@fortawesome/free-solid-svg-icons';
-
-const articles = [
-  {
-    title:
-      '리액트 쿼리 질문드립니다!!리액트 쿼리 질문드립니다!!리액트 쿼리 질문드립니다!!리액트 쿼리 질문드립니다!!',
-    text: '안녕하세요 매번 제로초님의 강의로 많은 도움과 영감을 얻어 사내에서 사용하는 시스템을 적용중에 있습니다. 감사드립니다. 다름이 아니라 타입스크립트 버전인 리액트쿼리를 깃허브에 올려주셔서 적용해봤는데요 새로고침 시 기존에는 깜박임 없이 바로 로그인 이후 페이지로 연결되었던게 지금은 일시적으로 로그인 페이지에 접근했다가 메인페이지로 가더라구요 그래서 임시로 Loading아이콘을 보여주는 식으로 했는데 제가 잘못사용해서 그런건가요? 소스코드 첨부합니다.ㅜㅜ',
-    createdAt: 1668878420020,
-    like: 13,
-    comment: 1,
-  },
-  {
-    title: '리액트 쿼리 질문드립니다!!',
-    text: '안녕하세요 매번 제로초님의 강의로 많은 도움과 영감을 얻어 사내에서 사용하는 시스템을 적용중에 있습니다. 감사드립니다. 다름이 아니라 타입스크립트 버전인 리액트쿼리를 깃허브에 올려주셔서 적용해봤는데요 새로고침 시 기존에는 깜박임 없이 바로 로그인 이후 페이지로 연결되었던게 지금은 일시적으로 로그인 페이지에 접근했다가 메인페이지로 가더라구요 그래서 임시로 Loading아이콘을 보여주는 식으로 했는데 제가 잘못사용해서 그런건가요? 소스코드 첨부합니다.ㅜㅜ',
-    createdAt: 1668878420020,
-    like: 13,
-    comment: 2,
-  },
-  {
-    title: '리액트 쿼리 질문드립니다!!',
-    text: '안녕하세요 매번 제로초님의 강의로 많은 도움과 영감을 얻어 사내에서 사용하는 시스템을 적용중에 있습니다. 감사드립니다. 다름이 아니라 타입스크립트 버전인 리액트쿼리를 깃허브에 올려주셔서 적용해봤는데요 새로고침 시 기존에는 깜박임 없이 바로 로그인 이후 페이지로 연결되었던게 지금은 일시적으로 로그인 페이지에 접근했다가 메인페이지로 가더라구요 그래서 임시로 Loading아이콘을 보여주는 식으로 했는데 제가 잘못사용해서 그런건가요? 소스코드 첨부합니다.ㅜㅜ',
-    createdAt: 1668878420020,
-    like: 13,
-    comment: 3,
-  },
-  {
-    title: '리액트 쿼리 질문드립니다!!',
-    text: '안녕하세요 매번 제로초님의 강의로 많은 도움과 영감을 얻어 사내에서 사용하는 시스템을 적용중에 있습니다. 감사드립니다. 다름이 아니라 타입스크립트 버전인 리액트쿼리를 깃허브에 올려주셔서 적용해봤는데요 새로고침 시 기존에는 깜박임 없이 바로 로그인 이후 페이지로 연결되었던게 지금은 일시적으로 로그인 페이지에 접근했다가 메인페이지로 가더라구요 그래서 임시로 Loading아이콘을 보여주는 식으로 했는데 제가 잘못사용해서 그런건가요? 소스코드 첨부합니다.ㅜㅜ',
-    createdAt: 1668878420020,
-    like: 13,
-    comment: 4,
-  },
-  {
-    title: '리액트 쿼리 질문드립니다!!',
-    text: '안녕하세요 매번 제로초님의 강의로 많은 도움과 영감을 얻어 사내에서 사용하는 시스템을 적용중에 있습니다. 감사드립니다. 다름이 아니라 타입스크립트 버전인 리액트쿼리를 깃허브에 올려주셔서 적용해봤는데요 새로고침 시 기존에는 깜박임 없이 바로 로그인 이후 페이지로 연결되었던게 지금은 일시적으로 로그인 페이지에 접근했다가 메인페이지로 가더라구요 그래서 임시로 Loading아이콘을 보여주는 식으로 했는데 제가 잘못사용해서 그런건가요? 소스코드 첨부합니다.ㅜㅜ',
-    createdAt: 1668878420020,
-    like: 13,
-    comment: 5,
-  },
-];
+import { useRecoilValue } from 'recoil';
+import { userDashboardAtom } from '../../atomsYW';
 
 const variants = {
   enter: (direction: number) => {
@@ -88,6 +51,7 @@ const swipePower = (offset: number, velocity: number) => {
 };
 
 export const CarouselArticle = () => {
+  const { articles } = useRecoilValue(userDashboardAtom);
   const [[page, direction], setPage] = useState([0, 0]);
 
   // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
@@ -129,7 +93,7 @@ export const CarouselArticle = () => {
         >
           {articles.slice(articleIndex, articleIndex + 2).map((article) => (
             <motion.div
-              key={article.comment}
+              key={article.articleId}
               className="bg-main-yellow bg-opacity-20 w-[793px] h-[190px] rounded-2xl p-8 relative mb-[72px]"
             >
               <div className="flex justify-between items-start">
@@ -144,11 +108,11 @@ export const CarouselArticle = () => {
                 <div className="flex gap-4">
                   <div className="flex gap-2">
                     <FontAwesomeIcon icon={faHeart} size="xs" />
-                    <span className="text-xs">{article.like}</span>
+                    <span className="text-xs">{article.likes}</span>
                   </div>
                   <div className="flex gap-2">
                     <FontAwesomeIcon icon={faComment} size="xs" />
-                    <span className="text-xs">{article.comment}</span>
+                    <span className="text-xs">{article.commentCount}</span>
                   </div>
                 </div>
               </div>
@@ -165,12 +129,15 @@ export const CarouselArticle = () => {
                     : new Date(article.createdAt).getHours()
                 }시 ${new Date(article.createdAt).getMinutes()}분`}</span>
               </div>
-              <div>
-                <p className="hover:cursor-pointer">
-                  {article.text.length > 180
-                    ? `${article.text.slice(0, 180)}...`
-                    : article.text}
-                </p>
+              <div className="flex justify-end gap-4 items-end h-16">
+                {article.tags.map((tag) => (
+                  <button
+                    className="bg-main-yellow rounded-full py-[6px] w-32"
+                    key={tag.tagId}
+                  >
+                    {tag.name}
+                  </button>
+                ))}
               </div>
             </motion.div>
           ))}
