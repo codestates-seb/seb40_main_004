@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseTime {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -144,14 +144,21 @@ public class User {
         this.password = newPassword;
     }
 
-    public String injectUserInformationForToken(JwtTokenUtil jwtTokenUtil) {
+    public String injectUserInformationForAccessToken(JwtTokenUtil jwtTokenUtil) {
+        return jwtTokenUtil.createAccessToken(this.getEmail(), this.getId(), getRoles(), this.getNickname());
+    }
+
+    public String injectUserInformationForRefreshToken(JwtTokenUtil jwtTokenUtil) {
+        return jwtTokenUtil.createRefreshToken(this.getEmail(), this.getId(), getRoles(), this.getNickname());
+    }
+
+    private List<String> getRoles() {
         List<String> roles = this.userRoles
                 .stream().map(e -> e.getRole().getRoleName().toString())
                 .collect(Collectors.toList());
 
         if (roles.size() == 0) roles = List.of("Role_User");
-
-        return jwtTokenUtil.createAccessToken(this.getEmail(), this.getId(), roles, this.getNickname());
+        return roles;
     }
 
     public void injectAvatar(Avatar avatar) {
