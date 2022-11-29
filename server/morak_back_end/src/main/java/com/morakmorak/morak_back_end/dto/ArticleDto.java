@@ -4,6 +4,7 @@ import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.service.EnumValid;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -17,6 +18,7 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class RequestUploadArticle {
         @NotBlank
         @Size(min = 5)
@@ -33,6 +35,7 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class RequestUpdateArticle {
         @NotBlank
         @Size(min = 5)
@@ -50,6 +53,7 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class ResponseSimpleArticle {
         private Long articleId;
     }
@@ -58,6 +62,7 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class ResponseListTypeArticle {
         private Long articleId;
         @EnumValid
@@ -81,6 +86,7 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class ResponseDetailArticle {
         private Long articleId;
         @EnumValid
@@ -107,6 +113,7 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class ResponseArticleLike {
         private Long articleId;
         private Long userId;
@@ -118,6 +125,7 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class RequestReportArticle {
         private ReportReason reason;
         private String content;
@@ -127,6 +135,7 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class ResponseReportArticle {
         private Long reportId;
     }

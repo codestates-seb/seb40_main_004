@@ -44,9 +44,9 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         List<Article> result = queryFactory
                 .select(article)
                 .from(article)
-                .where(categoryEq(category)
-                        .and(keywordEq(keyword, target))
-                        .and(article.articleStatus.eq(POSTING)))
+                .where(categoryEq(category),
+                        (keywordEq(keyword, target)))
+
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(sortEq(sort))
@@ -55,10 +55,8 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         Long count = queryFactory
                 .select(article.count())
                 .from(article)
-                .where(categoryEq(category)
-                                .and(keywordEq(keyword, target))
-                                .and(article.articleStatus.eq(POSTING))
-                        )
+                .where(categoryEq(category),
+                        (keywordEq(keyword, target)))
                 .orderBy(sortEq(sort))
                 .fetchOne();
 
@@ -80,18 +78,22 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         }
         switch (target) {
             case "title":
-                return article.title.startsWith(keyword);
+                return article.title.startsWith(keyword).and(statusPosting());
             case "content":
-                return article.content.startsWith(keyword);
+                return article.content.startsWith(keyword).and(statusPosting());
             case "tag":
-            return article.articleTags.any().tag.name.eq(TagName.valueOf(keyword));
+            return article.articleTags.any().tag.name.eq(TagName.valueOf(keyword)).and(statusPosting());
             case "bookmark":
-                 article.bookmarks.any().user.id.eq(Long.parseLong(keyword));
+                 article.bookmarks.any().user.id.eq(Long.parseLong(keyword)).and(statusPosting());
             case "titleAndContent":
-                return article.title.startsWith(keyword).or(article.content.startsWith(keyword));
+                return article.title.startsWith(keyword).or(article.content.startsWith(keyword)).and(statusPosting());
             default:
-                return null;
+                return statusPosting();
         }
+    }
+
+    private BooleanExpression statusPosting() {
+        return article.articleStatus.eq(POSTING);
     }
 
     private OrderSpecifier sortEq(String sort) {

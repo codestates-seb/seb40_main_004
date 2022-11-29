@@ -159,8 +159,10 @@ public class ArticleService {
     }
 
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
-        Article dbArticle = findVerifiedArticle(articleId);
-        checkArticleStatus(dbArticle);
+        Article article = findVerifiedArticle(articleId);
+        checkArticleStatus(article);
+        Article dbArticle = article.addClicks();
+
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
 
