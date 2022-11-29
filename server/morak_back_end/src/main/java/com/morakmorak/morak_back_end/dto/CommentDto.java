@@ -69,7 +69,7 @@ public class CommentDto {
                         .userInfo(UserDto.ResponseSimpleUserDto.of(savedComment.getUser()))
                         .avatar(AvatarDto.SimpleResponse.of(savedComment.getUser().getAvatar()))
                         .commentId(savedComment.getId())
-                        .answerId(savedComment.getArticle().getId())
+                        .answerId(savedComment.getAnswer().getId())
                         .content(savedComment.getContent())
                         .createdAt(savedComment.getCreatedAt())
                         .lastModifiedAt(savedComment.getLastModifiedAt())
