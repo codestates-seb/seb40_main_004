@@ -35,7 +35,7 @@ public class ArticleDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class RequestUpdateArticle {
         @NotBlank
-        @Size(min = 15)
+        @Size(min = 5)
         private String title;
         @Size(min = 5)
         private String content;
