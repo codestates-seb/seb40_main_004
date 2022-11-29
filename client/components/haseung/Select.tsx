@@ -1,21 +1,27 @@
+/*
+ * 책임 작성자: 정하승
+ * 최초 작성일: 2022-11-19
+ * 최근 수정일: 2022-11-29
+ */
+
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
 export type SelectOption = {
-  label: string;
-  values: string | number;
+  name: string;
+  tagId?: number;
 };
 
 type MultipleSelectProps = {
   multiple: true;
-  values: SelectOption[];
+  tags: SelectOption[];
   onChange: (value: SelectOption[]) => void;
 };
 
 type SingleSelectProps = {
   multiple?: false;
-  values?: SelectOption;
+  tags?: SelectOption;
   onChange: (value: SelectOption | undefined) => void;
 };
 
@@ -23,31 +29,22 @@ type SelectProps = {
   options: SelectOption[];
 } & (SingleSelectProps | MultipleSelectProps);
 
-export const Select = ({
-  multiple,
-  values,
-  onChange,
-  options,
-}: SelectProps) => {
+export const Select = ({ multiple, tags, onChange, options }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [highlightedIndex, setHighlightIndex] = useState(0);
 
-  const clearOptions = () => {
-    multiple ? onChange([]) : onChange(undefined);
-  };
-
   const selectOption = (option: SelectOption) => {
     if (multiple) {
-      if (values?.includes(option))
-        onChange(values.filter((o) => o !== option));
-      else onChange([...values, option]);
+      if (tags?.includes(option))
+        onChange(tags.filter((tag) => tag !== option));
+      else onChange([...tags, option]);
     } else {
-      if (option !== values) onChange(option);
+      if (option !== tags) onChange(option);
     }
   };
 
   const isOptionSelected = (option: SelectOption) => {
-    return multiple ? values.includes(option) : option === values;
+    return multiple ? tags.includes(option) : option === tags;
   };
 
   useEffect(() => {
@@ -59,24 +56,24 @@ export const Select = ({
       onBlur={() => setIsOpen(false)}
       onClick={() => setIsOpen((prev) => !prev)}
       tabIndex={0}
-      className="relative w-80 min-h-[1.5em] flex justify-start ml-10 border-[0.05em] border-solid border-slate-800 gap-1 outline-none cursor-pointer hover:border-main-orange"
+      className="relative w-80 top-20 min-h-[1.5em] flex justify-start ml-10 border-[0.05em] border-solid border-slate-800 gap-1 outline-none cursor-pointer hover:border-main-orange"
     >
       <span className="flex-grow flex gap-2 flex-wrap">
         {multiple
-          ? values.map((value) => (
+          ? tags.map((tag) => (
               <button
-                key={value.values}
+                key={tag.tagId}
                 onClick={(e) => {
                   e.stopPropagation();
-                  selectOption(value);
+                  selectOption(tag);
                 }}
                 className="rounded-md font-bold flex items-center rouned-sm my-2 py-1 px-1 mx-1 gap-1 cursor-pointer bg-transparent outline-none bg-main-orange hover:bg-main-yellow hover:border-main-gray focus:bg-main-yellow focus:border-main-yellow"
               >
-                {value.label}
+                {tag.name}
                 <span className="hover:text-main-gray">&times;</span>
               </button>
             ))
-          : values?.label}
+          : tags?.name}
       </span>
       {isOpen ? (
         <FontAwesomeIcon className="mt-4 mr-2" icon={faChevronUp} />
@@ -97,13 +94,13 @@ export const Select = ({
               selectOption(option);
               setIsOpen(false);
             }}
-            key={option.values}
+            key={option.tagId}
             onMouseEnter={() => setHighlightIndex(index)}
             className={`py-1 cursor-pointer font-bold hover:bg-main-yellow transition-all px-2  ${
               isOptionSelected(option) ? 'bg-main-yellow' : ''
             } ${index === highlightedIndex ? 'bg-main-yellow text-white' : ''}`}
           >
-            {option.label}
+            {option.name}
           </li>
         ))}
       </ul>
