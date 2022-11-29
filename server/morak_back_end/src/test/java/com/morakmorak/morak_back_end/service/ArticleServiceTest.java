@@ -74,7 +74,7 @@ public class ArticleServiceTest {
 
         given(userService.findVerifiedUserById(anyLong())).willReturn(User.builder().id(1L).build());
         given(fileRepository.findById(any())).willReturn(Optional.of(File.builder().build()));
-        given(tagRepository.findById(any())).willReturn(Optional.of(Tag.builder().build()));
+        given(tagRepository.findTagByName(any())).willReturn(Optional.of(Tag.builder().build()));
         given(categoryRepository.findCategoryByName(any())).willReturn(Optional.of(Category.builder().build()));
         given(articleRepository.save(article)).willReturn(article);
         given(articleMapper.articleToResponseSimpleArticle(article.getId())).willReturn(responseSimpleArticle);
@@ -117,28 +117,7 @@ public class ArticleServiceTest {
                 REQUEST_FILE_WITH_IDS,
                 REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
     }
-    @Test
-    @DisplayName("게시글 등록시 존재하지 않는 태그를 적용할 경우")
-    public void upload_fail4() throws Exception{
-        Article ARTICLE =
-                Article.builder().title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.")
-                        .content("콘텐트입니다. 잘부탁드립니다.")
-                        .thumbnail(1L)
-                        .build();
-        //given
-        TagDto.SimpleTag java = TagDto.SimpleTag.builder().tagId(1L).name(TagName.JAVA).build();
-        given(userService.findVerifiedUserById(any())).willReturn(User.builder().build());
-        given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().article(Article.builder().build()).build()));
-        given(tagRepository.findById(any())).willReturn(Optional.empty());
-        //when          //무슨 값이 들어가야하는건지 모르겠다....
 
-
-        //then
-        assertThatThrownBy(() -> articleService.upload(ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
-                REQUEST_TAG_WITH_ID_AND_NAMES,
-                REQUEST_FILE_WITH_IDS,
-                REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
-     }
      @Test
      @DisplayName("게시글 등록시 존재하지 않는 카테고리를 적용할 경우")
      public void upload_fail5() throws Exception{
@@ -152,7 +131,7 @@ public class ArticleServiceTest {
 
          given(userService.findVerifiedUserById(any())).willReturn(User.builder().build());
          given(fileRepository.findById(any())).willReturn(Optional.of(File.builder().build()));
-         given(tagRepository.findById(any()))
+         given(tagRepository.findTagByName(any()))
                  .willReturn(Optional.of(Tag.builder().id(1L).build()));
          given(categoryRepository.findCategoryByName(any())).willReturn(Optional.empty());
          //when
