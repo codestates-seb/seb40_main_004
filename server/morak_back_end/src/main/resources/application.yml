@@ -1,4 +1,89 @@
 spring:
   config:
-    import:
-      - classpath:/application-local.yml
+    activate:
+      on-profile:
+  jpa:
+    hibernate:
+      ddl-auto: validate # create update create-update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    database: mysql
+    open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  datasource:
+    url: jdbc:mysql://morakmorak.cqeshvuxzf0b.ap-northeast-2.rds.amazonaws.com:23306/morak?serverTimezone=UTC&characterEncoding=UTF-8&rewriteBatchedStatements=true
+    username: sion
+    password: skadyd1!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: adflajfla
+            client-secret:
+            scope:
+              - read:user
+              - user:email
+          google:
+            client-id: adlfafljaf
+            client-secret:
+            scope:
+              - email
+              - profile
+  mail:
+    host: smtp.gmail.com
+    username: dev.eunchan@gmail.com
+    password: zhvswatyvhvluwhe
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+            protocols: TLSv1.2
+
+logging:
+  level:
+    org.springframework.web.client: debug
+    org.hibernate.sql: debug
+    org.hibernate.type: trace
+    org.springframework.security: debug
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+jwt:
+  secretKey: jwt-tokens-that-should-be-changed-production
+  refreshKey: jwt-refresh-tokens-that-should-be-changed-production
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAX7DGYPEZ55PPUA5Y
+      secretKey: 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
+    s3:
+      bucket: morakmorak
+      dir: image
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+webdriver:
+  chrome:
+    location: "Users/sion/downloada/chromedriver"
