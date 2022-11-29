@@ -70,6 +70,8 @@ public class ArticleService {
                                                    List<FileDto.RequestFileWithId> files) {
         Article dbArticle = findVerifiedArticle(article.getId());
 
+        checkArticleStatus(dbArticle);
+
         dbArticle.updateArticleElement(article);
 
         checkArticlePerMission(dbArticle, userInfo);
@@ -82,9 +84,15 @@ public class ArticleService {
     }
 
     public Boolean deleteArticle(Long articleId, UserDto.UserInfo userInfo) {
+
         Article dbArticle = findVerifiedArticle(articleId);
+
+        checkArticleStatus(dbArticle);
+
         checkArticlePerMission(dbArticle, userInfo);
+
         dbArticle.changeArticleStatus(ArticleStatus.REMOVED);
+
         User user = dbArticle.getUser();
         user.minusPoint(dbArticle, pointCalculator);
         return true;
@@ -152,6 +160,7 @@ public class ArticleService {
 
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
         Article dbArticle = findVerifiedArticle(articleId);
+        checkArticleStatus(dbArticle);
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
 
@@ -184,11 +193,20 @@ public class ArticleService {
         return responseDetailArticle;
     }
 
+    private Article checkArticleStatus(Article verifiedArticle) {
+        if (!verifiedArticle.statusIsPosting()) {
+            throw new BusinessLogicException(ErrorCode.NO_ACCESS_TO_THAT_OBJECT);
+        }
+        return verifiedArticle;
+    }
+
     public ArticleDto.ResponseArticleLike pressLikeButton(Long articleId, UserDto.UserInfo userInfo) {
 
         Optional.ofNullable(userInfo).orElseThrow(() -> new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
 
         Article dbArticle = findVerifiedArticle(articleId);
+
+        checkArticleStatus(dbArticle);
 
         User dbUser = userService.findVerifiedUserById(userInfo.getId());
 
@@ -221,8 +239,10 @@ public class ArticleService {
     }
 
     public ArticleDto.ResponseReportArticle reportArticle(Long articleId, UserDto.UserInfo userInfo, Report reportArticle) {
+
         Article dbArticle = findVerifiedArticle(articleId);
-        
+        checkArticleStatus(dbArticle);
+
         User dbUser = null;
 
         if (userInfo != null) {
