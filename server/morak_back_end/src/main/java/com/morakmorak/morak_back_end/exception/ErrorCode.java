@@ -46,6 +46,8 @@ public enum ErrorCode {
 
     CAN_NOT_ACCESS_S3(CONFLICT, "unable to access amazon s3, contract your administrator."),
 
+    UNPROCESSABLE_REQUEST(UNPROCESSABLE_ENTITY,"contained instruction has correct syntax, but unprocessable."),
+
     /*
     * The error code expresses the dto validation exception of spring framework in web mvc test.
     * @author : YangEunChan
