@@ -164,4 +164,10 @@ public class Article extends BaseTime {
     public void injectReview(Review review) {
         this.reviews.add(review);
     }
+
+
+    public Article addClicks() {
+        this.clicks = this.getClicks() + 1;
+        return this;
+    }
 }
