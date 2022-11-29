@@ -30,17 +30,9 @@ export const BtnDropdown = () => {
         'ngrok-skip-browser-warning': '111',
       },
     });
-    localStorage.removeItem('email');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('nickname');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
+    localStorage.clear();
     setIsLogin(false);
     router.push('/');
-  };
-
-  const onClickDashboard = () => {
-    console.log(localStorage.getItem('userId'));
   };
 
   return (
@@ -55,11 +47,8 @@ export const BtnDropdown = () => {
               <span className="text-xs">나의 모락</span>
               <span className="text-lg font-semibold">✨ 260 모락</span>
             </li>
-            <Link href="/dashboard">
-              <li
-                className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer mt-2 py-1 px-4 rounded-xl text-[15px]"
-                onClick={onClickDashboard}
-              >
+            <Link href={`/dashboard/${localStorage.getItem('userId')}`}>
+              <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer mt-2 py-1 px-4 rounded-xl text-[15px]">
                 <FontAwesomeIcon icon={faUser} size="sm" />
                 <span className="ml-2">대시보드</span>
               </li>
