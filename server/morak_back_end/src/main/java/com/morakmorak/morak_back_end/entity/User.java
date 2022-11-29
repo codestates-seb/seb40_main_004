@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.morakmorak.morak_back_end.entity.enums.Grade.*;
+
 @Entity
 @Getter
 @Builder
@@ -66,8 +68,9 @@ public class User extends BaseTime {
 
     private String blog;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private Grade grade;
+    private Grade grade = CANDLE;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "avartar_id")
