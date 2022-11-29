@@ -48,8 +48,8 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
         // console.log(res);
       })
       .catch((err) => {
-        console.log(err);
         alert('코멘트 등록에 실패했습니다...!');
+        console.log(err);
       });
   };
 

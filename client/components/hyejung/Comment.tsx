@@ -75,7 +75,7 @@ export const Comment = ({
     );
   else
     return (
-      <section className="flex w-full pb-5">
+      <section className="flex w-full pb-2">
         <ProfileImage src={avatar.remotePath} />
         <section className="flex w-full flex-col pl-4 space-y-2">
           <article className="w-full flex space-x-3 items-center pb-2">
