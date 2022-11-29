@@ -3,6 +3,7 @@ package com.morakmorak.morak_back_end.repository.user;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.ActivityType;
+import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
@@ -29,6 +30,7 @@ import static com.morakmorak.morak_back_end.entity.QAvatar.*;
 import static com.morakmorak.morak_back_end.entity.QCategory.*;
 import static com.morakmorak.morak_back_end.entity.QComment.*;
 import static com.morakmorak.morak_back_end.entity.QReview.*;
+import static com.morakmorak.morak_back_end.entity.QTag.tag;
 import static com.morakmorak.morak_back_end.entity.QUser.*;
 
 @Repository
@@ -48,7 +50,7 @@ public class UserQueryRepository {
                 .leftJoin(article.category, category)
                 .leftJoin(article.articleTags, articleTag)
                 .leftJoin(article.comments, comment)
-                .where(article.user.id.eq(userId).and(article.category.name.eq(CategoryName.QNA)))
+                .where(article.user.id.eq(userId).and(article.category.name.eq(CategoryName.QNA).and(article.articleStatus.eq(ArticleStatus.POSTING))))
                 .groupBy(article.id)
                 .orderBy(article.id.desc())
                 .limit(50)

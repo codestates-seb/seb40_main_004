@@ -29,13 +29,20 @@ public class ReviewService {
     private final NotificationRepository notificationRepository;
 
     public ReviewDto.ResponseDetailReview createReview(Long articleId, Long userId, Long answerId, List<BadgeDto.SimpleBadge> badgeDtoList, Review reviewWithoutBadges) {
+
         User verifiedRequestUser = userService.findVerifiedUserById(userId);
+
         Article verifiedArticle = articleService.findVerifiedArticle(articleId);
+
         Answer verifiedAnswer = answerService.findVerifiedAnswerById(answerId);
+
         User articleAuthor = verifiedArticle.getUser();
         User receiver = verifiedAnswer.getUser();
+
         checkRequestUserIsAuthor(verifiedArticle, verifiedRequestUser);
+
         checkReceiverIsSameUser(verifiedRequestUser.getId(), receiver.getId());
+
         checkRemainingPoints(verifiedRequestUser, reviewWithoutBadges.getPoint());
 
         if (checkReviewPrequisites(verifiedArticle)) {
@@ -85,7 +92,7 @@ public class ReviewService {
     public Boolean checkRemainingPoints(User user, Integer point) {
         Integer remainingPoints = user.getPoint() - point;
         if (remainingPoints < 0) {
-            throw new BusinessLogicException(ErrorCode.BAD_REQUEST);
+            throw new BusinessLogicException(ErrorCode.UNPROCESSABLE_REQUEST);
         }
         return true;
     }

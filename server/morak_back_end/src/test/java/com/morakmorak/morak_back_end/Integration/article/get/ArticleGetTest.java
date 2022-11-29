@@ -5,11 +5,10 @@ import com.morakmorak.morak_back_end.dto.AvatarDto;
 import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.entity.enums.CategoryName;
-import com.morakmorak.morak_back_end.entity.enums.Grade;
-import com.morakmorak.morak_back_end.entity.enums.ReportReason;
-import com.morakmorak.morak_back_end.entity.enums.TagName;
-import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.entity.enums.*;
+import com.morakmorak.morak_back_end.repository.CategoryRepository;
+import com.morakmorak.morak_back_end.repository.FileRepository;
+import com.morakmorak.morak_back_end.repository.TagRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleTagRepository;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
@@ -22,7 +21,6 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,11 +32,11 @@ import java.util.List;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ROLE_USER_LIST;
-import static com.morakmorak.morak_back_end.util.TestConstants.*;
+import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
+import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME1;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 
 
 @SpringBootTest(value = {
@@ -286,6 +284,35 @@ public class ArticleGetTest {
     }
 
     @Test
+    @DisplayName("게시글 상세조회 시 삭제처리된 게시글의 경우 403 Forbidden을 보낸다.")
+    public void findDetailArticle_failed() throws Exception {
+        em.flush();
+        em.clear();
+        //given
+        Article dbArticle = Article.builder()
+                .articleStatus(ArticleStatus.REMOVED)
+                .build();
+        em.persist(dbArticle);
+
+        Avatar avatar = Avatar.builder().originalFilename("filename").remotePath("remotePath").build();
+        User dbUser = User.builder().email("test@naver.com").nickname("nickname").grade(Grade.BRONZE).avatar(avatar).build();
+
+        em.persist(avatar);
+        em.persist(dbUser);
+
+        String accessToken = jwtTokenUtil.createAccessToken(dbUser.getEmail(), dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                get("/articles/{article-id}" , dbArticle.getId())
+                        .header(JWT_HEADER, accessToken)
+        );
+
+        //then
+        perform.andExpect(status().isForbidden());
+    }
+
+    @Test
     @DisplayName("게시글 상세조회 컨트롤러 이용시 jwt토큰을 보낼시 isBookmarked와 isLiked를 확인하고 true or false를 보낸다.")
     public void findDetailArticle_suc() throws Exception {
         em.flush();
@@ -335,11 +362,10 @@ public class ArticleGetTest {
         em.persist(user);
 
         User dbUser = userRepository.findUserByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("유저없음"));
-        String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST,NICKNAME1);
+        String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         Article dbArticle = articleRepository.findArticleByContent("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다.")
                 .orElseThrow(() -> new RuntimeException("게시글 없음"));
-
 
 
         //when
@@ -442,11 +468,10 @@ public class ArticleGetTest {
         em.persist(user);
 
         User dbUser = userRepository.findUserByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("유저없음"));
-        String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST,NICKNAME1);
+        String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
         Article dbArticle = articleRepository.findArticleByContent("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다.")
                 .orElseThrow(() -> new RuntimeException("게시글 없음"));
-
 
 
         //when
@@ -543,7 +568,7 @@ public class ArticleGetTest {
                 .build();
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
 
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST,NICKNAME1);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -584,4 +609,6 @@ public class ArticleGetTest {
                 .andExpect(jsonPath("$.comments[0:1].lastModifiedAt").exists());
 
     }
+
+
 }

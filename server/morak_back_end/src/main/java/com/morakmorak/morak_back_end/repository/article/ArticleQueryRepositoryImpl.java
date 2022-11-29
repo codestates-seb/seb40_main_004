@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.repository.article;
 
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.repository.article.ArticleQueryRepository;
@@ -25,6 +26,7 @@ import static com.morakmorak.morak_back_end.entity.QFile.file;
 import static com.morakmorak.morak_back_end.entity.QReview.review;
 import static com.morakmorak.morak_back_end.entity.QTag.tag;
 import static com.morakmorak.morak_back_end.entity.QUser.user;
+import static com.morakmorak.morak_back_end.entity.enums.ArticleStatus.*;
 
 
 @Repository
@@ -42,8 +44,9 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         List<Article> result = queryFactory
                 .select(article)
                 .from(article)
-                .where(categoryEq(category),
-                        keywordEq(keyword, target))
+                .where(categoryEq(category)
+                        .and(keywordEq(keyword, target))
+                        .and(article.articleStatus.eq(POSTING)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(sortEq(sort))
@@ -52,8 +55,10 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         Long count = queryFactory
                 .select(article.count())
                 .from(article)
-                .where(categoryEq(category),
-                        keywordEq(keyword, target))
+                .where(categoryEq(category)
+                                .and(keywordEq(keyword, target))
+                                .and(article.articleStatus.eq(POSTING))
+                        )
                 .orderBy(sortEq(sort))
                 .fetchOne();
 
