@@ -184,20 +184,36 @@ public class User extends BaseTime {
 
     public void addPoint(Object object, PointCalculator pointCalculator) {
         this.point += pointCalculator.calculatePaymentPoint(object);
+        updateGrade();
     }
 
     public void minusPoint(Object object, PointCalculator pointCalculator) {
         this.point -= pointCalculator.calculatePaymentPoint(object);
+        updateGrade();
+    }
+
+    private Grade checkGradeUpdatable() {
+        if (this.point >= 20000) {
+            return MORAKMORAK;
+        } else if (this.point >= 10000) {
+            return BONFIRE;
+        } else if (this.point >= 5000) {
+            return MATCH;
+        } else {
+            return CANDLE;
+        }
+    }
+
+    private void updateGrade() {
+        this.grade = checkGradeUpdatable();
     }
 
     public void setAvatar(Avatar avatar) {
         this.avatar = avatar;
     }
-
     public void deleteAvatar() {
         this.avatar = null;
     }
-
     public void addNotification(Notification notification) {
         this.notifications.add(notification);
     }
@@ -207,5 +223,4 @@ public class User extends BaseTime {
     public void receivePoint(Integer pointToReceive) {
         this.point +=pointToReceive;
     }
-
 }
