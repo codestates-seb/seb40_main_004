@@ -29,7 +29,7 @@ export const LoginForm = () => {
   const router = useRouter();
   const onValid = ({ email, password }: LoginProps) => {
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/auth/token`, {
+      .post(`/api/auth/token`, {
         email,
         password,
       })
@@ -40,15 +40,6 @@ export const LoginForm = () => {
         const decoded: DecodedProps = jwt_decode(accessToken);
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
-
-        // console.log('accessToken', accessToken);
-        // console.log('refreshToken', refreshToken);
-        // console.log('decode', decoded);
-
-        // console.log({
-        //   email: decoded.sub, //email
-        //   userId: decoded.id, //userId
-        // });
 
         localStorage.setItem('email', decoded.sub);
         localStorage.setItem('userId', String(decoded.id));

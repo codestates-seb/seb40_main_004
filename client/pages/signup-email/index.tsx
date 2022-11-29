@@ -24,7 +24,7 @@ const AuthenticateNumber = () => {
   const router = useRouter();
   const onValid = ({ authKey }: VerificationNumber) => {
     axios
-      .put(`${process.env.NEXT_PUBLIC_API_URL}/auth/mail`, { email, authKey })
+      .put(`/api/auth/mail`, { email, authKey })
       .then((res) => {
         console.log('res', res);
         setAuthKey(res.data.authKey);

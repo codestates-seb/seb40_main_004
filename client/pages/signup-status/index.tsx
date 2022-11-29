@@ -20,7 +20,7 @@ const selectStatus = () => {
   const onSelectedStatusClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/auth`, {
+      .post(`/api/auth`, {
         email,
         authKey,
         password,

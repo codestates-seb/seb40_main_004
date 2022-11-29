@@ -50,7 +50,7 @@ export const SignUpForm = () => {
     }
 
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/auth/mail`, {
+      .post(`/api/auth/mail`, {
         email,
         password,
         confirmPassword,
