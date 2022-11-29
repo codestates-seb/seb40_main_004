@@ -36,7 +36,7 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
   }
 
   // answerId 가 있는 경우 댓글 코멘트 작성 api 로 요청
-  let url = answerId
+  const url = answerId
     ? `/api/answers/${answerId}/comments`
     : `/api/articles/${articleId}/comments`;
 

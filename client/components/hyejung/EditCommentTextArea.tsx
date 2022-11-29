@@ -29,7 +29,7 @@ export const EditCommentTextArea = ({
   setIsEdit,
 }: TextAreaProps) => {
   // answerId 가 있는 경우 댓글 코멘트 작성 api 로 요청
-  let { data: currComments } = useFetch(mutateUrl);
+  const { data: currComments } = useFetch(mutateUrl);
 
   const currCommentText = currComments.filter(
     (com: CommentResp) => com.commentId === commentId,

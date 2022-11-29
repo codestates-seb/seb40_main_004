@@ -9,7 +9,6 @@ import { faHeart as VoidHeart } from '@fortawesome/free-regular-svg-icons';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { client } from '../../libs/client';
-import { mutate } from 'swr';
 
 type BtnLikeProps = {
   isLiked: boolean;
@@ -24,7 +23,7 @@ export const BtnLike = ({ isLiked, answerId, likes }: BtnLikeProps) => {
   const [isLike, setIsLike] = useState(isLiked);
   const [likeCnt, setLikeCnt] = useState(likes);
 
-  let url = answerId
+  const url = answerId
     ? `/api/articles/${articleId}/answers/${answerId}/likes`
     : `/api/articles/${articleId}/likes`;
 
