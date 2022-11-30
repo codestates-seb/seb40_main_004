@@ -6,6 +6,7 @@
 
 import axios from 'axios';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { rankList } from '../../interfaces';
 
@@ -58,9 +59,11 @@ export const HallOfFame = () => {
                 </div>
                 <div>
                   <div>
-                    <span className="text-[15px] font-bold">
-                      {rank.nickname}
-                    </span>
+                    <Link href={`/dashboard/${rank.userId}`}>
+                      <span className="text-[15px] font-bold hover:cursor-pointer">
+                        {rank.nickname}
+                      </span>
+                    </Link>
                   </div>
                   <div className="flex justify-between w-[273px]">
                     <div>

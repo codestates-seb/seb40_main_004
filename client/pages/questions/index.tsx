@@ -12,7 +12,6 @@ import { Header } from '../../components/common/Header';
 import { LoadMoreButton } from '../../components/haseung/LoadMoreButton';
 import { QuestionList } from '../../components/haseung/QuestionList';
 import { SearchWithTagButton } from '../../components/haseung/SearchWithTagButton';
-import { BtnTag } from '../../components/hyejung/BtnTag';
 
 const Questions: NextPage = () => {
   return (

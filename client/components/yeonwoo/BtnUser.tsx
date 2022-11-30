@@ -8,21 +8,34 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { avatarPathAtom } from '../../atomsYW';
 
 export const BtnUser = () => {
+  const [avatarPath, setAvatarPath] = useRecoilState(avatarPathAtom);
+  const [isValid, setIsValid] = useState(true);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const data = localStorage.getItem('avatarPath');
+      if (data !== null) setAvatarPath(data !== 'null' ? data : '/favicon.ico');
+      else setAvatarPath('/favicon.ico');
+    }
+  }, []);
   return (
     <Link href={`/dashboard/${localStorage.getItem('userId')}`}>
       <button className="flex items-center">
         <div className="w-[25px] h-[25px] rounded-full overflow-hidden">
-          <Image
-            src={
-              localStorage.getItem('avatarPath')
-                ? `${localStorage.getItem('avatarPath')}`
-                : '/favicon.ico'
-            }
-            width="25px"
-            height="25px"
-          />
+          {isValid ? (
+            <Image
+              src={avatarPath}
+              width="25px"
+              height="25px"
+              onError={() => setIsValid(false)}
+            />
+          ) : (
+            <Image src="/favicon.ico" width="25px" height="25px" />
+          )}
         </div>
         <span className="ml-2">{localStorage.getItem('nickname')}</span>
         <FontAwesomeIcon icon={faChevronRight} />

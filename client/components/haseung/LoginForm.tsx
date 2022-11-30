@@ -63,7 +63,7 @@ export const LoginForm = () => {
         {...register('email', { required: true })}
         className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3 placeholder:pb-2"
         type="text"
-        placeholder="hyejj19@naver.com"
+        placeholder="이메일을 입력해주세요."
       />
       <label>비밀번호</label>
       <input

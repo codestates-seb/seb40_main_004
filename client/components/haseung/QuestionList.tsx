@@ -5,6 +5,7 @@
  * 개요: 질문 리스트를 표시합니다.
  */
 
+import Link from 'next/link';
 import { CreatedDate } from '../hyejung/CreatedDate';
 import { QuestionTitle } from '../hyejung/QuestionTitle';
 import { TagList } from '../hyejung/TagList';
@@ -13,6 +14,11 @@ import { UserNickname } from '../hyejung/UserNickname';
 export const QuestionList = () => {
   return (
     <section className="flex flex-col w-full mt-10">
+      <Link href="/ask">
+        <button className="bg-main-yellow hover:bg-main-orange w-20 mb-5 rounded-full p-2 ml-80">
+          질문하기
+        </button>
+      </Link>
       {[...Array(9)].map((_, i) => (
         <article key={i}>
           <QuestionTitle title="리액트 쿼리 질문드립니다." />
