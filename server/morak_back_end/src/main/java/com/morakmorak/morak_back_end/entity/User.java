@@ -98,10 +98,6 @@ public class User extends BaseTime {
     private List<Article> articles = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private List<Deposit> deposits = new ArrayList<>();
-
-    @Builder.Default
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
 
@@ -198,9 +194,9 @@ public class User extends BaseTime {
         } else if (this.point >= 10000) {
             return BONFIRE;
         } else if (this.point >= 5000) {
-            return MATCH;
-        } else {
             return CANDLE;
+        } else {
+            return MATCH;
         }
     }
 
