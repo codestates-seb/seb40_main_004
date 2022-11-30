@@ -166,4 +166,14 @@ public class UserDto {
         private String nickname;
         private String avatarPath;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ResponsePoint {
+        private Long userId;
+        private String nickname;
+        private Integer point;
+    }
 }

@@ -8,6 +8,7 @@ import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.resolver.RequestUser;
+import com.morakmorak.morak_back_end.service.auth_user_service.PointService;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import io.lettuce.core.dynamic.annotation.Param;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,9 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    private final PointService pointService;
     private final Integer MAX_SIZE = 50;
+
 
     @GetMapping("/{user-id}/dashboard")
     @ResponseStatus(HttpStatus.OK)
@@ -75,11 +78,17 @@ public class UserController {
 
     @GetMapping("/{user-id}/answers")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseMultiplePaging<AnswerDto.ResponseUserAnswerList> getUserAnswerList(@PathVariable ("user-id") Long userId,
+    public ResponseMultiplePaging<AnswerDto.ResponseUserAnswerList> getUserAnswerList(@PathVariable("user-id") Long userId,
                                                                                       @Positive @RequestParam(value = "page", defaultValue = "1") int page,
-                                                                                      @Positive @RequestParam(value = "size", defaultValue = "50" ) int size
-                                                                                      ) {
+                                                                                      @Positive @RequestParam(value = "size", defaultValue = "50") int size
+    ) {
         return userService.getUserAnswerList(userId, page - 1, size);
     }
 
+
+    @GetMapping("/points")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto.ResponsePoint getUserPoint(@RequestUser UserDto.UserInfo user) {
+        return pointService.getRemainingPoint(user.getId());
+    }
 }

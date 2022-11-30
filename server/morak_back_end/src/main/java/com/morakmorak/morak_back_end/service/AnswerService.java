@@ -2,20 +2,19 @@ package com.morakmorak.morak_back_end.service;
 
 import com.morakmorak.morak_back_end.domain.NotificationGenerator;
 import com.morakmorak.morak_back_end.domain.PointCalculator;
-import com.morakmorak.morak_back_end.dto.*;
+import com.morakmorak.morak_back_end.dto.AnswerDto;
+import com.morakmorak.morak_back_end.dto.CommentDto;
+import com.morakmorak.morak_back_end.dto.ResponseMultiplePaging;
+import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.entity.Answer;
-import com.morakmorak.morak_back_end.entity.Article;
-import com.morakmorak.morak_back_end.entity.File;
-import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.AnswerMapper;
+import com.morakmorak.morak_back_end.repository.BookmarkRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerLikeRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
-import com.morakmorak.morak_back_end.repository.BookmarkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,8 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -41,7 +40,6 @@ public class AnswerService {
     private final PointCalculator pointCalculator;
     int page = 0;
     int size = 5;
-
     public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> postAnswer(Long articleId, Long userId, Answer answerNotSaved, List<File> fileList) throws Exception {
         User verifiedUser = userService.findVerifiedUserById(userId);
         Article verifiedArticle = articleService.findVerifiedArticle(articleId);
@@ -90,7 +88,6 @@ public class AnswerService {
         Answer verifiedAnswer = findVerifiedAnswerById(answerId);
         User verifiedUser = userService.findVerifiedUserById(userId);
         Article verifiedArticle = articleService.findVerifiedArticle(articleId);
-
         if (verifiedAnswer.hasPermissionWith(verifiedUser) && !verifiedAnswer.isPickedAnswer()
                 && verifiedArticle.statusIsPosting()) {
             answerRepository.deleteById(answerId);
