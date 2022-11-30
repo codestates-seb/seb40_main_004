@@ -207,21 +207,6 @@ public class ArticleUploadTest {
     }
 
     @Test
-    @DisplayName("Article Service fusionCategoryWIthArticle 메서드 통과 테스트")
-    public void articleServiceFusionCategoryWIthArticle() throws Exception{
-        //given
-        Category category = Category.builder().name(CategoryName.INFO).build();
-        Article build = Article.builder().build();
-        //when
-        Boolean aBoolean = articleService.findDbCategoryAndInjectWithArticle(build, category);
-        //then
-        Assertions.assertThat(aBoolean).isTrue();
-
-        categoryRepository.deleteAll();
-        userRepository.deleteAll();
-    }
-
-    @Test
     @DisplayName("게시글 작성시 작성한 유저의 포인트가 증가한다.")
     public void upload_suc2() throws Exception {
         //given
