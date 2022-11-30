@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-11-30
  * 개요
    - 답변을 채택할 때 리뷰 태그를 선택할 수 있는 페이지 입니다.
  */
@@ -24,9 +24,9 @@ import { useRouter } from 'next/router';
 
 const Review: NextPage = () => {
   const router = useRouter();
-  const [isSelectable, setIsSelectable] = useState(true);
+  const reviewRequest = useRecoilValue(reviewRequestAtom);
   const [reviewTags, setReviewTagsAtom] = useRecoilState(reviewTagsAtom);
-  const [reviewRequest, setReviewRequest] = useRecoilState(reviewRequestAtom);
+  const [isSelectable, setIsSelectable] = useState(true);
   const tags = useRecoilValue(reviewTagsEnumAtom);
 
   useEffect(() => {
@@ -34,11 +34,11 @@ const Review: NextPage = () => {
       alert('잘못된 접근입니다!');
       router.replace('/');
     }
-    setReviewTagsAtom([]);
+    setReviewTagsAtom([{ badgeId: 0, name: '' }]);
   }, []);
 
   useEffect(() => {
-    if (reviewTags.length === 3) setIsSelectable(false);
+    if (reviewTags.length === 4) setIsSelectable(false);
     else setIsSelectable(true);
   }, [reviewTags]);
 
@@ -75,7 +75,7 @@ const Review: NextPage = () => {
             </section>
 
             <article className="ml-auto text-right space-x-3">
-              {reviewTags.length > 0 ? (
+              {reviewTags.length > 1 ? (
                 <Link href={'/review/message'}>
                   <button className="text-base sm:text-lg font-bold">
                     다음 단계로!

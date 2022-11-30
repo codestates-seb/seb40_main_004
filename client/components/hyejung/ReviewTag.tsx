@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-20
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-11-30
  */
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -20,7 +20,7 @@ export const ReviewTag = ({ children, isSelectable, enumTag }: TagProps) => {
   // 클릭시 selected state 와 selectedTags state를 업데이트
   const onClick = () => {
     setIsSelected(!isSelected);
-    if (isSelected) {
+    if (!isSelected) {
       const newState = reviewTags.slice();
       newState.push({ badgeId: 0, name: enumTag });
       setReviewTags(newState);
@@ -28,6 +28,7 @@ export const ReviewTag = ({ children, isSelectable, enumTag }: TagProps) => {
       setReviewTags(reviewTags.filter((tag) => tag.name !== enumTag));
     }
   };
+
   return (
     <div className="p-4 lg:p-9 md:text-lg font-bold">
       {!isSelected && !isSelectable ? (

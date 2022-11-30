@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-11-30
  * 개요
    - 답변 작성자에 대한 후기 메시지를 작성할 수 있는 페이지입니다.
  */
@@ -39,8 +39,9 @@ const Message: NextPage = () => {
   };
 
   const reviewTags = useRecoilValue(reviewTagsAtom);
+
   useEffect(() => {
-    if (reviewTags?.length === 0) router.replace('/review');
+    if (reviewTags?.length === 1) router.replace('/review');
   }, []);
 
   const reviewRequest = useRecoilValue(reviewRequestAtom);
