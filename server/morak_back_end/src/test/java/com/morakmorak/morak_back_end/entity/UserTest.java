@@ -1,6 +1,8 @@
 package com.morakmorak.morak_back_end.entity;
 
 import com.morakmorak.morak_back_end.domain.PointCalculator;
+import com.morakmorak.morak_back_end.entity.enums.Grade;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
+
+import static com.morakmorak.morak_back_end.entity.enums.Grade.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -156,5 +163,176 @@ class UserTest {
 
         //then
         assertThat(user.getPoint()).isEqualTo(-10);
+    }
+
+    @Test
+    @DisplayName("유저의 포인트가 20000점 이상이라면 Grade.MORAKMORAK을 반환한다.")
+    void checkGradeUpdatable1() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        User user = User.builder().point(20000).build();
+        Method checkGradeUpdatable = user.getClass().getDeclaredMethod("checkGradeUpdatable");
+        checkGradeUpdatable.setAccessible(true);
+
+        //when
+        Grade result = (Grade) checkGradeUpdatable.invoke(user);
+
+        //then
+        assertThat(result).isEqualTo(MORAKMORAK);
+    }
+
+    @Test
+    @DisplayName("유저의 포인트가 10000점 이상, 20000점 미만이라면 Grade.BONFIRE 반환한다.")
+    void checkGradeUpdatable2() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        User user1 = User.builder().point(19999).build();
+        User user2 = User.builder().point(10000).build();
+        Method checkGradeUpdatable = user1.getClass().getDeclaredMethod("checkGradeUpdatable");
+        checkGradeUpdatable.setAccessible(true);
+
+        //when
+        Grade result1 = (Grade) checkGradeUpdatable.invoke(user1);
+        Grade result2 = (Grade) checkGradeUpdatable.invoke(user2);
+
+        //then
+        assertThat(result1).isEqualTo(BONFIRE);
+        assertThat(result2).isEqualTo(BONFIRE);
+    }
+
+    @Test
+    @DisplayName("유저의 포인트가 5000점 이상, 10000점 미만이라면 Grade.BONFIRE 반환한다.")
+    void checkGradeUpdatable3() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        User user1 = User.builder().point(5000).build();
+        User user2 = User.builder().point(9999).build();
+        Method checkGradeUpdatable = user1.getClass().getDeclaredMethod("checkGradeUpdatable");
+        checkGradeUpdatable.setAccessible(true);
+
+        //when
+        Grade result1 = (Grade) checkGradeUpdatable.invoke(user1);
+        Grade result2 = (Grade) checkGradeUpdatable.invoke(user2);
+
+        //then
+        assertThat(result1).isEqualTo(CANDLE);
+        assertThat(result2).isEqualTo(CANDLE);
+    }
+
+    @Test
+    @DisplayName("유저의 포인트가 5000점 미만이라면 Grade.MATCH를 반환한다.")
+    void checkGradeUpdatable4() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        User user1 = User.builder().point(4999).build();
+        User user2 = User.builder().point(0).build();
+        Method checkGradeUpdatable = user1.getClass().getDeclaredMethod("checkGradeUpdatable");
+        checkGradeUpdatable.setAccessible(true);
+
+        //when
+        Grade result1 = (Grade) checkGradeUpdatable.invoke(user1);
+        Grade result2 = (Grade) checkGradeUpdatable.invoke(user2);
+
+        //then
+        assertThat(result1).isEqualTo(MATCH);
+        assertThat(result2).isEqualTo(MATCH);
+    }
+
+    @Test
+    @DisplayName("checkGradeUpdatable의 반환값에 따라 유저의 등급이 변경된다.")
+    void updateGrade() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        User user1 = User.builder().point(4999).build();
+        User user2 = User.builder().point(0).build();
+        Method updateGrade = user1.getClass().getDeclaredMethod("updateGrade");
+        updateGrade.setAccessible(true);
+
+        //when
+        updateGrade.invoke(user1);
+        updateGrade.invoke(user2);
+
+        //then
+        assertThat(user1.getGrade()).isEqualTo(MATCH);
+        assertThat(user2.getGrade()).isEqualTo(MATCH);
+    }
+
+    @Test
+    @DisplayName("checkGradeUpdatable의 반환값에 따라 유저의 등급이 변경된다.")
+    void updateGrade2() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        User user1 = User.builder().point(5000).build();
+        User user2 = User.builder().point(9999).build();
+        Method updateGrade = user1.getClass().getDeclaredMethod("updateGrade");
+        updateGrade.setAccessible(true);
+
+        //when
+        updateGrade.invoke(user1);
+        updateGrade.invoke(user2);
+
+        //then
+        assertThat(user1.getGrade()).isEqualTo(CANDLE);
+        assertThat(user2.getGrade()).isEqualTo(CANDLE);
+    }
+
+    @Test
+    @DisplayName("checkGradeUpdatable의 반환값에 따라 유저의 등급이 변경된다.")
+    void updateGrade3() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        User user1 = User.builder().point(10000).build();
+        User user2 = User.builder().point(19999).build();
+        Method updateGrade = user1.getClass().getDeclaredMethod("updateGrade");
+        updateGrade.setAccessible(true);
+
+        //when
+        updateGrade.invoke(user1);
+        updateGrade.invoke(user2);
+
+        //then
+        assertThat(user1.getGrade()).isEqualTo(BONFIRE);
+        assertThat(user2.getGrade()).isEqualTo(BONFIRE);
+    }
+
+    @Test
+    @DisplayName("checkGradeUpdatable의 반환값에 따라 유저의 등급이 변경된다.")
+    void updateGrade4() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        User user1 = User.builder().point(20000).build();
+        User user2 = User.builder().point(30000).build();
+        Method updateGrade = user1.getClass().getDeclaredMethod("updateGrade");
+        updateGrade.setAccessible(true);
+
+        //when
+        updateGrade.invoke(user1);
+        updateGrade.invoke(user2);
+
+        //then
+        assertThat(user1.getGrade()).isEqualTo(MORAKMORAK);
+        assertThat(user2.getGrade()).isEqualTo(MORAKMORAK);
+    }
+
+    @Test
+    @DisplayName("포인트 감소 시 포인트에 따라 등급이 변경된다")
+    void minusPoint2() {
+        //given
+        User user = User.builder().point(50000).grade(MORAKMORAK).build();
+        Article article = Article.builder().title(CONTENT1).build();
+        given(pointCalculator.calculatePaymentPoint(article)).willReturn(49000);
+
+        //when
+        user.minusPoint(article, pointCalculator);
+
+        //then
+        assertThat(user.getGrade()).isEqualTo(MATCH);
+    }
+
+    @Test
+    @DisplayName("pointCalculator가 반환하는 값만큼 point가 더해진다.")
+    void addPoint2() {
+        //given
+        User user = User.builder().point(0).grade(MATCH).build();
+        Article article = Article.builder().title(CONTENT1).build();
+        given(pointCalculator.calculatePaymentPoint(article)).willReturn(49000);
+
+        //when
+        user.addPoint(article, pointCalculator);
+
+        //then
+        assertThat(user.getGrade()).isEqualTo(MORAKMORAK);
     }
 }
