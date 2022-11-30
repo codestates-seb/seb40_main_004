@@ -14,6 +14,7 @@ import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
+import com.morakmorak.morak_back_end.service.auth_user_service.PointService;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -67,6 +68,8 @@ public class UserAnswerTest {
     UserMapper userMapper;
     @MockBean
     UserService userService;
+    @MockBean
+    PointService pointService;
     UserDto.ResponseSimpleUserDto dtoUserInfo;
     AvatarDto.SimpleResponse dtoAvatar;
     @BeforeEach
