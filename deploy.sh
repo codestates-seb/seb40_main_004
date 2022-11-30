@@ -36,4 +36,4 @@ JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
 echo "> $JAR_PATH 배포"
-shdo nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
+shdo nohup java -jar /home/ec2-user/app/server/morak_back_end/build/libs/morak_back_end-0.0.1-SNAPSHOT.jar > /dev/null 2> /dev/null < /dev/null &
