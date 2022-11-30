@@ -59,7 +59,7 @@ public class UserQueryRepository {
 
     public List<ReviewDto.Response> getReceivedReviews(Long userId) {
         return jpaQueryFactory.select(new QReviewDto_Response(
-                review.id, review.content, review.createdAt, review.sender.id, review.receiver.nickname, review.receiver.grade))
+                review.id, review.content, review.createdAt, review.sender.id, review.sender.nickname, review.sender.grade))
                 .from(review)
                 .where(review.receiver.id.eq(userId))
                 .fetch();
