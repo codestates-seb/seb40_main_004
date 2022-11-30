@@ -102,22 +102,19 @@ public class ArticleService {
         return articleRepository.findById(articleId).orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
     }
 
-    public Boolean checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
+    public void checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
         if (!article.getUser().getId().equals(userInfo.getId())) {
             throw new BusinessLogicException(ErrorCode.INVALID_USER);
         }
-        return true;
     }
 
-    public Boolean findDbCategoryAndInjectWithArticle(Article article, Category category) {
+    public void findDbCategoryAndInjectWithArticle(Article article, Category category) {
         Category dbCategory = categoryRepository.findCategoryByName(category.getName())
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.CATEGORY_NOT_FOUND));
         article.injectCategoryForMapping(dbCategory);
-
-        return true;
     }
 
-    public Boolean findDbTagsAndInjectWithArticle(Article article, List<TagDto.SimpleTag> tags) {
+    public void findDbTagsAndInjectWithArticle(Article article, List<TagDto.SimpleTag> tags) {
         for (int i = article.getArticleTags().size() - 1; i >= 0; i--) {
             article.getArticleTags().remove(i);
         }
@@ -128,7 +125,6 @@ public class ArticleService {
             article.getArticleTags().add(newArticleTag);
             dbTag.getArticleTags().add(newArticleTag);
         });
-        return true;
     }
 
     public void findDbFilesAndInjectWithArticle(Article article, List<FileDto.RequestFileWithId> files) {
