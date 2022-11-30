@@ -33,7 +33,7 @@ const EditProfile: NextPage = () => {
         <div className="w-2/4">
           <EditProfileComponent />
         </div>
-        <div className="pt-12">
+        <div className="pt-12 w-1/5">
           <EditAvatar />
         </div>
       </main>
