@@ -83,3 +83,8 @@ export const userDashboardAtom = atom<userDashboard>({
     ],
   },
 });
+
+export const avatarPathAtom = atom({
+  key: 'avatarPath',
+  default: '/favicon.ico',
+});
