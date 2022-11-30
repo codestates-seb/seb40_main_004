@@ -8,6 +8,7 @@ import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.resolver.RequestUser;
 import com.morakmorak.morak_back_end.service.auth_user_service.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import javax.validation.Valid;
 
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.REFRESH_HEADER;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
