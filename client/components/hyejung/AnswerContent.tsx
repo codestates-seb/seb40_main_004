@@ -38,8 +38,6 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
   const router = useRouter();
   const { articleId } = router.query;
 
-  console.log(answer);
-
   const answerElement = useRef<null | HTMLDivElement>(null);
   const isAnswerEdit = useRecoilValue(isAnswerEditAtom);
 

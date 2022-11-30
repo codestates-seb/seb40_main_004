@@ -27,8 +27,6 @@ export const QuestionContent = () => {
   const { data } = useSWR(`/articles/${articleId}`);
   const article = data.article;
 
-  console.log(article);
-
   let currUserId: any = '';
   if (typeof window !== 'undefined') {
     currUserId = localStorage.getItem('userId');
