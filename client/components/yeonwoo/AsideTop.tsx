@@ -8,11 +8,13 @@ import { faBloggerB, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { userDashboardAtom } from '../../atomsYW';
+import { isLoginAtom, userDashboardAtom } from '../../atomsYW';
 
 export const AsideTop = () => {
+  const isLogin = useRecoilValue(isLoginAtom);
   const [isEdit, setIsEdit] = useState(false);
   const userDashboard = useRecoilValue(userDashboardAtom);
   const [userId, setUserId] = useState<string | null>('');
@@ -31,6 +33,10 @@ export const AsideTop = () => {
     setEditInfoMessage(userDashboard.infoMessage ?? '');
     setEditGithub(userDashboard.github ?? '');
     setEditBlog(userDashboard.blog ?? '');
+  };
+  const router = useRouter();
+  const onClickCheer = () => {
+    isLogin ? router.push('/review') : alert('로그인이 필요합니다.');
   };
   const onSubmitForm = () => {
     axios.patch(
@@ -185,7 +191,7 @@ export const AsideTop = () => {
                 onClick={
                   userId === userDashboard.userId + ''
                     ? onClickEdit
-                    : () => setIsEdit(false)
+                    : onClickCheer
                 }
               >
                 {userId === userDashboard.userId + ''
