@@ -92,7 +92,8 @@ public class CalendarTest {
         entityManager.persist(job4);
 
         //when
-        ResultActions perform = mockMvc.perform(get("/calendars"));
+        ResultActions perform = mockMvc.perform(get("/calendars")
+                .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isOk())
@@ -131,7 +132,8 @@ public class CalendarTest {
         entityManager.persist(job2);
 
         //when
-        ResultActions perform = mockMvc.perform(get("/calendars"));
+        ResultActions perform = mockMvc.perform(get("/calendars")
+                .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isOk())

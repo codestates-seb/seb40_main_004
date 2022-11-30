@@ -121,6 +121,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles")
+                        .header("User-Agent", "Mozilla 5.0")
                         .param("category", "INFO")
                         .param("keyword", "테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                         .param("target", "title")
@@ -193,6 +194,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles")
+                        .header("User-Agent", "Mozilla 5.0")
                         .param("category", "INFO")
                         .param("keyword", "존재하지 않음")
                         .param("target", "title")
@@ -248,6 +250,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles")
+                        .header("User-Agent", "Mozilla 5.0")
                         .param("category", "INFO")
                         .param("keyword", "JAVA")
                         .param("target", "tag")
@@ -305,6 +308,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/{article-id}" , dbArticle.getId())
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, accessToken)
         );
 
@@ -371,6 +375,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/" + article.getId())
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, accessToken)
         );
 
@@ -477,6 +482,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/" + article.getId())
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, accessToken)
         );
 
@@ -573,6 +579,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/" + article.getId())
+                        .header("User-Agent", "Mozilla 5.0")
 
         );
 

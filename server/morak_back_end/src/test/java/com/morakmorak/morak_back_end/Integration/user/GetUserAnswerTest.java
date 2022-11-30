@@ -94,6 +94,7 @@ public class GetUserAnswerTest {
                 get("/users/{user-id}/answers", user.getId())
                         .param("page", "1")
                         .param("size", "50")
+                        .header("User-Agent", "Mozilla 5.0")
         );
 
         //검증
@@ -130,6 +131,7 @@ public class GetUserAnswerTest {
                 get("/users/-1/answers")
                         .param("page", "1")
                         .param("size", "50")
+                        .header("User-Agent", "Mozilla 5.0")
         );
 
         //검증

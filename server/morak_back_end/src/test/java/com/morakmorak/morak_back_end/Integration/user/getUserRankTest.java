@@ -81,7 +81,8 @@ public class getUserRankTest extends UserTest {
     void getUserRankTest1() throws Exception {
         //given
         //when
-        ResultActions perform = mockMvc.perform(get("/users/ranks?q=point&page=1&size=2"));
+        ResultActions perform = mockMvc.perform(get("/users/ranks?q=point&page=1&size=2")
+                .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isOk())
@@ -98,7 +99,8 @@ public class getUserRankTest extends UserTest {
     void getUserRankTest2() throws Exception {
         //given
         //when
-        ResultActions perform = mockMvc.perform(get("/users/ranks?q=articles&page=1&size=2"));
+        ResultActions perform = mockMvc.perform(get("/users/ranks?q=articles&page=1&size=2")
+                .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isOk())
@@ -111,7 +113,8 @@ public class getUserRankTest extends UserTest {
     void getUserRankTest3() throws Exception {
         //given
         //when
-        ResultActions perform = mockMvc.perform(get("/users/ranks?q=answers&page=1&size=2"));
+        ResultActions perform = mockMvc.perform(get("/users/ranks?q=answers&page=1&size=2")
+                .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isOk())
