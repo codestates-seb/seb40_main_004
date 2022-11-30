@@ -10,6 +10,7 @@ git stash
 echo "> GIT PULL"
 git pull
 
+APP_NAME=morak_back_end
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
 if [ -z $CURRENT_PID ]
@@ -30,7 +31,7 @@ sudo ./gradlew clean
 echo "> GRADLE BUILD"
 sudo ./gradlew build
 
-APP_NAME=morak_back_end
+
 JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
 JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
