@@ -31,14 +31,14 @@ public class Comment extends BaseTime{
     private LocalDate createDate;
 
     @Builder.Default
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(mappedBy = "comment",orphanRemoval = true)
     private List<Report> reports = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "answer_id")
     private Answer answer;
 

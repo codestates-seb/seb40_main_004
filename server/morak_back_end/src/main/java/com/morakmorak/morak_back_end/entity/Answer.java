@@ -50,7 +50,7 @@ public class Answer extends BaseTime{
 
     @Builder.Default
     @OneToMany(mappedBy = "answer",
-            cascade = CascadeType.PERSIST, orphanRemoval = true)
+             orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
