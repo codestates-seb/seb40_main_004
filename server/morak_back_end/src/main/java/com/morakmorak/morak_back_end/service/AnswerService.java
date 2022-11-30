@@ -137,7 +137,7 @@ public class AnswerService {
         Boolean isLiked = answerLikeRepository
                 .checkUserLiked(dbUser.getId(), dbAnswer.getId()).isPresent();
 
-        Integer likeCount = dbUser.getAnswerLikes().size();
+        Integer likeCount = dbAnswer.getAnswerLike().size();
 
         return answerMapper.makingResponseAnswerLikeDto(dbAnswer.getId(), dbUser.getId(), isLiked, likeCount);
     }

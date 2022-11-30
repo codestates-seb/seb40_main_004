@@ -102,22 +102,19 @@ public class ArticleService {
         return articleRepository.findById(articleId).orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
     }
 
-    public Boolean checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
+    public void checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
         if (!article.getUser().getId().equals(userInfo.getId())) {
             throw new BusinessLogicException(ErrorCode.INVALID_USER);
         }
-        return true;
     }
 
-    public Boolean findDbCategoryAndInjectWithArticle(Article article, Category category) {
+    public void findDbCategoryAndInjectWithArticle(Article article, Category category) {
         Category dbCategory = categoryRepository.findCategoryByName(category.getName())
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.CATEGORY_NOT_FOUND));
         article.injectCategoryForMapping(dbCategory);
-
-        return true;
     }
 
-    public Boolean findDbTagsAndInjectWithArticle(Article article, List<TagDto.SimpleTag> tags) {
+    public void findDbTagsAndInjectWithArticle(Article article, List<TagDto.SimpleTag> tags) {
         for (int i = article.getArticleTags().size() - 1; i >= 0; i--) {
             article.getArticleTags().remove(i);
         }
@@ -128,17 +125,15 @@ public class ArticleService {
             article.getArticleTags().add(newArticleTag);
             dbTag.getArticleTags().add(newArticleTag);
         });
-        return true;
     }
 
-    public Boolean findDbFilesAndInjectWithArticle(Article article, List<FileDto.RequestFileWithId> files) {
+    public void findDbFilesAndInjectWithArticle(Article article, List<FileDto.RequestFileWithId> files) {
         files.stream()
                 .forEach(file -> {
                     File dbFile = fileRepository.findById(file.getFileId())
                             .orElseThrow(() -> new BusinessLogicException(ErrorCode.FILE_NOT_FOUND));
                     dbFile.injectArticleForFile(article);
                 });
-        return true;
     }
 
     public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticleAsPaging(String category, String keyword, String target, String sort, Integer page, Integer size) {
@@ -159,8 +154,10 @@ public class ArticleService {
     }
 
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
-        Article dbArticle = findVerifiedArticle(articleId);
-        checkArticleStatus(dbArticle);
+        Article article = findVerifiedArticle(articleId);
+        checkArticleStatus(article);
+        Article dbArticle = article.addClicks();
+
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
 

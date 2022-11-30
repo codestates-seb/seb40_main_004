@@ -14,6 +14,7 @@ public class AnswerDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class RequestPostAnswer {
         @NotBlank
         @Length(min = 15)
@@ -24,6 +25,7 @@ public class AnswerDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class RequestUpdateAnswer {
         private String content;
         @Builder.Default
@@ -33,6 +35,7 @@ public class AnswerDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class SimpleResponsePostAnswer {
         private Long answerId;
         private UserDto.ResponseSimpleUserDto userInfo;

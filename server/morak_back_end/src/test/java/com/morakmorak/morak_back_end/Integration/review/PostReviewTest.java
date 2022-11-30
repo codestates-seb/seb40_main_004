@@ -143,7 +143,7 @@ public class PostReviewTest {
                 .header(JWT_HEADER, accessToken)
                 .contentType(MediaType.APPLICATION_JSON)
         );
-        perform.andExpect(status().isBadRequest());
+        perform.andExpect(status().isUnprocessableEntity());
         Assertions.assertThatThrownBy(() -> reviewService.checkRemainingPoints(user, request.getPoint().get())).isInstanceOf(BusinessLogicException.class);
     }
 

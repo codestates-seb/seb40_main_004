@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.repository.article;
 
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.repository.article.ArticleQueryRepository;
@@ -25,6 +26,7 @@ import static com.morakmorak.morak_back_end.entity.QFile.file;
 import static com.morakmorak.morak_back_end.entity.QReview.review;
 import static com.morakmorak.morak_back_end.entity.QTag.tag;
 import static com.morakmorak.morak_back_end.entity.QUser.user;
+import static com.morakmorak.morak_back_end.entity.enums.ArticleStatus.*;
 
 
 @Repository
@@ -43,7 +45,8 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .select(article)
                 .from(article)
                 .where(categoryEq(category),
-                        keywordEq(keyword, target))
+                        (keywordEq(keyword, target)))
+
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(sortEq(sort))
@@ -53,7 +56,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 .select(article.count())
                 .from(article)
                 .where(categoryEq(category),
-                        keywordEq(keyword, target))
+                        (keywordEq(keyword, target)))
                 .orderBy(sortEq(sort))
                 .fetchOne();
 
@@ -75,18 +78,22 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         }
         switch (target) {
             case "title":
-                return article.title.startsWith(keyword);
+                return article.title.startsWith(keyword).and(statusPosting());
             case "content":
-                return article.content.startsWith(keyword);
+                return article.content.startsWith(keyword).and(statusPosting());
             case "tag":
-            return article.articleTags.any().tag.name.eq(TagName.valueOf(keyword));
+            return article.articleTags.any().tag.name.eq(TagName.valueOf(keyword)).and(statusPosting());
             case "bookmark":
-                 article.bookmarks.any().user.id.eq(Long.parseLong(keyword));
+                 article.bookmarks.any().user.id.eq(Long.parseLong(keyword)).and(statusPosting());
             case "titleAndContent":
-                return article.title.startsWith(keyword).or(article.content.startsWith(keyword));
+                return article.title.startsWith(keyword).or(article.content.startsWith(keyword)).and(statusPosting());
             default:
-                return null;
+                return statusPosting();
         }
+    }
+
+    private BooleanExpression statusPosting() {
+        return article.articleStatus.eq(POSTING);
     }
 
     private OrderSpecifier sortEq(String sort) {

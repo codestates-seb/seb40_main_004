@@ -9,6 +9,7 @@ public class BookmarkDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class ResponsePostBookmark {
 
         private Long articleId;
