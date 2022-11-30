@@ -24,6 +24,7 @@ import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADE
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ROLE_USER_LIST;
 import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
@@ -72,7 +73,10 @@ public class GetPointTest {
         );
 
         //then 정확한 dto 반환
-        result.andExpect(status().isOk());
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").exists())
+                .andExpect(jsonPath("$.nickname").value("백엔드엔드"))
+                .andExpect(jsonPath("$.point").value(100));
     }
 
     @Test
