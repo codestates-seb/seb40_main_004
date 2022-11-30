@@ -13,6 +13,8 @@ import {
   faChevronLeft,
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
+import { useRecoilValue } from 'recoil';
+import { userDashboardAtom } from '../../atomsYW';
 
 const reviews = [
   {
@@ -90,18 +92,29 @@ const swipePower = (offset: number, velocity: number) => {
 };
 
 interface review {
-  author: string;
-  text: string;
-  like: boolean;
+  reviewId: number;
+  content: string;
+  createdAt: string;
+  userInfo: {
+    userId: number;
+    nickname: string;
+    grade: string;
+  };
 }
 
 export const CarouselReview = () => {
+  const { reviews } = useRecoilValue(userDashboardAtom);
   const [[page, direction], setPage] = useState([0, 0]);
   const [id, setId] = useState<null | string>(null);
   const [curReview, setCurReview] = useState<review>({
-    author: '',
-    text: '',
-    like: false,
+    reviewId: 0,
+    content: '',
+    createdAt: '',
+    userInfo: {
+      userId: 0,
+      nickname: '',
+      grade: '',
+    },
   });
 
   // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
@@ -143,30 +156,20 @@ export const CarouselReview = () => {
         >
           {reviews.slice(reviewIndex, reviewIndex + 3).map((review) => (
             <motion.div
-              key={review.author}
-              layoutId={review.author}
-              className="bg-main-yellow bg-opacity-20 w-[215px] h-[215px] rounded-2xl p-8 relative"
+              key={review.reviewId}
+              layoutId={review.reviewId + ''}
+              className="bg-main-yellow bg-opacity-20 w-[215px] h-[215px] rounded-2xl p-8 relative hover:cursor-pointer"
+              onClick={() => setId(review.reviewId + '')}
             >
               <div>
-                <p
-                  className="hover:cursor-pointer"
-                  onClick={() => {
-                    setId(review.author);
-                    setCurReview(review);
-                  }}
-                >
-                  {review.text.length > 50
-                    ? `${review.text.slice(0, 50)}...`
-                    : review.text}
+                <p onClick={() => setCurReview(review)}>
+                  {review.content.length > 50
+                    ? `${review.content.slice(0, 50)}...`
+                    : review.content}
                 </p>
               </div>
               <div className="absolute bottom-8 flex justify-between w-[155px]">
-                <span>{`- ${review.author}`}</span>
-                {review.like && (
-                  <button className="bg-main-yellow px-4 rounded-full">
-                    ❤️
-                  </button>
-                )}
+                <span>{`- ${review.userInfo.nickname}`}</span>
               </div>
             </motion.div>
           ))}
@@ -185,18 +188,13 @@ export const CarouselReview = () => {
             >
               <div>
                 <p>
-                  {curReview?.text.length > 500
-                    ? `${curReview?.text.slice(0, 500)}...`
-                    : curReview?.text}
+                  {curReview?.content.length > 500
+                    ? `${curReview?.content.slice(0, 500)}...`
+                    : curReview?.content}
                 </p>
               </div>
               <div className="flex justify-between w-full mt-7">
-                <span>{`- ${curReview?.author}`}</span>
-                {curReview?.like && (
-                  <button className="bg-main-yellow px-4 rounded-full">
-                    ❤️
-                  </button>
-                )}
+                <span>{`- ${curReview?.userInfo.nickname}`}</span>
               </div>
             </motion.div>
           </motion.div>

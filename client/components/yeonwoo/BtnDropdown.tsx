@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-16
+ * 최근 수정일: 2022-11-23
  */
 
 import { faUser } from '@fortawesome/free-regular-svg-icons';
@@ -11,17 +11,28 @@ import {
   faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { isLoggedInAtom } from '../../atomsYW';
+import { isLoginAtom } from '../../atomsYW';
 
 export const BtnDropdown = () => {
-  const setIsLoggedIn = useSetRecoilState(isLoggedInAtom);
   const [dropdown, setDropdown] = useState(false);
+  const setIsLogin = useSetRecoilState(isLoginAtom);
+  const router = useRouter();
 
-  const onClickLogout = () => {
-    setIsLoggedIn(false);
+  const onClickLogout = async () => {
+    await axios.delete('/api/auth/token', {
+      headers: {
+        RefreshToken: localStorage.getItem('refreshToken'),
+        'ngrok-skip-browser-warning': '111',
+      },
+    });
+    localStorage.clear();
+    setIsLogin(false);
+    router.push('/');
   };
 
   return (
@@ -36,7 +47,7 @@ export const BtnDropdown = () => {
               <span className="text-xs">나의 모락</span>
               <span className="text-lg font-semibold">✨ 260 모락</span>
             </li>
-            <Link href="/dashboard">
+            <Link href={`/dashboard/${localStorage.getItem('userId')}`}>
               <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer mt-2 py-1 px-4 rounded-xl text-[15px]">
                 <FontAwesomeIcon icon={faUser} size="sm" />
                 <span className="ml-2">대시보드</span>

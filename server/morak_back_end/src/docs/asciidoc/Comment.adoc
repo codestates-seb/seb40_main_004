@@ -1,0 +1,119 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+= 댓글 관련 API
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: Table of Contents
+:source-highlighter: prettify
+:app-name: [morakmorak]
+:author: HuiyunJeong
+
+본 REST API 문서에서 사용하는 HTTP 상태 코드는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
+|===
+| `200 OK`
+| 상태를 성공적으로 처리함.
+| `201 CREATED`
+| 새 리소스를 성공적으로 생성함.
+| `204 NO CONTENT`
+| 기존 리소스를 성공적으로 제거하여 반환할 자원이 존재하지 않음.
+| `400 BAD REQUEST`
+| 잘못된 요청이므로 서버에서 처리할 수 없음.
+| `401 UNAUTHORIZED`
+| 인증에 실패함.
+| `403 FORBIDDEN`
+| 권한이 부족하여 요청을 수행할 수 없음.
+| `404 NOT FOUND`
+| 요청한 자원이 존재하지 않음.
+| `409 CONFLICT`
+| 서버의 규칙에 의해 해당 요청을 수행할 수 없음.
+|===
+***
+== 게시글에 대한 댓글 등록
+=== 성공 201
+.http-request
+include::{snippets}/task post comment success/http-request.adoc[]
+
+.http-response
+include::{snippets}/task post comment success/http-response.adoc[]
+
+.request-body
+include::{snippets}/task post comment success/request-body.adoc[]
+.request-fields
+include::{snippets}/task post comment success/request-fields.adoc[]
+
+.request-headers
+include::{snippets}/task post comment success/request-headers.adoc[]
+
+.response-body
+include::{snippets}/task post comment success/response-body.adoc[]
+
+.response-fields
+include::{snippets}/task post comment success/response-fields.adoc[]
+
+=== 실패 400
+.http-request
+include::{snippets}/task post comment failed caused by invalid dto/http-request.adoc[]
+
+.http-response
+include::{snippets}/task post comment failed caused by invalid dto/http-response.adoc[]
+
+.request-body
+include::{snippets}/task post comment failed caused by invalid dto/request-body.adoc[]
+.request-fields
+include::{snippets}/task post comment failed caused by invalid dto/request-fields.adoc[]
+
+.request-headers
+include::{snippets}/task post comment failed caused by invalid dto/request-headers.adoc[]
+
+.response-body
+include::{snippets}/task post comment failed caused by invalid dto/response-body.adoc[]
+
+
+== 게시글에 대한 댓글 수정
+=== 성공 200
+.http-request
+include::{snippets}/task update answer succeeded/http-request.adoc[]
+
+.http-response
+include::{snippets}/task update answer succeeded/http-response.adoc[]
+
+.request-body
+include::{snippets}/task update answer succeeded/request-body.adoc[]
+.request-fields
+include::{snippets}/task update answer succeeded/request-fields.adoc[]
+
+.request-headers
+include::{snippets}/task update answer succeeded/request-headers.adoc[]
+
+.response-body
+include::{snippets}/task update answer succeeded/response-body.adoc[]
+
+.response-fields
+include::{snippets}/task update answer succeeded/response-fields.adoc[]
+
+=== 실패 409
+.http-request
+include::{snippets}/task update answer failed because the requested Answer is already picked/http-request.adoc[]
+
+.http-response
+include::{snippets}/task update answer failed because the requested Answer is already picked/http-response.adoc[]
+
+.request-body
+include::{snippets}/task update answer failed because the requested Answer is already picked/request-body.adoc[]
+.request-fields
+include::{snippets}/task update answer failed because the requested Answer is already picked/request-fields.adoc[]
+
+.request-headers
+include::{snippets}/task update answer failed because the requested Answer is already picked/request-headers.adoc[]
+
+.response-body
+include::{snippets}/task update answer failed because the requested Answer is already picked/response-body.adoc[]
+
+== 게시글에 대한 댓글 삭제
+=== 성공 200
+
+
+=== 실패 409

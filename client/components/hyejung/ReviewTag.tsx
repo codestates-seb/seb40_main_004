@@ -1,29 +1,32 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-20
- * 최근 수정일: 2022-11-20
+ * 최근 수정일: 2022-11-29
  */
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { selectedTagsAtom } from '../../atomsHJ';
+import { reviewTagsAtom } from '../../atomsHJ';
 
 type TagProps = {
   children: string;
   isSelectable: boolean;
+  enumTag: string;
 };
 
-export const ReviewTag = ({ children, isSelectable }: TagProps) => {
-  // 현재 리뷰 태그가 선택되었는지 여부를 확인하는 state
+export const ReviewTag = ({ children, isSelectable, enumTag }: TagProps) => {
   const [isSelected, setIsSelected] = useState(false);
-  // 선택된 리뷰 배열이 저장되는 전역 state
-  const [selectedTags, setSelectedTags] = useRecoilState(selectedTagsAtom);
+  const [reviewTags, setReviewTags] = useRecoilState(reviewTagsAtom);
 
   // 클릭시 selected state 와 selectedTags state를 업데이트
   const onClick = () => {
     setIsSelected(!isSelected);
-    !isSelected
-      ? setSelectedTags([children, ...selectedTags])
-      : setSelectedTags(selectedTags.filter((tag) => tag !== children));
+    if (isSelected) {
+      const newState = reviewTags.slice();
+      newState.push({ badgeId: 0, name: enumTag });
+      setReviewTags(newState);
+    } else {
+      setReviewTags(reviewTags.filter((tag) => tag.name !== enumTag));
+    }
   };
   return (
     <div className="p-4 lg:p-9 md:text-lg font-bold">
