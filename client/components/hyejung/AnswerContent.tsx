@@ -84,7 +84,7 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
   const [reviewRequest, setReviewRequest] = useRecoilState(reviewRequestAtom);
   const moveToReview = () => {
     const newState = {
-      answerId: answer.answerId,
+      targetId: answer.answerId,
       articleId: articleId as string,
       targetUserName: answer.userInfo.nickname,
     };
