@@ -5,9 +5,7 @@ import com.morakmorak.morak_back_end.dto.ActivityDto;
 import com.morakmorak.morak_back_end.dto.TagQueryDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.entity.enums.Grade;
-import com.morakmorak.morak_back_end.entity.enums.JobType;
-import com.morakmorak.morak_back_end.entity.enums.TagName;
+import com.morakmorak.morak_back_end.entity.enums.*;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.user.UserQueryRepository;
@@ -438,5 +436,27 @@ public class UserRepositoryTest {
         
         //when //then
         List<TagQueryDto> result = userRepository.getUsersTop3Tags(user.getId());
+    }
+
+    @Test
+    @DisplayName("삭제된 게시글은 조회되지 않는다.")
+    void test() {
+        //given
+        User user = User.builder().build();
+        userRepository.save(user);
+
+        for (int i=0; i<50; i++) {
+            Category category = new Category(CategoryName.QNA);
+            Article article = Article.builder().category(category).articleStatus(ArticleStatus.REMOVED).user(user).build();
+            user.addArticle(article);
+            entityManager.persist(category);
+            entityManager.persist(article);
+        }
+
+        //when
+        List<Article> recentQuestions = userQueryRepository.get50RecentQuestions(user.getId());
+
+        //then
+        Assertions.assertThat(recentQuestions.size()).isEqualTo(0);
     }
 }
