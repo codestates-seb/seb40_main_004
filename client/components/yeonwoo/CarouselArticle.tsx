@@ -17,6 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilValue } from 'recoil';
 import { userDashboardAtom } from '../../atomsYW';
+import Link from 'next/link';
 
 const variants = {
   enter: (direction: number) => {
@@ -97,14 +98,16 @@ export const CarouselArticle = () => {
               className="bg-main-yellow bg-opacity-20 w-[793px] h-[190px] rounded-2xl p-8 relative mb-[72px]"
             >
               <div className="flex justify-between items-start">
-                <div>
-                  <span className="text-2xl text-main-orange">Q. </span>
-                  <span className="hover:cursor-pointer text-2xl">
-                    {article.title.length > 30
-                      ? `${article.title.slice(0, 30)}...`
-                      : article.title}
-                  </span>
-                </div>
+                <Link href={`/questions/${article.articleId}`}>
+                  <div>
+                    <span className="text-2xl text-main-orange">Q. </span>
+                    <span className="hover:cursor-pointer text-2xl">
+                      {article.title.length > 30
+                        ? `${article.title.slice(0, 30)}...`
+                        : article.title}
+                    </span>
+                  </div>
+                </Link>
                 <div className="flex gap-4">
                   <div className="flex gap-2">
                     <FontAwesomeIcon icon={faHeart} size="xs" />

@@ -87,13 +87,19 @@ export const ListLately = () => {
                   key={article.articleId}
                 >
                   <div className="mb-4">
-                    <span className="text-lg font-bold">{article.title}</span>
+                    <Link href={`/questions/${article.articleId}`}>
+                      <span className="text-lg font-bold hover:cursor-pointer">
+                        {article.title}
+                      </span>
+                    </Link>
                   </div>
                   <div className="flex justify-between items-center">
                     <div className="flex">
-                      <span className="text-xs">
-                        {article.userInfo.nickname}
-                      </span>
+                      <Link href={`/dashboard/${article.userInfo.userId}`}>
+                        <span className="text-xs hover:cursor-pointer">
+                          {article.userInfo.nickname}
+                        </span>
+                      </Link>
                     </div>
                     <div className="flex gap-4">
                       <div className="flex">
