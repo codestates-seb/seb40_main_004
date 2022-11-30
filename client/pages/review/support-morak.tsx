@@ -61,7 +61,7 @@ const SupportMorak: NextPage = () => {
                 ✨후원을 통해 <br className="sm:hidden" /> 마음을 표현해보세요!
               </h1>
               <span className="font-bold text-right text-sm sm:text-base">
-                고마운 답변자에게 모락을 보내 마음을 표현해볼까요?
+                고마운 분에게 모락을 보내 마음을 표현해볼까요?
                 <br className="lg:hidden" />
                 <span className="text-main-gray">
                   {' '}

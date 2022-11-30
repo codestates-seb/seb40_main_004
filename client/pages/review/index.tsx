@@ -6,7 +6,7 @@
    - 답변을 채택할 때 리뷰 태그를 선택할 수 있는 페이지 입니다.
  */
 
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,19 +21,37 @@ import { ReviewTag } from '../../components/hyejung/ReviewTag';
 import { ProgressBar } from '../../components/hyejung/ProgressBar';
 import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
 import { useRouter } from 'next/router';
+import { userDashboardAtom } from '../../atomsYW';
+import { getIsFromDashboard } from '../../libs/getIsFromDashboard';
 
-const Review: NextPage = () => {
+type ReviewPageProps = {
+  prevUrl: string;
+};
+
+const Review: NextPage<ReviewPageProps> = ({ prevUrl }) => {
   const router = useRouter();
-  const reviewRequest = useRecoilValue(reviewRequestAtom);
+  const [reviewRequest, setReviewRequest] = useRecoilState(reviewRequestAtom);
   const [reviewTags, setReviewTagsAtom] = useRecoilState(reviewTagsAtom);
-  const [isSelectable, setIsSelectable] = useState(true);
+  const userDashboardInfo = useRecoilValue(userDashboardAtom);
   const tags = useRecoilValue(reviewTagsEnumAtom);
+  const [isSelectable, setIsSelectable] = useState(true);
 
   useEffect(() => {
     if (!reviewRequest.articleId) {
       alert('잘못된 접근입니다!');
       router.replace('/');
     }
+
+    const prevUrlResult = getIsFromDashboard(prevUrl);
+    if (prevUrlResult) {
+      setReviewRequest({
+        targetId: Number(prevUrlResult[1]),
+        articleId: '',
+        targetUserName: userDashboardInfo.nickname,
+        dashboardUrl: prevUrl,
+      });
+    }
+
     setReviewTagsAtom([{ badgeId: 0, name: '' }]);
   }, []);
 
@@ -53,7 +71,7 @@ const Review: NextPage = () => {
           <section className="flex flex-col space-y-10 w-full">
             <article className="text-left space-y-2 flex flex-col">
               <h1 className="text-2xl font-bold text-right">
-                🔖채택하실 답변을 설명할 수 있는 태그를 골라주세요!
+                🔖후원하실 분을 설명할 수 있는 태그를 골라주세요!
               </h1>
               <span className="font-bold text-right">
                 최소 1개, 최대 3개까지 선택하실 수 있어요!
@@ -96,6 +114,14 @@ const Review: NextPage = () => {
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const prevUrl = ctx.req.headers.referer ?? null;
+
+  return {
+    props: { prevUrl },
+  };
 };
 
 export default Review;

@@ -42,9 +42,10 @@ export const reviewPointAtom = atom({
 export const reviewRequestAtom = atom({
   key: 'reviewRequest',
   default: {
-    answerId: -1,
+    targetId: -1,
     articleId: '',
     targetUserName: '',
+    dashboardUrl: '',
   },
 });
 

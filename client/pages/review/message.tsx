@@ -56,7 +56,7 @@ const Message: NextPage = () => {
           <section className="flex flex-col space-y-10 w-full">
             <article className="text-left space-y-2 flex flex-col">
               <h1 className="text-2xl font-bold text-right">
-                💌답변을 보고 느낀 자세한 후기를 남겨주세요!
+                💌 후원하실 분에게 자세한 후기/응원메시지를 남겨주세요!
               </h1>
             </article>
 
