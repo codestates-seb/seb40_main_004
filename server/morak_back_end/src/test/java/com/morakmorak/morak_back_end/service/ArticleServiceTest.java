@@ -166,9 +166,9 @@ public class ArticleServiceTest {
 
            given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().build()));
            //when
-           Boolean aBoolean = articleService.findDbFilesAndInjectWithArticle(article, fileDto);
+           articleService.findDbFilesAndInjectWithArticle(article, fileDto);
            //then
-           assertThat(aBoolean).isTrue();
+           assertThat(article.getFiles().size()).isEqualTo(1);
         }
 
         @Test

@@ -131,14 +131,13 @@ public class ArticleService {
         return true;
     }
 
-    public Boolean findDbFilesAndInjectWithArticle(Article article, List<FileDto.RequestFileWithId> files) {
+    public void findDbFilesAndInjectWithArticle(Article article, List<FileDto.RequestFileWithId> files) {
         files.stream()
                 .forEach(file -> {
                     File dbFile = fileRepository.findById(file.getFileId())
                             .orElseThrow(() -> new BusinessLogicException(ErrorCode.FILE_NOT_FOUND));
                     dbFile.injectArticleForFile(article);
                 });
-        return true;
     }
 
     public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticleAsPaging(String category, String keyword, String target, String sort, Integer page, Integer size) {
