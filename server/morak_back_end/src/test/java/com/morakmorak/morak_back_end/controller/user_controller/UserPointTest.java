@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -43,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityTestConfig.class)
 @WebMvcTest({UserController.class, ExceptionController.class, UserMapper.class})
 @MockBean(JpaMetamodelMappingContext.class)
-//@AutoConfigureRestDocs(uriScheme = "https", uriHost = "docs.api.com")
+@AutoConfigureRestDocs(uriScheme = "https", uriHost = "docs.api.com")
 public class UserPointTest {
     @Autowired
     MockMvc mockMvc;
@@ -67,9 +68,8 @@ public class UserPointTest {
         Long INVALID_USERID = 1L;
         String INVALID_USER_ACCESS_TOKEN = "Invalid access token";
 
-        BDDMockito.given(userService.findVerifiedUserById(INVALID_USERID)).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
-        BDDMockito.given(pointService.getRemainingPoint(INVALID_USERID)).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
-//        BDDMockito.given(userMapper.toResponsePoint(User.builder().build())).willReturn();
+        BDDMockito.given(userService.findVerifiedUserById(any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+        BDDMockito.given(pointService.getRemainingPoint(any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
         //when
         ResultActions result = mockMvc.perform(get("/users/points", INVALID_USERID)
                 .header(JWT_HEADER, INVALID_USER_ACCESS_TOKEN)
@@ -77,7 +77,7 @@ public class UserPointTest {
         //then
         result.andExpect(status().isNotFound())
                 .andDo(document(
-                        "게시글을_등록할때_존재하지_않는_태그를_작성하려할떄_실패_404",
+                        "포인트 조회 실패_유저 없음_404",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestHeaders(
