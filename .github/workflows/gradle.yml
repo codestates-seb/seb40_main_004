@@ -10,7 +10,7 @@ name: Java CI with Gradle
 on:
   push:
     branches:
-      - 'main'
+      - 'dev/server'
 
 env:
   S3_BUCKET_NAME: morakmorak
@@ -40,19 +40,19 @@ jobs:
           name: application.yml
           path: ./server/morak_back_end/src/main/resources/application.yml
 
-      - name: Download chromedriver
-        run: |
-          wget -q -O tmp.zip https://chromedriver.storage.googleapis.com/81.0.4044.69/chromedriver_linux64.zip
-          unzip tmp.zip && rm tmp.zip
+#      - name: Download chromedriver
+ #       run: |
+  #        wget -q -O tmp.zip https://chromedriver.storage.googleapis.com/81.0.4044.69/chromedriver_linux64.zip
+   #       unzip tmp.zip && rm tmp.zip
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./server/morak_back_end/gradlew
-        shell: bash
+#      - name: Grant execute permission for gradlew
+ #       run: chmod +x ./server/morak_back_end/gradlew
+  #      shell: bash
 
         # [2] build
-      - name: Build with Gradle
-        run: cd server/morak_back_end; ./gradlew build
-        shell: bash
+#      - name: Build with Gradle
+ #       run: cd server/morak_back_end; ./gradlew build
+  #      shell: bash
 
         # [3] save build
       - name: Make zip file
