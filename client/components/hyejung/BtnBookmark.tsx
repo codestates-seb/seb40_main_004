@@ -23,7 +23,6 @@ export const BtnBookmark = ({ isBookmarked }: BtnBookmarkProps) => {
     client
       .post(`/api/articles/${articleId}/bookmark`)
       .then((res) => {
-        console.log(res.data);
         setIsMarked(res.data.scrappedByThisUser);
       })
       .catch((err) => {
