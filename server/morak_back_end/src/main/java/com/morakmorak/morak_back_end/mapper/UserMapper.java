@@ -63,4 +63,8 @@ public interface UserMapper {
                                 .build()
         ).collect(Collectors.toList());
     }
+    @Mapping(source = "id", target = "userId")
+    @Mapping(source = "nickname", target = "nickname")
+    @Mapping(source = "point", target = "point")
+    UserDto.ResponsePoint toResponsePoint(User user);
 }
