@@ -61,14 +61,14 @@ export const LoginForm = () => {
       <label>이메일</label>
       <input
         {...register('email', { required: true })}
-        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3 placeholder:pb-2 pl-2 border border-main-gray"
+        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3 placeholder:pb-2"
         type="text"
         placeholder="이메일을 입력해주세요."
       />
       <label>비밀번호</label>
       <input
         {...register('password', { required: true })}
-        className="rounded-full w-96 h-10 pl-2 border border-main-gray"
+        className="rounded-full w-96 h-10"
         type="password"
         autoComplete="off"
       />

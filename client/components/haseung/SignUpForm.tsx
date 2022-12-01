@@ -9,7 +9,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { userEmailAtom, userNickName, userPassword } from '../../atomsHS';
 import { Button } from '../common/Button';
 import { Divider } from './Divider';
@@ -23,9 +23,9 @@ type SignUpProps = {
 };
 
 export const SignUpForm = () => {
-  const setEmail = useSetRecoilState(userEmailAtom);
-  const setPassword = useSetRecoilState(userPassword);
-  const setNickName = useSetRecoilState(userNickName);
+  const [email, setEmail] = useRecoilState(userEmailAtom);
+  const [password, setPassword] = useRecoilState(userPassword);
+  const [nickname, setNickName] = useRecoilState(userNickName);
   const router = useRouter();
   const {
     register,
@@ -56,7 +56,7 @@ export const SignUpForm = () => {
         confirmPassword,
         nickname,
       })
-      .then(() => {
+      .then((res) => {
         setEmail(email);
         setPassword(password);
         setNickName(nickname);
@@ -87,7 +87,7 @@ export const SignUpForm = () => {
             message: '닉네임은 16자 이하이어야 합니다.',
           },
         })}
-        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3 placeholder:pb-2 pl-2 border border-main-gray"
+        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3 placeholder:pb-2"
         type="text"
         placeholder="닉네임을 입력해주세요."
       />
@@ -105,7 +105,7 @@ export const SignUpForm = () => {
             message: '이메일이 형식에 맞지 않습니다.',
           },
         })}
-        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3 placeholder:pb-2 pl-2 border border-main-gray"
+        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3 placeholder:pb-2"
         type="text"
         placeholder="이메일을 입력해주세요."
       />
@@ -125,7 +125,7 @@ export const SignUpForm = () => {
               '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다.',
           },
         })}
-        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3 pl-2 border border-main-gray"
+        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3"
         type="password"
         placeholder="비밀번호를 입력해주세요."
         autoComplete="off"
@@ -140,7 +140,7 @@ export const SignUpForm = () => {
         {...register('confirmPassword', {
           required: true,
         })}
-        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3 pl-2 border border-main-gray"
+        className="rounded-full w-96 h-10 placeholder:text-base placeholder:pl-3"
         type="password"
         placeholder="한번 더 입력해주세요."
         autoComplete="off"
