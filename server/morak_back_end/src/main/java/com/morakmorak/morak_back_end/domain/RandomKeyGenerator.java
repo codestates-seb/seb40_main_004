@@ -19,6 +19,8 @@ public class RandomKeyGenerator {
         return generateRandomKey(TEMPORARY_PASSWORD_LENGTH);
     }
 
+    public String generateTemporaryNicknameCode() { return generateRandomKey(TEMPORARY_NICKNAME_CODE_LENGTH); }
+
     private String generateRandomKey(int size) {
         StringBuilder stringBuilder = new StringBuilder();
 
