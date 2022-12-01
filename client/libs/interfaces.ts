@@ -1,78 +1,144 @@
-export interface Tags {
-  tagId: number;
-  name: string;
-}
-
-export interface UserInfo {
+export interface userDashboard {
   userId: number;
+  email: string;
   nickname: string;
+  jobType: string;
   grade: string;
+  point: number;
+  github: string | null;
+  blog: string | null;
+  infoMessage: string | null;
+  rank: number;
+  avatar: {
+    avatarId: number;
+    filename: string;
+    remotePath: string;
+  } | null;
+  tags: { name: string; tag_Id: number; ranking: number }[];
+  reviewBadges: { name: string; badge_Id: number }[];
+  articles: {
+    articleId: number;
+    category: string;
+    title: string;
+    clicks: number;
+    likes: number;
+    isClosed: boolean;
+    tags: [
+      {
+        tagId: number;
+        name: string;
+      },
+      {
+        tagId: number;
+        name: string;
+      },
+    ];
+    commentCount: number;
+    answerCount: number;
+    createdAt: string;
+    lastModifiedAt: string;
+    userInfo: {
+      userId: number;
+      nickname: string;
+      grade: string;
+    };
+    avatar: {
+      avatarId: number;
+      filename: string;
+      remotePath: string;
+    };
+  }[]; // 수정 필요
+  activities: {
+    articleCount: number;
+    answerCount: number;
+    commentCount: number;
+    total: number;
+    createdDate: string;
+  }[]; // 수정 필요
+  reviews: {
+    reviewId: number;
+    content: string;
+    createdAt: string;
+    userInfo: {
+      userId: number;
+      nickname: string;
+      grade: string;
+    };
+  }[]; // 수정 필요
 }
 
-export interface Avatar {
-  avatarId: number;
-  fileName: string;
-  remotePath: string;
-}
-
-export interface CommentResp {
-  answerId?: number | null;
-  commentId: number;
-  articleId: number;
-  content: string;
-  createdAt: string;
-  lastModifiedAt: string;
-  userInfo: UserInfo;
-  avatar: Avatar;
-}
-
-export interface ArticleDetail {
+export interface articleList {
   articleId: number;
   category: string;
   title: string;
-  content: string;
   clicks: number;
   likes: number;
   isClosed: boolean;
-  isLiked: boolean;
-  isBookmarked: boolean;
+  tags: [
+    {
+      tagId: number;
+      name: string;
+    },
+  ];
+  commentCount: number;
+  answerCount: number;
   createdAt: string;
   lastModifiedAt: string;
-  expiredDate: null;
-  tags: Tags[];
-  userInfo: UserInfo;
-  avatar: Avatar;
-  comments: Comment[];
+  userInfo: {
+    userId: number;
+    nickname: string;
+    grade: string | null;
+  };
+  avatar: {
+    avatarId: number | null;
+    filename: string | null;
+    remotePath: string | null;
+  };
 }
 
-export interface Answer {
-  answerId: number;
-  authorId: string;
-  content: string;
-  createdAt: string;
-  isLiked: boolean;
-  isPicked: boolean;
-  answerLikeCount: number;
+export interface rankList {
+  userId: number;
+  nickname: string;
+  infoMessage: string | null;
+  point: number;
+  grade: string | null;
+  jobType: string | null;
+  articleCount: number;
+  likeCount: number;
+  answerCount: number;
+  rank: number;
+  avatar: {
+    avatarId: number;
+    filename: string;
+    remotePath: string;
+  } | null;
+}
+
+export interface QuestionListProps {
+  answerCount: number;
+  articleId: number;
+  avatar: {
+    avatarId: number;
+    filename: string;
+    remothPath: string;
+  };
+  category: string;
+  clicks: number;
   commentCount: number;
-  commentPreview: CommentResp;
-  avatar: Avatar;
-  userInfo: UserInfo;
-}
-
-export interface PageInfo {
-  page: number;
-  size: number;
-  totalElements: number;
-  sort: { empty: boolean; unsorted: boolean; sorted: boolean };
-}
-
-export interface AnswerListProps {
-  data: Answer[];
-  pageInfo: PageInfo;
-}
-
-// 임의 지정
-export interface Articles {
-  article: ArticleDetail;
-  answers: Answer[];
+  createdAt: string;
+  isClosed: boolean;
+  lastModifiedAt: string;
+  likes: number;
+  tags: [
+    {
+      tagId: number;
+      name: string;
+    },
+  ];
+  title: string;
+  userInfo: {
+    userId: number;
+    nickname: string;
+    grade: string;
+  };
 }
