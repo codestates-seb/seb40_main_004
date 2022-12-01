@@ -13,7 +13,7 @@ public class SecurityConstants {
     public final static String EMAIL = "email";
     public static final String NICKNAME = "nickname";
 
-    public final static String REDIRECT_URL_OAUTH2 = "https://localhost:8080/login/oauth2/code/google";
+    public final static String REDIRECT_URL_OAUTH2 = "https://seb40-main-004-hyeonwooga.vercel.app/";
     public final static String ACCESS_TOKEN = "AccessToken";
 
     public final static Long AUTH_KEY_EXPIRATION_PERIOD = 300000L;
@@ -21,6 +21,7 @@ public class SecurityConstants {
 
     public final static Integer TEMPORARY_PASSWORD_LENGTH = 15;
     public final static Integer EMAIL_AUTH_KEY_LENGTH = 8;
+    public final static Integer TEMPORARY_NICKNAME_CODE_LENGTH = 5;
 
     public final static String DO_NOT_CRAWL = "I am a Teapot, do not crawl";
 }

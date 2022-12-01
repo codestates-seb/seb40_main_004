@@ -15,6 +15,7 @@ import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.repository.user.RoleRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRoleRepository;
+import com.morakmorak.morak_back_end.security.util.SecurityConstants;
 import com.morakmorak.morak_back_end.service.mail_service.MailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -104,6 +105,8 @@ public class AuthService {
         User user = userMapper.redisUserToUser(redisUser);
         String refreshToken = tokenGenerator.generateRefreshToken(user);
         String accessToken = tokenGenerator.generateAccessToken(user);
+
+        saveRefreshToken(refreshToken, redisUser);
 
         return AuthDto.ResponseToken
                 .builder()
