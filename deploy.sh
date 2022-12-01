@@ -39,4 +39,4 @@ sudo ./gradlew build
 cd build/libs
 
 # jar 백그라운드 실행 
-nohup java -jar morak_back_end-0.0.1-SNAPSHOT.jar 2>&1 &
+sudo nohup  java -jar morak_back_end-0.0.1-SNAPSHOT.jar &
