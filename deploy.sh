@@ -38,5 +38,5 @@ sudo ./gradlew build
 # jar 파일 위치로 이동
 cd build/libs
 
-echo "> Jar Name: $JAR_NAME"
+# jar 백그라운드 실행 
 nohup java -jar morak_back_end-0.0.1-SNAPSHOT.jar 2>&1 &
