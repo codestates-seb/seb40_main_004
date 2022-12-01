@@ -121,6 +121,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles")
+                        .header("User-Agent", "Mozilla 5.0")
                         .param("category", "INFO")
                         .param("keyword", "테스트 타이틀입니다. 잘부탁드립니다. 제발 돼라!!!~~~~~~~~")
                         .param("target", "title")
@@ -193,6 +194,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles")
+                        .header("User-Agent", "Mozilla 5.0")
                         .param("category", "INFO")
                         .param("keyword", "존재하지 않음")
                         .param("target", "title")
@@ -248,6 +250,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles")
+                        .header("User-Agent", "Mozilla 5.0")
                         .param("category", "INFO")
                         .param("keyword", "JAVA")
                         .param("target", "tag")
@@ -305,6 +308,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/{article-id}" , dbArticle.getId())
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, accessToken)
         );
 
@@ -371,6 +375,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/" + article.getId())
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, accessToken)
         );
 
@@ -477,6 +482,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/" + article.getId())
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, accessToken)
         );
 
@@ -484,8 +490,8 @@ public class ArticleGetTest {
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.articleId").value(article.getId()))
                 .andExpect(jsonPath("$.category").value("INFO"))
-                .andExpect(jsonPath("$.title").value("이 글은 신고가 누적되 더이상 확인하실 수 없습니다."))
-                .andExpect(jsonPath("$.content").value("이 글은 신고가 누적되 더이상 확인하실 수 없습니다."))
+                .andExpect(jsonPath("$.title").value("이 글은 신고가 누적되어 더이상 확인하실 수 없습니다."))
+                .andExpect(jsonPath("$.content").value("이 글은 신고가 누적되어 더이상 확인하실 수 없습니다."))
                 .andExpect(jsonPath("$.clicks").value(article.getClicks()))
                 .andExpect(jsonPath("$.likes").value(1))
                 .andExpect(jsonPath("$.isClosed").value(false))
@@ -573,6 +579,7 @@ public class ArticleGetTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/" + article.getId())
+                        .header("User-Agent", "Mozilla 5.0")
 
         );
 

@@ -200,6 +200,7 @@ public class ArticleUpdateTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/{article-id}" , dbArticle.getId())
+                        .header("User-Agent", "Mozilla 5.0")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(JWT_HEADER, accessToken)
                         .content(content)

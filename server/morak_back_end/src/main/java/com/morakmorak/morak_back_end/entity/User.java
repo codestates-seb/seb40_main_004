@@ -41,8 +41,9 @@ public class User extends BaseTime {
 
     private String phone;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private UserStatus userStatus;
+    private UserStatus userStatus = UserStatus.RUNNING;
 
     private String infoMessage;
 
@@ -204,9 +205,14 @@ public class User extends BaseTime {
         this.grade = checkGradeUpdatable();
     }
 
-    public void setAvatar(Avatar avatar) {
+    public void changeAvatar(Avatar avatar) {
         this.avatar = avatar;
     }
+
+    public void changeStatus(UserStatus status) {
+        this.userStatus = status;
+    }
+
     public void deleteAvatar() {
         this.avatar = null;
     }

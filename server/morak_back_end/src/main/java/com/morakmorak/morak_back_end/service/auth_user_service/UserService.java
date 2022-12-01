@@ -5,6 +5,7 @@ import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.ActivityType;
+import com.morakmorak.morak_back_end.entity.enums.UserStatus;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
@@ -28,6 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.morakmorak.morak_back_end.entity.enums.ActivityType.*;
+import static com.morakmorak.morak_back_end.entity.enums.UserStatus.*;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 
 @Service
@@ -85,6 +87,9 @@ public class UserService {
     }
 
     public UserDto.ResponseDashBoard findUserDashboard(Long userId) {
+        User user = findVerifiedUserById(userId);
+        checkIfDeletedUser(user);
+
         LocalDate january1st = LocalDate.now().withDayOfYear(1);
         LocalDate december31st = LocalDate.now().withDayOfYear(365);
 
@@ -287,4 +292,7 @@ public class UserService {
         return new ResponseMultiplePaging<>(userAnswers, userAnswersInPage);
     }
 
+    public void checkIfDeletedUser(User user) {
+        if (user.getUserStatus().equals(DELETED)) throw new BusinessLogicException(USER_NOT_FOUND);
+    }
 }

@@ -181,7 +181,7 @@ public class ArticleService {
 
         if (dbArticle.getReports().size() >= 5) {
             String report = "이 글은 신고가 누적되 더이상 확인하실 수 없습니다.";
-
+            
             return articleMapper.articleToResponseBlockedArticle(dbArticle, isLiked, isBookmarked,
                     report,new ArrayList<>(),new ArrayList<>(),likes);
         }

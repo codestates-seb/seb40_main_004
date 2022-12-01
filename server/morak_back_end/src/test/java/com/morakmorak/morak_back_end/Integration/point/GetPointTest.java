@@ -70,6 +70,7 @@ public class GetPointTest {
         ResultActions result = mockMvc.perform(
                 get("/users/points")
                         .header(JWT_HEADER, accessToken)
+                        .header("User-Agent", "Mozilla 5.0")
         );
 
         //then 정확한 dto 반환
@@ -91,6 +92,7 @@ public class GetPointTest {
         ResultActions result = mockMvc.perform(
                 get("/users/points")
                         .header(JWT_HEADER, accessToken)
+                        .header("User-Agent", "Mozilla 5.0")
         );
 
         //then 404 반환

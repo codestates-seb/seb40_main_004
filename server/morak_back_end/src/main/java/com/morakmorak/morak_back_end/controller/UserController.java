@@ -29,7 +29,6 @@ import java.time.format.DateTimeParseException;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
-
     private final PointService pointService;
     private final Integer MAX_SIZE = 50;
 
