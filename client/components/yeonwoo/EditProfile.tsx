@@ -1,13 +1,21 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-20
- * 최근 수정일: 2022-11-20
+ * 최근 수정일: 2022-12-01
  */
 
 import axios from 'axios';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { userDashboard } from '../../interfaces';
+
+interface IChangePassword {
+  originalPassword: string;
+  newPassword: string;
+  newPasswordCheck: string;
+}
 
 export const EditProfileComponent = () => {
   const [pathname, setPathname] = useState('');
@@ -20,6 +28,44 @@ export const EditProfileComponent = () => {
   const [blog, setBlog] = useState('');
   const [jobType, setJobType] = useState('');
   const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<IChangePassword>();
+  const onValid: SubmitHandler<IChangePassword> = async ({
+    originalPassword,
+    newPassword,
+    newPasswordCheck,
+  }) => {
+    if (newPassword !== newPasswordCheck) {
+      setError(
+        'newPasswordCheck',
+        { message: '비밀번호가 맞지 않습니다.' },
+        { shouldFocus: true },
+      );
+    } else {
+      try {
+        await axios.patch(
+          '/api/auth/password',
+          {
+            originalPassword,
+            newPassword,
+          },
+          {
+            headers: {
+              Authorization: accessToken,
+            },
+          },
+        );
+
+        router.push('/');
+      } catch (error) {
+        alert(`에러 발생 : ${error}`);
+      }
+    }
+  };
   const getPathname = () => {
     setPathname(router.pathname);
   };
@@ -56,25 +102,29 @@ export const EditProfileComponent = () => {
     userData?.blog && setBlog(userData.blog);
     userData?.jobType && setJobType(userData.jobType);
   }, [userData]);
-  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitEditProfile = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await axios.patch(
-      '/api/users/profiles',
-      {
-        nickname,
-        infoMessage,
-        github,
-        blog,
-        jobType,
-      },
-      {
-        headers: {
-          Authorization: accessToken,
+    try {
+      await axios.patch(
+        '/api/users/profiles',
+        {
+          nickname,
+          infoMessage,
+          github,
+          blog,
+          jobType,
         },
-      },
-    );
-    localStorage.setItem('nickname', nickname);
-    router.push('/');
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        },
+      );
+      localStorage.setItem('nickname', nickname);
+      router.push('/');
+    } catch (error) {
+      alert(`에러 발생 : ${error}`);
+    }
   };
   return (
     <>
@@ -83,7 +133,7 @@ export const EditProfileComponent = () => {
           <div className="mb-16">
             <span className="text-3xl font-bold">프로필 수정</span>
           </div>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={onSubmitEditProfile}>
             <label htmlFor="nickname">닉네임</label>
             <input
               id="nickname"
@@ -133,58 +183,98 @@ export const EditProfileComponent = () => {
               <button className="w-full py-[6px] rounded-full bg-main-yellow">
                 저장
               </button>
-              <button className="w-full py-[6px] rounded-full bg-main-gray">
-                취소
-              </button>
+              <Link href="/">
+                <div className="w-full py-[6px] rounded-full bg-main-gray hover:cursor-pointer flex justify-center">
+                  <span>취소</span>
+                </div>
+              </Link>
             </div>
           </form>
         </>
       ) : pathname === '/edit-password' ? (
         <>
           <div className="mb-16">
-            <span className="text-3xl font-bold">프로필 수정</span>
+            <span className="text-3xl font-bold">비밀번호 변경</span>
           </div>
-          <form>
-            <label htmlFor="nickname">닉네임</label>
-            <input
-              id="nickname"
-              type="text"
-              className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
-            />
-            <label htmlFor="message">메세지</label>
-            <input
-              id="message"
-              type="text"
-              className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
-            />
-            <label htmlFor="github">깃허브 주소</label>
-            <input
-              id="github"
-              type="text"
-              className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
-            />
-            <label htmlFor="blog">블로그 주소</label>
-            <input
-              id="blog"
-              type="text"
-              className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
-            />
-            <label htmlFor="userState">취준/현업/무관</label>
-            <select
-              id="userState"
-              className="w-full rounded-full h-11 px-4 mt-2 mb-32 border border-main-gray"
-            >
-              <option value="student">개발자 취준생</option>
-              <option value="developer">현업 개발자</option>
-              <option value="citizen">개발에 관심있는 일반인</option>
-            </select>
+          <form onSubmit={handleSubmit(onValid)}>
+            <div className="mt-2 mb-10">
+              <label htmlFor="original-password">기존 비밀번호</label>
+              <input
+                id="original-password"
+                type="password"
+                className="w-full rounded-full h-11 px-4 border border-main-gray"
+                placeholder="기존 비밀번호 입력"
+                {...register('originalPassword', {
+                  required: '기존 비밀번호는 필수 입력 사항입니다',
+                  pattern: {
+                    value:
+                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
+                    message:
+                      '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다',
+                  },
+                })}
+              />
+              {errors.originalPassword && (
+                <p className="font-semibold text-red-500 text-sm text-center">
+                  {errors.originalPassword.message}
+                </p>
+              )}
+            </div>
+            <div className="mt-2 mb-10">
+              <label htmlFor="new-password">신규 비밀번호</label>
+              <input
+                id="new-password"
+                type="password"
+                className="w-full rounded-full h-11 px-4 border border-main-gray"
+                placeholder="신규 비밀번호 입력"
+                {...register('newPassword', {
+                  required: '신규 비밀번호는 필수 입력 사항입니다',
+                  pattern: {
+                    value:
+                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
+                    message:
+                      '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다',
+                  },
+                })}
+              />
+              {errors.newPassword && (
+                <p className="font-semibold text-red-500 text-sm text-center">
+                  {errors.newPassword.message}
+                </p>
+              )}
+            </div>
+            <div className="mt-2 mb-10">
+              <label htmlFor="new-password-check">신규 비밀번호 확인</label>
+              <input
+                id="new-password-check"
+                type="password"
+                className="w-full rounded-full h-11 px-4 border border-main-gray"
+                placeholder="신규 비밀번호 확인"
+                {...register('newPasswordCheck', {
+                  required: '신규 비밀번호 확인은 필수 입력 사항입니다',
+                  pattern: {
+                    value:
+                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
+                    message:
+                      '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다',
+                  },
+                })}
+              />
+              {errors.newPasswordCheck && (
+                <p className="font-semibold text-red-500 text-sm text-center">
+                  {errors.newPasswordCheck.message}
+                </p>
+              )}
+            </div>
             <div className="flex gap-8">
               <button className="w-full py-[6px] rounded-full bg-main-yellow">
-                저장
+                변경
               </button>
-              <button className="w-full py-[6px] rounded-full bg-main-gray">
-                취소
-              </button>
+              <Link href="/">
+                <div className="w-full py-[6px] rounded-full bg-main-gray hover:cursor-pointer flex justify-center">
+                  <span>취소</span>
+                </div>
+              </Link>
             </div>
           </form>
         </>
