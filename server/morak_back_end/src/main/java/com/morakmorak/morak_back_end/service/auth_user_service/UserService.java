@@ -275,7 +275,6 @@ public class UserService {
     public ResponseMultiplePaging<AnswerDto.ResponseUserAnswerList> getUserAnswerList(Long userId, int page, int size) {
         findVerifiedUserById(userId);
         Page<Answer> userAnswersInPage = answerRepository.findByUserId(userId, PageRequest.of(page, size,Sort.by("createdAt").descending()));
-        Page<Answer> test = userAnswersInPage;
         List<AnswerDto.ResponseUserAnswerList> userAnswers =
                 userAnswersInPage.getContent().stream().map(
                         userAnswer -> {
