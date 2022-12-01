@@ -38,7 +38,7 @@ const AuthenticateNumber = () => {
     <div className="h-screen">
       <Header />
       <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
-        <article className="text-center mt-10 flex flex-col justify-center items-center w-full px-12">
+        <article className="text-center mt-10 flex flex-col justify-center items-center w-96">
           <Intro />
           <section className="text-background-gray font-semibold flex justify-center items-center bg-main-gray w-full h-20 mt-10 rounded-[20px]">
             이메일로 인증번호가 전송되었습니다!
