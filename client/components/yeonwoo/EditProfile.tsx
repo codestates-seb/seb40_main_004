@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useSetRecoilState } from 'recoil';
+import { isLoginAtom } from '../../atomsYW';
 import { userDashboard } from '../../interfaces';
 
 interface IChangePassword {
@@ -18,6 +20,7 @@ interface IChangePassword {
 }
 
 export const EditProfileComponent = () => {
+  const setIsLogin = useSetRecoilState(isLoginAtom);
   const [pathname, setPathname] = useState('');
   const [userId, setUserId] = useState('');
   const [accessToken, setAccessToken] = useState('');
@@ -27,6 +30,7 @@ export const EditProfileComponent = () => {
   const [github, setGithub] = useState('');
   const [blog, setBlog] = useState('');
   const [jobType, setJobType] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
   const {
     register,
@@ -124,6 +128,30 @@ export const EditProfileComponent = () => {
       router.push('/');
     } catch (error) {
       alert(`에러 발생 : ${error}`);
+    }
+  };
+  const onSubmitMembershipWithdrawal = async (
+    event: FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    const ok = confirm('회원 탈퇴 하시겠습니까?');
+    if (ok) {
+      try {
+        await axios.delete('/api/auth', {
+          headers: {
+            Authorization: accessToken,
+          },
+          data: {
+            password,
+          },
+        });
+        alert('회원 탈퇴 완료되었습니다');
+        localStorage.clear();
+        setIsLogin(false);
+        router.push('/');
+      } catch (error) {
+        alert(`에러 발생 : ${error}`);
+      }
     }
   };
   return (
@@ -269,6 +297,33 @@ export const EditProfileComponent = () => {
             <div className="flex gap-8">
               <button className="w-full py-[6px] rounded-full bg-main-yellow">
                 변경
+              </button>
+              <Link href="/">
+                <div className="w-full py-[6px] rounded-full bg-main-gray hover:cursor-pointer flex justify-center">
+                  <span>취소</span>
+                </div>
+              </Link>
+            </div>
+          </form>
+        </>
+      ) : pathname === '/membership-withdrawal' ? (
+        <>
+          <div className="mb-16">
+            <span className="text-3xl font-bold">회원 탈퇴</span>
+          </div>
+          <form onSubmit={onSubmitMembershipWithdrawal}>
+            <label htmlFor="password">비밀번호 입력</label>
+            <input
+              id="password"
+              type="password"
+              className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <div className="flex gap-8">
+              <button className="w-full py-[6px] rounded-full bg-main-yellow">
+                탈퇴
               </button>
               <Link href="/">
                 <div className="w-full py-[6px] rounded-full bg-main-gray hover:cursor-pointer flex justify-center">
