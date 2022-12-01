@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-11-30
  * 개요
    - 답변 작성자에 대한 후기 메시지를 작성할 수 있는 페이지입니다.
  */
@@ -39,8 +39,9 @@ const Message: NextPage = () => {
   };
 
   const reviewTags = useRecoilValue(reviewTagsAtom);
+
   useEffect(() => {
-    if (reviewTags?.length === 0) router.replace('/review');
+    if (reviewTags?.length === 1) router.replace('/review');
   }, []);
 
   const reviewRequest = useRecoilValue(reviewRequestAtom);
@@ -55,7 +56,7 @@ const Message: NextPage = () => {
           <section className="flex flex-col space-y-10 w-full">
             <article className="text-left space-y-2 flex flex-col">
               <h1 className="text-2xl font-bold text-right">
-                💌답변을 보고 느낀 자세한 후기를 남겨주세요!
+                💌 후원하실 분에게 자세한 후기/응원메시지를 남겨주세요!
               </h1>
             </article>
 

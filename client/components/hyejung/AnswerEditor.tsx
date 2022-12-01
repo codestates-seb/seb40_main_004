@@ -89,10 +89,11 @@ export const AnswerEditor = () => {
         setFileIdList([]);
       })
       .catch((err) => {
-        console.log(err);
         alert('답변 등록에 실패했습니다...!');
+        console.log(err);
       });
   };
+
   const patchAnswer = async (data: FormValue) => {
     const response = await client.patch(
       `/api/articles/${articleId}/answers/${isAnserEdit.answerId}`,

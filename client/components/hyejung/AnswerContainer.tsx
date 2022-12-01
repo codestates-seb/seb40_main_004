@@ -1,13 +1,12 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-24
- * 최근 수정일: 2022-11-28
+ * 최근 수정일: 2022-11-30
  */
 
 import { useFetch } from '../../libs/useFetchSWR';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
 import { AnswerProps } from './AnswerContent';
 import { Answer } from '../../libs/interfaces';
 import { AnswerContent } from './AnswerContent';
@@ -26,9 +25,10 @@ export const AnswerList = ({ index }: AnswerListProps) => {
   const router = useRouter();
   const { articleId } = router.query;
 
-  const { data } = useSWR(`/articles/${articleId}`);
-  const article = data.article;
-  const isClosed = article.isClosed;
+  const { data: article, isLoading: articleLoading } = useFetch(
+    `/api/articles/${articleId}`,
+  );
+  const isClosed = articleLoading || article.isClosed;
 
   const {
     data: answers,
@@ -36,7 +36,6 @@ export const AnswerList = ({ index }: AnswerListProps) => {
     isError,
   } = useFetch(`/api/articles/${articleId}/answers?page=${index}&size=5`);
   const answerData = answers?.data;
-
   if (isError) alert(isError);
 
   if (!isLoading) {
