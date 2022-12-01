@@ -46,7 +46,16 @@ public class AnswerService {
 
         if (verifiedArticle.isQuestion() && !verifiedArticle.isClosedArticle()
                 && verifiedArticle.statusIsPosting()) {
-            Answer savedAnswer = answerRepository.save(injectAllInto(answerNotSaved, verifiedUser, verifiedArticle, fileList));
+//            Answer savedAnswer = answerRepository.save(injectAllInto(answerNotSaved, verifiedUser, verifiedArticle, fileList));
+            answerNotSaved.injectUser(verifiedUser);
+            answerRepository.save(answerNotSaved);
+
+            answerNotSaved.injectArticle(verifiedArticle);
+            answerRepository.save(answerNotSaved);
+
+            fileList.stream().forEach(file -> file.attachToAnswer(answerNotSaved));
+            Answer savedAnswer = answerRepository.save(answerNotSaved);
+
             NotificationGenerator generator = NotificationGenerator.of(verifiedUser, savedAnswer);
             Notification notification = generator.generateNotification();
 
