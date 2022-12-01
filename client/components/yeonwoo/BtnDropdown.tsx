@@ -32,6 +32,7 @@ export const BtnDropdown = () => {
     });
     localStorage.clear();
     setIsLogin(false);
+    router.push('/');
   };
 
   return (
