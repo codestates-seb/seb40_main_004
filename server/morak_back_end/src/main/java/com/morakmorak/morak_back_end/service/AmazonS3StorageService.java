@@ -82,14 +82,21 @@ public class AmazonS3StorageService {
     }
 
     public void deleteAvatar(Long userId) {
-        Avatar avatar = avatarRepository.findByUserId(userId).orElseThrow(() -> new BusinessLogicException(FILE_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
+        Avatar avatar;
+
         try {
+            avatar = user.getAvatar();
+            user.deleteAvatar();
             amazonS3.deleteObject(bucketName, avatar.getOriginalFilename());
+        } catch (NullPointerException e) {
+            throw new BusinessLogicException(FILE_NOT_FOUND);
         } catch (AmazonServiceException e) {
-            log.error("",e);
-            throw new BusinessLogicException(CAN_NOT_ACCESS_S3);
+            log.error("", e);
+            user.deleteAvatar();
+            return;
         }
-        avatar.getUser().deleteAvatar();
+
         avatarRepository.deleteById(avatar.getId());
     }
 
