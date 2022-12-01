@@ -201,6 +201,10 @@ public class User extends BaseTime {
         }
     }
 
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     private void updateGrade() {
         this.grade = checkGradeUpdatable();
     }
