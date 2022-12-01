@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface AnswerRepository extends JpaRepository<Answer, Long> {
+public interface AnswerRepository extends JpaRepository<Answer, Long>, AnswerQueryRepository {
     Page<Answer> findByUserId(Long userId,Pageable pageable);
 
 
@@ -16,4 +16,5 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     Optional<Answer> findAnswerByContent(String content);
 
     Optional<Answer> findTopByUserId(Long id);
+
 }
