@@ -213,7 +213,11 @@ public class ArticleService {
                     articleLikeRepository.deleteById(articleLike.getId());
                 },
                 () -> {
-                    ArticleLike articleLike = ArticleLike.builder().article(dbArticle).user(dbUser).build();
+                    ArticleLike articleLike = ArticleLike.builder()
+                            .article(dbArticle)
+                            .user(dbUser)
+                            .build();
+
                     dbArticle.getArticleLikes().add(articleLike);
                     dbUser.getArticleLikes().add(articleLike);
 
@@ -247,7 +251,6 @@ public class ArticleService {
         } else {
             throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
         }
-        
         reportArticle.injectMappingUserAndArticle(dbUser, dbArticle);
         dbArticle.getReports().add(reportArticle);
         dbUser.getReports().add(reportArticle);
