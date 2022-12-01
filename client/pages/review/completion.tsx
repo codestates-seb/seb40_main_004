@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import {
   reviewTagsAtom,
   reviewContentAtom,
@@ -48,7 +48,7 @@ const Completion: NextPage = () => {
       .post(url, payload)
       .then((res) => {
         console.log(res.data);
-        alert('🔥답변 채택이 완료되었습니다! 후기가 전송되었습니다.🔥');
+        alert('🔥후기가 전송되었습니다! 따듯한 후기 고마워요!🔥');
         if (reviewRequest.dashboardUrl) {
           router.replace(reviewRequest.dashboardUrl);
         } else {
@@ -73,14 +73,14 @@ const Completion: NextPage = () => {
             <section className="flex space-y-10 sm:space-y-0 sm:space-x-10 flex-col sm:flex-row items-center sm:items-start">
               <section className="flex w-full p-6 h-[400px] justify-center flex-col">
                 <div className="text-lg lg:text-4xl flex flex-col w-full space-y-5">
-                  <strong>모든 단계가 끝났습니다!</strong>
+                  <strong>모든 단계가 끝났습니다!🔥</strong>
                   <strong>
                     <strong className="text-main-orange">소중한 후기 </strong>를
                     <strong className="text-main-orange">
                       {' '}
                       {reviewRequest.targetUserName}{' '}
                     </strong>
-                    님께 전달해드리겠습니다.🔥
+                    님께 전달해드리겠습니다.
                   </strong>
                 </div>
               </section>

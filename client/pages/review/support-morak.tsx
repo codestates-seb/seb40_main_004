@@ -23,16 +23,22 @@ import {
 } from '../../atomsHJ';
 import { ProgressBar } from '../../components/hyejung/ProgressBar';
 import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
+import { client } from '../../libs/client';
 
 const SupportMorak: NextPage = () => {
   const router = useRouter();
   const reviewTags = useRecoilValue(reviewTagsAtom);
+  const [myPoints, setMyPoints] = useState(0);
 
   useEffect(() => {
     if (reviewTags?.length === 0) router.replace('/review');
+    client
+      .get(`/api/users/points`)
+      .then((res) => setMyPoints(res.data.point))
+      .catch((err) => console.log(err));
   }, []);
 
-  const [reviewRequest, setReviewRequest] = useRecoilState(reviewRequestAtom);
+  const reviewRequest = useRecoilValue(reviewRequestAtom);
   const [points, setPoints] = useRecoilState(reviewPointAtom);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -42,9 +48,15 @@ const SupportMorak: NextPage = () => {
   };
 
   const onClickSelectMorak = (e: React.MouseEvent<HTMLElement>) => {
-    const value = (e.target as HTMLButtonElement).value;
-    setPoints(Number(value));
-    setIsOpen(false);
+    const value = Number((e.target as HTMLButtonElement).value);
+    if (value > myPoints) {
+      alert(`현재 보유하신 모락은 ${myPoints} 모락 입니다!`);
+      setIsOpen(false);
+      setPoints(0);
+    } else {
+      setPoints(value);
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -100,7 +112,7 @@ const SupportMorak: NextPage = () => {
 
               <section className="flex w-full p-6 h-[400px] bg-white rounded-[20px] justify-center flex-col relative">
                 <span className="absolute top-10 right-10 font-bold">
-                  나의 모락 : 500 모락
+                  나의 모락 : {myPoints} 모락
                 </span>
                 {points ? (
                   <div className="text-2xl flex flex-col items-center w-full space-y-5 lg:space-y-10">

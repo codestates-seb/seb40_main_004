@@ -29,7 +29,6 @@ type ReviewPageProps = {
 };
 
 const Review: NextPage<ReviewPageProps> = ({ prevUrl }) => {
-  const router = useRouter();
   const [reviewRequest, setReviewRequest] = useRecoilState(reviewRequestAtom);
   const [reviewTags, setReviewTagsAtom] = useRecoilState(reviewTagsAtom);
   const userDashboardInfo = useRecoilValue(userDashboardAtom);
@@ -37,11 +36,6 @@ const Review: NextPage<ReviewPageProps> = ({ prevUrl }) => {
   const [isSelectable, setIsSelectable] = useState(true);
 
   useEffect(() => {
-    if (!reviewRequest.articleId) {
-      alert('잘못된 접근입니다!');
-      router.replace('/');
-    }
-
     const prevUrlResult = getIsFromDashboard(prevUrl);
     if (prevUrlResult) {
       setReviewRequest({
