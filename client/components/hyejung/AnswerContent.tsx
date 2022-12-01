@@ -22,6 +22,7 @@ import { mutate } from 'swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =
@@ -105,9 +106,11 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
       >
         <div className="flex items-center space-x-2 text-white">
           <ProfileImage src={answer.avatar.remotePath || tempSrc} />
-          <span className="text-sm sm:text-xl font-bold">
-            {answer.userInfo.nickname}
-          </span>
+          <Link href={`/dashboard/${answer.userInfo.userId}`}>
+            <span className="text-sm sm:text-xl font-bold cursor-pointer">
+              {answer.userInfo.nickname}
+            </span>
+          </Link>
           <time className="text-gray-200 text-xs sm:text-sm">
             {elapsedTime(answer.createdAt)}
           </time>
