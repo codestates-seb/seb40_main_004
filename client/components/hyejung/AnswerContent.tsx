@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-28
+ * 최근 수정일: 2022-11-30
  */
 import { ProfileImage } from './ProfileImage';
 import { AnswerMainText } from './AnswerMainText';
@@ -22,6 +22,7 @@ import { mutate } from 'swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =
@@ -38,7 +39,7 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
   const router = useRouter();
   const { articleId } = router.query;
 
-  console.log(answer);
+  const pickedAnswerClass = answer.isPicked ? 'bg-main-orange' : 'bg-main-gray';
 
   const answerElement = useRef<null | HTMLDivElement>(null);
   const isAnswerEdit = useRecoilValue(isAnswerEditAtom);
@@ -55,8 +56,6 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
       answerElement.current.scrollIntoView({ behavior: 'smooth' });
   }, [isAnswerEdit]);
 
-  const setIsAnswerEdit = useSetRecoilState(isAnswerEditAtom);
-
   const onDelete = () => {
     if (confirm('정말 답변을 삭제하시겠습니까..?')) {
       client
@@ -72,6 +71,7 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
     }
   };
 
+  const setIsAnswerEdit = useSetRecoilState(isAnswerEditAtom);
   const onEdit = () => {
     setIsAnswerEdit({
       isEdit: true,
@@ -81,11 +81,11 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
     });
   };
 
+  // 답변 채택 페이지로 넘어갈 때 실행
   const [reviewRequest, setReviewRequest] = useRecoilState(reviewRequestAtom);
-
   const moveToReview = () => {
     const newState = {
-      answerId: answer.answerId,
+      targetId: answer.answerId,
       articleId: articleId as string,
       targetUserName: answer.userInfo.nickname,
     };
@@ -101,17 +101,23 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
       className="flex flex-col w-full mb-12 bg-[#FCFCFC] border rounded-[20px]"
       ref={answerElement}
     >
-      <section className="flex items-center justify-between bg-main-gray px-4 pt-1.5 sm:px-4 sm:pb-2 sm:pt-3 rounded-t-[20px] border-b">
+      <section
+        className={`flex items-center justify-between  px-4 pt-1.5 sm:px-4 sm:pb-2 sm:pt-3 rounded-t-[20px] border-b ${pickedAnswerClass}`}
+      >
         <div className="flex items-center space-x-2 text-white">
           <ProfileImage src={answer.avatar.remotePath || tempSrc} />
-          <span className="text-sm sm:text-xl font-bold">
-            {answer.userInfo.nickname}
-          </span>
+          <Link href={`/dashboard/${answer.userInfo.userId}`}>
+            <span className="text-sm sm:text-xl font-bold cursor-pointer">
+              {answer.userInfo.nickname}
+            </span>
+          </Link>
           <time className="text-gray-200 text-xs sm:text-sm">
             {elapsedTime(answer.createdAt)}
           </time>
         </div>
-        {!isClosed && articleAuthorId === currUserId ? (
+        {!isClosed &&
+        articleAuthorId === currUserId &&
+        answer.userInfo.userId.toString() !== currUserId ? (
           <button
             className="text-white font-bold text-xs sm:text-base space-x-2"
             onClick={moveToReview}
@@ -119,6 +125,15 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
             <FontAwesomeIcon icon={voidCheck} className={'fa-lg'} />
             <span>답변 채택하기</span>
           </button>
+        ) : null}
+        {answer.isPicked ? (
+          <div
+            className="text-white font-bold text-xs sm:text-base space-x-2"
+            onClick={moveToReview}
+          >
+            <FontAwesomeIcon icon={solidCheck} className={'fa-lg'} />
+            <span>채택된 답변</span>
+          </div>
         ) : null}
       </section>
 

@@ -1,22 +1,23 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-11-30
  */
 
 import { QuestionTitle } from './QuestionTitle';
 import { CreatedDate } from './CreatedDate';
 import { CommentContainer } from './CommentContainer';
 import { TagList } from './TagList';
-import { BtnBookmark } from './BtnBookmark';
 import { UserNickname } from './UserNickname';
-import useSWR, { mutate } from 'swr';
+import { mutate } from 'swr';
 import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
 import { BtnLike } from './BtnLike';
 import { QuestionMainText } from './QuestionMainText';
 import { client } from '../../libs/client';
+import { useFetch } from '../../libs/useFetchSWR';
+import { BtnBookmark } from './BtnBookmark';
 
 export const QuestionContent = () => {
   const router = useRouter();
@@ -24,17 +25,14 @@ export const QuestionContent = () => {
 
   const isLogin = useRecoilValue(isLoginAtom);
 
-  const { data } = useSWR(`/articles/${articleId}`);
-  const article = data.article;
-
-  console.log(article);
+  const { data: article, isLoading } = useFetch(`/api/articles/${articleId}`);
 
   let currUserId: any = '';
   if (typeof window !== 'undefined') {
     currUserId = localStorage.getItem('userId');
   }
-  const authorId = article.userInfo.userId;
-  const isClosed = article.isClosed;
+  const authorId = isLoading || article.userInfo.userId;
+  const isClosed = isLoading || article.isClosed;
 
   const onDelete = () => {
     if (confirm('게시글을 삭제하시겠습니까...?')) {
@@ -44,7 +42,7 @@ export const QuestionContent = () => {
           console.log(res);
           alert('게시글이 삭제되었습니다. 게시글 목록으로 돌아갑니다.');
           router.replace(`/questions`);
-          mutate(`/articles/${articleId}`);
+          mutate(`/api/articles/${articleId}`);
         })
         .catch((err) => {
           console.log(err);
@@ -59,7 +57,7 @@ export const QuestionContent = () => {
 
   return (
     <main className="flex flex-col w-full pb-6 border-b">
-      {data ? (
+      {!isLoading ? (
         <>
           <section className="flex flex-col space-y-4 border-b pb-3">
             <QuestionTitle title={article.title} />
@@ -76,7 +74,7 @@ export const QuestionContent = () => {
               </section>
               <div className="flex space-x-1">
                 <BtnLike isLiked={article.isLiked} likes={article.likes} />
-                <BtnBookmark isBookmarked={article.isBookMarked} />
+                <BtnBookmark isBookmarked={article.isBookmarked} />
               </div>
             </div>
           </section>
