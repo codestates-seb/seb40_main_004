@@ -59,7 +59,7 @@ export const EditProfileComponent = () => {
             },
           },
         );
-
+        alert('비밀번호가 정상적으로 변경 되었습니다');
         router.push('/');
       } catch (error) {
         alert(`에러 발생 : ${error}`);
