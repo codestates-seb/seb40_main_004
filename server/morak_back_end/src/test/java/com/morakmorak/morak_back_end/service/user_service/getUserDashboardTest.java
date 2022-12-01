@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.service.user_service;
 
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.Article;
+import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.*;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ONE;
@@ -21,20 +23,31 @@ import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.CONTENT1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 public class getUserDashboardTest extends UserServiceTest {
     @Test
-    @DisplayName("getUSerDashboard에 실패하면 나머지 로직은 실행되지 않고 예외가 발생한다.")
+    @DisplayName("해당 유저 아이디로 유저를 조회하지 못할 경우 USER NOT FOUND")
     void findUserDashboard_failed() {
         //given
-        given(userQueryRepository.getUserDashboardBasicInfo(ID1)).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+        given(userRepository.findById(anyLong())).willReturn(Optional.empty());
 
         //when then
         assertThatThrownBy(() -> userService.findUserDashboard(ID1)).isInstanceOf(BusinessLogicException.class);
     }
+
+    @Test
+    @DisplayName("getUSerDashboard에 실패하면 나머지 로직은 실행되지 않고 예외가 발생한다.")
+    void findUserDashboard_failed2() {
+        //given
+        User deletedUser = User.builder().userStatus(UserStatus.DELETED).build();
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(deletedUser));
+
+        //when then
+        assertThatThrownBy(() -> userService.findUserDashboard(ID1)).isInstanceOf(BusinessLogicException.class);
+    }
+
 
     @Test
     @DisplayName("")
@@ -99,6 +112,11 @@ public class getUserDashboardTest extends UserServiceTest {
                 .remotePath("remotePath")
                 .build();
 
+        User dbUser = User.builder()
+                .id(ID1)
+                .userStatus(UserStatus.RUNNING)
+                .build();
+
         UserDto.ResponseDashBoard dashBoard = UserDto.ResponseDashBoard.builder()
                 .userId(ID1)
                 .email(EMAIL1)
@@ -120,7 +138,7 @@ public class getUserDashboardTest extends UserServiceTest {
         LocalDate december31st = LocalDate.now().withDayOfYear(365);
         ActivityDto.Temporary activityDto = ActivityDto.Temporary.builder().count(1L).build();
 
-
+        given(userRepository.findById(any())).willReturn(Optional.of(dbUser));
         given(userQueryRepository.getUserDashboardBasicInfo(ID1)).willReturn(dashBoard);
         given(userQueryRepository.getUserDashboardBasicInfo(ID1)).willReturn(UserDto.ResponseDashBoard.builder().email(EMAIL1).build());
         given(userQueryRepository.get50RecentQuestions(ID1)).willReturn(List.of(Article.builder().id(ID1).build()));
