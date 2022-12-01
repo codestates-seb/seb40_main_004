@@ -14,12 +14,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
 
 export const BtnDropdown = () => {
   const [dropdown, setDropdown] = useState(false);
+  const [points, setPoints] = useState(0);
   const setIsLogin = useSetRecoilState(isLoginAtom);
   const router = useRouter();
 
@@ -35,6 +36,21 @@ export const BtnDropdown = () => {
     router.push('/');
   };
 
+  const getPoints = async () => {
+    if (typeof window !== 'undefined') {
+      const res = await axios.get('/api/users/points', {
+        headers: {
+          Authorization: localStorage.getItem('accessToken'),
+        },
+      });
+      setPoints(res.data.point);
+    }
+  };
+
+  useEffect(() => {
+    getPoints();
+  }, []);
+
   return (
     <>
       {dropdown ? (
@@ -45,7 +61,7 @@ export const BtnDropdown = () => {
           <ul className="border border-solid border-black border-opacity-10 border-spacing-1 right-0 w-[200px] rounded-xl absolute top-8 bg-background-gray z-20">
             <li className="pt-4 pb-1 mx-4 flex justify-between items-center border-b border-solid">
               <span className="text-xs">나의 모락</span>
-              <span className="text-lg font-semibold">✨ 260 모락</span>
+              <span className="text-lg font-semibold">{`✨ ${points} 모락`}</span>
             </li>
             <Link href={`/dashboard/${localStorage.getItem('userId')}`}>
               <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer mt-2 py-1 px-4 rounded-xl text-[15px]">
