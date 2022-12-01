@@ -52,11 +52,13 @@ public class AmazonS3StorageService {
                 .user(user)
                 .build();
 
-        if (user.getAvatar() != null) {
-            deleteAvatar(userId);
+        try {
+            deleteAvatar(user.getId());
+        } catch (Exception e) {
+            log.info("",e);
         }
 
-        user.setAvatar(avatar);
+        user.changeAvatar(avatar);
         avatarRepository.save(avatar);
 
         return AvatarDto.ResponseS3Url.builder()
