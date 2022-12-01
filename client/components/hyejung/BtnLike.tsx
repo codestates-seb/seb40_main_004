@@ -31,7 +31,6 @@ export const BtnLike = ({ isLiked, answerId, likes }: BtnLikeProps) => {
     client
       .post(url)
       .then((res) => {
-        console.log(res.data);
         setIsLike(res.data.isLiked);
         setLikeCnt(res.data.likeCount);
       })
