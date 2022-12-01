@@ -1,6 +1,8 @@
 package com.morakmorak.morak_back_end.dto;
 
 import com.morakmorak.morak_back_end.entity.Answer;
+import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -21,6 +23,7 @@ public class AnswerDto {
         private String content;
         private List<FileDto.RequestFileWithId> fileIdList = new ArrayList<>();
     }
+
     @Getter
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,6 +34,7 @@ public class AnswerDto {
         @Builder.Default
         private List<FileDto.RequestFileWithId> fileIdList = new ArrayList<>();
     }
+
     @Getter
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,6 +48,7 @@ public class AnswerDto {
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
         private Integer commentCount;
+
         public static SimpleResponsePostAnswer of(Answer savedAnswer) {
             return SimpleResponsePostAnswer.builder()
                     .answerId(savedAnswer.getId())
@@ -112,5 +117,17 @@ public class AnswerDto {
         private Integer commentCount;
         private LocalDateTime createdAt;
         private UserDto.ResponseSimpleUserDto userInfo;
+
+        @QueryProjection
+        public ResponseUserAnswerList(Long answerId, String content, Boolean isPicked, Integer answerLikeCount,
+                                      Integer commentCount, LocalDateTime createdAt, Long userId, String nickname, Grade grade) {
+            this.answerId = answerId;
+            this.content = content;
+            this.isPicked = isPicked;
+            this.answerLikeCount = answerLikeCount;
+            this.commentCount = commentCount;
+            this.createdAt = createdAt;
+            this.userInfo = UserDto.ResponseSimpleUserDto.builder().userId(userId).nickname(nickname).grade(grade).build();
+        }
     }
 }

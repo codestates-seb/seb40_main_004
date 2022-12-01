@@ -13,13 +13,13 @@ import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.repository.BookmarkRepository;
 import com.morakmorak.morak_back_end.repository.FileRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerLikeRepository;
+import com.morakmorak.morak_back_end.repository.answer.AnswerQueryRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +40,8 @@ public class AnswerService {
     private final NotificationRepository notificationRepository;
     private final PointCalculator pointCalculator;
     private final FileRepository fileRepository;
+
+    private final AnswerQueryRepository answerQueryRepository;
     int page = 0;
     int size = 5;
     public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> postAnswer(Long articleId, Long userId, Answer answerNotSaved, List<File> fileList) throws Exception {
@@ -151,7 +153,8 @@ public class AnswerService {
     }
 
     public Page<Answer> getAllAnswers(Long articleId, int page, int size) {
-        return answerRepository.findAllByArticleId(articleId, PageRequest.of(page, size, Sort.by("createdAt").descending()));
+//        return answerRepository.findAllByArticleId(articleId, PageRequest.of(page, size, Sort.by("createdAt").descending()));
+        return answerQueryRepository.getAnswersPickedFirst(articleId, PageRequest.of(page,size));
     }
 
     private Answer injectAllInto(Answer answerNotSaved, User verifiedUser, Article verifiedArticle, List<File> fileList) {

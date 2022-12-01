@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
     Page<Answer> findByUserId(Long userId,Pageable pageable);
 
+
     Page<Answer> findAllByArticleId(Long articleId, Pageable pageable);
 
     Optional<Answer> findAnswerByContent(String content);
