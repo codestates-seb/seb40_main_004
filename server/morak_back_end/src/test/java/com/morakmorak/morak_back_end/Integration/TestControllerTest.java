@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.Integration;
 
+import com.morakmorak.morak_back_end.security.filter.CrawlerFilter;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -20,8 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(value = {
         "jwt.secretKey=only_test_secret_Key_value_gn..rlfdlrkqnwhrgkekspdy",
-        "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
-})
+        "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"}
+)
 @AutoConfigureMockMvc
 @EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
 public class TestControllerTest {
@@ -57,7 +60,8 @@ public class TestControllerTest {
     public void test1() throws Exception {
         //given //when
         ResultActions perform = mockMvc
-                .perform(get("/test/user"));
+                .perform(get("/test/user")
+                        .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isUnauthorized());
@@ -69,6 +73,7 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/user")
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, userToken));
 
         //then
@@ -81,6 +86,7 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/user")
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, user_manager_admin_token));
 
         //then
@@ -93,6 +99,7 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/user")
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, user_manager_admin_token));
 
         //then
@@ -105,6 +112,7 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/user")
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, adminToken));
 
         //then
@@ -116,7 +124,8 @@ public class TestControllerTest {
     public void test6() throws Exception {
         //given //when
         ResultActions perform = mockMvc
-                .perform(get("/test/manager"));
+                .perform(get("/test/manager")
+                        .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isUnauthorized());
@@ -128,6 +137,7 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/manager")
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, userToken));
 
         //then
@@ -140,6 +150,7 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/manager")
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, managerToken));
 
         //then
@@ -152,6 +163,7 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/manager")
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, adminToken));
 
         //then
@@ -164,6 +176,7 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/manager")
+                        .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, user_manager_admin_token));
 
         //then
@@ -175,7 +188,8 @@ public class TestControllerTest {
     public void test11() throws Exception {
         //given //when
         ResultActions perform = mockMvc
-                .perform(get("/test/admin"));
+                .perform(get("/test/admin")
+                        .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isUnauthorized());
@@ -187,7 +201,8 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/admin")
-                        .header(JWT_HEADER, userToken));
+                        .header(JWT_HEADER, userToken)
+                        .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isForbidden());
@@ -199,7 +214,8 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/admin")
-                        .header(JWT_HEADER, managerToken));
+                        .header(JWT_HEADER, managerToken)
+                        .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isForbidden());
@@ -211,7 +227,8 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/admin")
-                        .header(JWT_HEADER, adminToken));
+                        .header(JWT_HEADER, adminToken)
+                        .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isOk());
@@ -223,7 +240,8 @@ public class TestControllerTest {
         //given //when
         ResultActions perform = mockMvc
                 .perform(get("/test/admin")
-                        .header(JWT_HEADER, user_manager_admin_token));
+                        .header(JWT_HEADER, user_manager_admin_token)
+                        .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isOk());

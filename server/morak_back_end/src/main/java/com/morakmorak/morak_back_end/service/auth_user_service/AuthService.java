@@ -8,6 +8,7 @@ import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.UserRole;
+import com.morakmorak.morak_back_end.entity.enums.UserStatus;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.entity.enums.RoleName.ROLE_USER;
+import static com.morakmorak.morak_back_end.entity.enums.UserStatus.*;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
 import static com.morakmorak.morak_back_end.service.mail_service.MailSenderImpl.*;
@@ -161,7 +163,7 @@ public class AuthService {
 
         if (!userPasswordManager.comparePasswordWithUser(dbUser, requestUser)) throw new BusinessLogicException(MISMATCHED_PASSWORD);
 
-        userRepository.delete(dbUser);
+        dbUser.changeStatus(DELETED);
         return Boolean.TRUE;
     }
 

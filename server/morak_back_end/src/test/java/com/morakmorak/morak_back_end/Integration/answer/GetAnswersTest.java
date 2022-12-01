@@ -106,6 +106,7 @@ public class GetAnswersTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/{article-id}/answers", article.getId())
+                        .header("User-Agent", "Mozilla 5.0")
                 .param("page","1")
                 .param("size","5")
         );
@@ -182,6 +183,7 @@ public class GetAnswersTest {
         //when
         ResultActions perform = mockMvc.perform(
                 get("/articles/{article-id}/answers", article.getId())
+                        .header("User-Agent", "Mozilla 5.0")
                         .param("page", "1")
                         .param("size", "5")
                         .header(JWT_HEADER, accessToken)

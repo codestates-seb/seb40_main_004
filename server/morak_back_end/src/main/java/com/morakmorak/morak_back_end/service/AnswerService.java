@@ -11,6 +11,7 @@ import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.repository.BookmarkRepository;
+import com.morakmorak.morak_back_end.repository.FileRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerLikeRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
@@ -38,6 +39,7 @@ public class AnswerService {
     private final AnswerMapper answerMapper;
     private final NotificationRepository notificationRepository;
     private final PointCalculator pointCalculator;
+    private final FileRepository fileRepository;
     int page = 0;
     int size = 5;
     public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> postAnswer(Long articleId, Long userId, Answer answerNotSaved, List<File> fileList) throws Exception {

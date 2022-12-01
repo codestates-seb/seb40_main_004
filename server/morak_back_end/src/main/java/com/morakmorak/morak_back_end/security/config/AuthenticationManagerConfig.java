@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.security.config;
 
-import com.morakmorak.morak_back_end.security.exception.JwtExceptionFilter;
+import com.morakmorak.morak_back_end.security.exception.ExceptionFilter;
+import com.morakmorak.morak_back_end.security.filter.CrawlerFilter;
 import com.morakmorak.morak_back_end.security.filter.JwtAuthenticationFilter;
 import com.morakmorak.morak_back_end.security.provider.JwtAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,13 @@ public class AuthenticationManagerConfig extends AbstractHttpConfigurer<Authenti
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Override
-    public void configure(HttpSecurity builder) throws Exception {
+    public void configure(HttpSecurity builder) {
         AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
         builder
                 .addFilterBefore(new JwtAuthenticationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
+                .addFilterBefore(new CrawlerFilter(), JwtAuthenticationFilter.class)
+                .addFilterBefore(new ExceptionFilter(), CrawlerFilter.class)
                 .authenticationProvider(jwtAuthenticationProvider);
     }
 }

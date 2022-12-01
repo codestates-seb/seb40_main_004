@@ -44,9 +44,8 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         List<Article> result = queryFactory
                 .select(article)
                 .from(article)
-                .where(categoryEq(category),
-                        (keywordEq(keyword, target)))
-
+                .where(categoryEq(category), (keywordEq(keyword, target)),
+                        (article.articleStatus.eq(POSTING)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(sortEq(sort))
@@ -55,8 +54,10 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         Long count = queryFactory
                 .select(article.count())
                 .from(article)
-                .where(categoryEq(category),
-                        (keywordEq(keyword, target)))
+                .where(categoryEq(category)
+                                ,(keywordEq(keyword, target))
+                                ,(article.articleStatus.eq(POSTING))
+                        )
                 .orderBy(sortEq(sort))
                 .fetchOne();
 

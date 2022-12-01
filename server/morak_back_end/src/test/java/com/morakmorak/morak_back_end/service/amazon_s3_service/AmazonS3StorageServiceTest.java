@@ -106,38 +106,53 @@ public class AmazonS3StorageServiceTest {
     }
 
     @Test
-    @DisplayName("해당 아이디로 avatar를 조회할 수 없을 경우 BusinessLogicException 발생")
+    @DisplayName("해당 아이디로 user를 조회하지 못할 경우 BusinessLogicException 발생")
     void deleteAvatar_failed1() throws Exception {
         //given
-        BDDMockito.given(avatarRepository.findByUserId(any())).willReturn(Optional.empty());
+        BDDMockito.given(userRepository.findById(any())).willReturn(Optional.empty());
         //when //then
         assertThatThrownBy(() -> amazonS3StorageService.deleteAvatar(ID1)).isInstanceOf(BusinessLogicException.class);
     }
 
     @Test
-    @DisplayName("s3에서 객체를 삭제하는 과정에 예외가 발생하는 경우 BusinessLogicException을 던진다.")
+    @DisplayName("s3에서 객체를 삭제하는 과정에 예외가 발생하는 경우에도 유저 객체에서 아바타가 삭제된다")
     void deleteAvatar_failed2() throws Exception {
         //given
         Avatar avatar = Avatar.builder().build();
-        BDDMockito.given(avatarRepository.findByUserId(any())).willReturn(Optional.of(avatar));
+        User user = User.builder().id(ID1).avatar(avatar).build();
+        BDDMockito.given(userRepository.findById(any())).willReturn(Optional.of(user));
         BDDMockito.willThrow(AmazonServiceException.class).given(amazonS3).deleteObject(any(), any());
 
-        //when //then
-        assertThatThrownBy(() -> amazonS3StorageService.deleteAvatar(ID1)).isInstanceOf(BusinessLogicException.class);
+        //when
+        amazonS3StorageService.deleteAvatar(user.getId());
+
+        // then
+        Assertions.assertThat(user.getAvatar()).isNull();
     }
 
     @Test
     @DisplayName("s3에서 객체를 삭제하는 로직이 모두 정상적으로 수행될 경우 avatarRepository.delete 실행")
     void deleteAvatar_success() throws Exception {
         //given
-        User user = User.builder().build();
-        Avatar avatar = Avatar.builder().id(ID1).user(user).build();
-        BDDMockito.given(avatarRepository.findByUserId(any())).willReturn(Optional.of(avatar));
+        Avatar avatar = Avatar.builder().id(ID1).build();
+        User user = User.builder().avatar(avatar).build();
+        BDDMockito.given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
 
         //when
-        amazonS3StorageService.deleteAvatar(ID1);
+        amazonS3StorageService.deleteAvatar(user.getId());
 
         // then
         BDDMockito.verify(avatarRepository, Mockito.times(1)).deleteById(ID1);
+    }
+
+    @Test
+    @DisplayName("s3에서 객체를 삭제하는 로직에서 유저의 getAvatar가 null일 경우 BusinessLogicException 발생")
+    void deleteAvatar_failed() throws Exception {
+        //given
+        User user = User.builder().id(ID1).build();
+        BDDMockito.given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
+
+        //when then
+        assertThatThrownBy(() -> amazonS3StorageService.deleteAvatar(ID1)).isInstanceOf(BusinessLogicException.class);
     }
 }
