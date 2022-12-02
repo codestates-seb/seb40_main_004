@@ -1,4 +1,4 @@
-export const changeGradeImoji = (grade: string) => {
+export const changeGradeEmoji = (grade: string) => {
   switch (grade) {
     case 'CANDLE':
       return '🕯';
