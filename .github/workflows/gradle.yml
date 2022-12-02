@@ -37,7 +37,7 @@ jobs:
         with:
           files: ./server/morak_back_end/src/main/resources/application.yml
         env:
-          spring.datasource.url: jdbc:mysql://?serverTimezone=UTC&characterEncoding=UTF-8
+          spring.datasource.url: jdbc:mysql://${{ secrets.RDS_URL }}?serverTimezone=UTC&characterEncoding=UTF-8
           
         # [3] save build
       - name: Make zip file
