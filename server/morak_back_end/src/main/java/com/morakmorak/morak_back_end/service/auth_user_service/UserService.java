@@ -5,7 +5,6 @@ import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.ActivityType;
-import com.morakmorak.morak_back_end.entity.enums.UserStatus;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
@@ -60,8 +59,8 @@ public class UserService {
     }
 
     public ResponseMultiplePaging<UserDto.ResponseRanking> getUserRankList(PageRequest request) {
-        Page<User> userRankPage = userQueryRepository.getRankData(request);
-        List<UserDto.ResponseRanking> result = userMapper.toResponseRankDto(userRankPage.getContent());
+        Page<UserDto.ResponseRanking> userRankPage = userQueryRepository.getRankData(request);
+        List<UserDto.ResponseRanking> result = userRankPage.getContent();
         reorderRank(request, result);
 
         return new ResponseMultiplePaging<>(result, userRankPage);

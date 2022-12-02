@@ -2,10 +2,8 @@ package com.morakmorak.morak_back_end.repository.user;
 
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.entity.enums.ActivityType;
 import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -18,11 +16,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.morakmorak.morak_back_end.entity.QAnswer.*;
+import static com.morakmorak.morak_back_end.entity.QAnswerLike.*;
 import static com.morakmorak.morak_back_end.entity.QArticle.article;
 import static com.morakmorak.morak_back_end.entity.QArticleLike.*;
 import static com.morakmorak.morak_back_end.entity.QArticleTag.*;
@@ -30,7 +28,6 @@ import static com.morakmorak.morak_back_end.entity.QAvatar.*;
 import static com.morakmorak.morak_back_end.entity.QCategory.*;
 import static com.morakmorak.morak_back_end.entity.QComment.*;
 import static com.morakmorak.morak_back_end.entity.QReview.*;
-import static com.morakmorak.morak_back_end.entity.QTag.tag;
 import static com.morakmorak.morak_back_end.entity.QUser.*;
 
 @Repository
@@ -135,18 +132,23 @@ public class UserQueryRepository {
                 .fetch();
     }
 
-    public Page<User> getRankData(Pageable pageable) {
+    @BatchSize(size = 50)
+    public Page<UserDto.ResponseRanking> getRankData(Pageable pageable) {
         List<String> sortTypes = getSortTypes(pageable);
 
-        List<User> result;
-
-            result = jpaQueryFactory.select(user)
-                    .from(article, user, answer)
-                    .orderBy(getOrderSpecifier(sortTypes))
-                    .groupBy(user.id)
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize())
-                    .fetch();
+        List<UserDto.ResponseRanking> result = jpaQueryFactory.select(new QUserDto_ResponseRanking(user.id, user.nickname, user.infoMessage, user.point, user.grade, user.jobType,
+                        article.count(), articleLike.count(), answerLike.count(), answer.count(), avatar.id, avatar.originalFilename, avatar.remotePath))
+                .from(user)
+                .leftJoin(user.articles, article)
+                .leftJoin(user.answers, answer)
+                .leftJoin(article.articleLikes, articleLike)
+                .leftJoin(answer.answerLike, answerLike)
+                .leftJoin(user.avatar, avatar)
+                .orderBy(getOrderSpecifier(sortTypes))
+                .groupBy(user.id)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
 
         return new PageImpl<>(result, pageable, getCount(user));
     }

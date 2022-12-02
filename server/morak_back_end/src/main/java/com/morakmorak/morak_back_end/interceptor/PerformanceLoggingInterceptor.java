@@ -22,13 +22,13 @@ public class PerformanceLoggingInterceptor extends AbstractMonitoringInterceptor
             logger.info("Method " + name + " execution ended at:" + new Date());
 
             if (time > 4000) {
-                logger.warn("☠️☠️☠️☠️☠️ 해당 메서드의 실행 시간이 4000ms를 초과했습니다. ☠️☠️☠️☠️☠️");
+                logger.warn("☠️☠️☠️☠️☠️ 해당 메서드의 실행 시간이 3500ms를 초과했습니다. ☠️☠️☠️☠️☠️");
             }else if (time > 3000) {
-                logger.warn("🚨🚨🚨🚨🚨 해당 메서드의 실행 시간이 3000ms를 초과했습니다. 🚨🚨🚨🚨🚨");
+                logger.warn("🚨🚨🚨🚨🚨 해당 메서드의 실행 시간이 2500ms를 초과했습니다. 🚨🚨🚨🚨🚨");
             }else if (time > 2000) {
-                logger.warn("⚠️⚠️⚠️⚠️⚠️ 해당 메서드의 실행 시간이 2000ms를 초과했습니다. ⚠️⚠️⚠️⚠️⚠️");
+                logger.warn("⚠️⚠️⚠️⚠️⚠️ 해당 메서드의 실행 시간이 1500ms를 초과했습니다. ⚠️⚠️⚠️⚠️⚠️");
             }else if (time > 1000) {
-                logger.warn("🤫🤫🤫🤫🤫 해당 메서드의 실행 시간이 1000ms를 초과했습니다. 🤫🤫🤫🤫🤫");
+                logger.warn("🤫🤫🤫🤫🤫 해당 메서드의 실행 시간이 500ms를 초과했습니다. 🤫🤫🤫🤫🤫");
             }
         }
     }
