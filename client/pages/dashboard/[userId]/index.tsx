@@ -54,7 +54,7 @@ const Dashboard: NextPage = () => {
           {/* <Grass /> */}
           <div className="mb-8 flex items-baseline">
             <div className="border-b-2 border-main-orange py-4 pr-6">
-              <Link href={`/dashboard/${router.query.userId}/questions`}>
+              <Link href={`/dashboard/${router.query.userId}`}>
                 <span className="text-2xl font-semibold hover:cursor-pointer">
                   ❓ 나의 질문
                 </span>
