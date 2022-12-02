@@ -13,13 +13,13 @@ import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.repository.BookmarkRepository;
 import com.morakmorak.morak_back_end.repository.FileRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerLikeRepository;
+import com.morakmorak.morak_back_end.repository.answer.AnswerQueryRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +34,7 @@ public class AnswerService {
     private final ArticleService articleService;
     private final UserService userService;
     private final AnswerRepository answerRepository;
+    private final AnswerQueryRepository answerQueryRepository;
     private final BookmarkRepository bookmarkRepository;
     private final AnswerLikeRepository answerLikeRepository;
     private final AnswerMapper answerMapper;
@@ -48,7 +49,6 @@ public class AnswerService {
 
         if (verifiedArticle.isQuestion() && !verifiedArticle.isClosedArticle()
                 && verifiedArticle.statusIsPosting()) {
-//            Answer savedAnswer = answerRepository.save(injectAllInto(answerNotSaved, verifiedUser, verifiedArticle, fileList));
             answerNotSaved.injectUser(verifiedUser);
             answerRepository.save(answerNotSaved);
 
@@ -63,6 +63,7 @@ public class AnswerService {
 
             verifiedUser.addPoint(savedAnswer, pointCalculator);
             notificationRepository.save(notification);
+
             return readAllAnswersForUser(articleId, userId, page, size);
         } else {
             throw new BusinessLogicException(ErrorCode.UNABLE_TO_ANSWER);
@@ -87,10 +88,10 @@ public class AnswerService {
 
 
     public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> readAllAnswers(Long articleId,  int page, int size) {
-        Page<Answer> answersInPage = getAllAnswers(articleId, page, size);
+        Page<Answer> answersInPage = answerQueryRepository.findAllByArticleId_PickedFirst(articleId, PageRequest.of(page, size));
         List<AnswerDto.ResponseListTypeAnswer> answers =
                 answersInPage.getContent().stream().map(AnswerDto.ResponseListTypeAnswer::of).collect(Collectors.toList());
-        List<Answer> answersP = answersInPage.getContent();
+
         return new ResponseMultiplePaging<>(answers, answersInPage);
     }
 
@@ -150,10 +151,6 @@ public class AnswerService {
         return answerMapper.makingResponseAnswerLikeDto(dbAnswer.getId(), dbUser.getId(), isLiked, likeCount);
     }
 
-    public Page<Answer> getAllAnswers(Long articleId, int page, int size) {
-        return answerRepository.findAllByArticleId(articleId, PageRequest.of(page, size, Sort.by("createdAt").descending()));
-    }
-
     private Answer injectAllInto(Answer answerNotSaved, User verifiedUser, Article verifiedArticle, List<File> fileList) {
         attachFilesToAnswer(answerNotSaved, fileList);
         answerNotSaved.injectUser(verifiedUser).injectArticle(verifiedArticle);
@@ -172,7 +169,7 @@ public class AnswerService {
         }
         userService.findVerifiedUserById(userId);
         articleService.findVerifiedArticle(articleId);
-        Page<Answer> answersInPage = getAllAnswers(articleId, page, size);
+        Page<Answer> answersInPage = answerQueryRepository.findAllByArticleId_PickedFirst(articleId, PageRequest.of(page, size));
         List<AnswerDto.ResponseListTypeAnswer> answers =
                 answersInPage.getContent().stream().map(answer -> {
                             Boolean isPicked = answer.getIsPicked();
