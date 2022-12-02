@@ -2,7 +2,6 @@ package com.morakmorak.morak_back_end.repository.answer;
 
 import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
-import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,16 +27,20 @@ public class AnswerQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-        return new PageImpl<>(result, pageable, getCount(answer));
-    }
-    private Long getCount(EntityPathBase<?> entity) {
-        return jpaQueryFactory.select(entity.count())
-                .from(entity)
+
+        Long count = jpaQueryFactory.select(answer.count())
+                .from(answer)
+                .where(answer.article.id.eq(articleId))
+                .orderBy(answer.isPicked.desc(), answer.createdAt.desc())
                 .fetchOne();
+
+        return new PageImpl<>(result, pageable, count);
     }
+
 
     public Page<Answer> findAnswersByUserId(Long userId, Pageable pageable) {
         List<Answer> result;
+
         result = jpaQueryFactory.select(answer)
                 .from(answer)
                 .where(answer.user.id.eq(userId).and(answer.article.articleStatus.eq(ArticleStatus.POSTING)))
@@ -45,7 +48,14 @@ public class AnswerQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-        return new PageImpl<>(result, pageable, getCount(answer));
+
+        Long count = jpaQueryFactory.select(answer.count())
+                .from(answer)
+                .where(answer.user.id.eq(userId).and(answer.article.articleStatus.eq(ArticleStatus.POSTING)))
+                .orderBy(answer.createdAt.desc())
+                .fetchOne();
+
+        return new PageImpl<>(result, pageable, count);
     }
 
 }
