@@ -16,7 +16,7 @@ export const ListLately = () => {
   const [data, setData] = useState<articleList[] | null>(null);
   const getList = async () => {
     const res = await axios.get(
-      '/api/articles?category=INFO&keyword=null&target=null&sort=desc&page=1&size=10',
+      '/api/articles?category=QNA&keyword=null&target=null&sort=desc&page=1&size=10',
     );
     setData(res.data.data);
   };
