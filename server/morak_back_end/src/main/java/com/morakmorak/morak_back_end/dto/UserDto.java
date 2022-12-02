@@ -76,7 +76,7 @@ public class UserDto {
         private AvatarDto.SimpleResponse avatar;
 
         @QueryProjection
-        public ResponseRanking(Long userId, String nickname, String infoMessage, Integer point, Grade grade, JobType jobType, Long articleCount, Long likeCount, Long answerCount, Long avatarId, String filename, String remotePath) {
+        public ResponseRanking(Long userId, String nickname, String infoMessage, Integer point, Grade grade, JobType jobType, Long articleCount, Long articleLikeCount, Long answerLikeCount, Long answerCount, Long avatarId, String filename, String remotePath) {
             this.userId = userId;
             this.nickname = nickname;
             this.infoMessage = infoMessage;
@@ -84,7 +84,7 @@ public class UserDto {
             this.grade = grade;
             this.jobType = jobType;
             this.articleCount = articleCount;
-            this.likeCount = likeCount;
+            this.likeCount = articleLikeCount + answerLikeCount;
             this.answerCount = answerCount;
             this.avatar = AvatarDto.SimpleResponse
                     .builder()
