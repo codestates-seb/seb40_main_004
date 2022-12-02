@@ -32,11 +32,14 @@ public enum ErrorCode {
     NICKNAME_EXISTS(CONFLICT, "nickname exists"),
     MISMATCHED_PASSWORD(CONFLICT, "mismatched password, check your original password"),
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "This request requires admin confirmation."),
-    CANNOT_ACCESS_COMMENT(CONFLICT,"unable to access comment"),
-    UNABLE_TO_ANSWER(CONFLICT,"unable to post answer, article is already closed"),
-    UNABLE_TO_REVIEW(CONFLICT,"unable to post review, article is already closed or status is not posting"),
-    BADGE_NOT_FOUND(NOT_FOUND,"badge not found"),
-    COMMENT_NOT_FOUND(NOT_FOUND,"comment not found"),
+    CANNOT_ACCESS_COMMENT(CONFLICT, "unable to access comment"),
+    UNABLE_TO_ANSWER(CONFLICT, "unable to post answer, article is removed"),
+    UNABLE_TO_CHANGE_ANSWER(CONFLICT, "picked answer is unable to edit or delete"),
+    CLOSED_ANSWER(CONFLICT, "unable to post answer, article is already closed"),
+    INVALID_CATEGORY(CONFLICT, "contained category is wrong. cannot post answer for info"),
+    UNABLE_TO_REVIEW(CONFLICT, "unable to post review, article is already closed or status is not posting"),
+    BADGE_NOT_FOUND(NOT_FOUND, "badge not found"),
+    COMMENT_NOT_FOUND(NOT_FOUND, "comment not found"),
 
     NOTIFICATION_NOT_FOUND(NOT_FOUND, "notification not found"),
     NO_ACCESS_TO_THAT_OBJECT(FORBIDDEN, "no access to that object"),
@@ -46,20 +49,20 @@ public enum ErrorCode {
 
     CAN_NOT_ACCESS_S3(CONFLICT, "unable to access amazon s3, contract your administrator."),
 
-    UNPROCESSABLE_REQUEST(UNPROCESSABLE_ENTITY,"contained instruction has correct syntax, but unprocessable."),
+    UNPROCESSABLE_REQUEST(UNPROCESSABLE_ENTITY, "contained instruction has correct syntax, but unprocessable."),
 
     /*
-    * The error code expresses the dto validation exception of spring framework in web mvc test.
-    * @author : YangEunChan
-    * */
+     * The error code expresses the dto validation exception of spring framework in web mvc test.
+     * @author : YangEunChan
+     * */
     ONLY_TEST_CODE(HttpStatus.BAD_REQUEST, "BAD_REQUEST"),
 
     /*
-    * It is a constant for JWT Exception only.
-    * The constants below should not be used in other exceptional situations.
-    * @author : YangEunChan
-    * @see : JwtParser, JwtTokenUtil
-    * */
+     * It is a constant for JWT Exception only.
+     * The constants below should not be used in other exceptional situations.
+     * @author : YangEunChan
+     * @see : JwtParser, JwtTokenUtil
+     * */
     SIGNATURE_EXCEPTION(UNAUTHORIZED, "signature key is different"),
     EXPIRED_EXCEPTION(UNAUTHORIZED, "expired token"),
     MALFORMED_EXCEPTION(UNAUTHORIZED, "malformed token"),
