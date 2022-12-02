@@ -172,8 +172,8 @@ public class UserDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ResponsePoint {
-        private Long userId;
-        private String nickname;
         private Integer point;
+        private UserDto.ResponseSimpleUserDto userInfo;
+        private AvatarDto.SimpleResponse avatar;
     }
 }

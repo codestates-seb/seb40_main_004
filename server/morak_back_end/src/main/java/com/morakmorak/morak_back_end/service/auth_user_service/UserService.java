@@ -10,6 +10,7 @@ import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
+import com.morakmorak.morak_back_end.repository.answer.AnswerQueryRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.user.UserQueryRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
@@ -41,6 +42,7 @@ public class UserService {
     private final TagMapper tagMapper;
     private final UserMapper userMapper;
     private final AnswerRepository answerRepository;
+    private final AnswerQueryRepository answerQueryRepository;
     private final AnswerMapper answerMapper;
 
     public User findVerifiedUserById(Long userId) {
@@ -277,8 +279,10 @@ public class UserService {
     }
 
     public ResponseMultiplePaging<AnswerDto.ResponseUserAnswerList> getUserAnswerList(Long userId, int page, int size) {
+
         findVerifiedUserById(userId);
-        Page<Answer> userAnswersInPage = answerRepository.findByUserId(userId, PageRequest.of(page, size,Sort.by("createdAt").descending()));
+
+        Page<Answer> userAnswersInPage = answerQueryRepository.findAnswersByUserId(userId, PageRequest.of(page, size,Sort.by("createdAt").descending()));
         List<AnswerDto.ResponseUserAnswerList> userAnswers =
                 userAnswersInPage.getContent().stream().map(
                         userAnswer -> {
@@ -288,6 +292,7 @@ public class UserService {
                             return answerMapper.answerToResponseUserAnswerList(userAnswer, isPicked, answerLikeCount, commentCount);
                         }
                 ).collect(Collectors.toList());
+
         return new ResponseMultiplePaging<>(userAnswers, userAnswersInPage);
     }
 
