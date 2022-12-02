@@ -24,7 +24,7 @@ export const HallOfFame = () => {
   }, []);
   return (
     <>
-      <div className="mb-10">
+      <div>
         <span className="text-2xl font-bold">🏆 명예의 전당</span>
       </div>
       <div>
