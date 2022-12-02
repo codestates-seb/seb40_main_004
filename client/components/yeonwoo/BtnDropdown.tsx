@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-23
+ * 최근 수정일: 2022-12-03
  */
 
 import { faUser } from '@fortawesome/free-regular-svg-icons';
@@ -15,13 +15,13 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { isLoginAtom } from '../../atomsYW';
-import { client } from '../../libs/client';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { dataHeaderAtom, isLoginAtom } from '../../atomsYW';
 
 export const BtnDropdown = () => {
   const [dropdown, setDropdown] = useState(false);
   const [points, setPoints] = useState(0);
+  const [dataHeader, setDataHeader] = useRecoilState(dataHeaderAtom);
   const setIsLogin = useSetRecoilState(isLoginAtom);
   const router = useRouter();
 
@@ -34,19 +34,17 @@ export const BtnDropdown = () => {
     });
     localStorage.clear();
     setIsLogin(false);
+    setDataHeader(null);
     router.push('/');
   };
 
-  const getPoints = async () => {
-    if (typeof window !== 'undefined') {
-      const res = await client.get('/api/users/points');
-      setPoints(res.data.point);
-    }
+  const getPoints = () => {
+    if (dataHeader) setPoints(dataHeader.point);
   };
 
   useEffect(() => {
     getPoints();
-  }, []);
+  }, [dataHeader]);
 
   return (
     <>

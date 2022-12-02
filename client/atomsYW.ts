@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { userDashboard } from './interfaces';
+import { IDataHeader, userDashboard } from './interfaces';
 
 export const isLoginAtom = atom({
   key: 'isLogin',
@@ -32,7 +32,12 @@ export const userDashboardAtom = atom<userDashboard>({
   },
 });
 
-export const avatarPathAtom = atom({
-  key: 'avatarPath',
-  default: '/favicon.ico',
+export const dataHeaderAtom = atom<IDataHeader | null>({
+  key: 'dataHeader',
+  default: null,
+});
+
+export const renderingAtom = atom({
+  key: 'rendering',
+  default: true,
 });
