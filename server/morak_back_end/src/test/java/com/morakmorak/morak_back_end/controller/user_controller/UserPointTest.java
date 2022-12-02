@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.config.SecurityTestConfig;
 import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.controller.UserController;
+import com.morakmorak.morak_back_end.dto.AvatarDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
+import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
@@ -20,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -30,6 +33,7 @@ import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentR
 import static com.morakmorak.morak_back_end.config.ApiDocumentUtils.getDocumentResponse;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.NICKNAME;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
+import static com.morakmorak.morak_back_end.util.TestConstants.AVATAR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -83,7 +87,7 @@ public class UserPointTest {
                         requestHeaders(
                                 headerWithName(JWT_HEADER).description("존재하지 않는 유저의 access token")
                         )
-));
+                ));
     }
 
     @Test
@@ -91,7 +95,12 @@ public class UserPointTest {
     void getUserPoint_succes_1() throws Exception {
         //given
         Long VALID_USERID = 1L;
-        UserDto.ResponsePoint response = UserDto.ResponsePoint.builder().point(10).userId(VALID_USERID).nickname(NICKNAME).build();
+        UserDto.ResponseSimpleUserDto userInfo = UserDto.ResponseSimpleUserDto.builder()
+                .userId(VALID_USERID)
+                .nickname(NICKNAME)
+                .grade(Grade.CANDLE)
+                .build();
+        UserDto.ResponsePoint response = UserDto.ResponsePoint.builder().point(10).userInfo(userInfo).avatar(AvatarDto.SimpleResponse.of(AVATAR)).build();
         String VALID_USER_ACCESS_TOKEN = "Valid access token";
 
         BDDMockito.given(pointService.getRemainingPoint(any())).willReturn(response);
@@ -109,8 +118,12 @@ public class UserPointTest {
                                         headerWithName(JWT_HEADER).description("액세스 토큰")
                                 ),
                                 responseFields(List.of(
-                                        fieldWithPath("userId").description("조회하는 유저 아이디"),
-                                        fieldWithPath("nickname").description("조회하는 유저 닉네임"),
+                                        fieldWithPath("userInfo.userId").type(JsonFieldType.NUMBER).description("유저의 아이디입니다."),
+                                        fieldWithPath("userInfo.nickname").type(JsonFieldType.STRING).description("유저의 닉네임입니다."),
+                                        fieldWithPath("userInfo.grade").type(JsonFieldType.STRING).description("유저의 등급입니다."),
+                                        fieldWithPath("avatar.avatarId").type(JsonFieldType.NUMBER).description("아바타 파일의 아이디 입니다."),
+                                        fieldWithPath("avatar.filename").type(JsonFieldType.STRING).description("아바타 파일의 이름입니다."),
+                                        fieldWithPath("avatar.remotePath").type(JsonFieldType.STRING).description("아바타 파일의 경로입니다."),
                                         fieldWithPath("point").description("조회하는 유저 잔여포인트"))
                                 )
                         )

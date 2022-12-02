@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.repository.answer;
 
 import com.morakmorak.morak_back_end.entity.Answer;
+import com.morakmorak.morak_back_end.entity.enums.ArticleStatus;
 import com.querydsl.core.types.dsl.EntityPathBase;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -34,4 +35,17 @@ public class AnswerQueryRepository {
                 .from(entity)
                 .fetchOne();
     }
+
+    public Page<Answer> findAnswersByUserId(Long userId, Pageable pageable) {
+        List<Answer> result;
+        result = jpaQueryFactory.select(answer)
+                .from(answer)
+                .where(answer.user.id.eq(userId).and(answer.article.articleStatus.eq(ArticleStatus.POSTING)))
+                .orderBy(answer.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        return new PageImpl<>(result, pageable, getCount(answer));
+    }
+
 }

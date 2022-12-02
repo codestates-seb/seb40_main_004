@@ -79,8 +79,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseMultiplePaging<AnswerDto.ResponseUserAnswerList> getUserAnswerList(@PathVariable("user-id") Long userId,
                                                                                       @Positive @RequestParam(value = "page", defaultValue = "1") int page,
-                                                                                      @Positive @RequestParam(value = "size", defaultValue = "50") int size
-    ) {
+                                                                                      @Positive @RequestParam(value = "size", defaultValue = "50") int size) {
         return userService.getUserAnswerList(userId, page - 1, size);
     }
 

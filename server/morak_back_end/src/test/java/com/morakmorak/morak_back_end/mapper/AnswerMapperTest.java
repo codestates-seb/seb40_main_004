@@ -1,10 +1,7 @@
 package com.morakmorak.morak_back_end.mapper;
 
 import com.morakmorak.morak_back_end.dto.AnswerDto;
-
 import com.morakmorak.morak_back_end.dto.UserDto;
-
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -26,7 +23,7 @@ class AnswerMapperTest {
 
     @Test
     @DisplayName("makingResponseAnswerLikeDto 메퍼 작동 테스트")
-    public void makingResponseAnswerLikeDto(){
+    void makingResponseAnswerLikeDto() {
         //given
         Long answerId = 1L;
         UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
@@ -39,4 +36,6 @@ class AnswerMapperTest {
         assertThat(responseAnswerLike.getIsLiked()).isTrue();
         assertThat(responseAnswerLike.getLikeCount()).isEqualTo(1);
     }
+
+
 }
