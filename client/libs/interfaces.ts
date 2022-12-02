@@ -45,6 +45,25 @@ export interface ArticleDetail {
   comments: Comment[];
 }
 
+export interface ArticleDetail {
+  articleId: number;
+  category: string;
+  title: string;
+  content: string;
+  clicks: number;
+  likes: number;
+  isClosed: boolean;
+  isLiked: boolean;
+  isBookmarked: boolean;
+  createdAt: string;
+  lastModifiedAt: string;
+  expiredDate: null;
+  tags: Tags[];
+  userInfo: UserInfo;
+  avatar: Avatar;
+  comments: Comment[];
+}
+
 export interface Answer {
   answerId: number;
   authorId: string;
@@ -75,4 +94,33 @@ export interface AnswerListProps {
 export interface Articles {
   article: ArticleDetail;
   answers: Answer[];
+}
+
+export interface QuestionListProps {
+  answerCount: number;
+  articleId: number;
+  avatar: {
+    avatarId: number;
+    filename: string;
+    remothPath: string;
+  };
+  category: string;
+  clicks: number;
+  commentCount: number;
+  createdAt: string;
+  isClosed: boolean;
+  lastModifiedAt: string;
+  likes: number;
+  tags: [
+    {
+      tagId: number;
+      name: string;
+    },
+  ];
+  title: string;
+  userInfo: {
+    userId: number;
+    nickname: string;
+    grade: string;
+  };
 }
