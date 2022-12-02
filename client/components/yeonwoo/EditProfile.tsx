@@ -1,15 +1,15 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-20
- * 최근 수정일: 2022-12-01
+ * 최근 수정일: 2022-12-02
  */
 
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { userDashboard } from '../../interfaces';
+import { client } from '../../libs/client';
 
 interface IChangePassword {
   originalPassword: string;
@@ -47,18 +47,10 @@ export const EditProfileComponent = () => {
       );
     } else {
       try {
-        await axios.patch(
-          '/api/auth/password',
-          {
-            originalPassword,
-            newPassword,
-          },
-          {
-            headers: {
-              Authorization: accessToken,
-            },
-          },
-        );
+        await client.patch('/api/auth/password', {
+          originalPassword,
+          newPassword,
+        });
         alert('비밀번호가 정상적으로 변경 되었습니다');
         router.push('/');
       } catch (error) {
@@ -83,7 +75,7 @@ export const EditProfileComponent = () => {
   };
   const getUserData = async () => {
     if (userId) {
-      const res = await axios.get(`/api/users/${userId}/dashboard`);
+      const res = await client.get(`/api/users/${userId}/dashboard`);
       setUserData(res.data);
     }
   };
@@ -105,21 +97,13 @@ export const EditProfileComponent = () => {
   const onSubmitEditProfile = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await axios.patch(
-        '/api/users/profiles',
-        {
-          nickname,
-          infoMessage,
-          github,
-          blog,
-          jobType,
-        },
-        {
-          headers: {
-            Authorization: accessToken,
-          },
-        },
-      );
+      await client.patch('/api/users/profiles', {
+        nickname,
+        infoMessage,
+        github,
+        blog,
+        jobType,
+      });
       localStorage.setItem('nickname', nickname);
       router.push('/');
     } catch (error) {

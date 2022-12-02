@@ -1,22 +1,22 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-12-02
  */
 
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { articleList } from '../../interfaces';
+import { client } from '../../libs/client';
 
 export const ListLately = () => {
   const [data, setData] = useState<articleList[] | null>(null);
   const getList = async () => {
-    const res = await axios.get(
-      '/api/articles?category=INFO&keyword=null&target=null&sort=desc&page=1&size=10',
+    const res = await client.get(
+      '/api/articles?category=QNA&keyword=null&target=null&sort=desc&page=1&size=10',
     );
     setData(res.data.data);
   };

@@ -76,3 +76,19 @@ export interface Articles {
   article: ArticleDetail;
   answers: Answer[];
 }
+
+export interface QuestionListProps {
+  answerCount: number;
+  articleId: number;
+  category: string;
+  clicks: number;
+  createdAt: string;
+  isClosed: boolean;
+  lastModifiedAt: string;
+  likes: number;
+  title: string;
+  commentCount: number;
+  avatar: Avatar;
+  tags: Tags[];
+  userInfo: UserInfo;
+}

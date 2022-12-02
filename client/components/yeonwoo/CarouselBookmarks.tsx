@@ -15,8 +15,8 @@ import {
   faComment,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import Link from 'next/link';
+import { client } from '../../libs/client';
 
 const variants = {
   enter: (direction: number) => {
@@ -50,48 +50,43 @@ const swipePower = (offset: number, velocity: number) => {
   return Math.abs(offset) * velocity;
 };
 
+interface IBookmarkArticle {
+  articleId: number;
+  category: string;
+  title: string;
+  clicks: number;
+  likes: number;
+  isClosed: false;
+  tags: [
+    {
+      tagId: number;
+      name: string;
+    },
+  ];
+  commentCount: number;
+  answerCount: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  userInfo: {
+    userId: number;
+    nickname: string;
+    grade: string;
+  };
+  avatar: {
+    avatarId: number;
+    filename: string;
+    remotePath: string;
+  };
+}
+
 export const CarouselBookmarks = () => {
   const router = useRouter();
   const [userId, setUserId] = useState<string | string[] | undefined>('');
-  const [articles, setArticles] = useState([
-    {
-      articleId: 0,
-      category: '',
-      title: '',
-      clicks: 0,
-      likes: 0,
-      isClosed: false,
-      tags: [
-        {
-          tagId: 0,
-          name: '',
-        },
-      ],
-      commentCount: 0,
-      answerCount: 0,
-      createdAt: '',
-      lastModifiedAt: '',
-      userInfo: {
-        userId: 0,
-        nickname: '',
-        grade: '',
-      },
-      avatar: {
-        avatarId: 0,
-        filename: '',
-        remotePath: '',
-      },
-    },
-  ]);
+  const [articles, setArticles] = useState<IBookmarkArticle[] | []>([]);
   const getReview = async () =>
-    await axios
+    await client
       .get(
         `/api/articles?category=INFO&keyword=${userId}&target=bookmark&sort=desc&page=1&size=50`,
-        {
-          headers: {
-            'ngrok-skip-browser-warning': '111',
-          },
-        },
       )
       .then((res) => setArticles(res.data.data))
       .catch((error) => console.log(error));
@@ -117,93 +112,103 @@ export const CarouselBookmarks = () => {
 
   return (
     <div className="relative w-full h-[440px]">
-      <AnimatePresence initial={false} custom={direction}>
-        <motion.div
-          key={page}
-          className="w-full h-[440px] absolute px-24 flex-col"
-          custom={direction}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: 'spring', stiffness: 300, damping: 30 },
-          }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={1}
-          onDragEnd={(e, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x);
-
-            if (swipe < -swipeConfidenceThreshold) {
-              paginate(2);
-            } else if (swipe > swipeConfidenceThreshold) {
-              paginate(-2);
-            }
-          }}
-        >
-          {articles.slice(articleIndex, articleIndex + 2).map((article) => (
+      {articles.length !== 0 ? (
+        <>
+          <AnimatePresence initial={false} custom={direction}>
             <motion.div
-              key={article.articleId}
-              className="bg-main-yellow bg-opacity-20 w-[793px] h-[190px] rounded-2xl p-8 relative mb-[72px]"
+              key={page}
+              className="w-full h-[440px] absolute px-24 flex-col"
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: 'spring', stiffness: 300, damping: 30 },
+              }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={1}
+              onDragEnd={(e, { offset, velocity }) => {
+                const swipe = swipePower(offset.x, velocity.x);
+
+                if (swipe < -swipeConfidenceThreshold) {
+                  paginate(2);
+                } else if (swipe > swipeConfidenceThreshold) {
+                  paginate(-2);
+                }
+              }}
             >
-              <div className="flex justify-between items-start">
-                <Link href={`/questions/${article.articleId}`}>
-                  <div>
-                    <span className="text-2xl text-main-orange">B. </span>
-                    <span className="hover:cursor-pointer text-2xl">
-                      {article.title.length > 30
-                        ? `${article.title.slice(0, 30)}...`
-                        : article.title}
-                    </span>
+              {articles.slice(articleIndex, articleIndex + 2).map((article) => (
+                <motion.div
+                  key={article.articleId}
+                  className="bg-main-yellow bg-opacity-20 w-[793px] h-[190px] rounded-2xl p-8 relative mb-[72px]"
+                >
+                  <div className="flex justify-between items-start">
+                    <Link href={`/questions/${article.articleId}`}>
+                      <div>
+                        <span className="text-2xl text-main-orange">B. </span>
+                        <span className="hover:cursor-pointer text-2xl">
+                          {article.title.length > 30
+                            ? `${article.title.slice(0, 30)}...`
+                            : article.title}
+                        </span>
+                      </div>
+                    </Link>
+                    <div className="flex gap-4">
+                      <div className="flex gap-2">
+                        <FontAwesomeIcon icon={faComment} size="xs" />
+                        <span className="text-xs">{article.commentCount}</span>
+                      </div>
+                    </div>
                   </div>
-                </Link>
-                <div className="flex gap-4">
-                  <div className="flex gap-2">
-                    <FontAwesomeIcon icon={faComment} size="xs" />
-                    <span className="text-xs">{article.commentCount}</span>
+                  <div className="flex justify-end mb-2">
+                    <span className="text-[15px] text-main-gray">{`${new Date(
+                      article.createdAt,
+                    ).getFullYear()}년 ${
+                      new Date(article.createdAt).getMonth() + 1
+                    }월 ${new Date(article.createdAt).getDate()}일 ${
+                      new Date(article.createdAt).getHours() < 12
+                        ? '오전'
+                        : '오후'
+                    } ${
+                      new Date(article.createdAt).getHours() > 12
+                        ? new Date(article.createdAt).getHours() - 12
+                        : new Date(article.createdAt).getHours()
+                    }시 ${new Date(article.createdAt).getMinutes()}분`}</span>
                   </div>
-                </div>
-              </div>
-              <div className="flex justify-end mb-2">
-                <span className="text-[15px] text-main-gray">{`${new Date(
-                  article.createdAt,
-                ).getFullYear()}년 ${
-                  new Date(article.createdAt).getMonth() + 1
-                }월 ${new Date(article.createdAt).getDate()}일 ${
-                  new Date(article.createdAt).getHours() < 12 ? '오전' : '오후'
-                } ${
-                  new Date(article.createdAt).getHours() > 12
-                    ? new Date(article.createdAt).getHours() - 12
-                    : new Date(article.createdAt).getHours()
-                }시 ${new Date(article.createdAt).getMinutes()}분`}</span>
-              </div>
-              <div className="flex justify-end gap-4 items-end h-16">
-                {article.tags.map((tag) => (
-                  <button
-                    className="bg-main-yellow rounded-full py-[6px] w-32"
-                    key={tag.tagId}
-                  >
-                    {tag.name}
-                  </button>
-                ))}
-              </div>
+                  <div className="flex justify-end gap-4 items-end h-16">
+                    {article.tags.map((tag) => (
+                      <button
+                        className="bg-main-yellow rounded-full py-[6px] w-32"
+                        key={tag.tagId}
+                      >
+                        {tag.name}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
-        </motion.div>
-      </AnimatePresence>
-      <div
-        className="absolute top-[45%] z-10 right-0 hover:cursor-pointer"
-        onClick={() => paginate(2)}
-      >
-        <FontAwesomeIcon icon={faChevronRight} size="3x" />
-      </div>
-      <div
-        className="absolute top-[45%] z-10 left-0 hover:cursor-pointer"
-        onClick={() => paginate(-2)}
-      >
-        <FontAwesomeIcon icon={faChevronLeft} size="3x" />
-      </div>
+          </AnimatePresence>
+          <div
+            className="absolute top-[45%] z-10 right-0 hover:cursor-pointer"
+            onClick={() => paginate(2)}
+          >
+            <FontAwesomeIcon icon={faChevronRight} size="3x" />
+          </div>
+          <div
+            className="absolute top-[45%] z-10 left-0 hover:cursor-pointer"
+            onClick={() => paginate(-2)}
+          >
+            <FontAwesomeIcon icon={faChevronLeft} size="3x" />
+          </div>
+        </>
+      ) : (
+        <div className="w-full h-full flex justify-center items-center">
+          <span>등록된 나의 답변이 아직 없습니다</span>
+        </div>
+      )}
     </div>
   );
 };
