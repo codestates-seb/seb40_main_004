@@ -13,9 +13,10 @@ import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { Pagination } from './Pagination';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 export const QuestionList = () => {
   const [pageIndex, setPageIndex] = useState(1);
@@ -23,16 +24,29 @@ export const QuestionList = () => {
     `/api/articles?page=${pageIndex}&size=10&category=QNA`,
   );
 
+  const onClick = () => {
+    alert('Coming Soon...😸');
+  };
+
   if (!isLoading)
     return (
       <main className="flex flex-col w-full space-y-6">
-        <Link href="/ask">
-          <button className="bg-main-yellow hover:bg-main-orange w-28 mb-5 rounded-2xl py-1 ml-96">
-            질문하기
+        <section className="flex justify-between mb-3">
+          <button
+            className="border border-main-gray rounded-lg py-1.5 w-28"
+            onClick={onClick}
+          >
+            {`최근순 `}
+            <FontAwesomeIcon icon={faChevronDown} className="fa-xs" />
           </button>
-        </Link>
+          <Link href="/ask">
+            <button className="bg-main-yellow hover:bg-main-orange rounded-lg py-1.5 w-28 transition-all">
+              질문하기
+            </button>
+          </Link>
+        </section>
         {response.data.map((article: QuestionListProps) => (
-          <section className="h-16 border-b space-y-3" key={article.articleId}>
+          <section className="h-16 border-b spac-y-3" key={article.articleId}>
             <article className="space-x-2">
               {article.isClosed ? (
                 <FontAwesomeIcon
@@ -84,7 +98,7 @@ export const QuestionList = () => {
             </section>
           </section>
         ))}
-        <div className="mx-auto">
+        <div className="mx-auto pt-4">
           <Pagination
             setPageIndex={setPageIndex}
             totalPage={response.pageInfo.totalPages}
