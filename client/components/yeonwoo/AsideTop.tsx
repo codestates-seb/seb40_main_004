@@ -1,17 +1,17 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-11-19
+ * 최근 수정일: 2022-12-02
  */
 
 import { faBloggerB, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { isLoginAtom, userDashboardAtom } from '../../atomsYW';
+import { client } from '../../libs/client';
 
 export const AsideTop = () => {
   const isLogin = useRecoilValue(isLoginAtom);
@@ -39,21 +39,13 @@ export const AsideTop = () => {
     isLogin ? router.push('/review') : alert('로그인이 필요합니다.');
   };
   const onSubmitForm = () => {
-    axios.patch(
-      '/api/users/profiles',
-      {
-        nickname: editNickname,
-        infoMessage: editInfoMessage,
-        github: editGithub,
-        blog: editBlog,
-        jobType: 'DEVELOPER',
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('accessToken'),
-        },
-      },
-    );
+    client.patch('/api/users/profiles', {
+      nickname: editNickname,
+      infoMessage: editInfoMessage,
+      github: editGithub,
+      blog: editBlog,
+      jobType: 'DEVELOPER',
+    });
   };
   const changeGradeImoji = (grade: string) => {
     switch (grade) {

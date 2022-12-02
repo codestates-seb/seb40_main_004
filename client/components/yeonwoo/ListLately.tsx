@@ -1,14 +1,13 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-12-02
  */
 
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { articleList } from '../../interfaces';
 import { client } from '../../libs/client';

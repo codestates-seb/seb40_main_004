@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-27
- * 최근 수정일: 2022-11-27
+ * 최근 수정일: 2022-12-02
  */
 
 import * as React from 'react';
@@ -15,8 +15,8 @@ import {
   faComment,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import Link from 'next/link';
+import { client } from '../../libs/client';
 
 const variants = {
   enter: (direction: number) => {
@@ -69,12 +69,8 @@ export const CarouselAnswers = () => {
   const [userId, setUserId] = useState<string | string[] | undefined>('');
   const [articles, setArticles] = useState<IMyAnswer[] | []>([]);
   const getReview = async () =>
-    await axios
-      .get(`/api/users/${userId}/answers?page=1&size=50`, {
-        headers: {
-          'ngrok-skip-browser-warning': '111',
-        },
-      })
+    await client
+      .get(`/api/users/${userId}/answers?page=1&size=50`)
       .then((res) => setArticles(res.data.data))
       .catch((error) => console.log(error));
 

@@ -15,8 +15,8 @@ import {
   faComment,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import Link from 'next/link';
+import { client } from '../../libs/client';
 
 const variants = {
   enter: (direction: number) => {
@@ -50,48 +50,43 @@ const swipePower = (offset: number, velocity: number) => {
   return Math.abs(offset) * velocity;
 };
 
+interface IBookmarkArticle {
+  articleId: number;
+  category: string;
+  title: string;
+  clicks: number;
+  likes: number;
+  isClosed: false;
+  tags: [
+    {
+      tagId: number;
+      name: string;
+    },
+  ];
+  commentCount: number;
+  answerCount: number;
+  createdAt: string;
+  lastModifiedAt: string;
+  userInfo: {
+    userId: number;
+    nickname: string;
+    grade: string;
+  };
+  avatar: {
+    avatarId: number;
+    filename: string;
+    remotePath: string;
+  };
+}
+
 export const CarouselBookmarks = () => {
   const router = useRouter();
   const [userId, setUserId] = useState<string | string[] | undefined>('');
-  const [articles, setArticles] = useState([
-    {
-      articleId: 0,
-      category: '',
-      title: '',
-      clicks: 0,
-      likes: 0,
-      isClosed: false,
-      tags: [
-        {
-          tagId: 0,
-          name: '',
-        },
-      ],
-      commentCount: 0,
-      answerCount: 0,
-      createdAt: '',
-      lastModifiedAt: '',
-      userInfo: {
-        userId: 0,
-        nickname: '',
-        grade: '',
-      },
-      avatar: {
-        avatarId: 0,
-        filename: '',
-        remotePath: '',
-      },
-    },
-  ]);
+  const [articles, setArticles] = useState<IBookmarkArticle[] | []>([]);
   const getReview = async () =>
-    await axios
+    await client
       .get(
         `/api/articles?category=INFO&keyword=${userId}&target=bookmark&sort=desc&page=1&size=50`,
-        {
-          headers: {
-            'ngrok-skip-browser-warning': '111',
-          },
-        },
       )
       .then((res) => setArticles(res.data.data))
       .catch((error) => console.log(error));

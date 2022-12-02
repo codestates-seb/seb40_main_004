@@ -1,14 +1,14 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-12-02
  */
 
-import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { rankList } from '../../interfaces';
+import { client } from '../../libs/client';
 
 export const HallOfFame = () => {
   const [ranks, setRanks] = useState<rankList[] | null>(null);
@@ -16,7 +16,7 @@ export const HallOfFame = () => {
     [],
   );
   const getRanks = async () => {
-    const res = await axios.get('/api/users/ranks?page=1&size=8');
+    const res = await client.get('/api/users/ranks?page=1&size=8');
     setRanks(res.data.data);
   };
   useEffect(() => {
