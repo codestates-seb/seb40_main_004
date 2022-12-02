@@ -11,11 +11,12 @@ import Link from 'next/link';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { articleList } from '../../interfaces';
+import { client } from '../../libs/client';
 
 export const ListLately = () => {
   const [data, setData] = useState<articleList[] | null>(null);
   const getList = async () => {
-    const res = await axios.get(
+    const res = await client.get(
       '/api/articles?category=QNA&keyword=null&target=null&sort=desc&page=1&size=10',
     );
     setData(res.data.data);
