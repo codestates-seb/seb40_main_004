@@ -6,7 +6,7 @@ import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.JobType;
-import com.morakmorak.morak_back_end.util.TestConstants;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class UserMapperTest {
     UserMapper userMapper;
@@ -136,5 +136,34 @@ class UserMapperTest {
         assertThat(responseRankings.get(0).getGrade()).isEqualTo(user.getGrade());
         assertThat(responseRankings.get(0).getJobType()).isEqualTo(user.getJobType());
         assertThat(responseRankings.get(0).getUserId()).isEqualTo(user.getId());
+    }
+
+    @Test
+    @DisplayName("toResponsePoint 작동 테스트")
+    void toResponsePoint() {
+        //given
+        User user = User.builder()
+                .point(100)
+                .nickname(NICKNAME1)
+                .avatar(Avatar.builder()
+                        .id(ID2)
+                        .remotePath(CONTENT1)
+                        .originalFilename(CONTENT2)
+                        .build())
+                .grade(Grade.VIP)
+                .jobType(JobType.DEVELOPER)
+                .id(ID1)
+                .build();
+
+        UserDto.ResponsePoint target = userMapper.toResponsePoint(user);
+
+        Assertions.assertThat(target.getPoint()).isEqualTo(user.getPoint());
+        Assertions.assertThat(target.getUserInfo().getUserId()).isEqualTo(user.getId());
+        Assertions.assertThat(target.getUserInfo().getNickname()).isEqualTo(user.getNickname());
+        Assertions.assertThat(target.getUserInfo().getGrade()).isEqualTo(user.getGrade());
+        Assertions.assertThat(target.getAvatar().getAvatarId()).isEqualTo(user.getAvatar().getId());
+        Assertions.assertThat(target.getAvatar().getRemotePath()).isEqualTo(user.getAvatar().getRemotePath());
+        Assertions.assertThat(target.getAvatar().getFilename()).isEqualTo(user.getAvatar().getOriginalFilename());
+
     }
 }
