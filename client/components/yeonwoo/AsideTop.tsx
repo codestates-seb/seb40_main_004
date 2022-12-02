@@ -1,17 +1,18 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-11-19
+ * 최근 수정일: 2022-12-02
  */
 
 import { faBloggerB, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { isLoginAtom, userDashboardAtom } from '../../atomsYW';
+import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
+import { client } from '../../libs/client';
 
 export const AsideTop = () => {
   const isLogin = useRecoilValue(isLoginAtom);
@@ -39,21 +40,13 @@ export const AsideTop = () => {
     isLogin ? router.push('/review') : alert('로그인이 필요합니다.');
   };
   const onSubmitForm = () => {
-    axios.patch(
-      '/api/users/profiles',
-      {
-        nickname: editNickname,
-        infoMessage: editInfoMessage,
-        github: editGithub,
-        blog: editBlog,
-        jobType: 'DEVELOPER',
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('accessToken'),
-        },
-      },
-    );
+    client.patch('/api/users/profiles', {
+      nickname: editNickname,
+      infoMessage: editInfoMessage,
+      github: editGithub,
+      blog: editBlog,
+      jobType: 'DEVELOPER',
+    });
   };
   return (
     <>
@@ -93,7 +86,9 @@ export const AsideTop = () => {
                 </span>
               </div>
               <div className="flex gap-4 text-xl">
-                <span className="text-2xl">{userDashboard.grade}</span>
+                <span className="text-2xl">
+                  {changeGradeEmoji(userDashboard.grade)}
+                </span>
                 <span>{`# ${userDashboard.rank}`}</span>
               </div>
             </div>
@@ -136,9 +131,20 @@ export const AsideTop = () => {
           <div className="mt-2">
             <div className="flex justify-between items-baseline w-[238px]">
               <div className="w-[168px]">
-                <span className="text-3xl font-bold">
-                  {userDashboard.nickname}
-                </span>
+                {userDashboard.nickname.length > 6 ? (
+                  <>
+                    <div className="w-[168px] text-3xl font-bold">
+                      {userDashboard.nickname.slice(0, 6)}
+                    </div>
+                    <div className="w-[168px] text-3xl font-bold">
+                      {userDashboard.nickname.slice(6)}
+                    </div>
+                  </>
+                ) : (
+                  <span className="w-[168px] text-3xl font-bold">
+                    {userDashboard.nickname}
+                  </span>
+                )}
               </div>
               <div className="w-[80px] flex justify-end">
                 <span className="text-sm">
@@ -162,14 +168,16 @@ export const AsideTop = () => {
                 {userDashboard.infoMessage ?? ''}
               </span>
             </div>
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-baseline">
               <div>
                 <span className="text-xl text-main-orange font-semibold">
                   {`${userDashboard.point} 모락`}
                 </span>
               </div>
               <div className="flex gap-4 text-xl">
-                <span className="text-2xl">{userDashboard.grade}</span>
+                <span className="text-2xl">
+                  {changeGradeEmoji(userDashboard.grade)}
+                </span>
                 <span>{`# ${userDashboard.rank}`}</span>
               </div>
             </div>

@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-27
- * 최근 수정일: 2022-11-27
+ * 최근 수정일: 2022-12-02
  */
 
 import * as React from 'react';
@@ -15,8 +15,8 @@ import {
   faComment,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import Link from 'next/link';
+import { client } from '../../libs/client';
 
 const variants = {
   enter: (direction: number) => {
@@ -50,31 +50,27 @@ const swipePower = (offset: number, velocity: number) => {
   return Math.abs(offset) * velocity;
 };
 
+interface IMyAnswer {
+  answerId: number;
+  content: string;
+  isPicked: boolean;
+  answerLikeCount: number;
+  commentCount: number;
+  createdAt: string;
+  userInfo: {
+    userId: number;
+    nickname: string;
+    grade: string;
+  };
+}
+
 export const CarouselAnswers = () => {
   const router = useRouter();
   const [userId, setUserId] = useState<string | string[] | undefined>('');
-  const [articles, setArticles] = useState([
-    {
-      answerId: 0,
-      content: '',
-      isPicked: false,
-      answerLikeCount: 0,
-      commentCount: 0,
-      createdAt: '',
-      userInfo: {
-        userId: 0,
-        nickname: '',
-        grade: '',
-      },
-    },
-  ]);
+  const [articles, setArticles] = useState<IMyAnswer[] | []>([]);
   const getReview = async () =>
-    await axios
-      .get(`/api/users/${userId}/answers?page=1&size=50`, {
-        headers: {
-          'ngrok-skip-browser-warning': '111',
-        },
-      })
+    await client
+      .get(`/api/users/${userId}/answers?page=1&size=50`)
       .then((res) => setArticles(res.data.data))
       .catch((error) => console.log(error));
 
@@ -99,88 +95,98 @@ export const CarouselAnswers = () => {
 
   return (
     <div className="relative w-full h-[440px]">
-      <AnimatePresence initial={false} custom={direction}>
-        <motion.div
-          key={page}
-          className="w-full h-[440px] absolute px-24 flex-col"
-          custom={direction}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: 'spring', stiffness: 300, damping: 30 },
-          }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={1}
-          onDragEnd={(e, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x);
-
-            if (swipe < -swipeConfidenceThreshold) {
-              paginate(2);
-            } else if (swipe > swipeConfidenceThreshold) {
-              paginate(-2);
-            }
-          }}
-        >
-          {articles.slice(articleIndex, articleIndex + 2).map((article) => (
+      {articles.length !== 0 ? (
+        <>
+          <AnimatePresence initial={false} custom={direction}>
             <motion.div
-              key={article.answerId}
-              className="bg-main-yellow bg-opacity-20 w-[793px] h-[190px] rounded-2xl p-8 relative mb-[72px]"
+              key={page}
+              className="w-full h-[440px] absolute px-24 flex-col"
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: 'spring', stiffness: 300, damping: 30 },
+              }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={1}
+              onDragEnd={(e, { offset, velocity }) => {
+                const swipe = swipePower(offset.x, velocity.x);
+
+                if (swipe < -swipeConfidenceThreshold) {
+                  paginate(2);
+                } else if (swipe > swipeConfidenceThreshold) {
+                  paginate(-2);
+                }
+              }}
             >
-              <div className="flex justify-between items-start">
-                <Link href={`/questions/${article.answerId}`}>
-                  <div>
-                    <span className="text-2xl text-main-orange">A. </span>
-                    <span className="hover:cursor-pointer text-2xl">
-                      {article.content.length > 30
-                        ? `${article.content.slice(0, 30)}...`
-                        : article.content}
-                    </span>
+              {articles.slice(articleIndex, articleIndex + 2).map((article) => (
+                <motion.div
+                  key={article.answerId}
+                  className="bg-main-yellow bg-opacity-20 w-[793px] h-[190px] rounded-2xl p-8 relative mb-[72px]"
+                >
+                  <div className="flex justify-between items-start">
+                    <Link href={`/questions/${article.answerId}`}>
+                      <div>
+                        <span className="text-2xl text-main-orange">A. </span>
+                        <span className="hover:cursor-pointer text-2xl">
+                          {article.content.length > 30
+                            ? `${article.content.slice(0, 30)}...`
+                            : article.content}
+                        </span>
+                      </div>
+                    </Link>
+                    <div className="flex gap-4">
+                      <div className="flex gap-2">
+                        <FontAwesomeIcon icon={faComment} size="xs" />
+                        <span className="text-xs">{article.commentCount}</span>
+                      </div>
+                    </div>
                   </div>
-                </Link>
-                <div className="flex gap-4">
-                  <div className="flex gap-2">
-                    <FontAwesomeIcon icon={faComment} size="xs" />
-                    <span className="text-xs">{article.commentCount}</span>
+                  <div className="flex justify-end mb-2">
+                    <span className="text-[15px] text-main-gray">{`${new Date(
+                      article.createdAt,
+                    ).getFullYear()}년 ${
+                      new Date(article.createdAt).getMonth() + 1
+                    }월 ${new Date(article.createdAt).getDate()}일 ${
+                      new Date(article.createdAt).getHours() < 12
+                        ? '오전'
+                        : '오후'
+                    } ${
+                      new Date(article.createdAt).getHours() > 12
+                        ? new Date(article.createdAt).getHours() - 12
+                        : new Date(article.createdAt).getHours()
+                    }시 ${new Date(article.createdAt).getMinutes()}분`}</span>
                   </div>
-                </div>
-              </div>
-              <div className="flex justify-end mb-2">
-                <span className="text-[15px] text-main-gray">{`${new Date(
-                  article.createdAt,
-                ).getFullYear()}년 ${
-                  new Date(article.createdAt).getMonth() + 1
-                }월 ${new Date(article.createdAt).getDate()}일 ${
-                  new Date(article.createdAt).getHours() < 12 ? '오전' : '오후'
-                } ${
-                  new Date(article.createdAt).getHours() > 12
-                    ? new Date(article.createdAt).getHours() - 12
-                    : new Date(article.createdAt).getHours()
-                }시 ${new Date(article.createdAt).getMinutes()}분`}</span>
-              </div>
-              <div className="flex justify-end gap-4 items-end h-16">
-                <button className="bg-main-yellow rounded-full py-[6px] w-32">
-                  {article.isPicked ? '채택 ✅' : '채택 ❎'}
-                </button>
-              </div>
+                  <div className="flex justify-end gap-4 items-end h-16">
+                    <button className="bg-main-yellow rounded-full py-[6px] w-32">
+                      {article.isPicked ? '채택 ✅' : '채택 ❎'}
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
-        </motion.div>
-      </AnimatePresence>
-      <div
-        className="absolute top-[45%] z-10 right-0 hover:cursor-pointer"
-        onClick={() => paginate(2)}
-      >
-        <FontAwesomeIcon icon={faChevronRight} size="3x" />
-      </div>
-      <div
-        className="absolute top-[45%] z-10 left-0 hover:cursor-pointer"
-        onClick={() => paginate(-2)}
-      >
-        <FontAwesomeIcon icon={faChevronLeft} size="3x" />
-      </div>
+          </AnimatePresence>
+          <div
+            className="absolute top-[45%] z-10 right-0 hover:cursor-pointer"
+            onClick={() => paginate(2)}
+          >
+            <FontAwesomeIcon icon={faChevronRight} size="3x" />
+          </div>
+          <div
+            className="absolute top-[45%] z-10 left-0 hover:cursor-pointer"
+            onClick={() => paginate(-2)}
+          >
+            <FontAwesomeIcon icon={faChevronLeft} size="3x" />
+          </div>
+        </>
+      ) : (
+        <div className="w-full h-full flex justify-center items-center">
+          <span>등록된 나의 답변이 아직 없습니다</span>
+        </div>
+      )}
     </div>
   );
 };
