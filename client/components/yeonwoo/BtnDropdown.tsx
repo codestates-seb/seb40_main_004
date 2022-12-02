@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
+import { client } from '../../libs/client';
 
 export const BtnDropdown = () => {
   const [dropdown, setDropdown] = useState(false);
@@ -38,11 +39,7 @@ export const BtnDropdown = () => {
 
   const getPoints = async () => {
     if (typeof window !== 'undefined') {
-      const res = await axios.get('/api/users/points', {
-        headers: {
-          Authorization: localStorage.getItem('accessToken'),
-        },
-      });
+      const res = await client.get('/api/users/points');
       setPoints(res.data.point);
     }
   };
