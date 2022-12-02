@@ -52,7 +52,7 @@ export const Footer = () => {
       <div className="flex max-w-[1280px] justify-between w-full">
         <div className="flex w-full flex-col space-y-2">
           <MorakLogo />
-          <p>©MORAKL. ALL RIGHTS RESERVED</p>
+          <p>©MORAK. ALL RIGHTS RESERVED</p>
         </div>
         <div className="flex w-full space-x-3">
           {developers.map((dev) => (

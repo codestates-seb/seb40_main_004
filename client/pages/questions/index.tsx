@@ -20,8 +20,8 @@ const Questions: NextPage = () => {
       <main className="max-w-[1280px] mx-auto">
         <h1>Questions</h1>
       </main>
-      <section className="flex items-center ml-3">
-        <form className="w-screen ml-96">
+      <section className="flex justify-center mx-auto w-screen space-x-32">
+        <form className="w-96 ml-10">
           <button>
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
@@ -30,7 +30,7 @@ const Questions: NextPage = () => {
           </button>
           <input
             type="text"
-            className="w-[30%] justify-center mt-10 border border-solid border-font-gray rounded-xl mr-2"
+            className="w-[30%] justify-center border mt-36 border-solid border-font-gray rounded-xl mr-2"
           />
           <Button>검색</Button>
           <SearchWithTagButton />
