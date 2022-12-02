@@ -50,10 +50,9 @@ jobs:
           spring.security.oauth2.client.registration.google.client-id: ${{ secrets.OAUTH_GOOGLE_ID }}
           spring.security.oauth2.client.registration.google.client-secret: ${{ secrets.OAUTH_GOOGLE_PASSWORD }}
           
-          spring.security.oauth2.client.provider.kako.authorization-uri: ${{ secrets.PROVIDER_ID }}
-          spring.security.oauth2.client.provider.kako.token-uri: ${{ secrets.PROVIDER_ID }}
-          spring.security.oauth2.client.provider.kako.user-info-uri: ${{ secrets.PROVIDER_ID }}
-          spring.security.oauth2.client.provider.kako,user-name-attribute: ${{ secrets.PROVIDER_ID }}
+          spring.security.oauth2.client.provider.kako.authorization-uri: ${{ secrets.PROVIDER_AUTH_URI }}
+          spring.security.oauth2.client.provider.kako.token-uri: ${{ secrets.PROVIDER_TOKEN_URI }}
+          spring.security.oauth2.client.provider.kako.user-info-uri: ${{ secrets.PROVIDER_INFO_URI }}
           
           spring.mail.host: ${{ secrets.MAIL_HOST }}
           spring.mail.username: ${{ secrets.MAIL_USERNAME }}
@@ -87,12 +86,12 @@ jobs:
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./morak.zip s3://$S3_BUCKET_NAME/morak.zip
 
-        # [6] deploy
-      - name: Code Deploy
-        run: |
-          aws deploy create-deployment \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-          --file-exists-behavior OVERWRITE \
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=morak.zip
+#        # [6] deploy
+ #     - name: Code Deploy
+  #      run: |
+   #       aws deploy create-deployment \
+    #      --deployment-config-name CodeDeployDefault.AllAtOnce \
+     #     --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+      #    --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+       #   --file-exists-behavior OVERWRITE \
+        #  --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=morak.zip
