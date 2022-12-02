@@ -155,7 +155,6 @@ public class AnswerQueryRepositoryTest {
         //when
         Page<Answer> target = answerQueryRepository.findAnswersByUserId(userId, pageRequest);
         List<Answer> user_answer_list = target.getContent();
-
         Assertions.assertThat(user_answer_list.size()).isEqualTo(0);
     }
 
