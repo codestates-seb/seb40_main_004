@@ -83,9 +83,9 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
             case "content":
                 return article.content.startsWith(keyword).and(statusPosting());
             case "tag":
-            return article.articleTags.any().tag.name.eq(TagName.valueOf(keyword)).and(statusPosting());
+                return article.articleTags.any().tag.name.eq(TagName.valueOf(keyword)).and(statusPosting());
             case "bookmark":
-                 article.bookmarks.any().user.id.eq(Long.parseLong(keyword)).and(statusPosting());
+                return article.bookmarks.any().user.id.eq(Long.parseLong(keyword)).and(statusPosting());
             case "titleAndContent":
                 return article.title.startsWith(keyword).or(article.content.startsWith(keyword)).and(statusPosting());
             default:
