@@ -132,17 +132,11 @@ public class UserQueryRepository {
                 .fetch();
     }
 
-    public Page<UserDto.ResponseRanking> getRankData(Pageable pageable) {
+    public Page<User> getRankData(Pageable pageable) {
         List<String> sortTypes = getSortTypes(pageable);
 
-        List<UserDto.ResponseRanking> result = jpaQueryFactory.select(new QUserDto_ResponseRanking(user.id, user.nickname, user.infoMessage, user.point, user.grade, user.jobType,
-                        article.count(), articleLike.count(), answerLike.count(), answer.count(), avatar.id, avatar.originalFilename, avatar.remotePath))
+        List<User> result = jpaQueryFactory.select(user)
                 .from(user)
-                .leftJoin(user.articles, article)
-                .leftJoin(user.answers, answer)
-                .leftJoin(article.articleLikes, articleLike)
-                .leftJoin(answer.answerLike, answerLike)
-                .leftJoin(user.avatar, avatar)
                 .orderBy(getOrderSpecifier(sortTypes))
                 .groupBy(user.id)
                 .offset(pageable.getOffset())
@@ -160,11 +154,11 @@ public class UserQueryRepository {
             case "point" :
                 return user.point.desc();
             case "articles" :
-                return article.count().desc();
+                return user.articles.size().desc();
             case "answers" :
-                return answer.count().desc();
+                return user.answers.size().desc();
             case "likes" :
-                return articleLike.count().add(answerLike.count()).desc();
+                return user.articleLikes.size().add(answerLike.count()).desc();
             default:
                 return user.point.desc();
         }

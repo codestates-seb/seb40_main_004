@@ -149,7 +149,7 @@ public class UserRepositoryTest {
         //given
         PageRequest page = PageRequest.of(0, 10, Sort.by("point"));
         //when
-        Page<UserDto.ResponseRanking> rank = userQueryRepository.getRankData(page);
+        Page<User> rank = userQueryRepository.getRankData(page);
         //then
         assertThat(rank.toList().get(0).getNickname()).isEqualTo(NICKNAME2);
         assertThat(rank.toList().get(1).getNickname()).isEqualTo(NICKNAME1);
@@ -161,7 +161,7 @@ public class UserRepositoryTest {
         //given
         PageRequest page = PageRequest.of(0, 2, Sort.by("articles"));
         //when
-        Page<UserDto.ResponseRanking> rank = userQueryRepository.getRankData(page);
+        Page<User> rank = userQueryRepository.getRankData(page);
         //then
 
         assertThat(rank.toList().get(0).getNickname()).isEqualTo(NICKNAME1);
@@ -174,7 +174,7 @@ public class UserRepositoryTest {
         //given
         PageRequest page = PageRequest.of(0, 2, Sort.by("answers"));
         //when
-        Page<UserDto.ResponseRanking> rank = userQueryRepository.getRankData(page);
+        Page<User> rank = userQueryRepository.getRankData(page);
         //then
         assertThat(rank.toList().get(0).getNickname()).isEqualTo(NICKNAME2);
         assertThat(rank.toList().get(1).getNickname()).isEqualTo(NICKNAME1);

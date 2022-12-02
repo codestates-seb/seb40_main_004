@@ -45,8 +45,6 @@ public class AnswerService {
     int page=0;
     int size=5;
 
-
-
     public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> postAnswer(Long articleId, Long userId, Answer answerNotSaved, List<File> fileList) throws Exception {
         User verifiedUser = userService.findVerifiedUserById(userId);
         Article verifiedArticle = articleService.findVerifiedArticle(articleId);

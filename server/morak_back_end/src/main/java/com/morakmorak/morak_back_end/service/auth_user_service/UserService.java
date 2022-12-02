@@ -61,11 +61,11 @@ public class UserService {
     }
 
     public ResponseMultiplePaging<UserDto.ResponseRanking> getUserRankList(PageRequest request) {
-        Page<UserDto.ResponseRanking> userRankPage = userQueryRepository.getRankData(request);
-        List<UserDto.ResponseRanking> result = userRankPage.getContent();
-        reorderRank(request, result);
+        Page<User> page = userQueryRepository.getRankData(request);
+        List<UserDto.ResponseRanking> dto = userMapper.toResponseRankDto(page.getContent());
+        reorderRank(request, dto);
 
-        return new ResponseMultiplePaging<>(result, userRankPage);
+        return new ResponseMultiplePaging<>(dto, page);
     }
 
     public ActivityDto.Detail findActivityHistoryOn(LocalDate date, Long userId) {
