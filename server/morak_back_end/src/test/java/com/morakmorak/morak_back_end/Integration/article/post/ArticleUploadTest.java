@@ -47,7 +47,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
 })
 @AutoConfigureMockMvc
-@Rollback(false)
 @EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
 public class ArticleUploadTest {
 
