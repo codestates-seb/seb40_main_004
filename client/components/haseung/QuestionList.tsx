@@ -46,7 +46,7 @@ export const QuestionList = () => {
           </Link>
         </section>
         {response.data.map((article: QuestionListProps) => (
-          <section className="h-16 border-b spac-y-3" key={article.articleId}>
+          <section className="h-16 border-b space-y-3" key={article.articleId}>
             <article className="space-x-2">
               {article.isClosed ? (
                 <FontAwesomeIcon
@@ -74,9 +74,7 @@ export const QuestionList = () => {
                 </div>
                 <div className="text-xs space-x-2">
                   {article.tags.map((tag) => (
-                    <span key={tag.name} className="">
-                      #{tag.name}
-                    </span>
+                    <span key={tag.name}>#{tag.name}</span>
                   ))}
                 </div>
               </article>
