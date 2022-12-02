@@ -105,7 +105,9 @@ export const AsideTop = () => {
                 </span>
               </div>
               <div className="flex gap-4 text-xl">
-                <span className="text-2xl">{userDashboard.grade}</span>
+                <span className="text-2xl">
+                  {changeGradeImoji(userDashboard.grade)}
+                </span>
                 <span>{`# ${userDashboard.rank}`}</span>
               </div>
             </div>
@@ -148,13 +150,13 @@ export const AsideTop = () => {
           <div className="mt-2">
             <div className="flex justify-between items-baseline w-[238px]">
               <div className="w-[168px]">
-                {userDashboard.nickname.length > 10 ? (
+                {userDashboard.nickname.length > 6 ? (
                   <>
                     <div className="w-[168px] text-3xl font-bold">
-                      {userDashboard.nickname.slice(0, 10)}
+                      {userDashboard.nickname.slice(0, 6)}
                     </div>
                     <div className="w-[168px] text-3xl font-bold">
-                      {userDashboard.nickname.slice(10)}
+                      {userDashboard.nickname.slice(6)}
                     </div>
                   </>
                 ) : (
