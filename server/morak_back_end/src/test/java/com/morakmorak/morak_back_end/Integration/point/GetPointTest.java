@@ -1,7 +1,9 @@
 package com.morakmorak.morak_back_end.Integration.point;
 
 import com.morakmorak.morak_back_end.controller.UserController;
+import com.morakmorak.morak_back_end.entity.Avatar;
 import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +26,7 @@ import javax.persistence.EntityManager;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ROLE_USER_LIST;
 import static com.morakmorak.morak_back_end.util.TestConstants.EMAIL1;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,7 +67,7 @@ public class GetPointTest {
     @DisplayName("유효한 조회 요청의 경우 200 반환")
     void getPoints_success() throws Exception {
         //given 기존에 유저가 존재, 포인트도 존재
-        User user = User.builder().nickname("백엔드엔드").point(100).email(EMAIL1).build();
+        User user = User.builder().avatar(Avatar.builder().originalFilename("sdaflkjasdflkajsfl").remotePath("asfdladfjlafljf").build()).nickname("백엔드엔드").grade(Grade.CANDLE).point(100).email(EMAIL1).build();
         em.persist(user);
         String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST, "백엔드엔드");
         //when 유효한 아이디로 조회 요청 시
@@ -75,9 +79,13 @@ public class GetPointTest {
 
         //then 정확한 dto 반환
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").exists())
-                .andExpect(jsonPath("$.nickname").value("백엔드엔드"))
-                .andExpect(jsonPath("$.point").value(100));
+                .andExpect(jsonPath("$.point").exists())
+                .andExpect(jsonPath("$.userInfo.userId").exists())
+                .andExpect(jsonPath("$.userInfo.nickname").exists())
+                .andExpect(jsonPath("$.userInfo.grade").exists())
+                .andExpect(jsonPath("$.avatar.avatarId").exists())
+                .andExpect(jsonPath("$.avatar.filename").exists())
+                .andExpect(jsonPath("$.avatar.remotePath").exists());
     }
 
     @Test

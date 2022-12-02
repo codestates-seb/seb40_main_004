@@ -103,7 +103,7 @@ public class DeleteAnswerTest {
                 .andExpect(jsonPath("$.pageInfo.size").value(5))
                 .andExpect(jsonPath("$.pageInfo.totalElements").value(1))
                 .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
-                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true));
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(false));
     }
 
     @Test
