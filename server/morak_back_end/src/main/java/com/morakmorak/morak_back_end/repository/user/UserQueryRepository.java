@@ -132,7 +132,6 @@ public class UserQueryRepository {
                 .fetch();
     }
 
-    @BatchSize(size = 50)
     public Page<UserDto.ResponseRanking> getRankData(Pageable pageable) {
         List<String> sortTypes = getSortTypes(pageable);
 
@@ -161,14 +160,14 @@ public class UserQueryRepository {
             case "point" :
                 return user.point.desc();
             case "articles" :
-                return user.articles.size().desc();
+                return article.count().desc();
             case "answers" :
-                return user.answers.size().desc();
+                return answer.count().desc();
             case "likes" :
-                return user.answers.any().answerLike.size().add(user.articles.any().articleLikes.size()).desc();
+                return articleLike.count().add(answerLike.count()).desc();
             default:
                 return user.point.desc();
-            }
+        }
     }
 
     private List<String> getSortTypes(Pageable pageable) {
