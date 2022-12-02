@@ -53,7 +53,7 @@ export const BtnDropdown = () => {
           <button onClick={() => setDropdown((prev) => !prev)}>
             <FontAwesomeIcon icon={faChevronUp} size="lg" />
           </button>
-          <ul className="border border-solid border-black border-opacity-10 border-spacing-1 right-0 w-[200px] rounded-xl absolute top-8 bg-background-gray z-20">
+          <ul className="border border-solid border-black border-opacity-10 border-spacing-1 right-0 min-w-[200px] rounded-xl absolute top-8 bg-background-gray z-20">
             <li className="pt-4 pb-1 mx-4 flex justify-between items-center border-b border-solid">
               <span className="text-xs">나의 모락</span>
               <span className="text-lg font-semibold">{`✨ ${points} 모락`}</span>
