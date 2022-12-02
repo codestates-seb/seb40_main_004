@@ -54,12 +54,14 @@ export const Pagination = ({
   };
   return (
     <nav>
-      <span>{pageIndex}</span>
-      <ul className="flex -space-x-px ">
+      <ul className="flex -space-x-px text-xs">
         <li>
           <a
             className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-l-lg cursor-pointer"
-            onClick={() => setCurrPagesIndex(0)}
+            onClick={() => {
+              setCurrPagesIndex(0);
+              setPageIndex(1);
+            }}
           >
             처음으로
           </a>
@@ -75,7 +77,11 @@ export const Pagination = ({
         {currPagesGroup.map((value) => (
           <li key={value}>
             <a
-              className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
+              className={`px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300  cursor-pointer  hover:text-gray-700 ${
+                value === Number(pageIndex)
+                  ? 'bg-main-yellow hover:bg-main-yellow'
+                  : 'hover:bg-gray-100'
+              }`}
               onClick={handlePageChange}
             >
               {value}
@@ -93,7 +99,10 @@ export const Pagination = ({
         <li>
           <a
             className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-r-lg cursor-pointer"
-            onClick={() => setCurrPagesIndex(totalPagesGroup.length - 1)}
+            onClick={() => {
+              setCurrPagesIndex(totalPagesGroup.length - 1);
+              setPageIndex(totalPage);
+            }}
           >
             맨끝으로
           </a>
