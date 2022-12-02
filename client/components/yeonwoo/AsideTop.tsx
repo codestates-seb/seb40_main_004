@@ -55,6 +55,18 @@ export const AsideTop = () => {
       },
     );
   };
+  const changeGradeImoji = (grade: string) => {
+    switch (grade) {
+      case 'CANDLE':
+        return '🕯';
+      case 'MATCH':
+        return '🔥';
+      case 'BONFIRE':
+        return '🎇';
+      case 'MORAKMORAK':
+        return '♨️';
+    }
+  };
   return (
     <>
       {isEdit ? (
@@ -136,9 +148,20 @@ export const AsideTop = () => {
           <div className="mt-2">
             <div className="flex justify-between items-baseline w-[238px]">
               <div className="w-[168px]">
-                <span className="text-3xl font-bold">
-                  {userDashboard.nickname}
-                </span>
+                {userDashboard.nickname.length > 10 ? (
+                  <>
+                    <div className="w-[168px] text-3xl font-bold">
+                      {userDashboard.nickname.slice(0, 10)}
+                    </div>
+                    <div className="w-[168px] text-3xl font-bold">
+                      {userDashboard.nickname.slice(10)}
+                    </div>
+                  </>
+                ) : (
+                  <span className="w-[168px] text-3xl font-bold">
+                    {userDashboard.nickname}
+                  </span>
+                )}
               </div>
               <div className="w-[80px] flex justify-end">
                 <span className="text-sm">
@@ -162,14 +185,16 @@ export const AsideTop = () => {
                 {userDashboard.infoMessage ?? ''}
               </span>
             </div>
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-baseline">
               <div>
                 <span className="text-xl text-main-orange font-semibold">
                   {`${userDashboard.point} 모락`}
                 </span>
               </div>
               <div className="flex gap-4 text-xl">
-                <span className="text-2xl">{userDashboard.grade}</span>
+                <span className="text-2xl">
+                  {changeGradeImoji(userDashboard.grade)}
+                </span>
                 <span>{`# ${userDashboard.rank}`}</span>
               </div>
             </div>
