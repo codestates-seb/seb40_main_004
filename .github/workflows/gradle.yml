@@ -50,9 +50,9 @@ jobs:
           spring.security.oauth2.client.registration.google.client-id: ${{ secrets.OAUTH_GOOGLE_ID }}
           spring.security.oauth2.client.registration.google.client-secret: ${{ secrets.OAUTH_GOOGLE_PASSWORD }}
           
-          spring.security.oauth2.client.provider.kako.authorization-uri: ${{ secrets.PROVIDER_AUTH_URI }}
-          spring.security.oauth2.client.provider.kako.token-uri: ${{ secrets.PROVIDER_TOKEN_URI }}
-          spring.security.oauth2.client.provider.kako.user-info-uri: ${{ secrets.PROVIDER_INFO_URI }}
+          spring.security.oauth2.client.provider.kakao.authorization-uri: ${{ secrets.PROVIDER_AUTH_URI }}
+          spring.security.oauth2.client.provider.kakao.token-uri: ${{ secrets.PROVIDER_TOKEN_URI }}
+          spring.security.oauth2.client.provider.kakao.user-info-uri: ${{ secrets.PROVIDER_INFO_URI }}
           
           spring.mail.host: ${{ secrets.MAIL_HOST }}
           spring.mail.username: ${{ secrets.MAIL_USERNAME }}
