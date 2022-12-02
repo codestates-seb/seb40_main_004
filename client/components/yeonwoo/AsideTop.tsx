@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { isLoginAtom, userDashboardAtom } from '../../atomsYW';
+import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 import { client } from '../../libs/client';
 
 export const AsideTop = () => {
@@ -46,18 +47,6 @@ export const AsideTop = () => {
       blog: editBlog,
       jobType: 'DEVELOPER',
     });
-  };
-  const changeGradeImoji = (grade: string) => {
-    switch (grade) {
-      case 'CANDLE':
-        return '🕯';
-      case 'MATCH':
-        return '🔥';
-      case 'BONFIRE':
-        return '🎇';
-      case 'MORAKMORAK':
-        return '♨️';
-    }
   };
   return (
     <>
@@ -98,7 +87,7 @@ export const AsideTop = () => {
               </div>
               <div className="flex gap-4 text-xl">
                 <span className="text-2xl">
-                  {changeGradeImoji(userDashboard.grade)}
+                  {changeGradeEmoji(userDashboard.grade)}
                 </span>
                 <span>{`# ${userDashboard.rank}`}</span>
               </div>
@@ -187,7 +176,7 @@ export const AsideTop = () => {
               </div>
               <div className="flex gap-4 text-xl">
                 <span className="text-2xl">
-                  {changeGradeImoji(userDashboard.grade)}
+                  {changeGradeEmoji(userDashboard.grade)}
                 </span>
                 <span>{`# ${userDashboard.rank}`}</span>
               </div>
