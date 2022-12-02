@@ -37,7 +37,7 @@ jobs:
         with:
           files: ./server/morak_back_end/src/main/resources/application.yml
         env:
-          spring.datasource.url: ${{ secrets.RDS_URL }}
+          spring.datasource.url: > ${{ secrets.RDS_URL }}
           
         # [3] save build
       - name: Make zip file
