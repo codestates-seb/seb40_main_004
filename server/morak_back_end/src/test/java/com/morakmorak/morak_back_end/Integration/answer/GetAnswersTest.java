@@ -129,7 +129,7 @@ public class GetAnswersTest {
                 .andExpect(jsonPath("$.pageInfo.size").value(5))
                 .andExpect(jsonPath("$.pageInfo.totalElements").value(1))
                 .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
-                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true));
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(false));
     }
     @Test
     @DisplayName("로그인 유저의 답변목록 조회 성공 시 200이 반환된다.")
@@ -220,6 +220,6 @@ public class GetAnswersTest {
                 .andExpect(jsonPath("$.pageInfo.size").value(5))
                 .andExpect(jsonPath("$.pageInfo.totalElements").value(2))
                 .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
-                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true));
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(false));
     }
 }
