@@ -31,18 +31,17 @@ jobs:
         with:
           java-version: 11
 
-      - uses: actions/checkout@v2
-      - run: touch ./server/morak_back_end/src/main/resources/application.yml
-      - run: echo "${{ secrets.APPLICATION_MAIN }}" > server/morak_back_end/src/main/resources/application.yml
-
-      - uses: actions/upload-artifact@v2
+ # [1] application.yml 생성
+      - name: Set yaml file 
+        uses: microsoft/variable-substitution@v1
         with:
-          name: application.yml
-          path: ./server/morak_back_end/src/main/resources/application.yml
-
+          files: ./server/morak_back_end/src/main/resources/application.yml
+        env:
+          spring.datasource.url: ${{ secrets.RDS_URL }}
+          
         # [3] save build
       - name: Make zip file
-        run: zip -r ./morak.zip .
+        run: zip -r ./test.zip .
         shell: bash
 
         # [4] aws 권한
@@ -55,14 +54,6 @@ jobs:
 
         # [5] upload
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./morak.zip s3://$S3_BUCKET_NAME/morak.zip
+        run: aws s3 cp --region ap-northeast-2 ./test.zip s3://$S3_BUCKET_NAME/test.zip
 
-        # [6] deploy
-      - name: Code Deploy
-        run: |
-          aws deploy create-deployment \
-          --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
-          --file-exists-behavior OVERWRITE \
-          --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=morak.zip
+      
