@@ -10,14 +10,11 @@ import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
-import com.morakmorak.morak_back_end.repository.ReportRepository;
+import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.repository.article.ArticleLikeRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
-import com.morakmorak.morak_back_end.repository.CategoryRepository;
-import com.morakmorak.morak_back_end.repository.FileRepository;
-import com.morakmorak.morak_back_end.repository.TagRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleTagRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
-import com.morakmorak.morak_back_end.util.ArticleTestConstants;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,53 +25,40 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.morakmorak.morak_back_end.util.ArticleTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class ArticleServiceTest {
     @InjectMocks
     ArticleService articleService;
-
     @Mock
     ArticleMapper articleMapper;
-
     @Mock
     UserService userService;
-
-    @Mock
-    TagRepository tagRepository;
-    @Mock
-    FileRepository fileRepository;
-
-    @Mock
-    CategoryRepository categoryRepository;
-
     @Mock
     ArticleRepository articleRepository;
-
     @Mock
     ArticleLikeRepository articleLikeRepository;
-
     @Mock
     ReportRepository reportRepository;
 
     @Mock
     PointCalculator pointCalculator;
-
     @Mock
     CategoryService categoryService;
-
     @Mock
     TagService tagService;
-
     @Mock
     FileService fileService;
+    @Mock
+    ArticleTagRepository articleTagRepository;
 
     @Test
     @DisplayName("게시글 등록 서비스로직 성공 테스트")
@@ -193,9 +177,6 @@ public class ArticleServiceTest {
         //then
         assertThatThrownBy(() -> articleService.upload(article, UserDto.UserInfo.builder().id(1L).build())).isInstanceOf(BusinessLogicException.class);
     }
-
-
-
       @Test
       @DisplayName("게시글을 삭제할때 Article의 상태가 REMOVED로 변하는게 성공할때 ")
       public void deleteArticle_suc() throws Exception{
@@ -208,43 +189,62 @@ public class ArticleServiceTest {
           //then
           assertThat(result).isTrue();
        }
+    @Test
+    @DisplayName("게시글 수정 성공 테스트")
+    public void updateArticle_suc(){
+    //given
+        List<ArticleTag> articleTags = new ArrayList<>();
 
-       @Test
-       @DisplayName("파일과 게시글의 연관관계를 맺는 메서드 통과 테스트")
-       public void fusionFileDtoWithArticle_suc() throws Exception{
-           //given
-           List<FileDto.RequestFileWithId> fileDto = List.of(FileDto.RequestFileWithId.builder().fileId(1L).build());
-           Article article = Article.builder().build();
+        List<File> files = new ArrayList<>();
 
-           given(fileRepository.findById(anyLong())).willReturn(Optional.of(File.builder().build()));
-           //when
-           articleService.findDbFilesAndInjectWithArticle(article, fileDto);
-           //then
-           assertThat(article.getFiles().size()).isEqualTo(1);
-        }
+        Article article = Article.builder().category(Category.builder().name(CategoryName.QNA).build())
+                .id(1L)
+                .thumbnail(1L)
+                .content("내용입니다. ")
+                .articleTags(articleTags)
+                .files(files)
+                .title("제목입니다. ")
+                .user(User.builder().id(1L).build())
+                .build();
+        Tag tag = Tag.builder().name(TagName.JAVA).build();
+        ArticleTag articleTag = ArticleTag.builder().tag(tag).article(article).build();
+        articleTags.add(articleTag);
+        tag.getArticleTags().add(articleTag);
+        File file = File.builder().id(1L).article(article).build();
+        files.add(file);
 
-//        @Test
-//        @DisplayName("게시글 수정시 태그의 갯수가 줄어드는지 ")
-//        public void updateArticle_suc(){
-//        //given
-//            List<ArticleTag> articleTags = new ArrayList<>();
-//            ArticleTag articleTag = ArticleTag.builder().tag(Tag.builder().name(TagName.JAVA).build()).build();
-//            articleTags.add(articleTag);
-//            Article article = Article.builder().id(1L).title("타이틀입니다.타이틀입니다.").content("내용입니다. 내용입니다. ").category(Category.builder().name(CategoryName.QNA).build())
-//                    .articleTags(articleTags).user(User.builder().id(1L).build()).build();
-//            UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
-//            List<TagDto.SimpleTag> tags = new ArrayList<>();
-//            TagDto.SimpleTag tag = TagDto.SimpleTag.builder().tagId(1L).name(TagName.C).build();
-//            tags.add(tag);
-//            ArticleDto.RequestUpdateArticle.builder().title("수정된 타이틀입니다.").content("수정된 내용입니다.").tags(tags).build();
-//            List<FileDto.RequestFileWithId> files = new ArrayList<>();
-//        //when
-//            ArticleDto.ResponseSimpleArticle update = articleService.update(article, userInfo, tags, files);
-//            //then
-//            List<String> result = article.getArticleTags().stream()
-//                    .map(articleTa -> articleTa.getTag().getName().toString()).collect(Collectors.toList());
-//            System.out.println(result.size());
-//        }
+
+        List<ArticleTag> changeArticleTags = new ArrayList<>();
+        changeArticleTags.add(ArticleTag.builder().tag(Tag.builder().name(TagName.NODE).build()).build());
+        List<File> changeFiles = new ArrayList<>();
+        changeFiles.add(File.builder().id(2L).build());
+        Article changeArticle = Article.builder().category(Category.builder().name(CategoryName.QNA).build())
+                .id(1L)
+                .thumbnail(1L)
+                .content("수정한 내용입니다. ")
+                .articleTags(changeArticleTags)
+                .files(changeFiles)
+                .title("수정한 제목입니다. ")
+                .build();
+        ArticleDto.ResponseSimpleArticle responseSimpleArticle =
+                ArticleDto.ResponseSimpleArticle.builder().articleId(1L).build();
+
+        given(articleRepository.findArticleRelationWithUser(any())).willReturn(Optional.of(article));
+        given(tagService.findVerifiedTagByTagName(any())).willReturn(Tag.builder().name(TagName.NODE).build());
+        given(fileService.findVerifiedFileById(any())).willReturn(File.builder().id(2L).build());
+        given(articleMapper.articleToResponseSimpleArticle(any())).willReturn(responseSimpleArticle);
+
+    //when
+        ArticleDto.ResponseSimpleArticle update =
+                articleService.update(changeArticle, UserDto.UserInfo.builder().id(1L).build());
+        //then
+        verify(articleTagRepository, times(1)).delete(any());
+        assertThat(update.getArticleId()).isEqualTo(1L);
+        assertThat(article.getTitle()).isEqualTo(changeArticle.getTitle());
+        assertThat(article.getContent()).isEqualTo(changeArticle.getContent());
+        assertThat(article.getFiles().size()).isEqualTo(2);
+    }
+
 
         @Test
         @DisplayName("게시글의 좋아요를 누를때 회원이 좋아요를 처음누르는거면 201코드와 json을 리턴한다.")
