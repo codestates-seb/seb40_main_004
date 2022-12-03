@@ -1,13 +1,15 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-20
- * 최근 수정일: 2022-12-02
+ * 최근 수정일: 2022-12-03
  */
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useSetRecoilState } from 'recoil';
+import { renderingAtom } from '../../atomsYW';
 import { userDashboard } from '../../interfaces';
 import { client } from '../../libs/client';
 
@@ -27,6 +29,7 @@ export const EditProfileComponent = () => {
   const [github, setGithub] = useState('');
   const [blog, setBlog] = useState('');
   const [jobType, setJobType] = useState('');
+  const setRenderingHeader = useSetRecoilState(renderingAtom);
   const router = useRouter();
   const {
     register,
@@ -105,6 +108,7 @@ export const EditProfileComponent = () => {
         jobType,
       });
       localStorage.setItem('nickname', nickname);
+      setRenderingHeader((prev) => !prev);
       router.push('/');
     } catch (error) {
       alert(`에러 발생 : ${error}`);

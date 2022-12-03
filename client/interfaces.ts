@@ -119,3 +119,17 @@ export interface rankList {
     remotePath: string;
   } | null;
 }
+
+export interface IDataHeader {
+  point: number;
+  userInfo: {
+    userId: number;
+    nickname: string;
+    grade: string;
+  };
+  avatar: {
+    avatarId: number | null;
+    filename: string | null;
+    remotePath: string | null;
+  } | null;
+}

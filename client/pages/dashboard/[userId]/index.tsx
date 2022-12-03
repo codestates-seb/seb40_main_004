@@ -1,15 +1,15 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-24
+ * 최근 수정일: 2022-12-03
  */
-import axios from 'axios';
+
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { userDashboardAtom } from '../../../atomsYW';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { renderingAtom, userDashboardAtom } from '../../../atomsYW';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 import { AsideBot } from '../../../components/yeonwoo/AsideBot';
@@ -18,20 +18,21 @@ import { AsideTop } from '../../../components/yeonwoo/AsideTop';
 import { CarouselArticle } from '../../../components/yeonwoo/CarouselArticle';
 import { CarouselReview } from '../../../components/yeonwoo/CarouselReview';
 import { Grass } from '../../../components/yeonwoo/Grass';
+import { client } from '../../../libs/client';
 
 const Dashboard: NextPage = () => {
+  const rendering = useRecoilValue(renderingAtom);
+  const setUserDashboard = useSetRecoilState(userDashboardAtom);
   const [userId, setUserId] = useState<string | string[] | undefined>('');
-  const [userDashboard, setUserDashboard] = useRecoilState(userDashboardAtom);
   const router = useRouter();
-  const getUser = async () =>
-    await axios
-      .get(`/api/users/${userId}/dashboard`, {
-        headers: {
-          'ngrok-skip-browser-warning': '111',
-        },
-      })
-      .then((res) => setUserDashboard(res.data))
-      .catch((error) => console.log(error));
+  const getUser = async () => {
+    try {
+      const res = await client.get(`/api/users/${userId}/dashboard`);
+      setUserDashboard(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     setUserId(router.query.userId);
@@ -39,7 +40,7 @@ const Dashboard: NextPage = () => {
 
   useEffect(() => {
     getUser();
-  }, [userId]);
+  }, [userId, rendering]);
 
   return (
     <>
@@ -74,16 +75,10 @@ const Dashboard: NextPage = () => {
                 </span>
               </Link>
             </div>
-            {/* <div>
-              <span className="text-xs ml-4 hover:cursor-pointer">
-                더 보기 ＞
-              </span>
-  </div> */}
           </div>
           <CarouselArticle />
           <div className="mt-20 mb-8">
             <span className="text-2xl font-semibold">☀️ 응원 메세지</span>
-            {/* <span className="text-xs ml-4">더 보기 ＞</span> */}
           </div>
           <CarouselReview />
         </div>
