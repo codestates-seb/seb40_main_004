@@ -127,7 +127,7 @@ class ArticleMapperTest {
     public void requestUpdateArticleToEntityTest() throws Exception {
         //given
         List<FileDto.RequestFileWithId> files = new ArrayList<>();
-         FileDto.RequestFileWithId fileDto = FileDto.RequestFileWithId.builder().fileId(1L).build();
+        FileDto.RequestFileWithId fileDto = FileDto.RequestFileWithId.builder().fileId(1L).build();
         files.add(fileDto);
 
         TagDto.SimpleTag tagDto = TagDto.SimpleTag.builder().tagId(1L).name(TagName.JAVA).build();
@@ -146,9 +146,11 @@ class ArticleMapperTest {
         Article article = articleMapper.requestUpdateArticleToEntity(requestUpdateArticle, 1L);
         //then
         assertThat(article.getId()).isEqualTo(1L);
+        assertThat(article.getTitle()).isEqualTo(requestUpdateArticle.getTitle());
         assertThat(article.getContent()).isEqualTo(requestUpdateArticle.getContent());
         assertThat(article.getThumbnail()).isEqualTo(requestUpdateArticle.getThumbnail());
-
+        assertThat(article.getArticleTags().get(0).getTag().getName()).isEqualTo(requestUpdateArticle.getTags().get(0).getName());
+        assertThat(article.getFiles().get(0).getId()).isEqualTo(requestUpdateArticle.getFileId().get(0).getFileId());
     }
 
 
