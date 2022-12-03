@@ -20,8 +20,12 @@ public class FileService {
     public List<File> createFileListFrom(List<FileDto.RequestFileWithId> fileIdList) {
         if (ObjectUtils.isEmpty(fileIdList)) {return Collections.emptyList();}
         return fileIdList.stream().map(request ->
-                        fileRepository.findById(request.getFileId()).orElseThrow(()
-                                -> new BusinessLogicException(ErrorCode.FILE_NOT_FOUND)))
+                        findVerifiedFileById(request.getFileId()))
                 .collect(Collectors.toList());
+    }
+
+    public File findVerifiedFileById(Long fileId) {
+        return fileRepository.findById(fileId)
+                .orElseThrow(() -> new BusinessLogicException(ErrorCode.FILE_NOT_FOUND));
     }
 }
