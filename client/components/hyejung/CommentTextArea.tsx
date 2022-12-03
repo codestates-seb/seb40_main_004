@@ -8,10 +8,8 @@ import { Button } from '../common/Button';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { client } from '../../libs/client';
 import { mutate } from 'swr';
-import { useFetch } from '../../libs/useFetchSWR';
-import { useRecoilValue } from 'recoil';
-import { isLoginAtom } from '../../atomsYW';
-import { useRef, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isLoginAtom, renderingAtom } from '../../atomsYW';
 
 type TextAreaProps = {
   answerId?: number;
@@ -26,6 +24,7 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
   const router = useRouter();
   const { articleId } = router.query;
   const isLogin = useRecoilValue(isLoginAtom);
+  const setRenderingHeader = useSetRecoilState(renderingAtom);
 
   const { register, handleSubmit, watch, setValue } = useForm<FormValue>();
 
@@ -42,10 +41,10 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
 
   // 데이터 요청 관련 함수
   const postComment = async (data: FormValue) => {
-    const response = await client.post(url, data);
+    await client.post(url, data);
     mutate(url)
-      .then((res) => {
-        // console.log(res);
+      .then(() => {
+        setRenderingHeader((prev) => !prev);
       })
       .catch((err) => {
         alert('코멘트 등록에 실패했습니다...!');
