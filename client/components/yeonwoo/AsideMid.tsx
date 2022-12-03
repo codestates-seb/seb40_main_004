@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-12-02
+ * 최근 수정일: 2022-12-03
  */
 
 import { useRecoilValue } from 'recoil';
@@ -12,7 +12,7 @@ export const AsideMid = () => {
   return (
     <div className="mt-[74px]">
       <div className="mb-6">
-        <span className="text-2xl font-semibold">후기 태그</span>
+        <span className="text-2xl font-semibold">기술 태그</span>
       </div>
       <div>
         {userDashboard.tags.map((tag) => (

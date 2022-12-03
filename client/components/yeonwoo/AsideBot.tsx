@@ -12,7 +12,7 @@ export const AsideBot = () => {
   return (
     <div className="mt-[74px]">
       <div className="mb-6">
-        <span className="text-2xl font-semibold">기술 태그</span>
+        <span className="text-2xl font-semibold">후기 태그</span>
       </div>
       <div>
         {userDashboard.reviewBadges.map((badge) => (
