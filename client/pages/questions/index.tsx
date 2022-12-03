@@ -25,9 +25,11 @@ const Questions: NextPage = () => {
   const [pageIndex, setPageIndex] = useState(1);
   const [keyword, setKeyword] = useState('');
   const [sort, setSort] = useState(['최신순', 'desc']);
+  const [isOpen, setIsOpen] = useState(false);
+  const [target, setTarget] = useState('titleAndContent');
 
   const { data: response, isLoading } = useFetch(
-    `/api/articles?page=${pageIndex}&size=10&category=QNA&target=titleAndContent&keyword=${keyword}&sort=${sort[1]}`,
+    `/api/articles?page=${pageIndex}&size=10&category=QNA&target=${target}&keyword=${keyword}&sort=${sort[1]}`,
   );
 
   const { register, handleSubmit } = useForm<FormValue>();
@@ -35,7 +37,6 @@ const Questions: NextPage = () => {
     setKeyword(data.keyword);
   };
 
-  const [isOpen, setIsOpen] = useState(false);
   const dropdownSortArr = [
     '최신순',
     '오래된순',
@@ -94,7 +95,11 @@ const Questions: NextPage = () => {
               검색
             </button>
           </section>
-          <SearchWithTagButton />
+          <SearchWithTagButton
+            setKeyword={setKeyword}
+            setTarget={setTarget}
+            keyword={keyword}
+          />
         </form>
         <section className="flex flex-col w-full space-y-6">
           <article className="flex justify-between">
