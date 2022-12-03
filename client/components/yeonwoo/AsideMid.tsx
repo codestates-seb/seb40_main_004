@@ -6,6 +6,7 @@
 
 import { useRecoilValue } from 'recoil';
 import { userDashboardAtom } from '../../atomsYW';
+import { changeTagPrettier } from '../../libs/changeTagPrettier';
 
 export const AsideMid = () => {
   const userDashboard = useRecoilValue(userDashboardAtom);
@@ -18,7 +19,7 @@ export const AsideMid = () => {
         {userDashboard.tags.map((tag) => (
           <div className="mb-4" key={tag.tag_Id}>
             <button className="bg-main-yellow rounded-full py-[6px] w-32">
-              {tag.name}
+              {changeTagPrettier(tag.name)}
             </button>
           </div>
         ))}

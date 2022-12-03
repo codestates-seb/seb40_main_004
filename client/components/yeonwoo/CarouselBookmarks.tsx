@@ -18,6 +18,7 @@ import {
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { client } from '../../libs/client';
+import { changeTagPrettier } from '../../libs/changeTagPrettier';
 
 const variants = {
   enter: (direction: number) => {
@@ -188,7 +189,7 @@ export const CarouselBookmarks = () => {
                         className="bg-main-yellow rounded-full py-[6px] w-32"
                         key={tag.tagId}
                       >
-                        {tag.name}
+                        {changeTagPrettier(tag.name)}
                       </button>
                     ))}
                   </div>

@@ -18,6 +18,7 @@ import {
 import { useRecoilValue } from 'recoil';
 import { userDashboardAtom } from '../../atomsYW';
 import Link from 'next/link';
+import { changeTagPrettier } from '../../libs/changeTagPrettier';
 
 const variants = {
   enter: (direction: number) => {
@@ -142,7 +143,7 @@ export const CarouselArticle = () => {
                         className="bg-main-yellow rounded-full py-[6px] w-32"
                         key={tag.tagId}
                       >
-                        {tag.name}
+                        {changeTagPrettier(tag.name)}
                       </button>
                     ))}
                   </div>
