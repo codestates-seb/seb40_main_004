@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { rankList } from '../../interfaces';
+import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 import { client } from '../../libs/client';
 
 export const HallOfFame = () => {
@@ -38,25 +39,27 @@ export const HallOfFame = () => {
                 <span className="text-lg font-bold">{rank.rank}</span>
               </div>
               <div className="w-[326px] flex gap-2">
-                <div className="w-[45px] h-[45px] rounded-full overflow-hidden">
-                  {errorAvatarId.includes(rank.avatar?.avatarId) ? (
-                    <Image src="/favicon.ico" width="45px" height="45px" />
-                  ) : (
-                    <Image
-                      src={
-                        rank.avatar ? rank.avatar.remotePath : '/favicon.ico'
-                      }
-                      width="45px"
-                      height="45px"
-                      onError={() =>
-                        setIsErrorAvatarId((prev) => [
-                          ...prev,
-                          rank.avatar?.avatarId,
-                        ])
-                      }
-                    />
-                  )}
-                </div>
+                <Link href={`/dashboard/${rank.userId}`}>
+                  <div className="w-[45px] h-[45px] rounded-full overflow-hidden hover:cursor-pointer">
+                    {errorAvatarId.includes(rank.avatar?.avatarId) ? (
+                      <Image src="/favicon.ico" width="45px" height="45px" />
+                    ) : (
+                      <Image
+                        src={
+                          rank.avatar ? rank.avatar.remotePath : '/favicon.ico'
+                        }
+                        width="45px"
+                        height="45px"
+                        onError={() =>
+                          setIsErrorAvatarId((prev) => [
+                            ...prev,
+                            rank.avatar?.avatarId,
+                          ])
+                        }
+                      />
+                    )}
+                  </div>
+                </Link>
                 <div>
                   <div>
                     <Link href={`/dashboard/${rank.userId}`}>
@@ -74,7 +77,9 @@ export const HallOfFame = () => {
                       </span>
                     </div>
                     <div>
-                      <span className="text-xs mr-2">{rank.grade}</span>
+                      <span className="text-xs mr-2">
+                        {changeGradeEmoji(rank.grade ?? '')}
+                      </span>
                     </div>
                   </div>
                 </div>

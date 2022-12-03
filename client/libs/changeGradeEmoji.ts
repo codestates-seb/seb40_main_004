@@ -8,5 +8,7 @@ export const changeGradeEmoji = (grade: string) => {
       return '🎇';
     case 'MORAKMORAK':
       return '♨️';
+    default:
+      return '❓';
   }
 };
