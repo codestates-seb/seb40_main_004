@@ -126,6 +126,7 @@ export const EditProfileComponent = () => {
             <input
               id="nickname"
               type="text"
+              placeholder="닉네임을 입력해주세요"
               className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
@@ -134,6 +135,7 @@ export const EditProfileComponent = () => {
             <input
               id="message"
               type="text"
+              placeholder="메세지를 입력해주세요"
               className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
               value={infoMessage}
               onChange={(e) => setInfoMessage(e.target.value)}
@@ -142,6 +144,7 @@ export const EditProfileComponent = () => {
             <input
               id="github"
               type="text"
+              placeholder="깃허브 주소를 입력해주세요"
               className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
               value={github}
               onChange={(e) => setGithub(e.target.value)}
@@ -150,11 +153,12 @@ export const EditProfileComponent = () => {
             <input
               id="blog"
               type="text"
+              placeholder="블로그 주소를 입력해주세요"
               className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
               value={blog}
               onChange={(e) => setBlog(e.target.value)}
             />
-            <label htmlFor="userState">취준/현업/무관</label>
+            <label htmlFor="userState">직업 현황</label>
             <select
               id="userState"
               className="w-full rounded-full h-11 px-4 mt-2 mb-32 border border-main-gray"
