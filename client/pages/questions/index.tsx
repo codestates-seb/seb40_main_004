@@ -67,10 +67,14 @@ const Questions: NextPage = () => {
         setSort([text, 'answer-desc']);
         break;
       case '채택완료':
-        setSort([text, 'isChecked-true-desc']);
+        setSort([text, 'desc']);
+        setKeyword('true');
+        setTarget('isChecked');
         break;
       case '미채택':
-        setSort([text, 'isChecked-false-desc']);
+        setSort([text, 'desc']);
+        setKeyword('false');
+        setTarget('isChecked');
         break;
     }
     setIsOpen(false);
