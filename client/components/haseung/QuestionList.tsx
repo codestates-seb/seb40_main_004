@@ -22,7 +22,7 @@ export const QuestionList = ({
   pageIndex,
   setPageIndex,
 }: any) => {
-  if (!isLoading && response.data.length)
+  if (!isLoading && response && response.data.length)
     return (
       <main className="flex flex-col w-full divide-y min-h-[50vh]">
         {response.data.map((article: QuestionListProps) => (
@@ -87,7 +87,7 @@ export const QuestionList = ({
         </div>
       </main>
     );
-  else if (!isLoading && !response.data.length)
+  else if (!isLoading && !response?.data.length)
     return (
       <div className="flex justify-center items-center my-20 text-main-gray w-full h-[50vh] text-base">
         검색 결과를 찾을 수 없습니다.🥲
