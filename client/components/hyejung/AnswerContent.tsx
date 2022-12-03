@@ -141,7 +141,7 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
       </section>
 
       <section>
-        <section className="p-6 flex flex-col space-y-2">
+        <section className="p-8 flex flex-col space-y-2">
           <AnswerMainText>{answer.content}</AnswerMainText>
           {answer.userInfo.userId.toString() === currUserId ? (
             <article className="space-x-2 text-sm ml-auto">

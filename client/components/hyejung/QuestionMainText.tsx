@@ -12,8 +12,11 @@ type MainTextProps = {
 // 본문 텍스트
 export const QuestionMainText = ({ children }: MainTextProps) => {
   return (
-    <main>
-      <div className="prose" dangerouslySetInnerHTML={{ __html: children }} />
+    <main className="flex">
+      <div
+        className="prose max-w-full"
+        dangerouslySetInnerHTML={{ __html: Dompurify.sanitize(children) }}
+      />
     </main>
   );
 };
