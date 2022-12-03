@@ -13,6 +13,7 @@ import {
   faChevronLeft,
   faChevronRight,
   faComment,
+  faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -86,7 +87,7 @@ export const CarouselBookmarks = () => {
   const getReview = async () =>
     await client
       .get(
-        `/api/articles?category=INFO&keyword=${userId}&target=bookmark&sort=desc&page=1&size=50`,
+        `/api/articles?category=QNA&keyword=${userId}&target=bookmark&sort=desc&page=1&size=50`,
       )
       .then((res) => setArticles(res.data.data))
       .catch((error) => console.log(error));
@@ -156,6 +157,10 @@ export const CarouselBookmarks = () => {
                       </div>
                     </Link>
                     <div className="flex gap-4">
+                      <div className="flex gap-2">
+                        <FontAwesomeIcon icon={faHeart} size="xs" />
+                        <span className="text-xs">{article.likes}</span>
+                      </div>
                       <div className="flex gap-2">
                         <FontAwesomeIcon icon={faComment} size="xs" />
                         <span className="text-xs">{article.commentCount}</span>
