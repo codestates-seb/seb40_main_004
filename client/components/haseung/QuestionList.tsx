@@ -22,11 +22,11 @@ export const QuestionList = ({
   pageIndex,
   setPageIndex,
 }: any) => {
-  if (!isLoading && response)
+  if (!isLoading && response.data.length)
     return (
-      <main className="flex flex-col w-full divide-y">
+      <main className="flex flex-col w-full divide-y min-h-[50vh]">
         {response.data.map((article: QuestionListProps) => (
-          <section className="py-4 space-y-4" key={article.articleId}>
+          <section className="py-4 space-y-4 " key={article.articleId}>
             <article className="space-x-2">
               {article.isClosed ? (
                 <FontAwesomeIcon
@@ -56,7 +56,7 @@ export const QuestionList = ({
                 </div>
                 <div className="text-xs space-x-2">
                   {article.tags.map((tag, i) => (
-                    <span key={tag.name}>{i < 3 ? `#${tag.name}` : ''}</span>
+                    <span key={i}>{i < 3 ? `#${tag.name}` : ''}</span>
                   ))}
                 </div>
               </article>
@@ -87,15 +87,15 @@ export const QuestionList = ({
         </div>
       </main>
     );
-  else if (!isLoading && !response)
+  else if (!isLoading && !response.data.length)
     return (
-      <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
+      <div className="flex justify-center items-center my-20 text-main-gray w-full h-[50vh] text-base">
         검색 결과를 찾을 수 없습니다.🥲
       </div>
     );
   else
     return (
-      <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
+      <div className="flex justify-center items-center my-20 text-main-gray w-full h-[50vh] text-base">
         로딩중~🔥
       </div>
     );
