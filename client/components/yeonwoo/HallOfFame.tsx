@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { rankList } from '../../interfaces';
+import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 import { client } from '../../libs/client';
 
 export const HallOfFame = () => {
@@ -74,7 +75,9 @@ export const HallOfFame = () => {
                       </span>
                     </div>
                     <div>
-                      <span className="text-xs mr-2">{rank.grade}</span>
+                      <span className="text-xs mr-2">
+                        {changeGradeEmoji(rank.grade ?? '')}
+                      </span>
                     </div>
                   </div>
                 </div>
