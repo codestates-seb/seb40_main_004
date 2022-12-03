@@ -7,46 +7,26 @@
 
 import Link from 'next/link';
 import { QuestionListProps } from '../../libs/interfaces';
-import { useFetch } from '../../libs/useFetchSWR';
 import { elapsedTime } from '../../libs/elapsedTime';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+
 import { Pagination } from './Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
-export const QuestionList = () => {
-  const [pageIndex, setPageIndex] = useState(1);
-  const { data: response, isLoading } = useFetch(
-    `/api/articles?page=${pageIndex}&size=10&category=QNA`,
-  );
-
-  const onClick = () => {
-    alert('Coming Soon...😸');
-  };
-
-  if (!isLoading)
+export const QuestionList = ({
+  response,
+  isLoading,
+  pageIndex,
+  setPageIndex,
+}: any) => {
+  if (!isLoading && response)
     return (
-      <main className="flex flex-col w-full space-y-6">
-        <section className="flex justify-between mb-3">
-          <button
-            className="border border-main-gray rounded-lg py-1.5 w-28"
-            onClick={onClick}
-          >
-            {`최근순 `}
-            <FontAwesomeIcon icon={faChevronDown} className="fa-xs" />
-          </button>
-          <Link href="/ask">
-            <button className="bg-main-yellow hover:bg-main-orange rounded-lg py-1.5 w-28 transition-all">
-              질문하기
-            </button>
-          </Link>
-        </section>
+      <main className="flex flex-col w-full divide-y">
         {response.data.map((article: QuestionListProps) => (
-          <section className="h-16 border-b space-y-3" key={article.articleId}>
+          <section className="py-4 space-y-4" key={article.articleId}>
             <article className="space-x-2">
               {article.isClosed ? (
                 <FontAwesomeIcon
@@ -59,7 +39,9 @@ export const QuestionList = () => {
 
               <Link href={`/questions/${article.articleId}`}>
                 <span className="text-lg font-bold hover:cursor-pointer">
-                  {article.title}
+                  {article.title.length >= 35
+                    ? `${article.title.slice(0, 35)}...`
+                    : article.title}
                 </span>
               </Link>
             </article>
@@ -73,8 +55,8 @@ export const QuestionList = () => {
                   </Link>
                 </div>
                 <div className="text-xs space-x-2">
-                  {article.tags.map((tag) => (
-                    <span key={tag.name}>#{tag.name}</span>
+                  {article.tags.map((tag, i) => (
+                    <span key={tag.name}>{i < 3 ? `#${tag.name}` : ''}</span>
                   ))}
                 </div>
               </article>
@@ -90,13 +72,13 @@ export const QuestionList = () => {
                 </div>
                 <div className="flex gap-2">
                   <FontAwesomeIcon icon={faComment} size="xs" />
-                  <span className="text-xs">{article.commentCount}</span>
+                  <span className="text-xs">{article.answerCount}</span>
                 </div>
               </article>
             </section>
           </section>
         ))}
-        <div className="mx-auto pt-4">
+        <div className="mx-auto mt-10">
           <Pagination
             setPageIndex={setPageIndex}
             totalPage={response.pageInfo.totalPages}
@@ -105,5 +87,16 @@ export const QuestionList = () => {
         </div>
       </main>
     );
-  else return <div className="">Loading...</div>;
+  else if (!isLoading && !response)
+    return (
+      <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
+        검색 결과를 찾을 수 없습니다.🥲
+      </div>
+    );
+  else
+    return (
+      <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
+        로딩중~🔥
+      </div>
+    );
 };
