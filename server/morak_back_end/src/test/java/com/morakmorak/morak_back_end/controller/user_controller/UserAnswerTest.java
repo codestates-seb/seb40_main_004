@@ -47,8 +47,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest({UserController.class, ExceptionController.class})
@@ -71,6 +70,7 @@ public class UserAnswerTest {
     PointService pointService;
     UserDto.ResponseSimpleUserDto dtoUserInfo;
     AvatarDto.SimpleResponse dtoAvatar;
+
     @BeforeEach
     void setup() {
         dtoUserInfo =
@@ -97,12 +97,13 @@ public class UserAnswerTest {
 
         Page<Answer> userAnswersInPage = new PageImpl<>(answers, pageable, 2);
         ResponseMultiplePaging<AnswerDto.ResponseUserAnswerList> userAnswersResponsePaging = new ResponseMultiplePaging<>(userAnswers, userAnswersInPage);
-        BDDMockito.given(userService.getUserAnswerList(any(),anyInt(),anyInt())).willReturn(userAnswersResponsePaging);
+        BDDMockito.given(userService.getUserAnswerList(any(), anyInt(), anyInt())).willReturn(userAnswersResponsePaging);
 
         ResultActions perform = mockMvc.perform(
                 get("/users/{user-id}/answers", 1L)
                         .param("page", "1")
                         .param("size", "50")
+
         );
         perform.andExpect(status().isOk())
                 .andDo(
@@ -110,6 +111,9 @@ public class UserAnswerTest {
                                 "유저 대시보드 답변목록 조회 성공_200",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("user-id").description("유효한 형식의 유저 아이디")
+                                ),
                                 responseFields(
                                         List.of(
                                                 fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("답변을 리스트 형태로 보여줍니다."),
@@ -134,13 +138,16 @@ public class UserAnswerTest {
                                 )
 
                         )
+
+
                 );
     }
+
     @Test
     @DisplayName("요청한 유저의 아이디가 존재하지 않거나 잘못된 경우 404 반환")
     void requestDashboard_failed() throws Exception {
         //given
-        given(userService.getUserAnswerList(any(),anyInt(),anyInt())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
+        given(userService.getUserAnswerList(any(), anyInt(), anyInt())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -151,13 +158,14 @@ public class UserAnswerTest {
         //then
         perform.andExpect(status().isNotFound())
                 .andDo(document(
-                        "유저 답변목록_조회_실패_404",
-                        getDocumentRequest(),
-                        getDocumentResponse(),
-                        pathParameters(
-                                parameterWithName("user-id").description("존재하지 않는 유저의 아이디 혹은 잘못된 아이디 형식")
+                                "유저 답변목록_조회_실패_404",
+                                getDocumentRequest(),
+                                getDocumentResponse(),
+                                pathParameters(
+                                        parameterWithName("user-id").description("존재하지 않는 유저의 아이디 혹은 잘못된 아이디 형식")
+                                )
                         )
-                ));
+                );
     }
 
 }
