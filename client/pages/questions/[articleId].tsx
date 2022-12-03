@@ -61,7 +61,7 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
   return (
     <>
       <Header />
-      <main className="max-w-[900px] mx-auto min-h-[80vh] bg-white p-[45px] sm:p-[60px] shadow-sm border-[1px] border-gray-200">
+      <main className="max-w-[900px] mx-auto min-h-[80vh] bg-white  p-8 md:p-16 shadow-sm border-[1px] border-gray-200">
         <BtnTopDown />
         {!isLoading ? (
           <>
