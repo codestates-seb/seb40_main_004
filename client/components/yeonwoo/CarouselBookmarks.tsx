@@ -206,7 +206,7 @@ export const CarouselBookmarks = () => {
         </>
       ) : (
         <div className="w-full h-full flex justify-center items-center">
-          <span>등록된 나의 답변이 아직 없습니다</span>
+          <span>등록된 북마크가 아직 없습니다</span>
         </div>
       )}
     </div>
