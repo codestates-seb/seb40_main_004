@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { articleList } from '../../interfaces';
 import { client } from '../../libs/client';
+import { elapsedTime } from '../../libs/elapsedTime';
 
 export const ListLately = () => {
   const [data, setData] = useState<articleList[] | null>(null);
@@ -24,50 +25,6 @@ export const ListLately = () => {
   useEffect(() => {
     getList();
   }, []);
-
-  const howManyTimesAgo = (createdAtUTC: string) => {
-    const date = new Date(createdAtUTC);
-    const createdAt = date.getTime();
-    const diffSeconds = Math.round((Date.now() - createdAt) / 1000);
-
-    if (diffSeconds < 60) {
-      if (diffSeconds === 1) return '1 sec ago';
-      return `${diffSeconds}초 전`;
-    }
-
-    const diffMinutes = Math.round(diffSeconds / 60);
-
-    if (diffMinutes < 60) {
-      if (diffMinutes === 1) return '1 sec ago';
-      return `${diffMinutes}분 전`;
-    }
-
-    const diffHours = Math.round(diffMinutes / 60);
-
-    if (diffHours < 24) {
-      if (diffHours === 1) return '1 hour ago';
-      return `${diffHours}시간 전`;
-    }
-
-    const diffDays = Math.round(diffHours / 24);
-
-    if (diffDays < 3) {
-      if (diffDays === 1) return '하루 전';
-      return '이틀 전';
-    }
-
-    const dateCreatedAt = new Date(createdAt - 32400000);
-
-    return `${dateCreatedAt.getFullYear()}년 ${
-      dateCreatedAt.getMonth() + 1
-    }월 ${dateCreatedAt.getDate()}일 ${
-      dateCreatedAt.getHours() < 12 ? '오전' : '오후'
-    } ${
-      dateCreatedAt.getHours() > 12
-        ? dateCreatedAt.getHours() - 12
-        : dateCreatedAt.getHours()
-    }시 ${dateCreatedAt.getMinutes()}분`;
-  };
 
   return (
     <>
@@ -104,7 +61,7 @@ export const ListLately = () => {
                     <div className="flex gap-4">
                       <div className="flex">
                         <span className="text-xs">
-                          {howManyTimesAgo(article.createdAt)}
+                          {elapsedTime(article.createdAt)}
                         </span>
                       </div>
                       <div className="flex gap-2">
@@ -145,7 +102,7 @@ export const ListLately = () => {
                     <div className="flex gap-4">
                       <div className="flex">
                         <span className="text-xs">
-                          {howManyTimesAgo(article.createdAt)}
+                          {elapsedTime(article.createdAt)}
                         </span>
                       </div>
                       <div className="flex gap-2">
