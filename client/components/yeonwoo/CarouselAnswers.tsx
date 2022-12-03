@@ -133,8 +133,10 @@ export const CarouselAnswers = () => {
                         <span className="text-2xl text-main-orange">A. </span>
                         <span className="hover:cursor-pointer text-2xl">
                           {article.content.length > 30
-                            ? `${article.content.slice(0, 30)}...`
-                            : article.content}
+                            ? `${article.content
+                                .replace(/(<([^>]+)>)/gi, '')
+                                .slice(0, 30)}...`
+                            : article.content.replace(/(<([^>]+)>)/gi, '')}
                         </span>
                       </div>
                     </Link>
