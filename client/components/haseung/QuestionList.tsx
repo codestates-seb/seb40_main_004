@@ -24,7 +24,7 @@ export const QuestionList = ({
 }: any) => {
   if (!isLoading && response && response.data.length)
     return (
-      <main className="flex flex-col w-full divide-y min-h-[50vh]">
+      <main className="flex flex-col w-full divide-y min-h-screen">
         {response.data.map((article: QuestionListProps) => (
           <section className="py-4 space-y-4 " key={article.articleId}>
             <article className="space-x-2">
@@ -89,13 +89,13 @@ export const QuestionList = ({
     );
   else if (!isLoading && !response?.data.length)
     return (
-      <div className="flex justify-center items-center my-20 text-main-gray w-full h-[50vh] text-base">
+      <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
         검색 결과를 찾을 수 없습니다.🥲
       </div>
     );
   else
     return (
-      <div className="flex justify-center items-center my-20 text-main-gray w-full h-[50vh] text-base">
+      <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
         로딩중~🔥
       </div>
     );
