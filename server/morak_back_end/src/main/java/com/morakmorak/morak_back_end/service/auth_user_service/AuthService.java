@@ -168,6 +168,8 @@ public class AuthService {
         if (!userPasswordManager.comparePasswordWithUser(dbUser, requestUser)) throw new BusinessLogicException(MISMATCHED_PASSWORD);
 
         dbUser.changeStatus(DELETED);
+        dbUser.setRandomEmail();
+        
         return Boolean.TRUE;
     }
 
