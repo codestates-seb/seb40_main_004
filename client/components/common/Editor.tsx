@@ -257,7 +257,7 @@ export const Editor = () => {
         />
       </section>
 
-      <article className="flex justify-center">
+      <article className="flex justify-center py-16">
         <input
           onClick={handleCancelClick}
           className="justify-center mx-2 bg-main-gray bg-opacity-80 px-4 py-2 rounded-full cursor-pointer hover:bg-main-gray hover:bg-opacity-100"
