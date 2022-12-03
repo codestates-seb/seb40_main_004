@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.morakmorak.morak_back_end.entity.enums.Grade.*;
@@ -334,5 +335,35 @@ class UserTest {
 
         //then
         assertThat(user.getGrade()).isEqualTo(MORAKMORAK);
+    }
+
+    @Test
+    @DisplayName("setRandomEmail() 수행 전후로 이메일이 다르다.")
+    void setRandomEmail1() {
+        // given
+        User user = User.builder().email(EMAIL1).build();
+
+        // when
+        user.setRandomEmail();
+
+        // then
+        assertThat(user.getEmail()).isNotEqualTo(EMAIL1);
+    }
+
+    @Test
+    @DisplayName("같은 메일을 가진 유저가 각각 setRandomEmail()을 수행해도 각 이메일은 모두 다르다")
+    void setRandomEmail2() {
+        // given
+        List<User> users = new ArrayList<>();
+
+        // when
+        for (int i=0; i<1000; i++) {
+            User user = User.builder().email(EMAIL1).build();
+            user.setRandomEmail();
+            users.add(user);
+        }
+
+        // then
+        assertThat(users).doesNotHaveDuplicates();
     }
 }

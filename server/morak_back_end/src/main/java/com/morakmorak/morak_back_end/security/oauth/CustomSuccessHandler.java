@@ -54,7 +54,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         UserDto.Redis redisUserDto = userMapper.userToRedisUser(user);
         refreshTokenStore.saveData(refreshToken, redisUserDto, REFRESH_TOKEN_EXPIRE_COUNT);
 
-        String avatarPath = (user.getAvatar() != null) ? "" : user.getAvatar().getRemotePath();
+        String avatarPath = (user.getAvatar() == null) ? "" : user.getAvatar().getRemotePath();
 
         String uri = createResponseUrl(accessToken, refreshToken, avatarPath);
 

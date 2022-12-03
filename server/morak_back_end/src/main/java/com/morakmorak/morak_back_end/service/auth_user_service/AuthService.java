@@ -46,6 +46,7 @@ public class AuthService {
 
     public AuthDto.ResponseToken loginUser(User user) {
         User dbUser = findUserByEmailOrThrowException(user.getEmail());
+        if (dbUser.checkIfRemovedOrBlockedUser()) throw new BusinessLogicException(ACCOUNT_INACCESSIBLE);
 
         if (!userPasswordManager.comparePasswordWithUser(dbUser, user)) {
             throw new BusinessLogicException(INVALID_USER);
@@ -167,6 +168,8 @@ public class AuthService {
         if (!userPasswordManager.comparePasswordWithUser(dbUser, requestUser)) throw new BusinessLogicException(MISMATCHED_PASSWORD);
 
         dbUser.changeStatus(DELETED);
+        dbUser.setRandomEmail();
+        
         return Boolean.TRUE;
     }
 

@@ -15,9 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.morakmorak.morak_back_end.entity.enums.Grade.*;
+import static com.morakmorak.morak_back_end.entity.enums.UserStatus.*;
 
 @Entity
 @Getter
@@ -43,7 +45,7 @@ public class User extends BaseTime {
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    private UserStatus userStatus = UserStatus.RUNNING;
+    private UserStatus userStatus = RUNNING;
 
     private String infoMessage;
 
@@ -215,6 +217,14 @@ public class User extends BaseTime {
 
     public void changeStatus(UserStatus status) {
         this.userStatus = status;
+    }
+
+    public Boolean checkIfRemovedOrBlockedUser() {
+        return this.getUserStatus().equals(BLOCKED) || this.getUserStatus().equals(DELETED);
+    }
+
+    public void setRandomEmail() {
+        this.email += UUID.randomUUID().toString();
     }
 
     public void deleteAvatar() {
