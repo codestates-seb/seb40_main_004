@@ -213,56 +213,61 @@ export const Editor = () => {
   );
 
   return (
-    <form onSubmit={handleSubmit(onValid)}>
-      <label htmlFor="제목" className="font-bold ml-2 flex py-2 px-2">
-        제목
-      </label>
-      <input
-        {...register('title', {
-          minLength: {
-            value: 5,
-            message: '제목은 5글자 이상으로 해주세요.',
-          },
-        })}
-        onChange={handleTitleChange}
-        type="text"
-        className="w-[97%] border-2 px-2 py-1 leading-loose mx-auto flex justify-center overflow-x-hidden"
-        placeholder="제목을 입력해주세요!"
-      />
-      <p className="font-bold text-red-500 ml-4 mt-2">
-        {errors.title?.message}
-      </p>
-      <label htmlFor="본문" className="font-bold ml-2 flex py-2 px-2">
-        본문
-      </label>
-      <QuillEditor
-        className="h-96 w-[97%] mx-auto py-1"
-        value={editorContent}
-        modules={modules}
-        onChange={editorChange}
-        bounds="#editor"
-        forwardRef={quillRef}
-      />
-      <label htmlFor="태그" className="font-bold ml-2 flex py-2 mt-10 px-2">
-        태그
-      </label>
-      <Select
-        multiple
-        options={options}
-        tags={tags}
-        onChange={(element) => setTags(element)}
-      />
+    <form onSubmit={handleSubmit(onValid)} className="h-full p-8 space-y-8">
+      <section className="space-y-3">
+        <label htmlFor="제목" className="font-bold flex">
+          제목
+        </label>
+        <input
+          {...register('title', {
+            minLength: {
+              value: 5,
+              message: '제목은 5글자 이상으로 해주세요.',
+            },
+          })}
+          onChange={handleTitleChange}
+          type="text"
+          className="border-2 px-2 py-1 leading-loose flex w-full justify-center rounded-md"
+          placeholder="제목을 입력해주세요!"
+        />
+        <p className="font-bold text-red-500">{errors.title?.message}</p>
+      </section>
+      <section className="space-y-3">
+        <label htmlFor="본문" className="font-bold flex">
+          본문
+        </label>
+        <QuillEditor
+          className="h-96 w-full mx-auto py-1"
+          value={editorContent}
+          modules={modules}
+          onChange={editorChange}
+          bounds="#editor"
+          forwardRef={quillRef}
+        />
+      </section>
+      <section className="space-y-3 pt-10">
+        <label htmlFor="태그" className="font-bold flex">
+          태그
+        </label>
+        <Select
+          multiple
+          options={options}
+          tags={tags}
+          onChange={(element) => setTags(element)}
+        />
+      </section>
+
       <article className="flex justify-center">
         <input
-          className="justify-center mx-2 my-20 bg-main-yellow px-4 py-2 rounded-full cursor-pointer hover:bg-main-orange"
-          type="submit"
-          value="등록"
-        />
-        <input
           onClick={handleCancelClick}
-          className="justify-center mx-2 my-20 bg-background-gray px-4 py-2 rounded-full cursor-pointer hover:bg-main-gray"
+          className="justify-center mx-2 bg-main-gray bg-opacity-80 px-4 py-2 rounded-full cursor-pointer hover:bg-main-gray hover:bg-opacity-100"
           type="submit"
           value="취소"
+        />
+        <input
+          className="justify-center mx-2 bg-main-yellow bg-opacity-80 px-4 py-2 rounded-full cursor-pointer hover:bg-main-yellow hover:bg-opacity-100 "
+          type="submit"
+          value="등록"
         />
       </article>
       <p className="text-center relative bottom-10 font-bold text-xl">
