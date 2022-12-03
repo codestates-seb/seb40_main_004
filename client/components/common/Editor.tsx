@@ -1,10 +1,9 @@
 /*
  * 책임 작성자: 정하승
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-12-04(박혜정)
  */
 
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import {
   ChangeEvent,
@@ -15,8 +14,10 @@ import {
   useState,
 } from 'react';
 import { useForm } from 'react-hook-form';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { isArticleEditAtom } from '../../atomsHJ';
 import { categoryAtom } from '../../atomsHS';
+import { client } from '../../libs/client';
 import { getFileUrl, uploadImg } from '../../libs/uploadS3';
 import { Select, SelectOption } from '../haseung/Select';
 import { QuillEditor } from '../hyejung/QuillEditor';
@@ -72,10 +73,80 @@ export const Editor = () => {
   const category = useRecoilValue(categoryAtom);
   const [fileIdList, setFileIdList] = useState<any>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isArticleEdit, setIsArticleEdit] = useRecoilState(isArticleEditAtom);
+
+  useEffect(() => {
+    if (isArticleEdit.isArticleEdit) {
+      setValue('title', isArticleEdit.title);
+      setValue('content', isArticleEdit.content);
+    }
+  }, []);
 
   useEffect(() => {
     if (document) register('content', { required: true });
   }, [register]);
+
+  const editorContent = watch('content');
+
+  const onValid = ({ title, content }: ContentProps) => {
+    setIsSubmitting(true);
+    if (isArticleEdit.isArticleEdit) {
+      client
+        .patch(`/api/articles/${isArticleEdit.articleId}`, {
+          title,
+          content,
+          fileId: fileIdList,
+          tags,
+        })
+        .then((res) => {
+          setIsSubmitting(false);
+          setIsArticleEdit({
+            isArticleEdit: false,
+            title: '',
+            content: '',
+            articleId: '',
+          });
+          router.push(`questions/${res.data.articleId}`);
+        })
+        .catch((error) => {
+          console.error('error', error);
+          alert('게시글 수정에 실패했습니다...🥲');
+          console.log(
+            `title:${title}, content:${content}, fileId:${fileIdList}, tags:${tags}`,
+          );
+        });
+    } else {
+      client
+        .post(`/api/articles`, {
+          title,
+          content,
+          category,
+          fileId: fileIdList,
+          tags,
+        })
+        .then((res) => {
+          setIsSubmitting(false);
+          router.push(`questions/${res.data.articleId}`);
+        })
+        .catch((error) => {
+          console.error('error', error);
+          alert('게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!');
+        });
+    }
+  };
+
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setTitle(event.target.value);
+
+  const editorChange = (editorState: string) => {
+    setValue('content', editorState);
+  };
+
+  const handleCancelClick = () => {
+    if (confirm('질문 작성을 취소하시겠어요?')) {
+      router.push('/questions');
+    }
+  };
 
   const quillRef = useRef<any>(null);
   const imageHandler = useCallback(async () => {
@@ -141,52 +212,12 @@ export const Editor = () => {
     [],
   );
 
-  const onValid = ({ title, content }: ContentProps) => {
-    setIsSubmitting(true);
-    const files = fileIdList[0]?.fileId;
-    axios
-      .post(
-        `/api/articles`,
-        { title, content, category, files, tags },
-        {
-          headers: {
-            'Content-Type': `application/json`,
-            Authorization: `${localStorage.getItem('accessToken')}`,
-          },
-        },
-      )
-      .then((res) => {
-        setIsSubmitting(false);
-        router.push(`questions/${res.data.articleId}`);
-      })
-      .catch((error) => {
-        console.error('error', error);
-      });
-  };
-
-  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) =>
-    setTitle(event.target.value);
-
-  const editorChange = (editorState: string) => {
-    setValue('content', editorState);
-  };
-
-  const handleCancelClick = () => {
-    if (confirm('질문 작성을 취소하겠습니까?')) router.push('/questions');
-  };
-
-  const editorContent = watch('content');
   return (
     <form onSubmit={handleSubmit(onValid)}>
-      <div
-        className="ml-3"
-        dangerouslySetInnerHTML={{ __html: editorContent }}
-      />
       <label htmlFor="제목" className="font-bold ml-2 flex py-2 px-2">
         제목
       </label>
       <input
-        value={title}
         {...register('title', {
           minLength: {
             value: 5,
