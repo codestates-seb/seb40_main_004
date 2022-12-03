@@ -105,6 +105,7 @@ public class AnswerDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ResponseUserAnswerList {
+        private Long articleId;
         private Long answerId;
         private String content;
         private Boolean isPicked;
