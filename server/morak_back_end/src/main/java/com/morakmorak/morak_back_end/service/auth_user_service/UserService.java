@@ -282,7 +282,8 @@ public class UserService {
 
         findVerifiedUserById(userId);
 
-        Page<Answer> userAnswersInPage = answerQueryRepository.findAnswersByUserId(userId, PageRequest.of(page, size,Sort.by("createdAt").descending()));
+        Page<Answer> userAnswersInPage = answerQueryRepository.findAnswersByUserId(userId, PageRequest.of(page, size));
+
         List<AnswerDto.ResponseUserAnswerList> userAnswers =
                 userAnswersInPage.getContent().stream().map(
                         userAnswer -> {

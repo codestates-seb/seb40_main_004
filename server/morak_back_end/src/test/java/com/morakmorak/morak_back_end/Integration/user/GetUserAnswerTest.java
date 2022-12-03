@@ -121,7 +121,7 @@ public class GetUserAnswerTest {
                 .andExpect(jsonPath("$.pageInfo.size").value(50))
                 .andExpect(jsonPath("$.pageInfo.totalElements").value(2))
                 .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
-                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true));
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(false));
     }
     @Test
     @DisplayName("특정 유저 대시보드에서 유저 아이디가 잘못된 경우.")
