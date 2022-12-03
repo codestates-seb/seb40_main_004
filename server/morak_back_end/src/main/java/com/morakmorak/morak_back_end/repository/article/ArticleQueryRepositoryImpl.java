@@ -105,7 +105,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
             case "desc":
                 return article.id.desc();
             case "asc":
-                article.id.asc();
+                return article.id.asc();
             case "comment-desc":
                 return article.comments.size().desc();
             case "comment-asc":
@@ -126,6 +126,7 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 return article.isClosed.eq(false).desc();
             case "isChecked-false-asc":
                 return article.isClosed.eq(false).asc();
+
             default:
                 article.id.desc();
         }
