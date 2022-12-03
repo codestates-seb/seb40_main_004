@@ -34,7 +34,13 @@ const Questions: NextPage = () => {
 
   const { register, handleSubmit } = useForm<FormValue>();
   const onValid: SubmitHandler<FormValue> = (data) => {
-    setKeyword(data.keyword);
+    if (!data.keyword.length) {
+      setKeyword('');
+      setTarget('titleAndContent');
+      setKeyword('');
+    } else {
+      setKeyword(data.keyword);
+    }
   };
 
   const dropdownSortArr = [
