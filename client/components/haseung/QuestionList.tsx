@@ -39,23 +39,23 @@ export const QuestionList = ({
 
               <Link href={`/questions/${article.articleId}`}>
                 <span className="text-lg font-bold hover:cursor-pointer">
-                  {article.title.length >= 35
-                    ? `${article.title.slice(0, 35)}...`
-                    : article.title}
+                  {article?.title?.length >= 35
+                    ? `${article?.title?.slice(0, 35)}...`
+                    : article?.title}
                 </span>
               </Link>
             </article>
             <section className="flex justify-between items-center">
               <article className="flex space-x-3">
                 <div className="flex">
-                  <Link href={`/dashboard/${article.userInfo.userId}`}>
+                  <Link href={`/dashboard/${article?.userInfo?.userId}`}>
                     <span className="text-xs hover:cursor-pointer">
-                      {article.userInfo.nickname}
+                      {article?.userInfo?.nickname}
                     </span>
                   </Link>
                 </div>
                 <div className="text-xs space-x-2">
-                  {article.tags.map((tag, i) => (
+                  {article?.tags?.map((tag, i) => (
                     <span key={i}>{i < 3 ? `#${tag.name}` : ''}</span>
                   ))}
                 </div>
@@ -81,7 +81,7 @@ export const QuestionList = ({
         <div className="mx-auto mt-10">
           <Pagination
             setPageIndex={setPageIndex}
-            totalPage={response.pageInfo.totalPages}
+            totalPage={response?.pageInfo?.totalPages}
             pageIndex={pageIndex}
           />
         </div>
