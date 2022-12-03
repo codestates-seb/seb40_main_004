@@ -79,15 +79,25 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
         }
         switch (target) {
             case "title":
-                return article.title.startsWith(keyword).and(statusPosting());
+                return article.title.contains(keyword).and(statusPosting());
             case "content":
-                return article.content.startsWith(keyword).and(statusPosting());
+                return article.content.contains(keyword).and(statusPosting());
             case "tag":
                 return article.articleTags.any().tag.name.eq(TagName.valueOf(keyword)).and(statusPosting());
             case "bookmark":
                 return article.bookmarks.any().user.id.eq(Long.parseLong(keyword)).and(statusPosting());
             case "titleAndContent":
-                return article.title.startsWith(keyword).or(article.content.startsWith(keyword)).and(statusPosting());
+                return article.title.contains(keyword).or(article.content.startsWith(keyword)).and(statusPosting());
+            case "isChecked":
+                return article.isClosed.eq(Boolean.valueOf(keyword)).and(statusPosting());
+            case "titleAndContentIsCheckedTrue":
+                return article.title.contains(keyword).or(article.content.startsWith(keyword))
+                        .and(article.isClosed.eq(true)
+                                .and(statusPosting()));
+            case "titleAndContentIsCheckedFalse":
+                return article.title.contains(keyword).or(article.content.startsWith(keyword))
+                        .and(article.isClosed.eq(false)
+                                .and(statusPosting()));
             default:
                 return statusPosting();
         }
@@ -118,14 +128,6 @@ public class ArticleQueryRepositoryImpl implements ArticleQueryRepository {
                 return article.answers.size().desc();
             case "answer-asc":
                 return article.answers.size().asc();
-            case "isChecked-true-desc":
-                return article.isClosed.eq(true).desc();
-            case "isChecked-true-asc":
-                return article.isClosed.eq(true).asc();
-            case "isChecked-false-desc":
-                return article.isClosed.eq(false).desc();
-            case "isChecked-false-asc":
-                return article.isClosed.eq(false).asc();
 
             default:
                 article.id.desc();
