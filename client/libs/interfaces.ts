@@ -1,19 +1,22 @@
-// 백엔드 소통 O
+export interface Tags {
+  tagId: number;
+  name: string;
+}
+
 export interface UserInfo {
   userId: number;
   nickname: string;
-  grade: null;
+  grade: string;
 }
 
-// 백엔드 소통 O
 export interface Avatar {
   avatarId: number;
   fileName: string;
   remotePath: string;
 }
 
-// 백엔드 소통 O
-export interface Comment {
+export interface CommentResp {
+  answerId?: number | null;
   commentId: number;
   articleId: number;
   content: string;
@@ -23,41 +26,69 @@ export interface Comment {
   avatar: Avatar;
 }
 
-// 임의 지정
-export interface Answer {
-  id: string;
-  author: string;
-  authorId: string;
-  level: string;
-  createdAt: string;
-  likes: number;
-  profileImg: string;
+export interface ArticleDetail {
+  articleId: number;
+  category: string;
+  title: string;
   content: string;
-  selection: boolean;
+  clicks: number;
+  likes: number;
+  isClosed: boolean;
   isLiked: boolean;
   isBookmarked: boolean;
+  createdAt: string;
+  lastModifiedAt: string;
+  expiredDate: null;
+  tags: Tags[];
+  userInfo: UserInfo;
+  avatar: Avatar;
   comments: Comment[];
 }
 
-// 임의 지정
-export interface ArticleDetail {
-  id: string;
-  title: string;
-  author: string;
+export interface Answer {
+  answerId: number;
   authorId: string;
-  level: string;
-  createdAt: string;
-  likes: number;
   content: string;
-  tags: string[];
-  selection: boolean;
+  createdAt: string;
   isLiked: boolean;
-  isBookmarked: boolean;
-  comments: Comment[];
+  isPicked: boolean;
+  answerLikeCount: number;
+  commentCount: number;
+  commentPreview: CommentResp;
+  avatar: Avatar;
+  userInfo: UserInfo;
+}
+
+export interface PageInfo {
+  page: number;
+  size: number;
+  totalElements: number;
+  sort: { empty: boolean; unsorted: boolean; sorted: boolean };
+}
+
+export interface AnswerListProps {
+  data: Answer[];
+  pageInfo: PageInfo;
 }
 
 // 임의 지정
 export interface Articles {
   article: ArticleDetail;
   answers: Answer[];
+}
+
+export interface QuestionListProps {
+  answerCount: number;
+  articleId: number;
+  category: string;
+  clicks: number;
+  createdAt: string;
+  isClosed: boolean;
+  lastModifiedAt: string;
+  likes: number;
+  title: string;
+  commentCount: number;
+  avatar: Avatar;
+  tags: Tags[];
+  userInfo: UserInfo;
 }

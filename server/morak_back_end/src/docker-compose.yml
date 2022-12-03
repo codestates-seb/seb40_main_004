@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+
+  redis:
+    image: redis
+    container_name: rediscache
+    ports:
+      - 6380:6379
+    networks:
+      - spring-net
+
+  spring-testcontainers-app:
+    image: spring-testcontainers-app
+    container_name: spring-testcontainers-app
+    build: .
+    restart: always
+    environment:
+      REDIS_HOST: rediscache
+      REDOS_PORT: 6379
+    ports:
+      - 8080:8080
+    depends_on:
+      - redis
+    networks:
+      - spring-net
+
+networks:
+  spring-net:
