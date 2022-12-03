@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useSetRecoilState } from 'recoil';
+import { dataHeaderAtom, isLoginAtom, renderingAtom } from '../../atomsYW';
 import { userDashboard } from '../../interfaces';
 import { client } from '../../libs/client';
 
@@ -18,6 +20,8 @@ interface IChangePassword {
 }
 
 export const EditProfileComponent = () => {
+  const setDataHeader = useSetRecoilState(dataHeaderAtom);
+  const setRenderingHeader = useSetRecoilState(renderingAtom);
   const setIsLogin = useSetRecoilState(isLoginAtom);
   const [pathname, setPathname] = useState('');
   const [userId, setUserId] = useState('');
@@ -28,6 +32,7 @@ export const EditProfileComponent = () => {
   const [github, setGithub] = useState('');
   const [blog, setBlog] = useState('');
   const [jobType, setJobType] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
   const {
     register,
@@ -119,16 +124,14 @@ export const EditProfileComponent = () => {
     const ok = confirm('회원 탈퇴 하시겠습니까?');
     if (ok) {
       try {
-        await axios.delete('/api/auth', {
-          headers: {
-            Authorization: accessToken,
-          },
+        await client.delete('/api/auth', {
           data: {
             password,
           },
         });
         alert('회원 탈퇴 완료되었습니다');
         localStorage.clear();
+        setDataHeader(null);
         setIsLogin(false);
         router.push('/');
       } catch (error) {
@@ -306,7 +309,6 @@ export const EditProfileComponent = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-
             <div className="flex gap-8">
               <button className="w-full py-[6px] rounded-full bg-main-yellow">
                 탈퇴
