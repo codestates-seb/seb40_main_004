@@ -70,7 +70,7 @@ export const ListLately = () => {
                       </div>
                       <div className="flex gap-2">
                         <FontAwesomeIcon icon={faComment} size="xs" />
-                        <span className="text-xs">{article.commentCount}</span>
+                        <span className="text-xs">{article.answerCount}</span>
                       </div>
                     </div>
                   </div>
@@ -111,7 +111,7 @@ export const ListLately = () => {
                       </div>
                       <div className="flex gap-2">
                         <FontAwesomeIcon icon={faComment} size="xs" />
-                        <span className="text-xs">{article.commentCount}</span>
+                        <span className="text-xs">{article.answerCount}</span>
                       </div>
                     </div>
                   </div>
