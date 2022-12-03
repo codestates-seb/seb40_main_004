@@ -29,7 +29,6 @@ export const SocialLoginBtn = () => {
         kakao.API.request({
           url: `/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`, // 사용자 정보 가져오기
           success: (res: any) => {
-            // 로그인 성공할 경우 정보 확인 후 /kakao 페이지로 push
             console.log(res);
           },
           fail: (error: any) => {
