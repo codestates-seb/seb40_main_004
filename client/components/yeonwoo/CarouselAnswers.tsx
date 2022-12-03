@@ -51,6 +51,7 @@ const swipePower = (offset: number, velocity: number) => {
 };
 
 interface IMyAnswer {
+  articleId: number;
   answerId: number;
   content: string;
   isPicked: boolean;
@@ -128,13 +129,15 @@ export const CarouselAnswers = () => {
                   className="bg-main-yellow bg-opacity-20 w-[793px] h-[190px] rounded-2xl p-8 relative mb-[72px]"
                 >
                   <div className="flex justify-between items-start">
-                    <Link href={`/questions/${article.answerId}`}>
+                    <Link href={`/questions/${article.articleId}`}>
                       <div>
                         <span className="text-2xl text-main-orange">A. </span>
                         <span className="hover:cursor-pointer text-2xl">
                           {article.content.length > 30
-                            ? `${article.content.slice(0, 30)}...`
-                            : article.content}
+                            ? `${article.content
+                                .replace(/(<([^>]+)>)/gi, '')
+                                .slice(0, 30)}...`
+                            : article.content.replace(/(<([^>]+)>)/gi, '')}
                         </span>
                       </div>
                     </Link>

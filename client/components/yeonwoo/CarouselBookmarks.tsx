@@ -13,10 +13,12 @@ import {
   faChevronLeft,
   faChevronRight,
   faComment,
+  faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { client } from '../../libs/client';
+import { changeTagPrettier } from '../../libs/changeTagPrettier';
 
 const variants = {
   enter: (direction: number) => {
@@ -86,7 +88,7 @@ export const CarouselBookmarks = () => {
   const getReview = async () =>
     await client
       .get(
-        `/api/articles?category=INFO&keyword=${userId}&target=bookmark&sort=desc&page=1&size=50`,
+        `/api/articles?category=QNA&keyword=${userId}&target=bookmark&sort=desc&page=1&size=50`,
       )
       .then((res) => setArticles(res.data.data))
       .catch((error) => console.log(error));
@@ -157,6 +159,10 @@ export const CarouselBookmarks = () => {
                     </Link>
                     <div className="flex gap-4">
                       <div className="flex gap-2">
+                        <FontAwesomeIcon icon={faHeart} size="xs" />
+                        <span className="text-xs">{article.likes}</span>
+                      </div>
+                      <div className="flex gap-2">
                         <FontAwesomeIcon icon={faComment} size="xs" />
                         <span className="text-xs">{article.commentCount}</span>
                       </div>
@@ -183,7 +189,7 @@ export const CarouselBookmarks = () => {
                         className="bg-main-yellow rounded-full py-[6px] w-32"
                         key={tag.tagId}
                       >
-                        {tag.name}
+                        {changeTagPrettier(tag.name)}
                       </button>
                     ))}
                   </div>
@@ -206,7 +212,7 @@ export const CarouselBookmarks = () => {
         </>
       ) : (
         <div className="w-full h-full flex justify-center items-center">
-          <span>등록된 나의 답변이 아직 없습니다</span>
+          <span>등록된 북마크가 아직 없습니다</span>
         </div>
       )}
     </div>

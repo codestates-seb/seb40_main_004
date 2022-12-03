@@ -58,13 +58,20 @@ const options = [
 
 export const Editor = () => {
   const router = useRouter();
-  const { register, handleSubmit, watch, setValue } = useForm<ContentProps>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<ContentProps>({
     mode: 'onChange',
   });
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<SelectOption[]>([options[1]]);
   const category = useRecoilValue(categoryAtom);
   const [fileIdList, setFileIdList] = useState<any>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (document) register('content', { required: true });
@@ -135,6 +142,7 @@ export const Editor = () => {
   );
 
   const onValid = ({ title, content }: ContentProps) => {
+    setIsSubmitting(true);
     const files = fileIdList[0]?.fileId;
     axios
       .post(
@@ -148,7 +156,7 @@ export const Editor = () => {
         },
       )
       .then((res) => {
-        console.log(res);
+        setIsSubmitting(false);
         router.push(`questions/${res.data.articleId}`);
       })
       .catch((error) => {
@@ -179,12 +187,20 @@ export const Editor = () => {
       </label>
       <input
         value={title}
-        {...register('title')}
+        {...register('title', {
+          minLength: {
+            value: 5,
+            message: '제목은 5글자 이상으로 해주세요.',
+          },
+        })}
         onChange={handleTitleChange}
         type="text"
         className="w-[97%] border-2 px-2 py-1 leading-loose mx-auto flex justify-center overflow-x-hidden"
         placeholder="제목을 입력해주세요!"
       />
+      <p className="font-bold text-red-500 ml-4 mt-2">
+        {errors.title?.message}
+      </p>
       <label htmlFor="본문" className="font-bold ml-2 flex py-2 px-2">
         본문
       </label>
@@ -218,6 +234,9 @@ export const Editor = () => {
           value="취소"
         />
       </article>
+      <p className="text-center relative bottom-10 font-bold text-xl">
+        {isSubmitting ? 'Loading...' : null}
+      </p>
     </form>
   );
 };

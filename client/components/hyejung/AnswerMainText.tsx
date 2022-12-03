@@ -14,7 +14,7 @@ export const AnswerMainText = ({ children }: AnswerTextProps) => {
   return (
     <main>
       <div
-        className="prose"
+        className="prose max-w-none"
         dangerouslySetInnerHTML={{ __html: Dompurify.sanitize(children) }}
       />
     </main>

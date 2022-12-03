@@ -4,7 +4,6 @@
  * 최근 수정일: 2022-12-02
  */
 
-import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { currPagesIndexAtom } from '../../atomsHJ';
 
@@ -43,7 +42,7 @@ export const Pagination = ({
 
   const handleChangePageNum = (e: React.MouseEvent<HTMLElement>) => {
     const text = (e.target as HTMLAnchorElement).text;
-    if (text === '이전' && pageIndex > 1) {
+    if (text === '이전' && pageIndex > 5) {
       setCurrPagesIndex(currPagesIndex - 1);
       setPageIndex(pageIndex - 1);
     }
@@ -57,7 +56,7 @@ export const Pagination = ({
       <ul className="flex -space-x-px text-xs">
         <li>
           <a
-            className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-l-lg cursor-pointer"
+            className="hidden lg:inline px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-l-lg cursor-pointer"
             onClick={() => {
               setCurrPagesIndex(0);
               setPageIndex(1);
@@ -68,7 +67,7 @@ export const Pagination = ({
         </li>
         <li>
           <a
-            className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
+            className="rounded-l-lg lg:rounded-none px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
             onClick={handleChangePageNum}
           >
             이전
@@ -90,7 +89,7 @@ export const Pagination = ({
         ))}
         <li>
           <a
-            className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
+            className="rounded-r-lg lg:rounded-none px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 cursor-pointer"
             onClick={handleChangePageNum}
           >
             다음
@@ -98,7 +97,7 @@ export const Pagination = ({
         </li>
         <li>
           <a
-            className="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-r-lg cursor-pointer"
+            className="hidden lg:inline px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 rounded-r-lg cursor-pointer"
             onClick={() => {
               setCurrPagesIndex(totalPagesGroup.length - 1);
               setPageIndex(totalPage);

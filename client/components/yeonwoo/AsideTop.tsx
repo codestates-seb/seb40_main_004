@@ -155,7 +155,7 @@ export const AsideTop = () => {
                 className="text-xl font-medium border border-main-gray rounded-full pl-4 w-[238px]"
                 value={editInfoMessage}
                 onChange={(e) => setEditInfoMessage(e.target.value)}
-                placeholder="인포 메세지"
+                placeholder="메세지"
               />
             </div>
             <div className="flex justify-between items-start">

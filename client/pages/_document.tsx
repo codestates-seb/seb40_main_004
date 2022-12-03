@@ -5,6 +5,7 @@ class MyDocument extends Document {
     return (
       <Html lang="ko">
         <Head>
+          <title>모락모락</title>
           <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         </Head>
         <body>
