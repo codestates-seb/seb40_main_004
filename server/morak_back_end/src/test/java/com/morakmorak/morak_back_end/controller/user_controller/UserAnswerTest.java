@@ -113,7 +113,7 @@ public class UserAnswerTest {
                                 responseFields(
                                         List.of(
                                                 fieldWithPath("data[]").type(JsonFieldType.ARRAY).description("답변을 리스트 형태로 보여줍니다."),
-                                                fieldWithPath("data[].articleId").type(JsonFieldType.NUMBER).description("답변의 아이디입니다."),
+                                                fieldWithPath("data[].articleId").type(JsonFieldType.NUMBER).description("답변이 속한 게시글의 아이디입니다."),
                                                 fieldWithPath("data[].answerId").type(JsonFieldType.NUMBER).description("답변의 아이디입니다."),
                                                 fieldWithPath("data[].isPicked").type(JsonFieldType.BOOLEAN).description("답변이 채택 되었다면 true를 반환합니다."),
                                                 fieldWithPath("data[].content").type(JsonFieldType.STRING).description("답변 내용입니다."),
