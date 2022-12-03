@@ -75,16 +75,10 @@ const DashboardAnswers: NextPage = () => {
                 </span>
               </Link>
             </div>
-            {/* <div>
-              <span className="text-xs ml-4 hover:cursor-pointer">
-                더 보기 ＞
-              </span>
-  </div> */}
           </div>
           <CarouselAnswers />
           <div className="mt-20 mb-8">
             <span className="text-2xl font-semibold">☀️ 응원 메세지</span>
-            {/* <span className="text-xs ml-4">더 보기 ＞</span> */}
           </div>
           <CarouselReview />
         </div>
