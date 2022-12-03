@@ -3,6 +3,7 @@ package com.morakmorak.morak_back_end.service;
 import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
@@ -24,8 +25,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.morakmorak.morak_back_end.util.ArticleTestConstants.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -64,27 +67,45 @@ public class ArticleServiceTest {
     @Mock
     PointCalculator pointCalculator;
 
+    @Mock
+    CategoryService categoryService;
+
+    @Mock
+    TagService tagService;
+
+    @Mock
+    FileService fileService;
+
     @Test
     @DisplayName("게시글 등록 서비스로직 성공 테스트")
     public void upload_suc() throws Exception {
         //given
-        Article article = Article.builder().build();
+
+        List<ArticleTag> articleTags = new ArrayList<>();
+        articleTags.add(ArticleTag.builder().tag(Tag.builder().name(TagName.JAVA).build()).build());
+        List<File> files = new ArrayList<>();
+        files.add(File.builder().id(1L).build());
+        Article article = Article.builder().category(Category.builder().name(CategoryName.QNA).build())
+                .thumbnail(1L)
+                .content("내용입니다. ")
+                .articleTags(articleTags)
+                .files(files)
+                .title("제목입니다. ")
+                .build();
+
         ArticleDto.ResponseSimpleArticle responseSimpleArticle =
                 ArticleDto.ResponseSimpleArticle.builder().articleId(1L).build();
 
         given(userService.findVerifiedUserById(anyLong())).willReturn(User.builder().id(1L).build());
-        given(fileRepository.findById(any())).willReturn(Optional.of(File.builder().build()));
-        given(tagRepository.findTagByName(any())).willReturn(Optional.of(Tag.builder().build()));
-        given(categoryRepository.findCategoryByName(any())).willReturn(Optional.of(Category.builder().build()));
-        given(articleRepository.save(article)).willReturn(article);
-        given(articleMapper.articleToResponseSimpleArticle(article.getId())).willReturn(responseSimpleArticle);
+        given(categoryService.findVerifiedCategoryByName(any())).willReturn(Category.builder().id(1L).name(CategoryName.QNA).build());
+        given(fileService.findVerifiedFileById(any())).willReturn(File.builder().build());
+        given(tagService.findVerifiedTagByTagName(any())).willReturn(Tag.builder().id(1L).name(TagName.JAVA).build());
+        given(articleRepository.save(any())).willReturn(Article.builder().id(1L).build());
+        given(articleMapper.articleToResponseSimpleArticle(any())).willReturn(responseSimpleArticle);
 
         //when
         ArticleDto.ResponseSimpleArticle upload = articleService.upload(
-                article, UserDto.UserInfo.builder().id(1L).build(),
-                REQUEST_TAG_WITH_ID_AND_NAMES,
-                REQUEST_FILE_WITH_IDS,
-                REQUEST_STRING_CATEGORY);
+                article, UserDto.UserInfo.builder().id(1L).build());
         //then
         assertThat(upload.getArticleId()).isEqualTo(1L);
     }
@@ -97,52 +118,83 @@ public class ArticleServiceTest {
         given(userService.findVerifiedUserById(any())).willThrow(new BusinessLogicException(ErrorCode.USER_NOT_FOUND));
         //when
         //then
-        assertThatThrownBy(() -> articleService.upload(ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
-                REQUEST_TAG_WITH_ID_AND_NAMES,
-                REQUEST_FILE_WITH_IDS,
-                REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
+        assertThatThrownBy(() -> articleService.upload(ARTICLE, UserDto.UserInfo.builder().id(1L).build())).isInstanceOf(BusinessLogicException.class);
+
+    }
+    @Test
+    @DisplayName("게시글 등록시 존재하지 않는 카테고리를 적용할 경우")
+    public void upload_fail5() throws Exception{
+        //given
+        Article article = Article.builder().category(Category.builder().name(CategoryName.QNA).build())
+                .thumbnail(1L)
+                .content("내용입니다. ")
+                .title("제목입니다. ")
+                .build();
+        given(userService.findVerifiedUserById(anyLong())).willReturn(User.builder().id(1L).build());
+        given(categoryService.findVerifiedCategoryByName(any())).willThrow(new BusinessLogicException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        //when
+
+        //then
+        assertThatThrownBy(() -> articleService.upload(article, UserDto.UserInfo.builder().id(1L).build())).isInstanceOf(BusinessLogicException.class);
 
     }
     @Test
     @DisplayName("게시글 등록시 존재하지 않는 file을 올릴경우")
     public void upload_fail3() throws Exception{
         //given
-        given(userService.findVerifiedUserById(any())).willReturn(User.builder().build());
-        given(fileRepository.findById(any())).willReturn(Optional.empty());
+
+        List<ArticleTag> articleTags = new ArrayList<>();
+        articleTags.add(ArticleTag.builder().tag(Tag.builder().name(TagName.JAVA).build()).build());
+        List<File> files = new ArrayList<>();
+        files.add(File.builder().id(1L).build());
+        Article article = Article.builder().category(Category.builder().name(CategoryName.QNA).build())
+                .thumbnail(1L)
+                .content("내용입니다. ")
+                .articleTags(articleTags)
+                .files(files)
+                .title("제목입니다. ")
+                .build();
+
+        ArticleDto.ResponseSimpleArticle responseSimpleArticle =
+                ArticleDto.ResponseSimpleArticle.builder().articleId(1L).build();
+
+        given(userService.findVerifiedUserById(anyLong())).willReturn(User.builder().id(1L).build());
+        given(categoryService.findVerifiedCategoryByName(any())).willReturn(Category.builder().id(1L).name(CategoryName.QNA).build());
+        given(fileService.findVerifiedFileById(any())).willReturn(File.builder().build());
+        given(tagService.findVerifiedTagByTagName(any())).willThrow(new BusinessLogicException(ErrorCode.TAG_NOT_FOUND));
+
         //when
 
         //then
-        assertThatThrownBy(() -> articleService.upload(ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
-                REQUEST_TAG_WITH_ID_AND_NAMES,
-                REQUEST_FILE_WITH_IDS,
-                REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
+        assertThatThrownBy(() -> articleService.upload(article, UserDto.UserInfo.builder().id(1L).build())).isInstanceOf(BusinessLogicException.class);
     }
 
-     @Test
-     @DisplayName("게시글 등록시 존재하지 않는 카테고리를 적용할 경우")
-     public void upload_fail5() throws Exception{
-         //given
-         Article ARTICLE =
-                 Article.builder().title("안녕하세요 타이틀입니다. 잘 부탁드립니다. 타이틀은 신경씁니다.")
-                         .content("콘텐트입니다. 잘부탁드립니다.")
-                         .thumbnail(1L)
-                         .build();
+    @Test
+    @DisplayName("게시글 등록시 존재하지 않는 Tag를 올릴경우")
+    public void upload_fail4() throws Exception{
+        //given
+
+        List<File> files = new ArrayList<>();
+        files.add(File.builder().id(1L).build());
+        Article article = Article.builder().category(Category.builder().name(CategoryName.QNA).build())
+                .thumbnail(1L)
+                .content("내용입니다. ")
+                .files(files)
+                .title("제목입니다. ")
+                .build();
 
 
-         given(userService.findVerifiedUserById(any())).willReturn(User.builder().build());
-         given(fileRepository.findById(any())).willReturn(Optional.of(File.builder().build()));
-         given(tagRepository.findTagByName(any()))
-                 .willReturn(Optional.of(Tag.builder().id(1L).build()));
-         given(categoryRepository.findCategoryByName(any())).willReturn(Optional.empty());
-         //when
+        given(userService.findVerifiedUserById(anyLong())).willReturn(User.builder().id(1L).build());
+        given(categoryService.findVerifiedCategoryByName(any())).willReturn(Category.builder().id(1L).name(CategoryName.QNA).build());
+        given(fileService.findVerifiedFileById(any())).willThrow(new BusinessLogicException(ErrorCode.FILE_NOT_FOUND));
+        //when
 
-         //then
-         assertThatThrownBy(() -> articleService.upload(ARTICLE, UserDto.UserInfo.builder().id(1L).build(),
-                 REQUEST_TAG_WITH_ID_AND_NAMES,
-                 REQUEST_FILE_WITH_IDS,
-                 REQUEST_STRING_CATEGORY)).isInstanceOf(BusinessLogicException.class);
+        //then
+        assertThatThrownBy(() -> articleService.upload(article, UserDto.UserInfo.builder().id(1L).build())).isInstanceOf(BusinessLogicException.class);
+    }
 
-      }
+
 
       @Test
       @DisplayName("게시글을 삭제할때 Article의 상태가 REMOVED로 변하는게 성공할때 ")
@@ -170,6 +222,29 @@ public class ArticleServiceTest {
            //then
            assertThat(article.getFiles().size()).isEqualTo(1);
         }
+
+//        @Test
+//        @DisplayName("게시글 수정시 태그의 갯수가 줄어드는지 ")
+//        public void updateArticle_suc(){
+//        //given
+//            List<ArticleTag> articleTags = new ArrayList<>();
+//            ArticleTag articleTag = ArticleTag.builder().tag(Tag.builder().name(TagName.JAVA).build()).build();
+//            articleTags.add(articleTag);
+//            Article article = Article.builder().id(1L).title("타이틀입니다.타이틀입니다.").content("내용입니다. 내용입니다. ").category(Category.builder().name(CategoryName.QNA).build())
+//                    .articleTags(articleTags).user(User.builder().id(1L).build()).build();
+//            UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
+//            List<TagDto.SimpleTag> tags = new ArrayList<>();
+//            TagDto.SimpleTag tag = TagDto.SimpleTag.builder().tagId(1L).name(TagName.C).build();
+//            tags.add(tag);
+//            ArticleDto.RequestUpdateArticle.builder().title("수정된 타이틀입니다.").content("수정된 내용입니다.").tags(tags).build();
+//            List<FileDto.RequestFileWithId> files = new ArrayList<>();
+//        //when
+//            ArticleDto.ResponseSimpleArticle update = articleService.update(article, userInfo, tags, files);
+//            //then
+//            List<String> result = article.getArticleTags().stream()
+//                    .map(articleTa -> articleTa.getTag().getName().toString()).collect(Collectors.toList());
+//            System.out.println(result.size());
+//        }
 
         @Test
         @DisplayName("게시글의 좋아요를 누를때 회원이 좋아요를 처음누르는거면 201코드와 json을 리턴한다.")
