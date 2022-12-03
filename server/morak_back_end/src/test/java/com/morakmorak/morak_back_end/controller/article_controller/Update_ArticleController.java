@@ -102,7 +102,7 @@ class Update_ArticleController {
                 .willReturn(List.of(TagDto.SimpleTag.builder().build()));
         given(fileMapper.RequestFileWithIdToFile(request))
                 .willReturn(List.of(FileDto.RequestFileWithId.builder().build()));
-        given(articleService.update(any(), any(), any(), any()))
+        given(articleService.update(any(), any()))
                 .willReturn(response);
 
         String content = objectMapper.writeValueAsString(request);
@@ -198,7 +198,7 @@ class Update_ArticleController {
                 .build();
 
         String content = objectMapper.writeValueAsString(requestUploadArticle);
-        given(articleService.update(any(), any(), any(), any())).willThrow(new BusinessLogicException(ErrorCode.NO_ACCESS_TO_THAT_OBJECT));
+        given(articleService.update(any(), any())).willThrow(new BusinessLogicException(ErrorCode.NO_ACCESS_TO_THAT_OBJECT));
 
         //when
         ResultActions perform =
