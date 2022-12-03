@@ -1,9 +1,8 @@
 package com.morakmorak.morak_back_end.mapper;
 
 import com.morakmorak.morak_back_end.dto.ArticleDto;
-
 import com.morakmorak.morak_back_end.dto.CommentDto;
-성import com.morakmorak.morak_back_end.dto.FileDto;
+import com.morakmorak.morak_back_end.dto.FileDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
 import com.morakmorak.morak_back_end.entity.*;
 import org.mapstruct.Mapper;
