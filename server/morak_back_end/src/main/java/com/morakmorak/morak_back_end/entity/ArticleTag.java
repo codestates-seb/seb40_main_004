@@ -31,4 +31,9 @@ public class ArticleTag extends BaseTime{
         this.article.getArticleTags().add(this);
         this.tag.getArticleTags().add(this);
     }
+
+    public void removeArticleAndTag(Article article, Tag tag) {
+        this.article = null;
+        this.tag = null;
+    }
 }

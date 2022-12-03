@@ -13,9 +13,10 @@ public class TagDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SimpleTag {
-        @NotBlank
+
         private Long tagId;
 //        @EnumValid
+        @NotBlank
         private TagName name;
 
         @QueryProjection

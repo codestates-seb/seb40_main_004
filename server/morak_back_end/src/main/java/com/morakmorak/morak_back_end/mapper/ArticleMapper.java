@@ -28,20 +28,16 @@ public interface ArticleMapper {
                 .build();
     }
 
-
-    @Mapping(source = "articleId", target = "id")
-    Article requestUpdateArticleToEntity(ArticleDto.RequestUpdateArticle updateArticle, Long articleId);
-
-//    default Article requestUpdateArticleToEntity(ArticleDto.RequestUpdateArticle updateArticle, Long articleId) {
-//
-//        return Article.builder()
-//                .title(updateArticle.getTitle())
-//                .content(updateArticle.getContent())
-//                .articleTags(getArticleTagsFromTagDto(updateArticle.getTags()))
-//                .files(getFilesFromFileDto(updateArticle.getFileId()))
-//                .thumbnail(updateArticle.getThumbnail())
-//                .build();
-//    }
+    default Article requestUpdateArticleToEntity(ArticleDto.RequestUpdateArticle updateArticle, Long articleId) {
+        return Article.builder()
+                .id(articleId)
+                .title(updateArticle.getTitle())
+                .content(updateArticle.getContent())
+                .articleTags(getArticleTagsFromTagDto(updateArticle.getTags()))
+                .files(getFilesFromFileDto(updateArticle.getFileId()))
+                .thumbnail(updateArticle.getThumbnail())
+                .build();
+    }
 
      private static List<ArticleTag> getArticleTagsFromTagDto(List<TagDto.SimpleTag> simpleTags) {
         List<ArticleTag> articleTags = simpleTags.stream()
