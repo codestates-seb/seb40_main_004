@@ -34,9 +34,9 @@ const Questions: NextPage = () => {
 
   const { register, handleSubmit } = useForm<FormValue>();
   const onValid: SubmitHandler<FormValue> = (data) => {
+    setTarget('titleAndContent');
     if (!data.keyword.length) {
       setKeyword('');
-      setTarget('titleAndContent');
       setKeyword('');
     } else {
       setKeyword(data.keyword);
