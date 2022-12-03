@@ -45,36 +45,55 @@ public class ArticleService {
     private final NotificationRepository notificationRepository;
     private final ReportRepository reportRepository;
 
-    public ArticleDto.ResponseSimpleArticle upload(
-            Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
-            List<FileDto.RequestFileWithId> files, Category category
-    ) {
+    private final FileService fileService;
+
+    private final CategoryService categoryService;
+
+    private final TagService tagService;
+
+    public ArticleDto.ResponseSimpleArticle upload(Article article, UserDto.UserInfo userInfo) {
         User dbUser = userService.findVerifiedUserById(userInfo.getId());
+        Category dbCategory = categoryService.findVerifiedCategoryByName(article.getCategory().getName());
 
-        article.injectUserForMapping(dbUser);
+        Article reBuildArticle = Article.builder().title(article.getTitle()).content(article.getContent())
+                .category(dbCategory).user(dbUser).thumbnail(article.getThumbnail()).build();
 
-        findDbFilesAndInjectWithArticle(article, files);
+        dbCategory.getArticleList().add(reBuildArticle);
 
-        findDbTagsAndInjectWithArticle(article, tags);
+        dbUser.getArticles().add(reBuildArticle);
 
-        findDbCategoryAndInjectWithArticle(article, category);
 
-        Article dbArticle = articleRepository.save(article);
+        article.getFiles().stream().forEach(file -> {
+            File dbFile = fileService.findVerifiedFileById(file.getId());
+            dbFile.injectArticleForFile(reBuildArticle);
+        });
+
+        article.getArticleTags().stream()
+                .forEach(articleTag -> {
+                    Tag dbTag = tagService.findVerifiedTagByTagName(articleTag.getTag().getName());
+                    ArticleTag reBuildArticleTag = ArticleTag.builder().article(reBuildArticle).tag(dbTag).build();
+                    reBuildArticle.getArticleTags().add(reBuildArticleTag);
+                    dbTag.getArticleTags().add(reBuildArticleTag);
+                });
+
+        Article dbArticle = articleRepository.save(reBuildArticle);
 
         dbUser.addPoint(dbArticle, pointCalculator);
 
         return articleMapper.articleToResponseSimpleArticle(dbArticle.getId());
     }
 
+
     public ArticleDto.ResponseSimpleArticle update(Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
                                                    List<FileDto.RequestFileWithId> files) {
+
         Article dbArticle = findVerifiedArticle(article.getId());
 
         checkArticleStatus(dbArticle);
 
-        dbArticle.updateArticleElement(article);
-
         checkArticlePerMission(dbArticle, userInfo);
+
+        dbArticle.updateArticleElement(article);
 
         findDbFilesAndInjectWithArticle(dbArticle, files);
 
@@ -102,6 +121,9 @@ public class ArticleService {
         return articleRepository.findById(articleId).orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
     }
 
+    public Article findRelationArticle(Long articleId) {
+        return articleRepository.findJackpot(articleId).orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
+    }
     public void checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
         if (!article.getUser().getId().equals(userInfo.getId())) {
             throw new BusinessLogicException(ErrorCode.INVALID_USER);
