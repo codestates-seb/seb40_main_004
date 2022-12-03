@@ -9,7 +9,7 @@ import static org.springframework.http.HttpStatus.*;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    USER_NOT_FOUND(NOT_FOUND, "The user is a user who has left or does not exist."),
+    USER_NOT_FOUND(NOT_FOUND, "USER_NOT_FOUND"),
     FILE_NOT_FOUND(NOT_FOUND, "FILE_NOT_FOUND"),
     TAG_NOT_FOUND(NOT_FOUND, "TAG_NOT_FOUND"),
     ANSWER_NOT_FOUND(NOT_FOUND, "ANSWER_NOT_FOUND"),
@@ -17,6 +17,7 @@ public enum ErrorCode {
     CATEGORY_NOT_FOUND(NOT_FOUND, "CATEGORY_NOT_FOUND"),
     INVALID_USER(UNAUTHORIZED, "INVALID_USER"),
     EMAIL_EXISTS(CONFLICT, "EMAIL_EXISTS"),
+    ACCOUNT_INACCESSIBLE(UNAUTHORIZED, "탈퇴했거나 차단 상태인 계정입니다."),
 
     EMBEDDED_REDIS_EXCEPTION(INTERNAL_SERVER_ERROR, "redis server error"),
     CAN_NOT_EXECUTE_GREP(INTERNAL_SERVER_ERROR, "can not execute grep process command"),
