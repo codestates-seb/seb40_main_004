@@ -25,6 +25,8 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
+                .headers().frameOptions().disable()
+                .and()
                 .csrf().disable()
                 .cors().disable()
                 .apply(authenticationManagerConfig)

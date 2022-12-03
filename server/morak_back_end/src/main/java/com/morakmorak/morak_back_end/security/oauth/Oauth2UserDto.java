@@ -36,7 +36,7 @@ public class Oauth2UserDto {
                 .attributes(attributes)
                 .email((String)attributes.get("email"))
                 .picture((String)attributes.get("picture"))
-                .provider((String)attributes.get("provider"))
+                .provider("google")
                 .nameAttributeKey(usernameAttributeName)
                 .build();
     }
