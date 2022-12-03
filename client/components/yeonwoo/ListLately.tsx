@@ -46,7 +46,9 @@ export const ListLately = () => {
                   <div className="mb-4">
                     <Link href={`/questions/${article.articleId}`}>
                       <span className="text-lg font-bold hover:cursor-pointer">
-                        {article.title}
+                        {article.title.length > 35
+                          ? `${article.title.slice(0, 35)}...`
+                          : article.title}
                       </span>
                     </Link>
                   </div>
@@ -87,7 +89,9 @@ export const ListLately = () => {
                   <div className="mb-4">
                     <Link href={`/questions/${article.articleId}`}>
                       <span className="text-lg font-bold hover:cursor-pointer">
-                        {article.title}
+                        {article.title.length > 35
+                          ? `${article.title.slice(0, 35)}...`
+                          : article.title}
                       </span>
                     </Link>
                   </div>
