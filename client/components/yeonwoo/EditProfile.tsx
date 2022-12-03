@@ -1,17 +1,15 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-20
- * 최근 수정일: 2022-12-01
+ * 최근 수정일: 2022-12-03
  */
 
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useSetRecoilState } from 'recoil';
-import { isLoginAtom } from '../../atomsYW';
 import { userDashboard } from '../../interfaces';
+import { client } from '../../libs/client';
 
 interface IChangePassword {
   originalPassword: string;
@@ -30,7 +28,6 @@ export const EditProfileComponent = () => {
   const [github, setGithub] = useState('');
   const [blog, setBlog] = useState('');
   const [jobType, setJobType] = useState('');
-  const [password, setPassword] = useState('');
   const router = useRouter();
   const {
     register,
@@ -51,18 +48,10 @@ export const EditProfileComponent = () => {
       );
     } else {
       try {
-        await axios.patch(
-          '/api/auth/password',
-          {
-            originalPassword,
-            newPassword,
-          },
-          {
-            headers: {
-              Authorization: accessToken,
-            },
-          },
-        );
+        await client.patch('/api/auth/password', {
+          originalPassword,
+          newPassword,
+        });
         alert('비밀번호가 정상적으로 변경 되었습니다');
         router.push('/');
       } catch (error) {
@@ -87,7 +76,7 @@ export const EditProfileComponent = () => {
   };
   const getUserData = async () => {
     if (userId) {
-      const res = await axios.get(`/api/users/${userId}/dashboard`);
+      const res = await client.get(`/api/users/${userId}/dashboard`);
       setUserData(res.data);
     }
   };
@@ -109,22 +98,15 @@ export const EditProfileComponent = () => {
   const onSubmitEditProfile = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await axios.patch(
-        '/api/users/profiles',
-        {
-          nickname,
-          infoMessage,
-          github,
-          blog,
-          jobType,
-        },
-        {
-          headers: {
-            Authorization: accessToken,
-          },
-        },
-      );
+      await client.patch('/api/users/profiles', {
+        nickname,
+        infoMessage,
+        github,
+        blog,
+        jobType,
+      });
       localStorage.setItem('nickname', nickname);
+      setRenderingHeader((prev) => !prev);
       router.push('/');
     } catch (error) {
       alert(`에러 발생 : ${error}`);
@@ -166,6 +148,7 @@ export const EditProfileComponent = () => {
             <input
               id="nickname"
               type="text"
+              placeholder="닉네임을 입력해주세요"
               className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
@@ -174,6 +157,7 @@ export const EditProfileComponent = () => {
             <input
               id="message"
               type="text"
+              placeholder="메세지를 입력해주세요"
               className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
               value={infoMessage}
               onChange={(e) => setInfoMessage(e.target.value)}
@@ -182,6 +166,7 @@ export const EditProfileComponent = () => {
             <input
               id="github"
               type="text"
+              placeholder="깃허브 주소를 입력해주세요"
               className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
               value={github}
               onChange={(e) => setGithub(e.target.value)}
@@ -190,11 +175,12 @@ export const EditProfileComponent = () => {
             <input
               id="blog"
               type="text"
+              placeholder="블로그 주소를 입력해주세요"
               className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
               value={blog}
               onChange={(e) => setBlog(e.target.value)}
             />
-            <label htmlFor="userState">취준/현업/무관</label>
+            <label htmlFor="userState">직업 현황</label>
             <select
               id="userState"
               className="w-full rounded-full h-11 px-4 mt-2 mb-32 border border-main-gray"

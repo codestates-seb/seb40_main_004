@@ -1,23 +1,27 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-11-19
+ * 최근 수정일: 2022-12-03
  */
 
 import { faBloggerB, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import { isLoginAtom, userDashboardAtom } from '../../atomsYW';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isLoginAtom, renderingAtom, userDashboardAtom } from '../../atomsYW';
+import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
+import { client } from '../../libs/client';
+import { uploadImg } from '../../libs/uploadS3';
 
 export const AsideTop = () => {
   const isLogin = useRecoilValue(isLoginAtom);
-  const [isEdit, setIsEdit] = useState(false);
   const userDashboard = useRecoilValue(userDashboardAtom);
+  const setRenderingHeader = useSetRecoilState(renderingAtom);
   const [userId, setUserId] = useState<string | null>('');
+  const [isEdit, setIsEdit] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
   useEffect(() => {
     const id = localStorage.getItem('userId');
     setUserId(id);
@@ -38,35 +42,103 @@ export const AsideTop = () => {
   const onClickCheer = () => {
     isLogin ? router.push('/review') : alert('로그인이 필요합니다.');
   };
-  const onSubmitForm = () => {
-    axios.patch(
-      '/api/users/profiles',
-      {
+  const onSubmitForm = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      await client.patch('/api/users/profiles', {
         nickname: editNickname,
         infoMessage: editInfoMessage,
         github: editGithub,
         blog: editBlog,
         jobType: 'DEVELOPER',
-      },
-      {
-        headers: {
-          Authorization: localStorage.getItem('accessToken'),
-        },
-      },
-    );
+      });
+      setIsEdit(false);
+      setIsClicked(false);
+      setRenderingHeader((prev) => !prev);
+    } catch (error) {
+      alert('에러가 발생했습니다 다시 시도해주세요');
+      console.error(error);
+    }
+  };
+
+  const onChangeFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    try {
+      const res = await client.get('/api/users/profiles/avatars');
+      const {
+        target: { files },
+      } = event;
+      const file = files && files[0];
+      await uploadImg(res.data.preSignedUrl, file);
+      setIsClicked(false);
+      alert('프로필이 정상적으로 변경되었습니다!');
+      setRenderingHeader((prev) => !prev);
+    } catch (error) {
+      alert('오류가 발생했습니다. 다시 시도해주세요!');
+    }
+  };
+
+  const onClickDelete = async () => {
+    try {
+      await client.delete('/api/users/profiles/avatars');
+      localStorage.removeItem('avatarPath');
+      setIsClicked(false);
+      alert('프로필이 정상적으로 삭제되었습니다!');
+      setRenderingHeader((prev) => !prev);
+    } catch (error) {
+      alert('오류가 발생했습니다. 다시 시도해주세요!');
+      console.error(error);
+    }
   };
   return (
     <>
       {isEdit ? (
         <>
-          <div className="rounded-full w-[238px] h-[238px] overflow-hidden">
-            <Image
-              src={userDashboard.avatar?.remotePath ?? '/favicon.ico'}
-              width="238px"
-              height="238px"
-            />
+          <div className="relative">
+            <div className="rounded-full w-[238px] h-[238px] overflow-hidden">
+              <Image
+                src={userDashboard.avatar?.remotePath ?? '/favicon.ico'}
+                width="238px"
+                height="238px"
+              />
+            </div>
+            <button
+              className="py-[6px] px-2 absolute left-4 bottom-4 bg-background-gray rounded-full"
+              onClick={() => setIsClicked((prev) => !prev)}
+            >
+              ✏️ 편집
+            </button>
+            {isClicked ? (
+              <div className="relative -left-8 bottom-8">
+                <ul className="border border-solid border-black border-opacity-10 border-spacing-1 right-0 w-[200px] rounded-xl absolute top-8 bg-background-gray z-20">
+                  <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer mt-2 py-1 px-4 rounded-xl text-[15px]">
+                    <label
+                      htmlFor="attach-file"
+                      className="ml-2 hover:cursor-pointer"
+                    >
+                      업데이트
+                    </label>
+                    <input
+                      id="attach-file"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={onChangeFile}
+                    />
+                  </li>
+                  <li
+                    className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer py-1 mb-2 px-4 rounded-xl text-[15px]"
+                    onClick={onClickDelete}
+                  >
+                    <button className="ml-2">삭제</button>
+                  </li>
+                </ul>
+              </div>
+            ) : null}
           </div>
-          <form className="mt-2" onSubmit={onSubmitForm}>
+          <form
+            className={`${isClicked ? 'mt-24' : 'mt-2'}`}
+            onSubmit={onSubmitForm}
+          >
             <div className="flex justify-between items-baseline">
               <input
                 className="text-3xl font-bold border border-main-gray rounded-full pl-4 w-[238px]"
@@ -83,7 +155,7 @@ export const AsideTop = () => {
                 className="text-xl font-medium border border-main-gray rounded-full pl-4 w-[238px]"
                 value={editInfoMessage}
                 onChange={(e) => setEditInfoMessage(e.target.value)}
-                placeholder="인포 메세지"
+                placeholder="메세지"
               />
             </div>
             <div className="flex justify-between items-start">
@@ -93,7 +165,9 @@ export const AsideTop = () => {
                 </span>
               </div>
               <div className="flex gap-4 text-xl">
-                <span className="text-2xl">{userDashboard.grade}</span>
+                <span className="text-2xl">
+                  {changeGradeEmoji(userDashboard.grade)}
+                </span>
                 <span>{`# ${userDashboard.rank}`}</span>
               </div>
             </div>
@@ -117,7 +191,10 @@ export const AsideTop = () => {
               </button>
               <button
                 className="bg-main-gray rounded-full py-[6px] w-32"
-                onClick={() => setIsEdit(false)}
+                onClick={() => {
+                  setIsEdit(false);
+                  setIsClicked(false);
+                }}
               >
                 취소
               </button>
@@ -136,9 +213,20 @@ export const AsideTop = () => {
           <div className="mt-2">
             <div className="flex justify-between items-baseline w-[238px]">
               <div className="w-[168px]">
-                <span className="text-3xl font-bold">
-                  {userDashboard.nickname}
-                </span>
+                {userDashboard.nickname.length > 6 ? (
+                  <>
+                    <div className="w-[168px] text-3xl font-bold">
+                      {userDashboard.nickname.slice(0, 6)}
+                    </div>
+                    <div className="w-[168px] text-3xl font-bold">
+                      {userDashboard.nickname.slice(6)}
+                    </div>
+                  </>
+                ) : (
+                  <span className="w-[168px] text-3xl font-bold">
+                    {userDashboard.nickname}
+                  </span>
+                )}
               </div>
               <div className="w-[80px] flex justify-end">
                 <span className="text-sm">
@@ -162,14 +250,16 @@ export const AsideTop = () => {
                 {userDashboard.infoMessage ?? ''}
               </span>
             </div>
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-baseline">
               <div>
                 <span className="text-xl text-main-orange font-semibold">
                   {`${userDashboard.point} 모락`}
                 </span>
               </div>
               <div className="flex gap-4 text-xl">
-                <span className="text-2xl">{userDashboard.grade}</span>
+                <span className="text-2xl">
+                  {changeGradeEmoji(userDashboard.grade)}
+                </span>
                 <span>{`# ${userDashboard.rank}`}</span>
               </div>
             </div>

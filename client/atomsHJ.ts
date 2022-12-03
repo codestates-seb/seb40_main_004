@@ -74,3 +74,8 @@ export const isCommentOpenAtom = atom({
   key: 'isCommentOpen',
   default: false,
 });
+
+export const currPagesIndexAtom = atom({
+  key: 'currPagesIndex',
+  default: 0,
+});

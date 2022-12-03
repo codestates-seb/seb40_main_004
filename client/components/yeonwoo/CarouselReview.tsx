@@ -16,49 +16,6 @@ import {
 import { useRecoilValue } from 'recoil';
 import { userDashboardAtom } from '../../atomsYW';
 
-const reviews = [
-  {
-    author: '박연우',
-    text: '저번에 답변을 너무 자세하게 잘해주셔서 큰 도움이 되었습니다. 감사합니다. 저번에 답변을 너무 자세하게 잘해주셔서 큰 도움이 되었습니다. 감사합니다.',
-    like: false,
-  },
-  {
-    author: '2',
-    text: '저번에 답변을 너무 자세하게 잘해주셔서 큰 도움이 되었습니다. 감사합니다.',
-    like: true,
-  },
-  {
-    author: '3',
-    text: '저번에 답변을 너무 자세하게 잘해주셔서 큰 도움이 되었습니다. 감사합니다.',
-    like: true,
-  },
-  {
-    author: '4',
-    text: '저번에 답변을 너무 자세하게 잘해주셔서 큰 도움이 되었습니다. 감사합니다.',
-    like: true,
-  },
-  {
-    author: '5',
-    text: '저번에 답변을 너무 자세하게 잘해주셔서 큰 도움이 되었습니다. 감사합니다.',
-    like: true,
-  },
-  {
-    author: '6',
-    text: '저번에 답변을 너무 자세하게 잘해주셔서 큰 도움이 되었습니다. 감사합니다.',
-    like: true,
-  },
-  {
-    author: '7',
-    text: '저번에 답변을 너무 자세하게 잘해주셔서 큰 도움이 되었습니다. 감사합니다.',
-    like: true,
-  },
-  {
-    author: '8',
-    text: '저번에 답변을 너무 자세하게 잘해주셔서 큰 도움이 되었습니다. 감사합니다.',
-    like: true,
-  },
-];
-
 const variants = {
   enter: (direction: number) => {
     return {
@@ -129,89 +86,97 @@ export const CarouselReview = () => {
 
   return (
     <div className="relative w-full h-[190px]">
-      <AnimatePresence initial={false} custom={direction}>
-        <motion.div
-          key={page}
-          className="w-full h-[190px] absolute px-24 flex gap-[72px]"
-          custom={direction}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{
-            x: { type: 'spring', stiffness: 300, damping: 30 },
-          }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={1}
-          onDragEnd={(e, { offset, velocity }) => {
-            const swipe = swipePower(offset.x, velocity.x);
+      {reviews.length !== 0 ? (
+        <>
+          <AnimatePresence initial={false} custom={direction}>
+            <motion.div
+              key={page}
+              className="w-full h-[190px] absolute px-24 flex gap-[72px]"
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: 'spring', stiffness: 300, damping: 30 },
+              }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={1}
+              onDragEnd={(e, { offset, velocity }) => {
+                const swipe = swipePower(offset.x, velocity.x);
 
-            if (swipe < -swipeConfidenceThreshold) {
-              paginate(3);
-            } else if (swipe > swipeConfidenceThreshold) {
-              paginate(-3);
-            }
-          }}
-        >
-          {reviews.slice(reviewIndex, reviewIndex + 3).map((review) => (
-            <motion.div
-              key={review.reviewId}
-              layoutId={review.reviewId + ''}
-              className="bg-main-yellow bg-opacity-20 w-[215px] h-[215px] rounded-2xl p-8 relative hover:cursor-pointer"
-              onClick={() => setId(review.reviewId + '')}
+                if (swipe < -swipeConfidenceThreshold) {
+                  paginate(3);
+                } else if (swipe > swipeConfidenceThreshold) {
+                  paginate(-3);
+                }
+              }}
             >
-              <div>
-                <p onClick={() => setCurReview(review)}>
-                  {review.content.length > 50
-                    ? `${review.content.slice(0, 50)}...`
-                    : review.content}
-                </p>
-              </div>
-              <div className="absolute bottom-8 flex justify-between w-[155px]">
-                <span>{`- ${review.userInfo.nickname}`}</span>
-              </div>
+              {reviews.slice(reviewIndex, reviewIndex + 3).map((review) => (
+                <motion.div
+                  key={review.reviewId}
+                  layoutId={review.reviewId + ''}
+                  className="bg-main-yellow bg-opacity-20 w-[215px] h-[215px] rounded-2xl p-8 relative hover:cursor-pointer"
+                  onClick={() => setId(review.reviewId + '')}
+                >
+                  <div>
+                    <p onClick={() => setCurReview(review)}>
+                      {review.content.length > 50
+                        ? `${review.content.slice(0, 50)}...`
+                        : review.content}
+                    </p>
+                  </div>
+                  <div className="absolute bottom-8 flex justify-between w-[155px]">
+                    <span>{`- ${review.userInfo.nickname}`}</span>
+                  </div>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
-        </motion.div>
-        {id ? (
-          <motion.div
-            className="w-screen h-screen fixed top-0 left-0 flex justify-center items-center z-10"
-            onClick={() => setId(null)}
-            initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
-            animate={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
-            exit={{ backgroundColor: 'rgba(0,0,0,0)' }}
+            {id ? (
+              <motion.div
+                className="w-screen h-screen fixed top-0 left-0 flex justify-center items-center z-10"
+                onClick={() => setId(null)}
+                initial={{ backgroundColor: 'rgba(0,0,0,0)' }}
+                animate={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+                exit={{ backgroundColor: 'rgba(0,0,0,0)' }}
+              >
+                <motion.div
+                  layoutId={id}
+                  className="w-[633px] h-[633px] bg-[#F5EFD9] p-12 rounded-2xl text-[28px]"
+                >
+                  <div>
+                    <p>
+                      {curReview?.content.length > 500
+                        ? `${curReview?.content.slice(0, 500)}...`
+                        : curReview?.content}
+                    </p>
+                  </div>
+                  <div className="flex justify-between w-full mt-7">
+                    <span>{`- ${curReview?.userInfo.nickname}`}</span>
+                  </div>
+                </motion.div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+          <div
+            className="absolute top-[45%] z-10 right-0 hover:cursor-pointer"
+            onClick={() => paginate(3)}
           >
-            <motion.div
-              layoutId={id}
-              className="w-[633px] h-[633px] bg-[#F5EFD9] p-12 rounded-2xl text-[28px]"
-            >
-              <div>
-                <p>
-                  {curReview?.content.length > 500
-                    ? `${curReview?.content.slice(0, 500)}...`
-                    : curReview?.content}
-                </p>
-              </div>
-              <div className="flex justify-between w-full mt-7">
-                <span>{`- ${curReview?.userInfo.nickname}`}</span>
-              </div>
-            </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
-      <div
-        className="absolute top-[45%] z-10 right-0 hover:cursor-pointer"
-        onClick={() => paginate(3)}
-      >
-        <FontAwesomeIcon icon={faChevronRight} size="3x" />
-      </div>
-      <div
-        className="absolute top-[45%] z-10 left-0 hover:cursor-pointer"
-        onClick={() => paginate(-3)}
-      >
-        <FontAwesomeIcon icon={faChevronLeft} size="3x" />
-      </div>
+            <FontAwesomeIcon icon={faChevronRight} size="3x" />
+          </div>
+          <div
+            className="absolute top-[45%] z-10 left-0 hover:cursor-pointer"
+            onClick={() => paginate(-3)}
+          >
+            <FontAwesomeIcon icon={faChevronLeft} size="3x" />
+          </div>
+        </>
+      ) : (
+        <div className="w-full h-full flex justify-center items-center">
+          <span>받은 응원 메세지가 아직 없습니다</span>
+        </div>
+      )}
     </div>
   );
 };

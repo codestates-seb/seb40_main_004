@@ -2,7 +2,7 @@ export const elapsedTime = (pastDate: string) => {
   const now = new Date();
   const past = new Date(pastDate);
   const diff = now.getTime() - past.getTime();
-  const sec = Math.floor(diff / 1000);
+  const sec = Math.floor(diff / 1000) + 1;
   const min = Math.floor(sec / 60);
   const hour = Math.floor(min / 60);
   const day = Math.floor(hour / 24);

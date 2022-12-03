@@ -1,34 +1,102 @@
 /*
  * 책임 작성자: 정하승
  * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-18
+ * 최근 수정일: 2022-12-02(박혜정)
  * 개요: 질문 리스트를 표시합니다.
  */
 
 import Link from 'next/link';
-import { CreatedDate } from '../hyejung/CreatedDate';
-import { QuestionTitle } from '../hyejung/QuestionTitle';
-import { TagList } from '../hyejung/TagList';
-import { UserNickname } from '../hyejung/UserNickname';
+import { QuestionListProps } from '../../libs/interfaces';
+import { elapsedTime } from '../../libs/elapsedTime';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
+import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
 
-export const QuestionList = () => {
-  return (
-    <section className="flex flex-col w-full mt-10">
-      <Link href="/ask">
-        <button className="bg-main-yellow hover:bg-main-orange w-20 mb-5 rounded-full p-2 ml-80">
-          질문하기
-        </button>
-      </Link>
-      {[...Array(9)].map((_, i) => (
-        <article key={i}>
-          <QuestionTitle title="리액트 쿼리 질문드립니다." />
-          <div className="flex justify-start space-x-2">
-            <UserNickname nickname="김코딩" userId={1} grade="BRONZE" />
-            <CreatedDate createdAt="1분전" />
-          </div>
-          <TagList tags={[{ tagId: 1, name: 'REACT' }]} />
-        </article>
-      ))}
-    </section>
-  );
+import { Pagination } from './Pagination';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+export const QuestionList = ({
+  response,
+  isLoading,
+  pageIndex,
+  setPageIndex,
+}: any) => {
+  if (!isLoading && response && response.data.length)
+    return (
+      <main className="flex flex-col w-full divide-y min-h-screen">
+        {response.data.map((article: QuestionListProps) => (
+          <section className="py-4 space-y-4 " key={article.articleId}>
+            <article className="space-x-2">
+              {article.isClosed ? (
+                <FontAwesomeIcon
+                  icon={solidCheck}
+                  className="fa-lg text-main-orange"
+                />
+              ) : (
+                <FontAwesomeIcon icon={voidCheck} className="fa-lg" />
+              )}
+
+              <Link href={`/questions/${article.articleId}`}>
+                <span className="text-lg font-bold hover:cursor-pointer">
+                  {article?.title?.length >= 35
+                    ? `${article?.title?.slice(0, 35)}...`
+                    : article?.title}
+                </span>
+              </Link>
+            </article>
+            <section className="flex justify-between items-center">
+              <article className="flex space-x-3">
+                <div className="flex">
+                  <Link href={`/dashboard/${article?.userInfo?.userId}`}>
+                    <span className="text-xs hover:cursor-pointer">
+                      {article?.userInfo?.nickname}
+                    </span>
+                  </Link>
+                </div>
+                <div className="text-xs space-x-2">
+                  {article?.tags?.map((tag, i) => (
+                    <span key={i}>{i < 3 ? `#${tag.name}` : ''}</span>
+                  ))}
+                </div>
+              </article>
+              <article className="flex gap-4">
+                <div className="flex">
+                  <span className="text-xs">
+                    {elapsedTime(article.createdAt)}
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <FontAwesomeIcon icon={faHeart} size="xs" />
+                  <span className="text-xs">{article.likes}</span>
+                </div>
+                <div className="flex gap-2">
+                  <FontAwesomeIcon icon={faComment} size="xs" />
+                  <span className="text-xs">{article.answerCount}</span>
+                </div>
+              </article>
+            </section>
+          </section>
+        ))}
+        <div className="mx-auto mt-10">
+          <Pagination
+            setPageIndex={setPageIndex}
+            totalPage={response?.pageInfo?.totalPages}
+            pageIndex={pageIndex}
+          />
+        </div>
+      </main>
+    );
+  else if (!isLoading && !response?.data.length)
+    return (
+      <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
+        검색 결과를 찾을 수 없습니다.🥲
+      </div>
+    );
+  else
+    return (
+      <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
+        로딩중~🔥
+      </div>
+    );
 };

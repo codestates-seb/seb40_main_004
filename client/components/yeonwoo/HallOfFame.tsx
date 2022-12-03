@@ -1,14 +1,15 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-12-02
  */
 
-import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { rankList } from '../../interfaces';
+import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
+import { client } from '../../libs/client';
 
 export const HallOfFame = () => {
   const [ranks, setRanks] = useState<rankList[] | null>(null);
@@ -16,7 +17,7 @@ export const HallOfFame = () => {
     [],
   );
   const getRanks = async () => {
-    const res = await axios.get('/api/users/ranks?page=1&size=8');
+    const res = await client.get('/api/users/ranks?page=1&size=8');
     setRanks(res.data.data);
   };
   useEffect(() => {
@@ -24,7 +25,7 @@ export const HallOfFame = () => {
   }, []);
   return (
     <>
-      <div className="mb-10">
+      <div>
         <span className="text-2xl font-bold">🏆 명예의 전당</span>
       </div>
       <div>
@@ -38,25 +39,27 @@ export const HallOfFame = () => {
                 <span className="text-lg font-bold">{rank.rank}</span>
               </div>
               <div className="w-[326px] flex gap-2">
-                <div className="w-[45px] h-[45px] rounded-full overflow-hidden">
-                  {errorAvatarId.includes(rank.avatar?.avatarId) ? (
-                    <Image src="/favicon.ico" width="45px" height="45px" />
-                  ) : (
-                    <Image
-                      src={
-                        rank.avatar ? rank.avatar.remotePath : '/favicon.ico'
-                      }
-                      width="45px"
-                      height="45px"
-                      onError={() =>
-                        setIsErrorAvatarId((prev) => [
-                          ...prev,
-                          rank.avatar?.avatarId,
-                        ])
-                      }
-                    />
-                  )}
-                </div>
+                <Link href={`/dashboard/${rank.userId}`}>
+                  <div className="w-[45px] h-[45px] rounded-full overflow-hidden hover:cursor-pointer">
+                    {errorAvatarId.includes(rank.avatar?.avatarId) ? (
+                      <Image src="/favicon.ico" width="45px" height="45px" />
+                    ) : (
+                      <Image
+                        src={
+                          rank.avatar ? rank.avatar.remotePath : '/favicon.ico'
+                        }
+                        width="45px"
+                        height="45px"
+                        onError={() =>
+                          setIsErrorAvatarId((prev) => [
+                            ...prev,
+                            rank.avatar?.avatarId,
+                          ])
+                        }
+                      />
+                    )}
+                  </div>
+                </Link>
                 <div>
                   <div>
                     <Link href={`/dashboard/${rank.userId}`}>
@@ -74,7 +77,9 @@ export const HallOfFame = () => {
                       </span>
                     </div>
                     <div>
-                      <span className="text-xs mr-2">{rank.grade}</span>
+                      <span className="text-xs mr-2">
+                        {changeGradeEmoji(rank.grade ?? '')}
+                      </span>
                     </div>
                   </div>
                 </div>
