@@ -11,7 +11,7 @@ import { isAnswerEditAtom, isAnswerPostedAtom } from '../../atomsHJ';
 import { client } from '../../libs/client';
 import { useFetch } from '../../libs/useFetchSWR';
 import { mutate as patchMutate } from 'swr';
-import { isLoginAtom } from '../../atomsYW';
+import { isLoginAtom, renderingAtom } from '../../atomsYW';
 import { getFileUrl, uploadImg } from '../../libs/uploadS3';
 import { QuillEditor } from './QuillEditor';
 
@@ -27,6 +27,7 @@ export const AnswerEditor = () => {
   const isLogin = useRecoilValue(isLoginAtom);
   const [isAnserEdit, setIsAnswerEdit] = useRecoilState(isAnswerEditAtom);
   const [fileIdList, setFileIdList] = useState<any>([]);
+  const setRenderingHeader = useSetRecoilState(renderingAtom);
 
   // 답변글 등록 후 업데이트(mutate)를 위해 캐시 데이터 요청
   const { data: currAnswers, mutate } = useFetch(
@@ -79,6 +80,7 @@ export const AnswerEditor = () => {
       `/api/articles/${articleId}/answers`,
       payload,
     );
+    setRenderingHeader((prev) => !prev);
     const newAnswers = response.data;
     mutate({ currAnswers, ...newAnswers }, { revalidate: false })
       .then(() => {

@@ -23,6 +23,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
+import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =
@@ -108,6 +109,8 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
           <ProfileImage src={answer.avatar.remotePath || tempSrc} />
           <Link href={`/dashboard/${answer.userInfo.userId}`}>
             <span className="text-sm sm:text-xl font-bold cursor-pointer">
+              {changeGradeEmoji(answer.userInfo.grade)}
+              {` `}
               {answer.userInfo.nickname}
             </span>
           </Link>
@@ -138,7 +141,7 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
       </section>
 
       <section>
-        <section className="p-6 flex flex-col space-y-2">
+        <section className="p-8 flex flex-col space-y-2">
           <AnswerMainText>{answer.content}</AnswerMainText>
           {answer.userInfo.userId.toString() === currUserId ? (
             <article className="space-x-2 text-sm ml-auto">
