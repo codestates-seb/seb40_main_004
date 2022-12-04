@@ -30,4 +30,11 @@
 이제 개발을 막 시작한 초보 개발자의 경우, 모르는 것이 생겼을 때 해당 부분을 어떻게 질문할지, 만일 답변을 받더라도 '이런 것도 모르냐'식의 답변을 받을 까에 대한 두려움이 있을 것입니다.
 그렇기 때문에 저희 팀은 이 프로젝트를 통해서 딱딱한 분위기를 깨고 좀 더 둥글둥글한 분위기 속에서 질문/답변이 오가는 커뮤니티를 만들고 싶었습니다.
 
+![게시글 작성](https://user-images.githubusercontent.com/89173923/205502592-eceb18ff-b442-4ff3-b73a-f02b30cdac50.gif)
+![답변 작성](https://user-images.githubusercontent.com/89173923/205502684-9085d4b7-df5e-4cd1-acef-0e8218a569ce.gif)
+![답변 채택](https://user-images.githubusercontent.com/89173923/205502730-605aa86e-ca6e-4f66-9dcd-4af322de4b1e.gif)
+![게시글 검색](https://user-images.githubusercontent.com/89173923/205502882-1745f77d-c5d5-4ef7-bb7e-7c2c69d779c6.gif)
+![대시보드 : 질문 - 답변 조회](https://user-images.githubusercontent.com/89173923/205503526-102e03dd-1ade-4d97-9b97-5fc8cf9872f2.gif)
+![대시보드 : 후기 - 북마크 조회](https://user-images.githubusercontent.com/89173923/205503263-11dd3f94-dcbd-46a1-9efa-041969b0bf8b.gif)
+
 
