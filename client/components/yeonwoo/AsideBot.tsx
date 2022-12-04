@@ -10,7 +10,7 @@ import { userDashboardAtom } from '../../atomsYW';
 const arrKor = [
   '친절한',
   '현명한',
-  'SMART',
+  '똑똑한',
   '응가',
   '꼼꼼한',
   '박식한',
