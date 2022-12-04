@@ -45,7 +45,7 @@ The file explorer is accessible using the button in left corner of the navigatio
 
 
 ### 전체 동작은 MorakMorak GitBook에서!
-
+https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 
 
 ## 기술스택  
