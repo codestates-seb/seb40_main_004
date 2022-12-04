@@ -11,19 +11,21 @@ import { TagList } from './TagList';
 import { UserNickname } from './UserNickname';
 import { mutate } from 'swr';
 import { useRouter } from 'next/router';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
 import { BtnLike } from './BtnLike';
 import { QuestionMainText } from './QuestionMainText';
 import { client } from '../../libs/client';
 import { useFetch } from '../../libs/useFetchSWR';
 import { BtnBookmark } from './BtnBookmark';
+import { isArticleEditAtom } from '../../atomsHJ';
 
 export const QuestionContent = () => {
   const router = useRouter();
   const { articleId } = router.query;
 
   const isLogin = useRecoilValue(isLoginAtom);
+  const setArticleEdit = useSetRecoilState(isArticleEditAtom);
 
   const { data: article, isLoading } = useFetch(`/api/articles/${articleId}`);
 
@@ -38,8 +40,7 @@ export const QuestionContent = () => {
     if (confirm('게시글을 삭제하시겠습니까...?')) {
       client
         .delete(`/api/articles/${articleId}`)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           alert('게시글이 삭제되었습니다. 게시글 목록으로 돌아갑니다.');
           router.replace(`/questions`);
           mutate(`/api/articles/${articleId}`);
@@ -52,6 +53,12 @@ export const QuestionContent = () => {
   };
 
   const onEdit = () => {
+    setArticleEdit({
+      isArticleEdit: true,
+      title: article.title,
+      content: article.content,
+      articleId: articleId as string,
+    });
     router.push(`/ask`);
   };
 

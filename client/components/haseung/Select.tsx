@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 정하승
  * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-11-29
+ * 최근 수정일: 2022-12-04(박혜정)
  */
 
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
@@ -53,10 +53,9 @@ export const Select = ({ multiple, tags, onChange, options }: SelectProps) => {
 
   return (
     <div
-      onBlur={() => setIsOpen(false)}
       onClick={() => setIsOpen((prev) => !prev)}
       tabIndex={0}
-      className="relative w-80 top-5 min-h-[1.5em] flex justify-start ml-10 border-[0.05em] border-solid border-slate-800 gap-1 outline-none cursor-pointer hover:border-main-orange"
+      className="relative h-12 flex justify-start border-[0.05em] border-solid border-main-gray rounded-md outline-none cursor-pointer hover:border-main-orange"
     >
       <span className="flex-grow flex gap-2 flex-wrap">
         {multiple
@@ -76,9 +75,9 @@ export const Select = ({ multiple, tags, onChange, options }: SelectProps) => {
           : tags?.name}
       </span>
       {isOpen ? (
-        <FontAwesomeIcon className="mt-4 mr-2" icon={faChevronUp} />
-      ) : (
         <FontAwesomeIcon className="mt-4 mr-2" icon={faChevronDown} />
+      ) : (
+        <FontAwesomeIcon className="mt-4 mr-2" icon={faChevronUp} />
       )}
       <ul
         className={`absolute my-1 p-0 list-none max-h-[15em] overflow-y-auto border-solid border-[0.05rem] border-slate-800 w-full left-0 top-[calc(100%+0.25em)] bg-white z-[100] cursor-pointer block ${

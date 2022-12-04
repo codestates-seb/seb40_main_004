@@ -79,3 +79,13 @@ export const currPagesIndexAtom = atom({
   key: 'currPagesIndex',
   default: 0,
 });
+
+export const isArticleEditAtom = atom({
+  key: 'isArticleEdit',
+  default: {
+    isArticleEdit: false,
+    title: '',
+    content: '',
+    articleId: '',
+  },
+});
