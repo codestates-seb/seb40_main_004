@@ -16,6 +16,8 @@ import { useFetch } from '../../libs/useFetchSWR';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useRecoilState } from 'recoil';
+import { keywordAtom } from '../../atomsYW';
 
 type FormValue = {
   keyword: string;
@@ -23,7 +25,7 @@ type FormValue = {
 
 const Questions: NextPage = () => {
   const [pageIndex, setPageIndex] = useState(1);
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useRecoilState(keywordAtom);
   const [sort, setSort] = useState(['최신순', 'desc']);
   const [isOpen, setIsOpen] = useState(false);
   const [target, setTarget] = useState('titleAndContent');

@@ -41,3 +41,8 @@ export const renderingAtom = atom({
   key: 'rendering',
   default: true,
 });
+
+export const keywordAtom = atom({
+  key: 'keyword',
+  default: '',
+});
