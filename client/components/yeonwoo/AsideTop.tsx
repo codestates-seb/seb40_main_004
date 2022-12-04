@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-12-03
+ * 최근 수정일: 2022-12-04
  */
 
 import { faBloggerB, faGithub } from '@fortawesome/free-brands-svg-icons';
@@ -238,7 +238,9 @@ export const AsideTop = () => {
                     ? '비개발자'
                     : userDashboard.jobType === 'PM'
                     ? '매니저'
-                    : '디자이너'}
+                    : userDashboard.jobType === 'DESIGNER'
+                    ? '디자이너'
+                    : '?'}
                 </span>
               </div>
             </div>

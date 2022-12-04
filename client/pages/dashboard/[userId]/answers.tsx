@@ -27,10 +27,33 @@ const DashboardAnswers: NextPage = () => {
   const router = useRouter();
   const getUser = async () => {
     try {
-      const res = await client.get(`/api/users/${userId}/dashboard`);
-      setUserDashboard(res.data);
+      if (userId) {
+        const res = await client.get(`/api/users/${userId}/dashboard`);
+        setUserDashboard(res.data);
+      }
     } catch (error) {
-      console.error(error);
+      setUserDashboard({
+        userId: 0,
+        email: '',
+        nickname: '탈퇴한 유저',
+        jobType: '',
+        grade: '',
+        point: 0,
+        github: '',
+        blog: '',
+        infoMessage: '',
+        rank: 0,
+        avatar: {
+          avatarId: 0,
+          filename: '',
+          remotePath: '/favicon.ico',
+        },
+        tags: [],
+        reviewBadges: [],
+        articles: [],
+        activities: [],
+        reviews: [],
+      });
     }
   };
 
