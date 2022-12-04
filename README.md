@@ -35,6 +35,8 @@
 ### 사용 기술 스택
 
 ### Documentation
+- https://huiyuns-organization.gitbook.io/morak-2-lab/
+- 작성과정
 https://github.com/MorakMorak/morakmorak
 
 
