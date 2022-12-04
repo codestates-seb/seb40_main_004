@@ -22,7 +22,6 @@ export const SearchBar = () => {
   const onValid: SubmitHandler<IFormValue> = (data) => {
     if (!data.keyword.length) {
       setKeyword('');
-      setKeyword('');
     } else {
       setKeyword(data.keyword);
       router.push('/questions');
