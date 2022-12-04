@@ -20,14 +20,41 @@
 
 </table>
 
-### 컨셉
+##  가장 따뜻한 개발자 커뮤니티, 모락모락
 
-모든 개발자를 위한 따듯한 질문/답변 커뮤니티
+처음 개발을 시작했던 때를 기억하시나요?
+외계어 같은 코드와 읽어도 이해되지 않는 문서, 기나긴 에러코드까지… 
+서툰 질문이 부끄럽고, 날선 답변이 두려우셨다면
+모락모락에서 함께해요!
 
-### 이 프로젝트를 시작하게 된 이유
 
-기존 개발 관련 질문답변 커뮤니티는 다소 딱딱한 감이 없지 않아 있습니다.
-이제 개발을 막 시작한 초보 개발자의 경우, 모르는 것이 생겼을 때 해당 부분을 어떻게 질문할지, 만일 답변을 받더라도 '이런 것도 모르냐'식의 답변을 받을 까에 대한 두려움이 있을 것입니다.
-그렇기 때문에 저희 팀은 이 프로젝트를 통해서 딱딱한 분위기를 깨고 좀 더 둥글둥글한 분위기 속에서 질문/답변이 오가는 커뮤니티를 만들고 싶었습니다.
+##  모락모락의 핵심 기능
+
+###  따뜻한 후기를 나눠보세요
+
+The file explorer is accessible using the button in left corner of the navigation bar. You can create a new file by clicking the **New file** button in the file explorer. You can also create folders by clicking the **New folder** button.
+
+### 가장 많이 받은 후기 태그를 확인하세요
+
+
+
+### 따뜻함을 나눌수록 랭킹이 올라갑니다. 
+
+
+### 도움받은 질문을 북마크해보세요
+
+
+### 전체 동작은 MorakMorak GitBook에서!
+
+
+## 기술스택  
+### Frontend
+### Backend
+
+## 아키텍처
+
+## 팀 소개
+
+## 업데이트 예정 기능
 
 
