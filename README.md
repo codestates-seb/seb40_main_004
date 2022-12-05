@@ -1,3 +1,7 @@
+
+
+
+
 ##  가장 따뜻한 개발자 커뮤니티, 모락모락
 ![ 모락모락](https://user-images.githubusercontent.com/102589253/205538117-219ce4e9-068c-4e9f-a373-38ce000a50f1.png)
 
@@ -9,7 +13,9 @@
 
 ##  모락모락의 핵심 기능
 
-###  따뜻한 후기를 나눠보세요
+###  따뜻하고 재밌는 후기를 나눠보세요
+  유저끼리 주고받는 후기와 포인트로 거리낌없이 질문하고, 속시원하게 답변을 받아보세요!
+![ezgif com-gif-maker (10) (1)](https://user-images.githubusercontent.com/102589253/205721715-887bee2f-6c4a-4861-80a1-6103bb8eeca4.gif)
 <table>
   
   <tr>
@@ -27,18 +33,75 @@
 
 </table>
 
-![답변 채택](https://user-images.githubusercontent.com/89173923/205502730-605aa86e-ca6e-4f66-9dcd-4af322de4b1e.gif)
+
 
 ### 가장 많이 받은 후기 태그를 확인하세요
+<table>
+  
+  <tr>
+      <td align="center">
+    <img src="![대시보드 : 질문 - 답변 조회](https://user-images.githubusercontent.com/89173923/205503526-102e03dd-1ade-4d97-9b97-5fc8cf9872f2.gif)"width="700px;" alt=""/><br/>
+    </td>
+     <td align="center">
+       <img src="![대시보드 : 후기 - 북마크 조회](https://user-images.githubusercontent.com/89173923/205503263-11dd3f94-dcbd-46a1-9efa-041969b0bf8b.gif)" width="700px;" alt=""/><br/>
+    </td>
 
+</tr>
+      <td align="center">작성한 답변 확인하기</td>
+      <td align="center">받은 후기와 태그 보기</td>
+</tr>
+
+</table>
 
 
 ### 따뜻함을 나눌수록 랭킹이 올라갑니다. 
+🕯️ 촛불 ⇒ 🔥 성냥불 ⇒ 🎇 모닥불 ⇒ ♨️ 모락모락
+점점 성장하는 여러분의 영향력을 확인해보세요! 
+<table>
+  <tr>
+      <td align="center">
+    <img src="![답글 좋아요 ](https://user-images.githubusercontent.com/102589253/205718289-fd9493e0-cf19-45c0-a4dc-c66c350c2a15.gif)"width="700px;" alt=""/><br/>
+    </td>
+     <td align="center">
+       <img src="![ezgif com-gif-maker (8)](https://user-images.githubusercontent.com/102589253/205714052-a912cc35-e955-4b36-87c9-4bc24a557741.gif)f" width="700px;" alt=""/><br/>
+    </td>
+</tr>
+      <td align="center">답변 좋아요</td>
+      <td align="center">명예의 전당</td>
+</tr>
+</table>
 
+![ezgif com-gif-maker (8)](https://user-images.githubusercontent.com/102589253/205714052-a912cc35-e955-4b36-87c9-4bc24a557741.gif)
+
+![답글 좋아요 ](https://user-images.githubusercontent.com/102589253/205718289-fd9493e0-cf19-45c0-a4dc-c66c350c2a15.gif)
+
+![ezgif com-gif-maker (11)](https://user-images.githubusercontent.com/102589253/205715323-de55a96e-c475-40cd-9ba2-5718ba2692f7.gif)
 
 ### 도움받은 질문을 북마크해보세요
+같은 질문 반복 검색은 이제 그만! </br>
+검색하다 명쾌한 글을 보셨다면 북마크해보세요!
+<table>
+  
+  <tr>
+      <td align="center">
+    <img src="![morak-기능-6](https://user-images.githubusercontent.com/102589253/205721315-8246b28c-9e5f-46d7-b348-7706b47e85f3.gif)"width="700px;" alt=""/><br/>
+    </td>
+     <td align="center">
+       <img src="![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/102589253/205721438-476b95be-066b-4717-9fa4-0e16443906e1.gif)" width="700px;" alt=""/><br/>
+    </td>
 
-![대시보드 : 후기 - 북마크 조회](https://user-images.githubusercontent.com/89173923/205503263-11dd3f94-dcbd-46a1-9efa-041969b0bf8b.gif)
+</tr>
+      <td align="center">키워드 검색하기</td>
+      <td align="center">북마크 모아보기</td>
+</tr>
+
+</table>
+
+
+
+### 함께 심기는 잔디는 덤!
+![ezgif com-gif-maker (11)](https://user-images.githubusercontent.com/102589253/205715323-de55a96e-c475-40cd-9ba2-5718ba2692f7.gif)
+
 
 ### 전체 API는 MorakMorak GitBook에서 확인해보세요!
 <img width="1160" alt="image" src="https://user-images.githubusercontent.com/102589253/205534052-fdc4939c-9815-462b-90b9-d782b49e3b13.png">
@@ -73,10 +136,8 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 
 ## 모락모락 팀 소개
 </br>
-안녕하세요! 저희는 **모락모락 랩**입니다!
 
-![스크린샷 2022-12-05 오전 1.47.47.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/bc576024-cdfd-462b-bc6e-5e4cef85575b/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-12-05_%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB_1.47.47.png)
-
+안녕하세요! 저희는 **모락모락**입니다!
 <table>
   <tr>
   <td align="center"><a href="https://github.com/HyeonWooGa"><img src="https://avatars.githubusercontent.com/u/101603474?v=4" width="100px;" alt=""/><br /><sub><b>@HyeonWooGa</b></sub></a><br /></td>
