@@ -7,18 +7,18 @@ import { userEmailAtom } from '../../../atomsHS';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 
-type TemporaryPasswordProps = {
+type CheckAuthCodeProps = {
   email: string;
   authKey: string;
 };
 
 const CheckAuthCode = () => {
-  const { register, handleSubmit } = useForm<TemporaryPasswordProps>({
+  const { register, handleSubmit } = useForm<CheckAuthCodeProps>({
     mode: 'onChange',
   });
   const setEmail = useSetRecoilState(userEmailAtom);
   const router = useRouter();
-  const onValid = ({ email, authKey }: TemporaryPasswordProps) => {
+  const onValid = ({ email, authKey }: CheckAuthCodeProps) => {
     axios
       .post(`/api/auth/password/recovery`, { email, authKey })
       .then(() => {

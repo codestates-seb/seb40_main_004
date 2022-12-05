@@ -4,16 +4,16 @@ import { useForm } from 'react-hook-form';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 
-type FindPasswordProps = {
+type GetAuthCodeProps = {
   email: string;
 };
 
 const GetAuthCode = () => {
-  const { register, handleSubmit } = useForm<FindPasswordProps>({
+  const { register, handleSubmit } = useForm<GetAuthCodeProps>({
     mode: 'onChange',
   });
   const router = useRouter();
-  const onValid = ({ email }: FindPasswordProps) => {
+  const onValid = ({ email }: GetAuthCodeProps) => {
     axios
       .post(`/api/auth/password/support`, { email })
       .then(() => {
