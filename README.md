@@ -48,7 +48,10 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 
 ## 기술스택  
 ### Frontend
+![Untitled](https://user-images.githubusercontent.com/97802103/205541214-ff5ad357-41c3-4c99-b1a5-b9d9bcda7b22.png)
+
 ### Backend
+![Untitled (1)](https://user-images.githubusercontent.com/97802103/205541248-187c3f3a-ec4a-4a6b-9f1a-7c8552a88d7d.png)
 
 ## 아키텍처
 
