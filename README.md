@@ -54,6 +54,7 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 ![Untitled (1)](https://user-images.githubusercontent.com/97802103/205541248-187c3f3a-ec4a-4a6b-9f1a-7c8552a88d7d.png)
 
 ## 아키텍처
+![Web App Reference Architecture (1)](https://user-images.githubusercontent.com/97802103/205543932-bf0811dc-6126-4d05-a084-b09c17fb68a3.png)
 
 
 
