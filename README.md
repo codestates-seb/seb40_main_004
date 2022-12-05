@@ -37,7 +37,6 @@
 
 ### 가장 많이 받은 후기 태그를 확인하세요
 <table>
-  
   <tr>
       <td align="center">
     <img src="![대시보드 : 질문 - 답변 조회](https://user-images.githubusercontent.com/89173923/205503526-102e03dd-1ade-4d97-9b97-5fc8cf9872f2.gif)"width="700px;" alt=""/><br/>
@@ -45,12 +44,10 @@
      <td align="center">
        <img src="![대시보드 : 후기 - 북마크 조회](https://user-images.githubusercontent.com/89173923/205503263-11dd3f94-dcbd-46a1-9efa-041969b0bf8b.gif)" width="700px;" alt=""/><br/>
     </td>
-
 </tr>
       <td align="center">작성한 답변 확인하기</td>
       <td align="center">받은 후기와 태그 보기</td>
 </tr>
-
 </table>
 
 
