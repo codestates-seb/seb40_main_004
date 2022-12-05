@@ -1,22 +1,23 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
-
-type FindPasswordProps = {
-  email: string;
-};
+import { Loader } from '../../../components/common/Loader';
+import { AuthProps } from '../../../libs/interfaces';
 
 const GetAuthCode = () => {
-  const { register, handleSubmit } = useForm<FindPasswordProps>({
+  const { register, handleSubmit } = useForm<AuthProps>({
     mode: 'onChange',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const onValid = ({ email }: FindPasswordProps) => {
+  const onValid = ({ email }: AuthProps) => {
     axios
       .post(`/api/auth/password/support`, { email })
       .then(() => {
+        setIsSubmitting(true);
         router.push('/find-password/check-auth-code');
       })
       .catch((error) => console.error('error', error));
@@ -36,6 +37,13 @@ const GetAuthCode = () => {
           <button className="bg-main-yellow bg-opacity-80 py-3 w-full rounded-[20px] font-bold  hover:bg-main-yellow">
             인증번호 발송
           </button>
+          <p className="text-center relative top-20 font-bold text-xl">
+            {isSubmitting ? (
+              <>
+                <Loader /> <span>인증번호 전송 중....</span>
+              </>
+            ) : null}
+          </p>
         </form>
       </main>
       <Footer />
