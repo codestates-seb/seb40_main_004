@@ -128,11 +128,13 @@ public class ArticleService {
     }
 
     public Article findVerifiedArticle(Long articleId) {
-        return articleRepository.findById(articleId).orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
+        return articleRepository.findById(articleId)
+                .orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
     }
 
     private Article findArticleRelationWithUser(Long articleId) {
-        return articleRepository.findArticleRelationWithUser(articleId).orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
+        return articleRepository.findArticleRelationWithUser(articleId)
+                .orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
     }
     private void checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
         if (!article.getUser().getId().equals(userInfo.getId())) {
@@ -140,21 +142,31 @@ public class ArticleService {
         }
     }
 
-    public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticleAsPaging(String category, String keyword, String target, String sort, Integer page, Integer size) {
+    public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticleAsPaging(
+            String category, String keyword, String target, String sort, Integer page, Integer size) {
+
         PageRequest pageRequest = PageRequest.of(page - 1, size);
 
         Page<Article> articles = articleRepository.search(category, keyword, target, sort, pageRequest);
 
-        List<ArticleDto.ResponseListTypeArticle> mapper = articles.getContent().stream().map(article -> {
+        List<ArticleDto.ResponseListTypeArticle> mapper = getResponseListTypeArticles(articles);
+
+        return new ResponseMultiplePaging<>(mapper, articles);
+    }
+
+    private List<ArticleDto.ResponseListTypeArticle> getResponseListTypeArticles(Page<Article> articles) {
+        return articles.getContent().stream().map(article -> {
+
             Integer likes = article.getArticleLikes().size();
             Integer commentCount = article.getComments().size();
             Integer answerCount = article.getAnswers().size();
+
             List<TagDto.SimpleTag> tags = article.getArticleTags().stream()
-                    .map(articleTag -> tagMapper.tagEntityToTagDto(articleTag.getTag())).collect(Collectors.toList());
+                    .map(articleTag -> tagMapper.tagEntityToTagDto(articleTag.getTag()))
+                    .collect(Collectors.toList());
+
             return articleMapper.articleToResponseSearchResultArticle(article, commentCount, answerCount, tags, likes);
         }).collect(Collectors.toList());
-
-        return new ResponseMultiplePaging<>(mapper, articles);
     }
 
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {

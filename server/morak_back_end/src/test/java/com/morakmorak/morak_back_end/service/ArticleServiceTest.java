@@ -3,10 +3,7 @@ package com.morakmorak.morak_back_end.service;
 import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.entity.enums.CategoryName;
-import com.morakmorak.morak_back_end.entity.enums.Grade;
-import com.morakmorak.morak_back_end.entity.enums.ReportReason;
-import com.morakmorak.morak_back_end.entity.enums.TagName;
+import com.morakmorak.morak_back_end.entity.enums.*;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
@@ -247,7 +244,7 @@ public class ArticleServiceTest {
 
     @Test
     @DisplayName("게시글 수정시 존재하지 않는 파일을 보낼시 NotFound 404에러를 던진다. ")
-    public void updateArticle_fail(){
+    public void updateArticle_fail1(){
         //given
         UserDto.UserInfo userInfo = UserDto.UserInfo.builder().id(1L).build();
         List<ArticleTag> articleTags = new ArrayList<>();
@@ -295,6 +292,55 @@ public class ArticleServiceTest {
         //when
         //then
         assertThatThrownBy(() -> articleService.update(changeArticle, userInfo))
+                .isInstanceOf(BusinessLogicException.class);
+    }
+
+    @Test
+    @DisplayName("게시글 수정시 작성자가 아닌 유저가 해당글을 수정할때 401 예외를 터트린다.")
+    public void updateArticle_fail2(){
+        //given
+        List<ArticleTag> articleTags = new ArrayList<>();
+
+        List<File> files = new ArrayList<>();
+
+        Article article = Article.builder().category(Category.builder().name(CategoryName.QNA).build())
+                .id(1L)
+                .thumbnail(1L)
+                .content("내용입니다. ")
+                .articleTags(articleTags)
+                .files(files)
+                .title("제목입니다. ")
+                .user(User.builder().id(1L).build())
+                .build();
+        Tag tag = Tag.builder().name(TagName.JAVA).build();
+        ArticleTag articleTag = ArticleTag.builder().tag(tag).article(article).build();
+        articleTags.add(articleTag);
+        tag.getArticleTags().add(articleTag);
+        File file = File.builder().id(1L).article(article).build();
+        files.add(file);
+
+
+        List<ArticleTag> changeArticleTags = new ArrayList<>();
+        changeArticleTags.add(ArticleTag.builder().tag(Tag.builder().name(TagName.NODE).build()).build());
+        List<File> changeFiles = new ArrayList<>();
+        changeFiles.add(File.builder().id(2L).build());
+        Article changeArticle = Article.builder().category(Category.builder().name(CategoryName.QNA).build())
+                .id(1L)
+                .thumbnail(1L)
+                .content("수정한 내용입니다. ")
+                .articleTags(changeArticleTags)
+                .files(changeFiles)
+                .title("수정한 제목입니다. ")
+                .build();
+        ArticleDto.ResponseSimpleArticle responseSimpleArticle =
+                ArticleDto.ResponseSimpleArticle.builder().articleId(1L).build();
+
+        given(articleRepository.findArticleRelationWithUser(any())).willReturn(Optional.of(article));
+
+
+        //when
+        //then
+        assertThatThrownBy(() -> articleService.update(changeArticle, UserDto.UserInfo.builder().id(2L).build()))
                 .isInstanceOf(BusinessLogicException.class);
     }
 
