@@ -52,15 +52,17 @@ export const EditProfileComponent = () => {
         { shouldFocus: true },
       );
     } else {
-      try {
-        await client.patch('/api/auth/password', {
-          originalPassword,
-          newPassword,
-        });
-        alert('비밀번호가 정상적으로 변경 되었습니다');
-        router.push('/');
-      } catch (error) {
-        alert(`에러 발생 : ${error}`);
+      if (window.confirm('비밀번호 변경 하시겠습니가?')) {
+        try {
+          await client.patch('/api/auth/password', {
+            originalPassword,
+            newPassword,
+          });
+          alert('비밀번호가 정상적으로 변경 되었습니다');
+          router.push('/');
+        } catch (error) {
+          alert(`에러 발생 : ${error}`);
+        }
       }
     }
   };
@@ -102,19 +104,21 @@ export const EditProfileComponent = () => {
   }, [userData]);
   const onSubmitEditProfile = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      await client.patch('/api/users/profiles', {
-        nickname,
-        infoMessage,
-        github,
-        blog,
-        jobType,
-      });
-      localStorage.setItem('nickname', nickname);
-      setRenderingHeader((prev) => !prev);
-      router.push('/');
-    } catch (error) {
-      alert(`에러 발생 : ${error}`);
+    if (window.confirm('프로필 저장 하시겠습니까?')) {
+      try {
+        await client.patch('/api/users/profiles', {
+          nickname,
+          infoMessage,
+          github,
+          blog,
+          jobType,
+        });
+        localStorage.setItem('nickname', nickname);
+        setRenderingHeader((prev) => !prev);
+        router.push('/');
+      } catch (error) {
+        alert(`에러 발생 : ${error}`);
+      }
     }
   };
   const onSubmitMembershipWithdrawal = async (

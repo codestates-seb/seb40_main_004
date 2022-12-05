@@ -52,12 +52,12 @@ export const AsideBot = () => {
   return (
     <div className="mt-[74px]">
       <div className="mb-6">
-        <span className="text-2xl font-semibold">후기 태그</span>
+        <span className="text-xl font-semibold">후기 태그</span>
       </div>
       <div>
         {userDashboard.reviewBadges.map((badge) => (
           <div className="mb-4" key={badge.badge_Id}>
-            <button className="bg-main-yellow rounded-full py-[6px] w-32">
+            <button className="bg-main-yellow rounded-full py-[6px] w-32 text-sm">
               {arrKor[arrEng.indexOf(badge.name)]}
             </button>
           </div>

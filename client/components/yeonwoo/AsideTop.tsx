@@ -102,7 +102,7 @@ export const AsideTop = () => {
               />
             </div>
             <button
-              className="py-[6px] px-2 absolute left-4 bottom-4 bg-background-gray rounded-full"
+              className="py-[6px] px-2 absolute left-4 bottom-4 bg-background-gray rounded-full text-sm border border-[#D9D9D9]"
               onClick={() => setIsClicked((prev) => !prev)}
             >
               ✏️ 편집
@@ -110,7 +110,7 @@ export const AsideTop = () => {
             {isClicked ? (
               <div className="relative -left-8 bottom-8">
                 <ul className="border border-solid border-black border-opacity-10 border-spacing-1 right-0 w-[200px] rounded-xl absolute top-8 bg-background-gray z-20">
-                  <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer mt-2 py-1 px-4 rounded-xl text-[15px]">
+                  <li className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer mt-2 py-1 px-4 rounded-xl text-sm">
                     <label
                       htmlFor="attach-file"
                       className="ml-2 hover:cursor-pointer"
@@ -126,7 +126,7 @@ export const AsideTop = () => {
                     />
                   </li>
                   <li
-                    className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer py-1 mb-2 px-4 rounded-xl text-[15px]"
+                    className="hover:bg-main-yellow hover:bg-opacity-40 hover:cursor-pointer py-1 mb-2 px-4 rounded-xl text-sm"
                     onClick={onClickDelete}
                   >
                     <button className="ml-2">삭제</button>
@@ -141,18 +141,20 @@ export const AsideTop = () => {
           >
             <div className="flex justify-between items-baseline">
               <input
-                className="text-3xl font-bold border border-main-gray rounded-full pl-4 w-[238px]"
+                className="text-xl font-bold border border-main-gray rounded-full pl-4 w-[238px]"
                 value={editNickname}
                 onChange={(e) => setEditNickname(e.target.value)}
                 placeholder="닉네임"
               />
             </div>
             <div className="-mt-1">
-              <span className="text-sm">{userDashboard.email}</span>
+              <span className="text-xs opacity-80 pl-4">
+                {userDashboard.email}
+              </span>
             </div>
             <div className="my-2">
               <input
-                className="text-xl font-medium border border-main-gray rounded-full pl-4 w-[238px]"
+                className="text-lg font-medium border border-main-gray rounded-full pl-4 w-[238px]"
                 value={editInfoMessage}
                 onChange={(e) => setEditInfoMessage(e.target.value)}
                 placeholder="메세지"
@@ -160,12 +162,12 @@ export const AsideTop = () => {
             </div>
             <div className="flex justify-between items-start">
               <div>
-                <span className="text-xl text-main-orange font-semibold">
+                <span className="text-main-orange font-semibold">
                   {`${userDashboard.point} 모락`}
                 </span>
               </div>
-              <div className="flex gap-4 text-xl">
-                <span className="text-2xl">
+              <div className="flex gap-4 items-baseline">
+                <span className="text-lg">
                   {changeGradeEmoji(userDashboard.grade)}
                 </span>
                 <span>{`# ${userDashboard.rank}`}</span>
@@ -173,24 +175,24 @@ export const AsideTop = () => {
             </div>
             <div className="mt-2 mb-4">
               <input
-                className="border border-main-gray rounded-full pl-4 w-[238px] mb-2"
+                className="border border-main-gray rounded-full pl-4 w-[238px] mb-2 text-sm"
                 value={editGithub}
                 onChange={(e) => setEditGithub(e.target.value)}
                 placeholder="깃허브 주소"
               />
               <input
-                className="border border-main-gray rounded-full pl-4 w-[238px]"
+                className="border border-main-gray rounded-full pl-4 w-[238px] text-sm"
                 value={editBlog}
                 onChange={(e) => setEditBlog(e.target.value)}
                 placeholder="블로그 주소"
               />
             </div>
             <div className="w-[238px] flex justify-between">
-              <button className="bg-main-yellow rounded-full py-[6px] w-32">
+              <button className="bg-main-yellow rounded-full py-[6px] w-32 text-sm">
                 저장
               </button>
               <button
-                className="bg-main-gray rounded-full py-[6px] w-32"
+                className="bg-main-gray rounded-full py-[6px] w-32 text-sm"
                 onClick={() => {
                   setIsEdit(false);
                   setIsClicked(false);
@@ -213,23 +215,12 @@ export const AsideTop = () => {
           <div className="mt-2">
             <div className="flex justify-between items-baseline w-[238px]">
               <div className="w-[168px]">
-                {userDashboard.nickname.length > 6 ? (
-                  <>
-                    <div className="w-[168px] text-3xl font-bold">
-                      {userDashboard.nickname.slice(0, 6)}
-                    </div>
-                    <div className="w-[168px] text-3xl font-bold">
-                      {userDashboard.nickname.slice(6)}
-                    </div>
-                  </>
-                ) : (
-                  <span className="w-[168px] text-3xl font-bold">
-                    {userDashboard.nickname}
-                  </span>
-                )}
+                <span className="w-[168px] text-xl font-bold">
+                  {userDashboard.nickname}
+                </span>
               </div>
               <div className="w-[80px] flex justify-end">
-                <span className="text-sm">
+                <span className="text-xs">
                   {userDashboard.jobType === 'DEVELOPER'
                     ? '현업 개발자'
                     : userDashboard.jobType === 'JOB_SEEKER'
@@ -245,21 +236,21 @@ export const AsideTop = () => {
               </div>
             </div>
             <div className="-mt-1">
-              <span className="text-sm">{userDashboard.email}</span>
+              <span className="text-xs opacity-80">{userDashboard.email}</span>
             </div>
             <div className="my-2 max-w-[238px] flex-col">
-              <span className="text-xl font-medium max-w-[238px] overflow-scro">
+              <span className="text-lg font-medium max-w-[238px] overflow-scro">
                 {userDashboard.infoMessage ?? ''}
               </span>
             </div>
             <div className="flex justify-between items-baseline">
               <div>
-                <span className="text-xl text-main-orange font-semibold">
+                <span className="text-main-orange font-semibold">
                   {`${userDashboard.point} 모락`}
                 </span>
               </div>
-              <div className="flex gap-4 text-xl">
-                <span className="text-2xl">
+              <div className="flex gap-4 items-baseline">
+                <span className="text-lg">
                   {changeGradeEmoji(userDashboard.grade)}
                 </span>
                 <span>{`# ${userDashboard.rank}`}</span>
@@ -268,18 +259,18 @@ export const AsideTop = () => {
             <div className="mt-2 mb-4 flex gap-8">
               {userDashboard.github && (
                 <a target="_blank" href={userDashboard.github} rel="noopener">
-                  <FontAwesomeIcon icon={faGithub} size="2xl" />
+                  <FontAwesomeIcon icon={faGithub} size="xl" />
                 </a>
               )}
               {userDashboard.blog && (
                 <a target="_blank" href={userDashboard.blog} rel="noopener">
-                  <FontAwesomeIcon icon={faBloggerB} size="2xl" />
+                  <FontAwesomeIcon icon={faBloggerB} size="xl" />
                 </a>
               )}
             </div>
             <div>
               <button
-                className="bg-main-yellow py-[6px] rounded-full w-[238px]"
+                className="bg-main-yellow py-[6px] rounded-full w-[238px] text-sm"
                 onClick={
                   userId === userDashboard.userId + ''
                     ? onClickEdit

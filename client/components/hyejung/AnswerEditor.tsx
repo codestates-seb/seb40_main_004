@@ -14,6 +14,7 @@ import { mutate as patchMutate } from 'swr';
 import { isLoginAtom, renderingAtom } from '../../atomsYW';
 import { getFileUrl, uploadImg } from '../../libs/uploadS3';
 import { QuillEditor } from './QuillEditor';
+import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
 
 type FormValue = {
   content: string;
@@ -25,6 +26,7 @@ export const AnswerEditor = () => {
 
   const isAnswerPosted = useSetRecoilState(isAnswerPostedAtom);
   const isLogin = useRecoilValue(isLoginAtom);
+  const checkIsLogin = useCheckClickIsLogin();
   const [isAnserEdit, setIsAnswerEdit] = useRecoilState(isAnswerEditAtom);
   const [fileIdList, setFileIdList] = useState<any>([]);
   const setRenderingHeader = useSetRecoilState(renderingAtom);
@@ -120,11 +122,19 @@ export const AnswerEditor = () => {
       });
   };
   const onValid: SubmitHandler<FormValue> = async (data) => {
-    if (isAnserEdit.isEdit) patchAnswer(data);
-    else postAnswer(data);
+    if (isLogin) {
+      if (isAnserEdit.isEdit) patchAnswer(data);
+      else postAnswer(data);
+    } else {
+      checkIsLogin();
+    }
   };
   const onInvalid: SubmitErrorHandler<FormValue> = (data) => {
-    alert(data.content?.message);
+    if (isLogin) {
+      alert(data.content?.message);
+    } else {
+      checkIsLogin();
+    }
   };
 
   // Quill 에디터 & 이미지 업로드 관련 코드

@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-11-19
+ * 최근 수정일: 2022-12-05
  */
 
 import * as React from 'react';
@@ -100,11 +100,11 @@ export const CarouselArticle = () => {
                   key={article.articleId}
                   className="bg-main-yellow bg-opacity-20 w-[793px] h-[190px] rounded-2xl p-8 relative mb-[72px]"
                 >
-                  <div className="flex justify-between items-start">
+                  <div className="flex justify-between items-baseline">
                     <Link href={`/questions/${article.articleId}`}>
                       <div>
-                        <span className="text-2xl text-main-orange">Q. </span>
-                        <span className="hover:cursor-pointer text-2xl">
+                        <span className="text-lg text-main-orange">Q. </span>
+                        <span className="hover:cursor-pointer text-lg">
                           {article.title.length > 30
                             ? `${article.title.slice(0, 30)}...`
                             : article.title}
@@ -113,17 +113,17 @@ export const CarouselArticle = () => {
                     </Link>
                     <div className="flex gap-4">
                       <div className="flex gap-2">
-                        <FontAwesomeIcon icon={faHeart} size="xs" />
+                        <FontAwesomeIcon icon={faHeart} size="sm" />
                         <span className="text-xs">{article.likes}</span>
                       </div>
                       <div className="flex gap-2">
-                        <FontAwesomeIcon icon={faComment} size="xs" />
-                        <span className="text-xs">{article.commentCount}</span>
+                        <FontAwesomeIcon icon={faComment} size="sm" />
+                        <span className="text-xs">{article.answerCount}</span>
                       </div>
                     </div>
                   </div>
                   <div className="flex justify-end mb-2">
-                    <span className="text-[15px] text-main-gray">{`${new Date(
+                    <span className="text-xs text-main-gray">{`${new Date(
                       article.createdAt,
                     ).getFullYear()}년 ${
                       new Date(article.createdAt).getMonth() + 1
@@ -140,7 +140,7 @@ export const CarouselArticle = () => {
                   <div className="flex justify-end gap-4 items-end h-16">
                     {article.tags.map((tag) => (
                       <button
-                        className="bg-main-yellow rounded-full py-[6px] w-32"
+                        className="bg-main-yellow rounded-full py-[6px] w-32 text-xs"
                         key={tag.tagId}
                       >
                         {changeTagPrettier(tag.name)}
@@ -155,13 +155,13 @@ export const CarouselArticle = () => {
             className="absolute top-[45%] z-10 right-0 hover:cursor-pointer"
             onClick={() => paginate(2)}
           >
-            <FontAwesomeIcon icon={faChevronRight} size="3x" />
+            <FontAwesomeIcon icon={faChevronRight} size="2xl" />
           </div>
           <div
             className="absolute top-[45%] z-10 left-0 hover:cursor-pointer"
             onClick={() => paginate(-2)}
           >
-            <FontAwesomeIcon icon={faChevronLeft} size="3x" />
+            <FontAwesomeIcon icon={faChevronLeft} size="2xl" />
           </div>
         </>
       ) : (

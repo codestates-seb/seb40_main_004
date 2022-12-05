@@ -18,6 +18,7 @@ import Link from 'next/link';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
 import { keywordAtom } from '../../atomsYW';
+import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
 
 type FormValue = {
   keyword: string;
@@ -81,6 +82,7 @@ const Questions: NextPage = () => {
     }
     setIsOpen(false);
   };
+  const checkIsLogin = useCheckClickIsLogin();
 
   return (
     <>
@@ -141,7 +143,10 @@ const Questions: NextPage = () => {
               ) : null}
             </div>
             <Link href="/ask">
-              <button className="bg-main-orange bg-opacity-80 py-1.5 px-4 rounded-md text-font-gray hover:bg-main-orange hover:opacity-100 w-28 transition-all">
+              <button
+                className="bg-main-orange bg-opacity-80 py-1.5 px-4 rounded-md text-font-gray hover:bg-main-orange hover:opacity-100 w-28 transition-all"
+                onClick={checkIsLogin}
+              >
                 질문하기
               </button>
             </Link>
