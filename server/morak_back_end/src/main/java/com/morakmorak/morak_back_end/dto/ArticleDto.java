@@ -4,9 +4,9 @@ import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.service.EnumValid;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,15 +18,16 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @ToString
     public static class RequestUploadArticle {
         @NotBlank
         @Size(min = 5)
         private String title;
         @Size(min = 5)
         private String content;
-        private List<TagDto.SimpleTag> tags = new ArrayList<>();
+        @NotNull
+        private List<TagDto.SimpleTag> tags;
         private CategoryName category;
+        @Builder.Default
         private List<FileDto.RequestFileWithId> fileId = new ArrayList<>();
         private Long thumbnail;
     }
@@ -35,15 +36,14 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @ToString
     public static class RequestUpdateArticle {
         @NotBlank
         @Size(min = 5)
         private String title;
         @Size(min = 5)
         private String content;
-        @Builder.Default
-        private List<TagDto.SimpleTag> tags = new ArrayList<>();
+        @NotNull
+        private List<TagDto.SimpleTag> tags;
         @Builder.Default
         private List<FileDto.RequestFileWithId> fileId = new ArrayList<>();
         private Long thumbnail;
@@ -53,7 +53,6 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @ToString
     public static class ResponseSimpleArticle {
         private Long articleId;
     }
@@ -62,7 +61,6 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @ToString
     public static class ResponseListTypeArticle {
         private Long articleId;
         @EnumValid
@@ -86,7 +84,6 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @ToString
     public static class ResponseDetailArticle {
         private Long articleId;
         @EnumValid
@@ -113,7 +110,6 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @ToString
     public static class ResponseArticleLike {
         private Long articleId;
         private Long userId;
@@ -125,7 +121,6 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @ToString
     public static class RequestReportArticle {
         private ReportReason reason;
         private String content;
@@ -135,7 +130,6 @@ public class ArticleDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @ToString
     public static class ResponseReportArticle {
         private Long reportId;
     }
