@@ -70,7 +70,7 @@ export const EditCommentTextArea = ({
         })}
       />
       <div className="flex justify-end">
-        <Button onClick={checkIsLogin}>코멘트 수정</Button>
+        <Button funcProp={checkIsLogin}>코멘트 수정</Button>
       </div>
     </form>
   );
