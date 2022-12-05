@@ -8,7 +8,7 @@ import { MouseEventHandler } from 'react';
 
 type ButtonText = {
   children: string;
-  funcProp: MouseEventHandler;
+  funcProp?: MouseEventHandler;
 };
 
 export const Button = ({ children, funcProp }: ButtonText) => {
