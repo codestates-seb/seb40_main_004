@@ -55,7 +55,7 @@ export const SignUpForm = () => {
         confirmPassword,
         nickname,
       })
-      .then((res) => {
+      .then(() => {
         setEmail(email);
         setPassword(password);
         setNickName(nickname);
