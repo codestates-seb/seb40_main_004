@@ -64,13 +64,9 @@ spring:
           ssl:
             trust: smtp.gmail.com
             protocols: TLSv1.2
-
 logging:
   level:
-    org.springframework.web.client: debug
-    org.hibernate.sql: debug
-    org.hibernate.type: trace
-    org.springframework.security: debug
+    root: error
 
 server:
   servlet:
