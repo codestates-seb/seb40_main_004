@@ -20,15 +20,57 @@
 
 </table>
 
-### 컨셉
+##  가장 따뜻한 개발자 커뮤니티, 모락모락
 
-모든 개발자를 위한 따듯한 질문/답변 커뮤니티
+처음 개발을 시작했던 때를 기억하시나요?
+외계어 같은 코드와 읽어도 이해되지 않는 문서, 기나긴 에러코드까지… 
+서툰 질문이 부끄럽고, 날선 답변이 두려우셨다면
+모락모락에서 함께해요!
 
-### 이 프로젝트를 시작하게 된 이유
 
-기존 개발 관련 질문답변 커뮤니티는 다소 딱딱한 감이 없지 않아 있습니다.
-이제 개발을 막 시작한 초보 개발자의 경우, 모르는 것이 생겼을 때 해당 부분을 어떻게 질문할지, 만일 답변을 받더라도 '이런 것도 모르냐'식의 답변을 받을 까에 대한 두려움이 있을 것입니다.
-그렇기 때문에 저희 팀은 이 프로젝트를 통해서 딱딱한 분위기를 깨고 좀 더 둥글둥글한 분위기 속에서 질문/답변이 오가는 커뮤니티를 만들고 싶었습니다.
+##  모락모락의 핵심 기능
+
+###  따뜻한 후기를 나눠보세요
+<table>
+  <tr>
+     <td align="center"><img src="[https://user-images.githubusercontent.com/89173923/205502730-605aa86e-ca6e-4f66-9dcd-4af322de4b1e.gif]" width="700px;" alt=""/><br /><sub><b>@Shawn9948</b></sub></a><br/></td>
+
+</tr>
+      <td align="center">답변 채택하기</td>
+</tr>
+
+</table>
+
+![답변 채택](https://user-images.githubusercontent.com/89173923/205502730-605aa86e-ca6e-4f66-9dcd-4af322de4b1e.gif)
+
+### 가장 많이 받은 후기 태그를 확인하세요
+
+
+
+### 따뜻함을 나눌수록 랭킹이 올라갑니다. 
+
+
+### 도움받은 질문을 북마크해보세요
+
+![대시보드 : 후기 - 북마크 조회](https://user-images.githubusercontent.com/89173923/205503263-11dd3f94-dcbd-46a1-9efa-041969b0bf8b.gif)
+
+### 전체 API는 MorakMorak GitBook에서 확인해보세요!
+<img width="1160" alt="image" src="https://user-images.githubusercontent.com/102589253/205534052-fdc4939c-9815-462b-90b9-d782b49e3b13.png">
+
+https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
+
+
+## 기술스택  
+### Frontend
+### Backend
+
+## 아키텍처
+
+## 팀 소개
+
+## 업데이트 예정 기능
+
+
 
 ![게시글 작성](https://user-images.githubusercontent.com/89173923/205502592-eceb18ff-b442-4ff3-b73a-f02b30cdac50.gif)
 ![답변 작성](https://user-images.githubusercontent.com/89173923/205502684-9085d4b7-df5e-4cd1-acef-0e8218a569ce.gif)
