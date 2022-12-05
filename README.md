@@ -5,15 +5,22 @@
 ##  가장 따뜻한 개발자 커뮤니티, 모락모락
 ![ 모락모락](https://user-images.githubusercontent.com/102589253/205538117-219ce4e9-068c-4e9f-a373-38ce000a50f1.png)
 
-처음 개발을 시작했던 때를 기억하시나요?<br/>
+🎇처음 개발을 시작했던 때를 기억하시나요?<br/>
 외계어 같은 코드와 읽어도 이해되지 않는 문서, 기나긴 에러코드까지… <br/>
 서툰 질문이 부끄럽고, 날선 답변이 두려우셨다면<br/>
 모락모락에서 함께해요!<br/>
+<br/>
+**배포링크** : [https://seb40-main-004.vercel.app](https://seb40-main-004.vercel.app/)
 
+**깃허브** : [https://github.com/codestates-seb/seb40_main_004](https://github.com/codestates-seb/seb40_main_004)
+
+**API문서** : [https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks](https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks)
+
+<br/>
 
 ##  모락모락의 핵심 기능
 
-###  따뜻하고 재밌는 후기를 나눠보세요
+###  🎇따뜻하고 재밌는 후기를 나눠보세요
   유저끼리 주고받는 후기와 포인트로 거리낌없이 질문하고, 속시원하게 답변을 받아보세요!
 ![ezgif com-gif-maker (10) (1)](https://user-images.githubusercontent.com/102589253/205721715-887bee2f-6c4a-4861-80a1-6103bb8eeca4.gif)
 <table>
@@ -35,7 +42,10 @@
 
 
 
-### 가장 많이 받은 후기 태그를 확인하세요
+### 🎇가장 많이 받은 후기 태그를 확인하세요
+
+더 많은 답변이 채택될수록, 질문한 모락님에게 받은 뱃지가 쌓입니다!
+그중 TOP 3 뱃지를 대시보드에서 확인할 수 있어요! <br/>
 <table>
   <tr>
       <td align="center">
@@ -51,7 +61,7 @@
 </table>
 
 
-### 따뜻함을 나눌수록 랭킹이 올라갑니다. 
+### 🎇따뜻함을 나눌수록 랭킹이 올라갑니다. 
 🕯️ 촛불 ⇒ 🔥 성냥불 ⇒ 🎇 모닥불 ⇒ ♨️ 모락모락
 점점 성장하는 여러분의 영향력을 확인해보세요! 
 <table>
@@ -69,9 +79,9 @@
 </table>
 
 
-### 도움받은 질문을 북마크해보세요
+### 🎇도움받은 질문을 북마크해보세요
 같은 질문 반복 검색은 이제 그만! </br>
-검색하다 명쾌한 글을 보셨다면 북마크해보세요!
+검색하다 명쾌한 글을 보셨다면 북마크해보세요!<br/>
 <table>
   
   <tr>
@@ -91,11 +101,11 @@
 
 
 
-### 함께 심기는 잔디는 덤!
+### 🎇함께 심기는 잔디는 덤!
 ![ezgif com-gif-maker (11)](https://user-images.githubusercontent.com/102589253/205715323-de55a96e-c475-40cd-9ba2-5718ba2692f7.gif)
 
 
-### 전체 API는 MorakMorak GitBook에서 확인해보세요!
+### 🎇전체 API는 MorakMorak GitBook에서 확인해보세요!
 <img width="1160" alt="image" src="https://user-images.githubusercontent.com/102589253/205534052-fdc4939c-9815-462b-90b9-d782b49e3b13.png">
 
 https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
@@ -104,9 +114,13 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 ## 기술스택  
 ### Frontend
 ![Untitled](https://user-images.githubusercontent.com/97802103/205541214-ff5ad357-41c3-4c99-b1a5-b9d9bcda7b22.png)
+<br/>
+모락모락 FE 팀은 Recoil(전역 상태 관리 라이브러리) 및 SWR + axios를 활용한 커스텀 훅, React Quill 커스터마이징 등을 통해 부드러운 동작과 더 효과적인 퍼포먼스를 낼 수 있었습니다. 
 
 ### Backend
 ![Untitled (1)](https://user-images.githubusercontent.com/97802103/205541248-187c3f3a-ec4a-4a6b-9f1a-7c8552a88d7d.png)
+<br/>
+모락모락 BE 팀은 프로젝트 전체에 TDD 도입 및 Redis를 활용한 캐시 관리, QueryDsl과 Native Query, JDBC tempate 도입 등을 통한 데이터베이스 최적화를 진행했습니다. 그 결과, 배포 이후 발생하는 에러 핸들링 시간을 효과적으로 단축하며 안정적인 서버환경을 구현할 수 있었습니다. 
 
 ## 아키텍처
 ![Web App Reference Architecture (1)](https://user-images.githubusercontent.com/97802103/205543932-bf0811dc-6126-4d05-a084-b09c17fb68a3.png)
@@ -114,9 +128,9 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 
 
 ## 업데이트 예정 기능
-
-
-
+- 알림 API 연동
+- 신고 API 연동
+- 기존 dto 로직 Query Projection 활용한 리팩터링
 
 
 ## 모락모락 팀 소개
@@ -145,4 +159,48 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 </table>
 
 ## 모락모락의 개발문화
+### 투명한 공유, 따뜻한 피드백
+<table>
+  
+  <tr>
+      <td align="center">
+    <img src="https://user-images.githubusercontent.com/102589253/205724918-73813c40-5753-4334-aaa8-c83f75fd1737.png"width="700px;" alt=""/><br/>
+    </td>
+     <td align="center">
+       <img src="https://user-images.githubusercontent.com/102589253/205724922-5c56f0c0-ef5b-45d3-a8a3-f46b7bd8dbb1.png" width="700px;" alt=""/><br/>
+    </td>
 
+</tr>
+      <td align="center">팀 목표 공유 세션</td>
+      <td align="center">그라운드룰</td>
+</tr>
+
+</table>
+<br/>
+모락모락은 첫 아이스 브레이킹을 거치며 각자 프로젝트를 통해 목표하는 점과 지향하는 협업 분위기를 공유해 팀 규칙을 정했습니다. 모두의 성향과 경험이 달랐지만, 문제를 즉시 해결하고 편하게 소통하는 분위기를 만들며 팀의 어려움을 해결해왔습니다.
+
+### 프론트, 백 함께 쓰는 API 소통공간
+<table>
+  
+  <tr>
+      <td align="center">
+    <img src="https://user-images.githubusercontent.com/102589253/205725403-4c036043-ee41-4b71-8c07-b01ca7f7972e.png"width="700px;" alt=""/><br/>
+    </td>
+     <td align="center">
+       <img src="https://user-images.githubusercontent.com/102589253/205725410-1b6ffc71-2d6f-461a-9da9-03fa131e98ff.png" width="700px;" alt=""/><br/>
+    </td>
+
+</tr>
+      <td align="center">팀 목표 공유 세션</td>
+      <td align="center">그라운드룰</td>
+</tr>
+
+</table>
+<br/>
+프리 프로젝트를 진행하며 모락모락 팀은 프론트와 백엔드의 기능 구성 단위가 달라 협업 과정에 문제가 발생한다는 점을 인지했습니다. 특히 API의 요청, 응답 데이터를 구성하고 기능을 구현하는 과정에서 개발 일정에 차질이 생기거나, 소통 오류가 생기는 경우가 잦았습니다. 따라서 모락모락은 백엔드의 기능별 뷰, 프론트엔드의 페이지별 뷰를 반영한 API 소통공간을 마련해 각 담당자의 상호 구체적인 합의를 거쳐 기능을 완성해나갔습니다.
+
+
+## To Be CONTINUE...
+더 따뜻한 개발문화를 만들어나가는 모락모락 랩은 앞으로도 꾸준한 리팩터링을 통해 모락모락 커뮤니티에 애정을 가지고 발전시킬 예정입니다. 모락모락이 만들어나갈 포근한 개발문화가 기대되신다면, ~~morak_admin에게 500포인트를 후원해주세요!~~ 모락모락에서 지금 함께해주세요! <br/>
+<br/>
+지금까지, 모락모락이었습니다!
