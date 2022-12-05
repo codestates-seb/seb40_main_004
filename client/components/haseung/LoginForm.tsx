@@ -11,6 +11,7 @@ import { useForm } from 'react-hook-form';
 import jwt_decode from 'jwt-decode';
 import { useSetRecoilState } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
+import { SocialLoginBtn } from './SocialLoginBtn';
 
 type LoginProps = {
   email: string;
@@ -90,7 +91,7 @@ export const LoginForm = () => {
           비밀번호를 잊어버리셨나요?
         </span>
       </Link>
-      <span className="text-xs mt-3 cursor-pointer text-main-gray">
+      <span className="text-xs mt-3 cursor-pointer text-main-gray mb-2">
         계정이 없으신가요?{' '}
         <Link href="/signup">
           <span className="text-blue-500 hover:text-blue-400">
@@ -98,6 +99,7 @@ export const LoginForm = () => {
           </span>
         </Link>
       </span>
+      <SocialLoginBtn />
     </form>
   );
 };

@@ -21,6 +21,7 @@ import { client } from '../../libs/client';
 import { getFileUrl, uploadImg } from '../../libs/uploadS3';
 import { Select, SelectOption } from '../haseung/Select';
 import { QuillEditor } from '../hyejung/QuillEditor';
+import { Loader } from './Loader';
 
 type ContentProps = {
   title: string;
@@ -130,7 +131,8 @@ export const Editor = () => {
         })
         .catch((error) => {
           console.error('error', error);
-          alert('게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!');
+          // alert('게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!');
+          if (Boolean(tags)) alert('태그를 입력해주세요');
         });
     }
   };
@@ -271,7 +273,7 @@ export const Editor = () => {
         />
       </article>
       <p className="text-center relative bottom-10 font-bold text-xl">
-        {isSubmitting ? 'Loading...' : null}
+        {isSubmitting ? <Loader /> : null}
       </p>
     </form>
   );
