@@ -85,7 +85,7 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
         })}
       />
       <div className="flex justify-end">
-        <Button onClick={checkIsLogin}>코멘트 등록</Button>
+        <Button funcProp={checkIsLogin}>코멘트 등록</Button>
       </div>
     </form>
   );
