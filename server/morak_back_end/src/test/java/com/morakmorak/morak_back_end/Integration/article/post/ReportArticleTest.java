@@ -141,7 +141,7 @@ public class ReportArticleTest {
     }
 
     @Test
-    @DisplayName("로그인하지않은 회원이 실제 존재하는 게시글을 신고할경우 201코드와 reportId를 던진다. ")
+    @DisplayName("로그인하지않은 회원이 실제 존재하는 게시글을 신고할경우 401. ")
     public void reportArticle_suc2() throws Exception {
         //given
         Article article = Article.builder().title("제목입니다.제목입니다.제목입니다.제목입니다.").content("본문 입니다.본문 입니다.본문 입니다.")
@@ -165,6 +165,6 @@ public class ReportArticleTest {
         );
 
         //then
-        perform.andExpect(status().isNotFound());
+        perform.andExpect(status().isUnauthorized());
     }
 }

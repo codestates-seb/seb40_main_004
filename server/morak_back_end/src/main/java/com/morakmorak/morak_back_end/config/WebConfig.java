@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowCredentials(true)
-                .allowedOriginPatterns("*")
+                .allowedOrigins("http://localhost:3000/", "http://seb40-main-004-hyeonwooga.vercel.app/", "https://seb40-main-004-hyeonwooga.vercel.app/")
                 .exposedHeaders("*")
                 .allowedMethods(
                         HttpMethod.GET.name(),
