@@ -1,11 +1,11 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-11-19
+ * 최근 수정일: 2022-12-05
  */
 
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { wrap } from 'popmotion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -118,10 +118,15 @@ export const CarouselReview = () => {
                   key={review.reviewId}
                   layoutId={review.reviewId + ''}
                   className="bg-main-yellow bg-opacity-20 w-[215px] h-[215px] rounded-2xl p-8 relative hover:cursor-pointer"
-                  onClick={() => setId(review.reviewId + '')}
+                  onClick={() => {
+                    setCurReview(review);
+                    setTimeout(() => {
+                      setId(review.reviewId + '');
+                    }, 50);
+                  }}
                 >
                   <div>
-                    <p onClick={() => setCurReview(review)}>
+                    <p>
                       {review.content.length > 50
                         ? `${review.content.slice(0, 50)}...`
                         : review.content}
@@ -163,13 +168,13 @@ export const CarouselReview = () => {
             className="absolute top-[45%] z-10 right-0 hover:cursor-pointer"
             onClick={() => paginate(3)}
           >
-            <FontAwesomeIcon icon={faChevronRight} size="3x" />
+            <FontAwesomeIcon icon={faChevronRight} size="2xl" />
           </div>
           <div
             className="absolute top-[45%] z-10 left-0 hover:cursor-pointer"
             onClick={() => paginate(-3)}
           >
-            <FontAwesomeIcon icon={faChevronLeft} size="3x" />
+            <FontAwesomeIcon icon={faChevronLeft} size="2xl" />
           </div>
         </>
       ) : (

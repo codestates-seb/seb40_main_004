@@ -9,6 +9,7 @@ import { client } from '../../libs/client';
 import { mutate } from 'swr';
 import { useFetch } from '../../libs/useFetchSWR';
 import { CommentResp } from '../../libs/interfaces';
+import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
 
 type TextAreaProps = {
   url: string;
@@ -30,6 +31,8 @@ export const EditCommentTextArea = ({
 }: TextAreaProps) => {
   // answerId 가 있는 경우 댓글 코멘트 작성 api 로 요청
   const { data: currComments } = useFetch(mutateUrl);
+
+  const checkIsLogin = useCheckClickIsLogin();
 
   const currCommentText = currComments.filter(
     (com: CommentResp) => com.commentId === commentId,
@@ -67,7 +70,7 @@ export const EditCommentTextArea = ({
         })}
       />
       <div className="flex justify-end">
-        <Button>코멘트 수정</Button>
+        <Button onClick={checkIsLogin}>코멘트 수정</Button>
       </div>
     </form>
   );

@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-03
+ * 최근 수정일: 2022-12-05
  */
 
 import { NextPage } from 'next';
@@ -79,21 +79,21 @@ const Dashboard: NextPage = () => {
           <div className="mb-8 flex items-baseline">
             <div className="border-b-2 border-main-orange py-4 pr-6">
               <Link href={`/dashboard/${router.query.userId}`}>
-                <span className="text-2xl font-semibold hover:cursor-pointer">
+                <span className="text-xl font-semibold hover:cursor-pointer">
                   ❓ 나의 질문
                 </span>
               </Link>
             </div>
             <div className="border-b-2 py-4 pr-6">
               <Link href={`/dashboard/${router.query.userId}/answers`}>
-                <span className="text-2xl font-semibold hover:cursor-pointer">
+                <span className="text-xl font-semibold hover:cursor-pointer">
                   ❗ 나의 답변
                 </span>
               </Link>
             </div>
             <div className="border-b-2 py-4 pr-6">
               <Link href={`/dashboard/${router.query.userId}/bookmarks`}>
-                <span className="text-2xl font-semibold hover:cursor-pointer">
+                <span className="text-xl font-semibold hover:cursor-pointer">
                   🔖 북마크
                 </span>
               </Link>
@@ -101,7 +101,7 @@ const Dashboard: NextPage = () => {
           </div>
           <CarouselArticle />
           <div className="mt-20 mb-8">
-            <span className="text-2xl font-semibold">☀️ 응원 메세지</span>
+            <span className="text-xl font-semibold">☀️ 응원 메세지</span>
           </div>
           <CarouselReview />
         </div>
