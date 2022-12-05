@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { Footer } from '../../components/common/Footer';
-import { Header } from '../../components/common/Header';
+import { Footer } from '../../../components/common/Footer';
+import { Header } from '../../../components/common/Header';
 
 type FindPasswordProps = {
   email: string;
 };
 
-const findPassWordWithEmail = () => {
+const GetCode = () => {
   const { register, handleSubmit } = useForm<FindPasswordProps>({
     mode: 'onChange',
   });
@@ -17,7 +17,7 @@ const findPassWordWithEmail = () => {
     axios
       .post(`/api/auth/password/support`, { email })
       .then(() => {
-        router.push('/temporary-password');
+        router.push('/find-password/check-auth-code');
       })
       .catch((error) => console.error('error', error));
   };
@@ -43,4 +43,4 @@ const findPassWordWithEmail = () => {
   );
 };
 
-export default findPassWordWithEmail;
+export default GetCode;

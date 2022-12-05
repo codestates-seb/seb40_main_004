@@ -3,16 +3,16 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-import { userEmailAtom } from '../../atomsHS';
-import { Footer } from '../../components/common/Footer';
-import { Header } from '../../components/common/Header';
+import { userEmailAtom } from '../../../atomsHS';
+import { Footer } from '../../../components/common/Footer';
+import { Header } from '../../../components/common/Header';
 
 type TemporaryPasswordProps = {
   email: string;
   authKey: string;
 };
 
-const TemporaryPassword = () => {
+const CheckCode = () => {
   const { register, handleSubmit } = useForm<TemporaryPasswordProps>({
     mode: 'onChange',
   });
@@ -60,4 +60,4 @@ const TemporaryPassword = () => {
   );
 };
 
-export default TemporaryPassword;
+export default CheckCode;
