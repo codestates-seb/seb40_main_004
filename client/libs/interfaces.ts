@@ -92,3 +92,8 @@ export interface QuestionListProps {
   tags: Tags[];
   userInfo: UserInfo;
 }
+
+export interface AuthProps {
+  email: string;
+  authKey?: string;
+}

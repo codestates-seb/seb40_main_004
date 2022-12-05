@@ -12,6 +12,8 @@ import jwt_decode from 'jwt-decode';
 import { useSetRecoilState } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
 import { SocialLoginBtn } from './SocialLoginBtn';
+import { Loader } from '../common/Loader';
+import { useState } from 'react';
 
 type LoginProps = {
   email: string;
@@ -26,6 +28,7 @@ type DecodedProps = {
 
 export const LoginForm = () => {
   const setIsLogin = useSetRecoilState(isLoginAtom);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const onValid = ({ email, password }: LoginProps) => {
     axios
@@ -44,6 +47,7 @@ export const LoginForm = () => {
         localStorage.setItem('email', decoded.sub);
         localStorage.setItem('userId', String(decoded.id));
         localStorage.setItem('nickname', decoded.nickname);
+        setIsSubmitting(true);
         setIsLogin(true);
         router.push('/');
       })
@@ -100,6 +104,13 @@ export const LoginForm = () => {
         </Link>
       </span>
       <SocialLoginBtn />
+      <p className="text-center relative top-20 mx-auto font-bold text-xl">
+        {isSubmitting ? (
+          <>
+            <Loader /> <span>로그인 중....</span>
+          </>
+        ) : null}
+      </p>
     </form>
   );
 };

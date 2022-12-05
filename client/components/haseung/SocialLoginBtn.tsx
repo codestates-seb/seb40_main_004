@@ -14,7 +14,7 @@ import Link from 'next/link';
 export const SocialLoginBtn = () => {
   return (
     <section className="flex w-full justify-center">
-      <Link href="http://morak-873888559.ap-northeast-2.elb.amazonaws.com:8080/login/oauth2/code/google">
+      <Link href="https://morak-873888559.ap-northeast-2.elb.amazonaws.com:8080/login/oauth2/code/google">
         <button className="bg-main-gray rounded-[20px] w-44 mr-2 h-10">
           <FontAwesomeIcon
             icon={faGoogle}
