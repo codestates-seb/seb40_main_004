@@ -10,6 +10,7 @@ import { client } from '../../libs/client';
 import { mutate } from 'swr';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isLoginAtom, renderingAtom } from '../../atomsYW';
+import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
 
 type TextAreaProps = {
   answerId?: number;
@@ -23,8 +24,9 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
   // router, id
   const router = useRouter();
   const { articleId } = router.query;
-  const isLogin = useRecoilValue(isLoginAtom);
   const setRenderingHeader = useSetRecoilState(renderingAtom);
+  const isLogin = useRecoilValue(isLoginAtom);
+  const checkIsLogin = useCheckClickIsLogin();
 
   const { register, handleSubmit, watch, setValue } = useForm<FormValue>();
 
@@ -53,12 +55,21 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
   };
 
   const onValid: SubmitHandler<FormValue> = (data) => {
-    postComment(data);
-    setValue('content', '');
+    console.log('here');
+    if (isLogin) {
+      postComment(data);
+      setValue('content', '');
+    } else {
+      checkIsLogin();
+    }
   };
 
-  const onInvalid: SubmitErrorHandler<FormValue> = (data) => {
-    alert('코멘트를 입력해주세요!');
+  const onInvalid: SubmitErrorHandler<FormValue> = () => {
+    if (isLogin) {
+      alert('코멘트를 입력해주세요!');
+    } else {
+      checkIsLogin();
+    }
   };
 
   return (
@@ -74,7 +85,7 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
         })}
       />
       <div className="flex justify-end">
-        <Button>코멘트 등록</Button>
+        <Button onClick={checkIsLogin}>코멘트 등록</Button>
       </div>
     </form>
   );

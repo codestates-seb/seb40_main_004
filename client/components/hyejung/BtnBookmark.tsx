@@ -9,6 +9,9 @@ import { faBookmark as VoidBookmark } from '@fortawesome/free-regular-svg-icons'
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { client } from '../../libs/client';
+import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
+import { isLoginAtom } from '../../atomsYW';
+import { useRecoilValue } from 'recoil';
 
 type BtnBookmarkProps = {
   isBookmarked: boolean;
@@ -16,19 +19,19 @@ type BtnBookmarkProps = {
 export const BtnBookmark = ({ isBookmarked }: BtnBookmarkProps) => {
   const router = useRouter();
   const { articleId } = router.query;
+  const isLogin = useRecoilValue(isLoginAtom);
+  const checkIsLogin = useCheckClickIsLogin();
 
   const [isMarked, setIsMarked] = useState(isBookmarked);
 
   const onClickBookmark = () => {
-    client
-      .post(`/api/articles/${articleId}/bookmark`)
-      .then((res) => {
+    if (isLogin) {
+      client.post(`/api/articles/${articleId}/bookmark`).then((res) => {
         setIsMarked(res.data.scrappedByThisUser);
-      })
-      .catch((err) => {
-        // alert('로그인이 필요한 서비스입니다.');
-        console.error(err);
       });
+    } else {
+      checkIsLogin();
+    }
   };
 
   return (
