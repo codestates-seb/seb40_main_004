@@ -32,10 +32,16 @@
 
 ###  따뜻한 후기를 나눠보세요
 <table>
+  
   <tr>
-     <td align="center"><img src="https://user-images.githubusercontent.com/89173923/205502730-605aa86e-ca6e-4f66-9dcd-4af322de4b1e.gif" width="700px;" alt=""/><br /><sub><b>@Shawn9948</b></sub></a><br/></td>
+      <td align="center"><br />
+    <img src="https://user-images.githubusercontent.com/89173923/205502684-9085d4b7-df5e-4cd1-acef-0e8218a569ce.gif"width="700px;" alt=""/><br/>
+    </td>
+     <td align="center"><img src="https://user-images.githubusercontent.com/89173923/205502730-605aa86e-ca6e-4f66-9dcd-4af322de4b1e.gif" width="700px;" alt=""/><br/>
+    </td>
 
 </tr>
+      <td align="center">답변 작성하기</td>
       <td align="center">답변 채택하기</td>
 </tr>
 
