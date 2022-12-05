@@ -86,7 +86,7 @@ export const LoginForm = () => {
       >
         로그인
       </button>
-      <Link href="/edit-password">
+      <Link href="/find-password/get-auth-code">
         <span className="text-xs mt-3 cursor-pointer hover:text-main-gray">
           비밀번호를 잊어버리셨나요?
         </span>
