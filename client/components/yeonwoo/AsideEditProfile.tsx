@@ -23,38 +23,38 @@ export const AsideEditProfile = () => {
     <>
       <Link href="/edit-profile">
         <div
-          className={`w-full px-4 py-3 flex items-center hover:cursor-pointer ${
+          className={`w-full px-4 py-3 flex items-baseline hover:cursor-pointer ${
             pathname === '/edit-profile'
               ? 'border-main-yellow bg-[#D9D9D9] border-l-4'
               : 'border-transparent'
           }`}
         >
-          <FontAwesomeIcon icon={faUser} size="lg" />
-          <span className="ml-4 text-xl">프로필 수정</span>
+          <FontAwesomeIcon icon={faUser} />
+          <span className="ml-4 text-lg">프로필 수정</span>
         </div>
       </Link>
       <Link href="edit-password">
         <div
-          className={`w-full px-4 py-3 flex items-center hover:cursor-pointer ${
+          className={`w-full px-4 py-3 flex items-baseline hover:cursor-pointer ${
             pathname === '/edit-password'
               ? 'border-main-yellow bg-[#D9D9D9] border-l-4'
               : 'border-transparent'
           }`}
         >
-          <FontAwesomeIcon icon={faUser} size="lg" />
-          <span className="ml-4 text-xl">비밀번호 수정</span>
+          <FontAwesomeIcon icon={faUser} />
+          <span className="ml-4 text-lg">비밀번호 수정</span>
         </div>
       </Link>
       <Link href="/membership-withdrawal">
         <div
-          className={`w-full px-4 py-3 flex items-center hover:cursor-pointer ${
+          className={`w-full px-4 py-3 flex items-baseline hover:cursor-pointer ${
             pathname === '/membership-withdrawal'
               ? 'border-main-yellow bg-[#D9D9D9] border-l-4'
               : 'border-transparent'
           }`}
         >
-          <FontAwesomeIcon icon={faUser} size="lg" />
-          <span className="ml-4 text-xl">회원 탈퇴</span>
+          <FontAwesomeIcon icon={faUser} />
+          <span className="ml-4 text-lg">회원 탈퇴</span>
         </div>
       </Link>
     </>

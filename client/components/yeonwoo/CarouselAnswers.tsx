@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박연우
  * 최초 작성일: 2022-11-27
- * 최근 수정일: 2022-12-02
+ * 최근 수정일: 2022-12-05
  */
 
 import * as React from 'react';
@@ -131,8 +131,8 @@ export const CarouselAnswers = () => {
                   <div className="flex justify-between items-start">
                     <Link href={`/questions/${article.articleId}`}>
                       <div>
-                        <span className="text-2xl text-main-orange">A. </span>
-                        <span className="hover:cursor-pointer text-2xl">
+                        <span className="text-lg text-main-orange">A. </span>
+                        <span className="hover:cursor-pointer text-lg">
                           {article.content.length > 30
                             ? `${article.content
                                 .replace(/(<([^>]+)>)/gi, '')
@@ -143,13 +143,13 @@ export const CarouselAnswers = () => {
                     </Link>
                     <div className="flex gap-4">
                       <div className="flex gap-2">
-                        <FontAwesomeIcon icon={faComment} size="xs" />
+                        <FontAwesomeIcon icon={faComment} size="sm" />
                         <span className="text-xs">{article.commentCount}</span>
                       </div>
                     </div>
                   </div>
                   <div className="flex justify-end mb-2">
-                    <span className="text-[15px] text-main-gray">{`${new Date(
+                    <span className="text-xs text-main-gray">{`${new Date(
                       article.createdAt,
                     ).getFullYear()}년 ${
                       new Date(article.createdAt).getMonth() + 1
@@ -164,7 +164,7 @@ export const CarouselAnswers = () => {
                     }시 ${new Date(article.createdAt).getMinutes()}분`}</span>
                   </div>
                   <div className="flex justify-end gap-4 items-end h-16">
-                    <button className="bg-main-yellow rounded-full py-[6px] w-32">
+                    <button className="bg-main-yellow rounded-full py-[6px] w-32 text-xs">
                       {article.isPicked ? '채택 ✅' : '채택 ❎'}
                     </button>
                   </div>
@@ -176,13 +176,13 @@ export const CarouselAnswers = () => {
             className="absolute top-[45%] z-10 right-0 hover:cursor-pointer"
             onClick={() => paginate(2)}
           >
-            <FontAwesomeIcon icon={faChevronRight} size="3x" />
+            <FontAwesomeIcon icon={faChevronRight} size="2xl" />
           </div>
           <div
             className="absolute top-[45%] z-10 left-0 hover:cursor-pointer"
             onClick={() => paginate(-2)}
           >
-            <FontAwesomeIcon icon={faChevronLeft} size="3x" />
+            <FontAwesomeIcon icon={faChevronLeft} size="2xl" />
           </div>
         </>
       ) : (
