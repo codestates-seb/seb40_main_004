@@ -21,6 +21,7 @@ import { client } from '../../libs/client';
 import { getFileUrl, uploadImg } from '../../libs/uploadS3';
 import { Select, SelectOption } from '../haseung/Select';
 import { QuillEditor } from '../hyejung/QuillEditor';
+import { Loader } from './Loader';
 
 type ContentProps = {
   title: string;
@@ -271,7 +272,7 @@ export const Editor = () => {
         />
       </article>
       <p className="text-center relative bottom-10 font-bold text-xl">
-        {isSubmitting ? 'Loading...' : null}
+        {isSubmitting ? <Loader /> : null}
       </p>
     </form>
   );
