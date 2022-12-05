@@ -5,11 +5,19 @@ import com.morakmorak.morak_back_end.security.oauth.CustomOauth2Service;
 import com.morakmorak.morak_back_end.security.oauth.CustomSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
+
+import static org.springframework.http.HttpMethod.*;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -28,17 +36,36 @@ public class SecurityConfig {
                 .headers().frameOptions().disable()
                 .and()
                 .csrf().disable()
-                .cors().disable()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .apply(authenticationManagerConfig)
                 .and()
                 .httpBasic().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .mvcMatchers("/test/all/**").permitAll()
-                .mvcMatchers("/test/user/**").hasAnyRole("USER","MANAGER","ADMIN")
-                .mvcMatchers("/test/manager/**").hasAnyRole("MANAGER","ADMIN")
+                .mvcMatchers("/auth/**").permitAll()
+                .mvcMatchers(GET, "/users/**").permitAll()
+                .mvcMatchers(GET, "/calendars").permitAll()
+                .mvcMatchers("/test/user/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers("/test/manager/**").hasAnyRole("MANAGER", "ADMIN")
                 .mvcMatchers("/test/admin/**").hasAnyRole("ADMIN")
-                .anyRequest().permitAll()
+                .mvcMatchers(GET, "/articles/**").permitAll()
+                .mvcMatchers(POST, "/articles/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(PUT, "/articles/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(PATCH, "/articles/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(DELETE, "/articles/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(POST, "/users/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(PUT, "/users/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(PATCH, "/users/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(DELETE, "/users/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(GET, "/files/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(POST, "/files/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(PUT, "/files/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(DELETE, "/files/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(GET, "/notifications/**").permitAll()
+                .mvcMatchers(DELETE, "/notifications/**").permitAll()
+                .anyRequest().denyAll()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
@@ -50,4 +77,20 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:3000/");
+        config.addAllowedOrigin("http://seb40-main-004-hyeonwooga.vercel.app/");
+        config.addAllowedOrigin("https://seb40-main-004-hyeonwooga.vercel.app/");
+        config.addAllowedHeader("*");
+        config.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH", "PUT"));
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
 }
+
