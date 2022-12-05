@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .mvcMatchers("/test/all/**").permitAll()
                 .mvcMatchers("/auth/**").permitAll()
+                .mvcMatchers("/login/**").permitAll()
                 .mvcMatchers(GET, "/users/**").permitAll()
                 .mvcMatchers(GET, "/calendars").permitAll()
                 .mvcMatchers("/test/user/**").hasAnyRole("USER", "MANAGER", "ADMIN")
