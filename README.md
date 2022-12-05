@@ -113,12 +113,13 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 
 ## 기술스택  
 ### Frontend
-![Untitled](https://user-images.githubusercontent.com/97802103/205541214-ff5ad357-41c3-4c99-b1a5-b9d9bcda7b22.png)
+![Untitled (1)](https://user-images.githubusercontent.com/97802103/205541248-187c3f3a-ec4a-4a6b-9f1a-7c8552a88d7d.png)
+
 <br/>
 모락모락 FE 팀은 Recoil(전역 상태 관리 라이브러리) 및 SWR + axios를 활용한 커스텀 훅, React Quill 커스터마이징 등을 통해 부드러운 동작과 더 효과적인 퍼포먼스를 낼 수 있었습니다. 
 
 ### Backend
-![Untitled (1)](https://user-images.githubusercontent.com/97802103/205541248-187c3f3a-ec4a-4a6b-9f1a-7c8552a88d7d.png)
+![Untitled](https://user-images.githubusercontent.com/97802103/205541214-ff5ad357-41c3-4c99-b1a5-b9d9bcda7b22.png)
 <br/>
 모락모락 BE 팀은 프로젝트 전체에 TDD 도입 및 Redis를 활용한 캐시 관리, QueryDsl과 Native Query, JDBC tempate 도입 등을 통한 데이터베이스 최적화를 진행했습니다. 그 결과, 배포 이후 발생하는 에러 핸들링 시간을 효과적으로 단축하며 안정적인 서버환경을 구현할 수 있었습니다. 
 
