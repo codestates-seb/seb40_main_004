@@ -99,25 +99,12 @@ public class BookmarkTest {
     }
 
     @Test
-    @DisplayName("북마크 등록 시 탈퇴한 유저인 경우 404가 반환된다.")
+    @DisplayName("북마크 등록 시 탈퇴한 유저인 경우 401가 반환된다.")
     public void postBookmark_fail_1() throws Exception {
         ResultActions perform = mockMvc
-                .perform(post("/article/{article-id}/bookmarks", savedArticle1.getId())
+                .perform(post("/articles/{article-id}/bookmarks", savedArticle1.getId())
                         .contentType(MediaType.APPLICATION_JSON));
-        perform.andExpect(status().isNotFound());
-    }
-
-    @Test
-    @DisplayName("북마크 등록 시 게시글이 존재하지 않는 경우 404가 반환된다.")
-    public void postBookmark_fail_2() throws Exception {
-
-        ResultActions perform = mockMvc
-                .perform(post("/article/{article-id}/bookmark", savedArticle1.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(JWT_HEADER, accessTokenForUser1)
-                );
-        articleRepository.delete(savedArticle1);
-        perform.andExpect(status().isNotFound());
+        perform.andExpect(status().isUnauthorized());
     }
 
     @Test
