@@ -39,10 +39,10 @@
 <table>
   <tr>
       <td align="center">
-    <img src="![대시보드 : 질문 - 답변 조회](https://user-images.githubusercontent.com/89173923/205503526-102e03dd-1ade-4d97-9b97-5fc8cf9872f2.gif)"width="700px;" alt=""/><br/>
+    <img src="https://user-images.githubusercontent.com/89173923/205503526-102e03dd-1ade-4d97-9b97-5fc8cf9872f2.gif"width="700px;" alt=""/><br/>
     </td>
      <td align="center">
-       <img src="![대시보드 : 후기 - 북마크 조회](https://user-images.githubusercontent.com/89173923/205503263-11dd3f94-dcbd-46a1-9efa-041969b0bf8b.gif)" width="700px;" alt=""/><br/>
+       <img src="https://user-images.githubusercontent.com/89173923/205503263-11dd3f94-dcbd-46a1-9efa-041969b0bf8b.gif" width="700px;" alt=""/><br/>
     </td>
 </tr>
       <td align="center">작성한 답변 확인하기</td>
@@ -57,10 +57,10 @@
 <table>
   <tr>
       <td align="center">
-    <img src="![답글 좋아요 ](https://user-images.githubusercontent.com/102589253/205718289-fd9493e0-cf19-45c0-a4dc-c66c350c2a15.gif)"width="700px;" alt=""/><br/>
+    <img src="https://user-images.githubusercontent.com/102589253/205718289-fd9493e0-cf19-45c0-a4dc-c66c350c2a15.gif"width="700px;" alt=""/><br/>
     </td>
      <td align="center">
-       <img src="![ezgif com-gif-maker (8)](https://user-images.githubusercontent.com/102589253/205714052-a912cc35-e955-4b36-87c9-4bc24a557741.gif)f" width="700px;" alt=""/><br/>
+       <img src="https://user-images.githubusercontent.com/102589253/205714052-a912cc35-e955-4b36-87c9-4bc24a557741.gif" width="700px;" alt=""/><br/>
     </td>
 </tr>
       <td align="center">답변 좋아요</td>
@@ -68,11 +68,6 @@
 </tr>
 </table>
 
-![ezgif com-gif-maker (8)](https://user-images.githubusercontent.com/102589253/205714052-a912cc35-e955-4b36-87c9-4bc24a557741.gif)
-
-![답글 좋아요 ](https://user-images.githubusercontent.com/102589253/205718289-fd9493e0-cf19-45c0-a4dc-c66c350c2a15.gif)
-
-![ezgif com-gif-maker (11)](https://user-images.githubusercontent.com/102589253/205715323-de55a96e-c475-40cd-9ba2-5718ba2692f7.gif)
 
 ### 도움받은 질문을 북마크해보세요
 같은 질문 반복 검색은 이제 그만! </br>
@@ -81,10 +76,10 @@
   
   <tr>
       <td align="center">
-    <img src="![morak-기능-6](https://user-images.githubusercontent.com/102589253/205721315-8246b28c-9e5f-46d7-b348-7706b47e85f3.gif)"width="700px;" alt=""/><br/>
+    <img src="https://user-images.githubusercontent.com/102589253/205721315-8246b28c-9e5f-46d7-b348-7706b47e85f3.gif"width="700px;" alt=""/><br/>
     </td>
      <td align="center">
-       <img src="![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/102589253/205721438-476b95be-066b-4717-9fa4-0e16443906e1.gif)" width="700px;" alt=""/><br/>
+       <img src="https://user-images.githubusercontent.com/102589253/205721438-476b95be-066b-4717-9fa4-0e16443906e1.gif" width="700px;" alt=""/><br/>
     </td>
 
 </tr>
@@ -122,19 +117,14 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 
 
 
-![게시글 작성](https://user-images.githubusercontent.com/89173923/205502592-eceb18ff-b442-4ff3-b73a-f02b30cdac50.gif)
-![답변 작성](https://user-images.githubusercontent.com/89173923/205502684-9085d4b7-df5e-4cd1-acef-0e8218a569ce.gif)
-![답변 채택](https://user-images.githubusercontent.com/89173923/205502730-605aa86e-ca6e-4f66-9dcd-4af322de4b1e.gif)
-![게시글 검색](https://user-images.githubusercontent.com/89173923/205502882-1745f77d-c5d5-4ef7-bb7e-7c2c69d779c6.gif)
-![대시보드 : 질문 - 답변 조회](https://user-images.githubusercontent.com/89173923/205503526-102e03dd-1ade-4d97-9b97-5fc8cf9872f2.gif)
-![대시보드 : 후기 - 북마크 조회](https://user-images.githubusercontent.com/89173923/205503263-11dd3f94-dcbd-46a1-9efa-041969b0bf8b.gif)
-
 
 
 ## 모락모락 팀 소개
 </br>
 
-안녕하세요! 저희는 **모락모락**입니다!
+더 따뜻한 개발 문화를 추구하는, <br/>
+저희는 **모락모락**입니다!
+
 <table>
   <tr>
   <td align="center"><a href="https://github.com/HyeonWooGa"><img src="https://avatars.githubusercontent.com/u/101603474?v=4" width="100px;" alt=""/><br /><sub><b>@HyeonWooGa</b></sub></a><br /></td>
@@ -154,4 +144,5 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 </tr>
 </table>
 
+## 모락모락의 개발문화
 
