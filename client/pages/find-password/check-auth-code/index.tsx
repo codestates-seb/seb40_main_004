@@ -1,27 +1,26 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 import { userEmailAtom } from '../../../atomsHS';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
-
-type CheckAuthCodeProps = {
-  email: string;
-  authKey: string;
-};
+import { Loader } from '../../../components/common/Loader';
+import { AuthProps } from '../../../libs/interfaces';
 
 const CheckAuthCode = () => {
-  const { register, handleSubmit } = useForm<CheckAuthCodeProps>({
+  const { register, handleSubmit } = useForm<AuthProps>({
     mode: 'onChange',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const setEmail = useSetRecoilState(userEmailAtom);
   const router = useRouter();
-  const onValid = ({ email, authKey }: CheckAuthCodeProps) => {
+  const onValid = ({ email, authKey }: AuthProps) => {
     axios
       .post(`/api/auth/password/recovery`, { email, authKey })
       .then(() => {
+        setIsSubmitting(true);
         setEmail(email);
         alert('임시 비밀번호가 발급되었습니다! 메일을 확인해주세요.');
         router.push('/login');
@@ -53,6 +52,13 @@ const CheckAuthCode = () => {
           <button className="bg-main-yellow bg-opacity-80 py-3 w-full rounded-[20px] font-bold mb-5 hover:bg-main-yellow">
             임시 비밀번호 발급
           </button>
+          <p className="text-center relative top-20 font-bold text-xl">
+            {isSubmitting ? (
+              <>
+                <Loader /> <span>임시 비밀번호 전송 중....</span>
+              </>
+            ) : null}
+          </p>
         </form>
       </main>
       <Footer />

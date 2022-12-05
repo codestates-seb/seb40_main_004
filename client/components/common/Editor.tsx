@@ -100,7 +100,7 @@ export const Editor = () => {
           tags,
         })
         .then((res) => {
-          setIsSubmitting(false);
+          setIsSubmitting(true);
           setIsArticleEdit({
             isArticleEdit: false,
             title: '',
@@ -273,7 +273,11 @@ export const Editor = () => {
         />
       </article>
       <p className="text-center relative bottom-10 font-bold text-xl">
-        {isSubmitting ? <Loader /> : null}
+        {isSubmitting ? (
+          <>
+            <Loader /> <span>등록 중....</span>
+          </>
+        ) : null}
       </p>
     </form>
   );
