@@ -84,7 +84,7 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
      <td align="center"><a href="https://github.com/HA-SEUNG-JEONG"><img src="https://avatars.githubusercontent.com/u/88266129?v=4" width="100px;" alt=""/><br /><sub><b>@HA-SEUNG-JEONG</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/yangddoddi"><img src="https://avatars.githubusercontent.com/u/97802103?v=4" width="100px;" alt=""/><br /><sub><b>@yangddoddi</b></sub></a><br />
      <td align="center"><a href="https://github.com/Tldkt"><img src="https://avatars.githubusercontent.com/u/102589253?v=4" width="100px;" alt=""/><br /><sub><b>@Tldkt</b></sub></a><br />
-     <td align="center"><a href="https://github.com/Shawn9948"><img src="https://avatars.githubusercontent.com/u/104377048?v=4" width="100px;" alt=""/><br /><sub><b>@Shawn9948</b></sub></a><br /></td>
+     <td align="center"><a href="https://github.com/SionBackEnd"><img src="https://avatars.githubusercontent.com/u/104377048?v=4" width="100px;" alt=""/><br /><sub><b>@SionBackEnd</b></sub></a><br /></td>
 
 </tr>
       <td align="center">[FE]박연우</td>
