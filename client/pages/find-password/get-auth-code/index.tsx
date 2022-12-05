@@ -8,7 +8,7 @@ type FindPasswordProps = {
   email: string;
 };
 
-const GetCode = () => {
+const GetAuthCode = () => {
   const { register, handleSubmit } = useForm<FindPasswordProps>({
     mode: 'onChange',
   });
@@ -43,4 +43,4 @@ const GetCode = () => {
   );
 };
 
-export default GetCode;
+export default GetAuthCode;

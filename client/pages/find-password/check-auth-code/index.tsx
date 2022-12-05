@@ -12,7 +12,7 @@ type TemporaryPasswordProps = {
   authKey: string;
 };
 
-const CheckCode = () => {
+const CheckAuthCode = () => {
   const { register, handleSubmit } = useForm<TemporaryPasswordProps>({
     mode: 'onChange',
   });
@@ -60,4 +60,4 @@ const CheckCode = () => {
   );
 };
 
-export default CheckCode;
+export default CheckAuthCode;
