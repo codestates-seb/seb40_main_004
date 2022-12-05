@@ -4,9 +4,11 @@
  * 최근 수정일: 2022-12-06
  */
 
+import { MouseEventHandler } from 'react';
+
 type ButtonText = {
   children: string;
-  funcProp?: any;
+  funcProp: MouseEventHandler;
 };
 
 export const Button = ({ children, funcProp }: ButtonText) => {
@@ -14,7 +16,7 @@ export const Button = ({ children, funcProp }: ButtonText) => {
     <button
       className="bg-main-yellow text-[16px] px-5 py-[6px] rounded-full"
       type="submit"
-      onClick={funcProp ? funcProp : null}
+      onClick={funcProp}
     >
       {children}
     </button>
