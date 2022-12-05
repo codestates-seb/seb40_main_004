@@ -356,16 +356,14 @@ public class ArticleUpdateTest {
     @DisplayName("게시글 수정시 태그를 보내지 않을경우 유효성 검증에 실패하고 Bad_Request 예외를 던지고 400 에러코드를 반환한다. ")
     public void update_fail10() throws Exception{
         //given
-        Tag tag = tagRepository.findTagByName(TagName.C).orElseThrow();
         Article article = articleRepository.findArticleByContent("콘텐트입니다. 잘부탁드립니다.").orElseThrow(() -> new RuntimeException("뭐지?"));
 
         ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
                 .title("안녕하세요 새로운 타이틀입니다. 수정부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
                 .fileId(List.of(FileDto.RequestFileWithId.builder()
-                        .fileId(1212L).build(), FileDto.RequestFileWithId.builder()
-                        .fileId(12312L).build()))
+                        .fileId(5L).build(), FileDto.RequestFileWithId.builder()
+                        .fileId(5L).build()))
                 .thumbnail(5555L)
-
                 .build();
 
         String content = objectMapper.writeValueAsString(requestUpdateArticle);

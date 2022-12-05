@@ -6,6 +6,7 @@ import com.morakmorak.morak_back_end.service.EnumValid;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -24,7 +25,7 @@ public class ArticleDto {
         private String title;
         @Size(min = 5)
         private String content;
-        @NotNull
+        @NotEmpty
         private List<TagDto.SimpleTag> tags;
         private CategoryName category;
         @Builder.Default
@@ -42,7 +43,7 @@ public class ArticleDto {
         private String title;
         @Size(min = 5)
         private String content;
-        @NotNull
+        @NotEmpty
         private List<TagDto.SimpleTag> tags;
         @Builder.Default
         private List<FileDto.RequestFileWithId> fileId = new ArrayList<>();
