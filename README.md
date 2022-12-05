@@ -44,7 +44,9 @@ The file explorer is accessible using the button in left corner of the navigatio
 ### 도움받은 질문을 북마크해보세요
 
 
-### 전체 동작은 MorakMorak GitBook에서!
+### 전체 API는 MorakMorak GitBook에서 확인해보세요!
+<img width="1160" alt="image" src="https://user-images.githubusercontent.com/102589253/205534052-fdc4939c-9815-462b-90b9-d782b49e3b13.png">
+
 https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 
 
