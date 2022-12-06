@@ -159,7 +159,7 @@ public class User extends BaseTime {
                 .stream().map(e -> e.getRole().getRoleName().toString())
                 .collect(Collectors.toList());
 
-        if (roles.size() == 0) roles = List.of("Role_User");
+        if (roles.size() == 0) roles = List.of("ROLE_USER");
         return roles;
     }
 
