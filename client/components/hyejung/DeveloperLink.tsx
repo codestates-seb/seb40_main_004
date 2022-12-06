@@ -15,7 +15,7 @@ export const DeveloperLink = ({
   children,
 }: DeveloperInfoProps) => {
   return (
-    <div className="flex-col space-y-1 items-center w-[90px] hidden md:flex">
+    <div className="flex-col space-y-1 items-end w-[90px] hidden md:flex">
       <span className="font-bold text-[18px]">{children}</span>
       <div className="space-x-2.5">
         <Link href={github}>
