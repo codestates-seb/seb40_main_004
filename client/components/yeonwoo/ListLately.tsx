@@ -29,7 +29,7 @@ export const ListLately = () => {
   return (
     <>
       <div className="mb-6">
-        <span className="text-2xl mr-6 font-bold">❓ 최근 질문</span>
+        <span className="text-2xl mr-2 font-bold">❓ 최근 질문</span>
         <Link href="/questions">
           <span className="text-xs hover:cursor-pointer">더보기 ＞</span>
         </Link>

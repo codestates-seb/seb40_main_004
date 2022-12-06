@@ -28,7 +28,6 @@ const OAuth2Login = () => {
       )
       .then((res) => {
         // 해당 요청에 성공했을 경우, 데이터 추출하여 로컬스토리지 저장
-        console.log(res);
         const { accessToken, refreshToken, avatarPath } = res.data;
         const decoded: DecodedProps = jwt_decode(accessToken);
         localStorage.setItem('accessToken', accessToken);
@@ -40,8 +39,6 @@ const OAuth2Login = () => {
         // 로그인 상태를 true 로 변경한 후 메인페이지로 이동
         setIsLogin(true);
         router.replace('/');
-
-        console.log(decoded);
       })
       .catch((err) => console.log(err.response));
   };

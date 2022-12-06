@@ -22,6 +22,7 @@ import { getFileUrl, uploadImg } from '../../libs/uploadS3';
 import { Select, SelectOption } from '../haseung/Select';
 import { QuillEditor } from '../hyejung/QuillEditor';
 import { Loader } from './Loader';
+import { ValidationMsg } from './ValildationMsg';
 
 type ContentProps = {
   title: string;
@@ -242,10 +243,14 @@ export const Editor = () => {
 
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)} className="h-full p-8">
+      {/* 제목 */}
       <section className="space-y-3 pb-5">
-        <label htmlFor="제목" className="font-bold flex">
-          제목
-        </label>
+        <article className="flex items-baseline space-x-3">
+          <label htmlFor="제목" className="font-bold flex">
+            제목
+          </label>
+          <ValidationMsg msg={errors.title?.message} />
+        </article>
         <input
           {...register('title', {
             required: '제목을 입력해주세요!',
@@ -259,14 +264,17 @@ export const Editor = () => {
           className="border-2 px-2 py-1 leading-loose flex w-full justify-center rounded-md"
           placeholder="제목을 입력해주세요!"
         />
-        <p className="font-bold text-red-500">{errors.title?.message}</p>
       </section>
-      <section className="space-y-3 pb-5">
-        <label htmlFor="본문" className="font-bold flex">
-          본문
-        </label>
+      {/* 본문 */}
+      <section className="space-y-3 pb-5 relative">
+        <article className="flex items-baseline space-x-3">
+          <label htmlFor="본문" className="font-bold flex">
+            본문
+          </label>
+          <ValidationMsg msg={errors.content?.message} />
+        </article>
         <QuillEditor
-          className="h-96 w-full mx-auto pb-5"
+          className="h-[45vh] w-full mx-auto pb-10"
           value={editorContent}
           modules={modules}
           onChange={editorChange}
@@ -274,11 +282,14 @@ export const Editor = () => {
           forwardRef={quillRef}
         />
       </section>
-      <p className="font-bold mt-3 text-red-500">{errors.content?.message}</p>
+      {/* 태그 */}
       <section className="space-y-3 pt-10">
-        <label htmlFor="태그" className="font-bold flex">
-          태그
-        </label>
+        <article className="flex items-baseline space-x-3">
+          <label htmlFor="태그" className="font-bold flex">
+            태그
+          </label>
+          <ValidationMsg msg={tagsError} />
+        </article>
         <Select
           multiple
           options={options}
@@ -286,9 +297,9 @@ export const Editor = () => {
           onChange={(element) => setTags(element)}
         />
       </section>
-      <p className="font-bold mt-3 text-red-500">{tagsError}</p>
 
-      <article className="flex justify-center py-16">
+      {/* 등록 취소 버튼 */}
+      <article className="flex justify-center py-24">
         <input
           onClick={handleCancelClick}
           className="justify-center mx-2 bg-main-gray bg-opacity-80 px-4 py-2 rounded-full cursor-pointer hover:bg-main-gray hover:bg-opacity-100"
@@ -301,6 +312,8 @@ export const Editor = () => {
           value="등록"
         />
       </article>
+
+      {/* 로딩 컴포넌트 */}
       <p className="text-center relative bottom-10 font-bold text-xl">
         {isSubmitting ? (
           <>

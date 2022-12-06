@@ -13,6 +13,7 @@ import { HallOfFame } from '../components/yeonwoo/HallOfFame';
 import { ListLately } from '../components/yeonwoo/ListLately';
 import dynamic from 'next/dynamic';
 import { Seo } from '../components/common/Seo';
+import Link from 'next/link';
 
 const Calendar = dynamic<any>(
   () => import('../components/yeonwoo/Calendar').then((mod) => mod.Calendar),
@@ -39,7 +40,16 @@ const Home: NextPage = () => {
         <div className="w-[1163px] py-12 mx-auto flex gap-14">
           <div>
             <div className="w-[732px] h-[60px] bg-main-yellow rounded-2xl mb-[22px] flex justify-center items-center">
-              <span className="text-2xl font-bold">📆 채용 일정 캘린더</span>
+              <div>
+                <span className="text-2xl font-bold mr-2">
+                  📆 채용 일정 캘린더
+                </span>
+                <Link href="/recruit">
+                  <span className="text-xs hover:cursor-pointer relative">
+                    더보기 ＞
+                  </span>
+                </Link>
+              </div>
             </div>
             <div className="w-[732px] h-[592px] bg-white rounded-2xl pt-3">
               <Calendar />
