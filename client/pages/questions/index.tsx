@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 정하승
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-02(박혜정)
+ * 최근 수정일: 2022-12-06(박혜정)
  */
 
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
@@ -11,7 +11,7 @@ import { Header } from '../../components/common/Header';
 import { QuestionList } from '../../components/haseung/QuestionList';
 import { SearchWithTagButton } from '../../components/haseung/SearchWithTagButton';
 import { Footer } from '../../components/common/Footer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFetch } from '../../libs/useFetchSWR';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
@@ -31,6 +31,13 @@ const Questions: NextPage = () => {
   const [sort, setSort] = useState(['최신순', 'desc']);
   const [isOpen, setIsOpen] = useState(false);
   const [target, setTarget] = useState('titleAndContent');
+
+  useEffect(() => {
+    setPageIndex(1);
+    setKeyword('');
+    setSort(['최신순', 'desc']);
+    setTarget('titleAndContent');
+  }, []);
 
   const { data: response, isLoading } = useFetch(
     `/api/articles?page=${pageIndex}&size=10&category=QNA&target=${target}&keyword=${keyword}&sort=${sort[1]}`,
