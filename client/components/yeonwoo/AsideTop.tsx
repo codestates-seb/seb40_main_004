@@ -44,20 +44,24 @@ export const AsideTop = () => {
   };
   const onSubmitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      await client.patch('/api/users/profiles', {
-        nickname: editNickname,
-        infoMessage: editInfoMessage,
-        github: editGithub,
-        blog: editBlog,
-        jobType: 'DEVELOPER',
-      });
-      setIsEdit(false);
-      setIsClicked(false);
-      setRenderingHeader((prev) => !prev);
-    } catch (error) {
-      alert('에러가 발생했습니다 다시 시도해주세요');
-      console.error(error);
+    if (!/([^가-힣a-z\x20]){1, 7}/i.test(editNickname)) {
+      alert('닉네임은 최소 1글자, 최대 7글자, 자음, 모음 불가입니다');
+    } else {
+      try {
+        await client.patch('/api/users/profiles', {
+          nickname: editNickname,
+          infoMessage: editInfoMessage,
+          github: editGithub,
+          blog: editBlog,
+          jobType: 'DEVELOPER',
+        });
+        setIsEdit(false);
+        setIsClicked(false);
+        setRenderingHeader((prev) => !prev);
+      } catch (error) {
+        alert('에러가 발생했습니다 다시 시도해주세요');
+        console.error(error);
+      }
     }
   };
 
