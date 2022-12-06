@@ -1,13 +1,17 @@
 import axios from 'axios';
+import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 import { Loader } from '../../../components/common/Loader';
-import { AuthProps } from '../../../libs/interfaces';
+import { AuthProps, TitleProps } from '../../../libs/interfaces';
 
-const GetAuthCode = () => {
+const GetAuthCode: NextPage<TitleProps> = ({
+  title = '비밀번호 찾기 이메일 확인',
+}) => {
   const { register, handleSubmit } = useForm<AuthProps>({
     mode: 'onChange',
   });
@@ -24,6 +28,9 @@ const GetAuthCode = () => {
   };
   return (
     <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Header />
       <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
         <form onSubmit={handleSubmit(onValid)} className="space-y-2">
@@ -49,6 +56,15 @@ const GetAuthCode = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
 };
 
 export default GetAuthCode;

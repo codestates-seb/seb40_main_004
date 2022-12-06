@@ -4,7 +4,8 @@
  * 최근 수정일: 2022-11-29
  */
 
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { Footer } from '../../components/common/Footer';
@@ -12,8 +13,9 @@ import { Header } from '../../components/common/Header';
 import { AsideEditProfile } from '../../components/yeonwoo/AsideEditProfile';
 import { EditAvatar } from '../../components/yeonwoo/EditAvatar';
 import { EditProfileComponent } from '../../components/yeonwoo/EditProfile';
+import { TitleProps } from '../../libs/interfaces';
 
-const EditProfile: NextPage = () => {
+const EditProfile: NextPage<TitleProps> = ({ title = '프로필 수정' }) => {
   const router = useRouter();
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -25,6 +27,9 @@ const EditProfile: NextPage = () => {
   }, []);
   return (
     <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Header />
       <main className="w-[1280px] min-h-screen mx-auto flex justify-between mb-12">
         <div className="w-[280px] pt-12">
@@ -40,6 +45,15 @@ const EditProfile: NextPage = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
 };
 
 export default EditProfile;

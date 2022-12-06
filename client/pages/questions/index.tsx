@@ -6,7 +6,7 @@
 
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { Header } from '../../components/common/Header';
 import { QuestionList } from '../../components/haseung/QuestionList';
 import { SearchWithTagButton } from '../../components/haseung/SearchWithTagButton';
@@ -19,12 +19,14 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
 import { keywordAtom } from '../../atomsYW';
 import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
+import Head from 'next/head';
+import { TitleProps } from '../../libs/interfaces';
 
 type FormValue = {
   keyword: string;
 };
 
-const Questions: NextPage = () => {
+const Questions: NextPage<TitleProps> = ({ title = 'Q&A' }) => {
   const [pageIndex, setPageIndex] = useState(1);
   const [keyword, setKeyword] = useRecoilState(keywordAtom);
   const [sort, setSort] = useState(['최신순', 'desc']);
@@ -86,6 +88,9 @@ const Questions: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Header />
       <main className="max-w-[1280px] mx-auto flex space-x-5 p-8 md:p-16 bg-white shadow-sm border-[1px] border-gray-200">
         <form
@@ -162,6 +167,15 @@ const Questions: NextPage = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
 };
 
 export default Questions;

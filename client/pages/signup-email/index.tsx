@@ -7,22 +7,27 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userAuthKey, userEmailAtom } from '../../atomsHS';
 import { AuthenticationTimer } from '../../components/haseung/AuthenticationTimer';
 import { Intro } from '../../components/haseung/Intro';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
+import { GetServerSideProps, NextPage } from 'next';
+import { TitleProps } from '../../libs/interfaces';
+import Head from 'next/head';
 
 type VerificationNumber = {
   authKey: string;
 };
 
-const AuthenticateNumber = () => {
+const SignUpWithEmail: NextPage<TitleProps> = ({
+  title = '이메일로 인증하기',
+}) => {
   const { register, handleSubmit } = useForm<VerificationNumber>();
   const email = useRecoilValue(userEmailAtom);
 
-  const [authKey, setAuthKey] = useRecoilState(userAuthKey);
+  const setAuthKey = useSetRecoilState(userAuthKey);
   const router = useRouter();
   const onValid = ({ authKey }: VerificationNumber) => {
     axios
@@ -36,6 +41,9 @@ const AuthenticateNumber = () => {
   };
   return (
     <div className="h-screen">
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Header />
       <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
         <article className="text-center mt-10 flex flex-col justify-center items-center w-96">
@@ -67,4 +75,13 @@ const AuthenticateNumber = () => {
   );
 };
 
-export default AuthenticateNumber;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
+};
+
+export default SignUpWithEmail;

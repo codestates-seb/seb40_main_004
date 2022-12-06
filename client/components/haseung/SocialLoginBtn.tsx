@@ -18,7 +18,7 @@ export const SocialLoginBtn = () => {
         <button className="bg-main-gray rounded-[20px] w-44 mr-2 h-10">
           <FontAwesomeIcon
             icon={faGoogle}
-            className="cursor-pointer h-7 align-middle"
+            className="cursor-pointer h-6 items-center align-middle"
           />
         </button>
       </Link>
@@ -26,7 +26,7 @@ export const SocialLoginBtn = () => {
         <button className="bg-main-yellow w-44 mr-2 cursor-pointer rounded-[20px] h-10">
           <FontAwesomeIcon
             icon={faComment}
-            className="cursor-pointer h-7 align-middle"
+            className="cursor-pointer h-6 items-center align-middle"
           />
         </button>
       </Link>

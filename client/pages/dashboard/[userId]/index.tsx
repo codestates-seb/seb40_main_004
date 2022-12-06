@@ -4,7 +4,8 @@
  * 최근 수정일: 2022-12-05
  */
 
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -19,8 +20,9 @@ import { CarouselArticle } from '../../../components/yeonwoo/CarouselArticle';
 import { CarouselReview } from '../../../components/yeonwoo/CarouselReview';
 import { Grass } from '../../../components/yeonwoo/Grass';
 import { client } from '../../../libs/client';
+import { TitleProps } from '../../../libs/interfaces';
 
-const Dashboard: NextPage = () => {
+const Dashboard: NextPage<TitleProps> = ({ title = '대시보드' }) => {
   const rendering = useRecoilValue(renderingAtom);
   const setUserDashboard = useSetRecoilState(userDashboardAtom);
   const [userId, setUserId] = useState<string | string[] | undefined>('');
@@ -67,6 +69,9 @@ const Dashboard: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Header />
       <main className="w-[1280px] min-h-screen mx-auto flex gap-12 mb-12">
         <div className="w-[305px]">
@@ -109,6 +114,15 @@ const Dashboard: NextPage = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
 };
 
 export default Dashboard;

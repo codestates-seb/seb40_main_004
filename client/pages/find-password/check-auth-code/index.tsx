@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -7,9 +9,11 @@ import { userEmailAtom } from '../../../atomsHS';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 import { Loader } from '../../../components/common/Loader';
-import { AuthProps } from '../../../libs/interfaces';
+import { AuthProps, TitleProps } from '../../../libs/interfaces';
 
-const CheckAuthCode = () => {
+const CheckAuthCode: NextPage<TitleProps> = ({
+  title = '임시 비밀번호 발급',
+}) => {
   const { register, handleSubmit } = useForm<AuthProps>({
     mode: 'onChange',
   });
@@ -29,6 +33,9 @@ const CheckAuthCode = () => {
   };
   return (
     <>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Header />
       <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
         <form
@@ -64,6 +71,15 @@ const CheckAuthCode = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
 };
 
 export default CheckAuthCode;

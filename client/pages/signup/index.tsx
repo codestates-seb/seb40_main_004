@@ -9,10 +9,16 @@ import { Intro } from '../../components/haseung/Intro';
 import { SignUpForm } from '../../components/haseung/SignUpForm';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
+import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import { TitleProps } from '../../libs/interfaces';
 
-const SignUp = () => {
+const SignUp: NextPage<TitleProps> = ({ title = '회원가입' }) => {
   return (
     <div className="h-screen">
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Header />
       <main className="flex flex-col justify-center items-center h-[90%] bg-white">
         <article className="text-center">
@@ -23,6 +29,15 @@ const SignUp = () => {
       <Footer />
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
 };
 
 export default SignUp;
