@@ -5,6 +5,7 @@
  */
 
 import dynamic from 'next/dynamic';
+import { Loader } from '../common/Loader';
 
 const formats = [
   'header',
@@ -40,9 +41,9 @@ export const QuillEditor = dynamic(
   {
     ssr: false,
     loading: () => (
-      <p className="flex justify-center items-center mx-auto py-20">
-        Loading ...
-      </p>
+      <div className="flex justify-center items-center mx-auto py-20">
+        <Loader />
+      </div>
     ),
   },
 );
