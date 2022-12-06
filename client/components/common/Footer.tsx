@@ -48,13 +48,13 @@ const developers: Developer[] = [
 
 export const Footer = () => {
   return (
-    <footer className="flex bg-background-gray h-[130px] justify-center w-full border-t items-center mx-auto">
+    <footer className="flex bg-background-gray h-[130px] justify-center w-full border-t items-center">
       <div className="flex max-w-[1280px] justify-between w-full">
         <div className="flex w-full flex-col space-y-2">
           <MorakLogo />
           <p>©MORAK. ALL RIGHTS RESERVED</p>
         </div>
-        <div className="flex w-full space-x-3">
+        <div className="flex w-full space-x-3 justify-end">
           {developers.map((dev) => (
             <DeveloperLink github={dev.github} blog={dev.blog} key={dev.name}>
               {dev.name}
