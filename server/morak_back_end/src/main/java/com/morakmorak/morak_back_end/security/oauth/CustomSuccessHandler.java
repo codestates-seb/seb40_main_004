@@ -54,10 +54,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         UserDto.Redis redisUserDto = userMapper.userToRedisUser(user);
         refreshTokenStore.saveData(refreshToken, redisUserDto, REFRESH_TOKEN_EXPIRE_COUNT);
 
-        String avatarPath = (user.getAvatar() == null) ? "" : user.getAvatar().getRemotePath();
-
-        String uri = createResponseUrl(accessToken, refreshToken, avatarPath);
-
+        String uri = createResponseUrl(accessToken, refreshToken);
         getRedirectStrategy().sendRedirect(request, response, uri);
     }
 
@@ -68,11 +65,10 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         return userRepository.findUserByEmail(email).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
     }
 
-    private String createResponseUrl(String accessToken, String refreshToken, String avatarPath) {
+    private String createResponseUrl(String accessToken, String refreshToken) {
         return UriComponentsBuilder.fromUriString(REDIRECT_URL_OAUTH2)
-                .queryParam(ACCESS_TOKEN, accessToken)
                 .queryParam(REFRESH_HEADER, refreshToken)
-                .queryParam("avatarPath", avatarPath)
+                .queryParam(ACCESS_TOKEN, accessToken)
                 .build()
                 .toUriString();
     }
