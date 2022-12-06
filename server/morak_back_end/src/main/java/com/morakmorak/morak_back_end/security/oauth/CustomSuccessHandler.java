@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.morakmorak.morak_back_end.exception.ErrorCode.USER_NOT_FOUND;
@@ -52,7 +53,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String accessToken = tokenGenerator.generateAccessToken(user);
         String refreshToken = tokenGenerator.generateRefreshToken(user);
         UserDto.Redis redisUserDto = userMapper.userToRedisUser(user);
-        refreshTokenStore.saveData(refreshToken, redisUserDto, REFRESH_TOKEN_EXPIRE_COUNT);
+
+        String splitToken = getTokenValue(refreshToken);
+        refreshTokenStore.saveData(splitToken, redisUserDto, REFRESH_TOKEN_EXPIRE_COUNT);
 
         String uri = createResponseUrl(accessToken, refreshToken);
         getRedirectStrategy().sendRedirect(request, response, uri);
@@ -60,7 +63,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private User findUserBy(Authentication authentication) {
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
-        String email = (String)user.getAttributes().get("email");
+        String email = (String)((Map)user.getAttributes().get("kakao_account")).get("email");
 
         return userRepository.findUserByEmail(email).orElseThrow(() -> new BusinessLogicException(USER_NOT_FOUND));
     }
@@ -71,5 +74,11 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .queryParam(ACCESS_TOKEN, accessToken)
                 .build()
                 .toUriString();
+    }
+
+    private String getTokenValue(String bearerToken) {
+        String[] splitToken = bearerToken.split(" ");
+        String token = splitToken[1];
+        return token;
     }
 }
