@@ -15,7 +15,7 @@ public class ArticleTag extends BaseTime{
     @Column(name = "article_tag_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY )
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST )
     @JoinColumn(name = "article_id")
     private Article article;
 
