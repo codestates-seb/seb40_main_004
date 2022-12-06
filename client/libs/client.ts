@@ -5,6 +5,34 @@ if (typeof window !== 'undefined') {
   accessToken = localStorage.getItem('accessToken');
 }
 
+export const refreshAccessToken = async () => {
+  return axios
+    .put(
+      `/api/auth/token`,
+      {},
+      {
+        headers: {
+          RefreshToken: localStorage.getItem('refreshToken'),
+          'ngrok-skip-browser-warning': '111',
+        },
+      },
+    )
+    .then((res) => {
+      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+        res.data;
+      localStorage.setItem('accessToken', newAccessToken);
+      localStorage.setItem('refreshToken', newRefreshToken);
+
+      return { newAccessToken, newRefreshToken };
+    })
+    .catch((err) => {
+      if (err.response.status === 404) {
+        console.log(404);
+        window.location.reload();
+      }
+    });
+};
+
 export const client = axios.create({
   headers: {
     withCredentials: true,
@@ -13,8 +41,6 @@ export const client = axios.create({
     'ngrok-skip-browser-warning': '111',
   },
 });
-
-const requestArray: any = [];
 
 client.interceptors.request.use(
   async (config) => {
@@ -34,48 +60,32 @@ client.interceptors.request.use(
 
 client.interceptors.response.use(
   (response) => {
-    if (requestArray.length != 0) {
-      requestArray.forEach(function (x: any, i: any) {
-        if (response.config.url == x.url) {
-          requestArray.splice(i, 1);
-        }
-      });
-    }
     return response;
   },
+  // 에러가 있을 경우
   async (error) => {
     const {
       config,
       response: { status },
     } = error;
-    if (status === 401) {
-      const originalRequest = config;
-      const { data } = await axios.put(
-        `/api/auth/token`,
-        {},
-        {
-          headers: {
-            RefreshToken: localStorage.getItem('refreshToken'),
-            'ngrok-skip-browser-warning': '111',
-          },
-        },
-      );
-      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-        data;
-      localStorage.setItem('accessToken', newAccessToken);
-      localStorage.setItem('refreshToken', newRefreshToken);
-      if (requestArray.length !== 0) {
-        requestArray.forEach((x: any) => {
-          try {
-            x.headers.Authorization = newAccessToken;
-            client.defaults.headers.common['Authorization'] = newAccessToken;
-          } catch (err) {
-            console.log(err);
-          }
-        });
-      }
+    // 기존 요청을 저장해둔다.
+    const originalRequest = config;
+    // 만약 그 에러가 401 에러라면
+    if (status === 401 || status === 403) {
+      6;
+      const response = await refreshAccessToken();
+      originalRequest.headers.Authorization = response?.newAccessToken;
+      client.defaults.headers.common['Authorization'] =
+        response?.newRefreshToken;
       return client(originalRequest);
     }
     return Promise.reject(error);
   },
 );
+
+/*
+1. 같은 페이지 내에서 새로고침을 할 때는 401 에러가 뜨면 바로 갱신이 되어서 put 요청에서 404 에러가 발생하지 않는다.
+2. 다른 페이지로 이동을 하게되면 401 에러가 발생해서 put 요청이 들어가는데, 이 때 404 에러가 발생한다.
+3. 그러면 put 요청이 발생했는데 404 에러가 떴다 => 그러면 메시지를 띄우고 새로고침을 해버리자.
+
+*/
