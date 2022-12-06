@@ -104,7 +104,7 @@ export const EditProfileComponent = () => {
   }, [userData]);
   const onSubmitEditProfile = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (confirm('프로필 저장 하시겠습니까?')) {
+    if (window.confirm('프로필 저장 하시겠습니까?')) {
       try {
         await client.patch('/api/users/profiles', {
           nickname,
