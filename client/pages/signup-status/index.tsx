@@ -16,8 +16,11 @@ import {
 import { Intro } from '../../components/haseung/Intro';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
+import { GetServerSideProps, NextPage } from 'next';
+import Head from 'next/head';
+import { TitleProps } from '../../libs/interfaces';
 
-const selectStatus = () => {
+const SelectStatus: NextPage<TitleProps> = ({ title = '직업 선택' }) => {
   const email = useRecoilValue(userEmailAtom);
   const authKey = useRecoilValue(userAuthKey);
   const password = useRecoilValue(userPassword);
@@ -41,6 +44,9 @@ const selectStatus = () => {
 
   return (
     <div className="h-screen">
+      <Head>
+        <title>{title}</title>
+      </Head>
       <Header />
       <form className="flex flex-col justify-center items-center h-[79vh] bg-white">
         <article className="text-center mt-10">
@@ -82,4 +88,13 @@ const selectStatus = () => {
   );
 };
 
-export default selectStatus;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
+};
+
+export default SelectStatus;

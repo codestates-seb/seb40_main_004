@@ -97,3 +97,7 @@ export interface AuthProps {
   email: string;
   authKey?: string;
 }
+
+export interface TitleProps {
+  title: string;
+}

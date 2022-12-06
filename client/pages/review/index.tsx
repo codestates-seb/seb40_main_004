@@ -112,7 +112,6 @@ const Review: NextPage<ReviewPageProps> = ({ prevUrl }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const prevUrl = ctx.req.headers.referer ?? null;
-
   return {
     props: { prevUrl },
   };
