@@ -19,6 +19,7 @@ import { articleAuthorIdAtom, isAnswerPostedAtom } from '../../atomsHJ';
 import { useEffect, useRef } from 'react';
 import { BtnTopDown } from '../../components/common/BtnTopDown';
 import { Seo } from '../../components/common/Seo';
+import { Loader } from '../../components/common/Loader';
 
 type QuestionDetailProps = {
   articleId: string;
@@ -102,7 +103,9 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
             )}
           </>
         ) : (
-          <div>Loading...</div>
+          <div className="flex justify-center items-center text-main-gray w-full  min-h-[60vh]">
+            <Loader />
+          </div>
         )}
       </main>
       <Footer />
