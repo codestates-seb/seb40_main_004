@@ -19,6 +19,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.morakmorak.morak_back_end.entity.enums.Grade.*;
+import static com.morakmorak.morak_back_end.entity.enums.JobType.DEFAULT;
 import static com.morakmorak.morak_back_end.entity.enums.UserStatus.*;
 
 @Entity
@@ -57,7 +58,8 @@ public class User extends BaseTime {
     private Boolean isJobSeeker;
 
     @Enumerated(EnumType.STRING)
-    private JobType jobType;
+    @Builder.Default
+    private JobType jobType = DEFAULT;
 
     private Boolean gender;
 
