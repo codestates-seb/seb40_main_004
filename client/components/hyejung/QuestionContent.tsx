@@ -43,7 +43,6 @@ export const QuestionContent = () => {
         .then(() => {
           alert('게시글이 삭제되었습니다. 게시글 목록으로 돌아갑니다.');
           router.replace(`/questions`);
-          mutate(`/api/articles/${articleId}`);
         })
         .catch((err) => {
           console.log(err);
