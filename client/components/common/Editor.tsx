@@ -13,7 +13,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { isArticleEditAtom } from '../../atomsHJ';
 import { categoryAtom } from '../../atomsHS';
@@ -75,7 +75,9 @@ export const Editor = () => {
   const [fileIdList, setFileIdList] = useState<any>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isArticleEdit, setIsArticleEdit] = useRecoilState(isArticleEditAtom);
+  const [tagsError, setTagsError] = useState('');
 
+  // 질문글 수정을 통해 넘어왔다면 해당 데이터로 초기값 셋팅
   useEffect(() => {
     if (isArticleEdit.isArticleEdit) {
       setValue('title', isArticleEdit.title);
@@ -83,57 +85,77 @@ export const Editor = () => {
     }
   }, []);
 
+  // 에디터 콘텐츠 register 부분
   useEffect(() => {
-    if (document) register('content', { required: true });
+    if (document)
+      register('content', {
+        required: '내용을 입력해주세요!',
+        minLength: {
+          message: '내용은 최소 10글자 이상 작성해주세요!🤭',
+          value: 10,
+        },
+      });
   }, [register]);
 
   const editorContent = watch('content');
 
-  const onValid = ({ title, content }: ContentProps) => {
-    setIsSubmitting(true);
-    if (isArticleEdit.isArticleEdit) {
-      client
-        .patch(`/api/articles/${isArticleEdit.articleId}`, {
-          title,
-          content,
-          fileId: fileIdList,
-          tags,
-        })
-        .then((res) => {
-          setIsSubmitting(true);
-          setIsArticleEdit({
-            isArticleEdit: false,
-            title: '',
-            content: '',
-            articleId: '',
+  const onValid: SubmitHandler<ContentProps> = ({ title, content }) => {
+    if (!tags.length) setTagsError('최소 한 개 이상의 태그를 선택해주세요!');
+    else {
+      setIsSubmitting(true);
+      setTagsError('');
+      if (isArticleEdit.isArticleEdit) {
+        client
+          .patch(`/api/articles/${isArticleEdit.articleId}`, {
+            title,
+            content,
+            fileId: fileIdList,
+            tags,
+          })
+          .then((res) => {
+            setIsSubmitting(true);
+            setIsArticleEdit({
+              isArticleEdit: false,
+              title: '',
+              content: '',
+              articleId: '',
+            });
+            router.push(`questions/${res.data.articleId}`);
+          })
+          .catch((error) => {
+            console.error('error', error);
+            alert('게시글 수정에 실패했습니다...🥲');
+            console.log(
+              `title:${title}, content:${content}, fileId:${fileIdList}, tags:${tags}`,
+            );
           });
-          router.push(`questions/${res.data.articleId}`);
-        })
-        .catch((error) => {
-          console.error('error', error);
-          alert('게시글 수정에 실패했습니다...🥲');
-          console.log(
-            `title:${title}, content:${content}, fileId:${fileIdList}, tags:${tags}`,
-          );
-        });
+      } else {
+        client
+          .post(`/api/articles`, {
+            title,
+            content,
+            category,
+            fileId: fileIdList,
+            tags,
+          })
+          .then((res) => {
+            setIsSubmitting(false);
+            router.push(`questions/${res.data.articleId}`);
+          })
+          .catch((error) => {
+            console.error('error', error);
+            // alert('게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!');
+            if (Boolean(tags)) alert('태그를 입력해주세요');
+          });
+      }
+    }
+  };
+
+  const onInvalid: SubmitErrorHandler<ContentProps> = () => {
+    if (!tags.length) {
+      setTagsError('최소 한 개 이상의 태그를 선택해주세요!');
     } else {
-      client
-        .post(`/api/articles`, {
-          title,
-          content,
-          category,
-          fileId: fileIdList,
-          tags,
-        })
-        .then((res) => {
-          setIsSubmitting(false);
-          router.push(`questions/${res.data.articleId}`);
-        })
-        .catch((error) => {
-          console.error('error', error);
-          // alert('게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!');
-          if (Boolean(tags)) alert('태그를 입력해주세요');
-        });
+      setTagsError('');
     }
   };
 
@@ -215,16 +237,17 @@ export const Editor = () => {
   );
 
   return (
-    <form onSubmit={handleSubmit(onValid)} className="h-full p-8 space-y-8">
-      <section className="space-y-3">
+    <form onSubmit={handleSubmit(onValid, onInvalid)} className="h-full p-8">
+      <section className="space-y-3 pb-5">
         <label htmlFor="제목" className="font-bold flex">
           제목
         </label>
         <input
           {...register('title', {
+            required: '제목을 입력해주세요!',
             minLength: {
               value: 5,
-              message: '제목은 5글자 이상으로 해주세요.',
+              message: '제목은 최소 5글자 이상 작성해주세요!🤭',
             },
           })}
           onChange={handleTitleChange}
@@ -234,12 +257,12 @@ export const Editor = () => {
         />
         <p className="font-bold text-red-500">{errors.title?.message}</p>
       </section>
-      <section className="space-y-3">
+      <section className="space-y-3 pb-5">
         <label htmlFor="본문" className="font-bold flex">
           본문
         </label>
         <QuillEditor
-          className="h-96 w-full mx-auto py-1"
+          className="h-96 w-full mx-auto pb-5"
           value={editorContent}
           modules={modules}
           onChange={editorChange}
@@ -247,6 +270,7 @@ export const Editor = () => {
           forwardRef={quillRef}
         />
       </section>
+      <p className="font-bold mt-3 text-red-500">{errors.content?.message}</p>
       <section className="space-y-3 pt-10">
         <label htmlFor="태그" className="font-bold flex">
           태그
@@ -258,6 +282,7 @@ export const Editor = () => {
           onChange={(element) => setTags(element)}
         />
       </section>
+      <p className="font-bold mt-3 text-red-500">{tagsError}</p>
 
       <article className="flex justify-center py-16">
         <input
