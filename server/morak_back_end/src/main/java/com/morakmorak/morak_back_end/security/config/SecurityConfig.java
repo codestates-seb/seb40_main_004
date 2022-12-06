@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .mvcMatchers("/test/all/**").permitAll()
                 .mvcMatchers("/auth/**").permitAll()
                 .mvcMatchers("/login/**").permitAll()
+                .mvcMatchers("/oauth/**").permitAll()
                 .mvcMatchers(GET, "/users/**").permitAll()
                 .mvcMatchers(GET, "/calendars").permitAll()
                 .mvcMatchers("/test/user/**").hasAnyRole("USER", "MANAGER", "ADMIN")
@@ -91,8 +92,9 @@ public class SecurityConfig {
         config.addAllowedOrigin("http://localhost:3000/");
         config.addAllowedOrigin("http://seb40-main-004-hyeonwooga.vercel.app/");
         config.addAllowedOrigin("https://seb40-main-004-hyeonwooga.vercel.app/");
+        config.addAllowedOrigin("https://seb40-main-004.vercel.app/");
         config.addAllowedHeader("*");
-        config.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH", "PUT"));
+        config.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH", "PUT", "OPTION"));
         source.registerCorsConfiguration("/**", config);
 
         return source;
