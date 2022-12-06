@@ -7,34 +7,55 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { userAuthKey, userEmailAtom } from '../../atomsHS';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  userAuthKey,
+  userEmailAtom,
+  userNickName,
+  userPassword,
+} from '../../atomsHS';
 import { AuthenticationTimer } from '../../components/haseung/AuthenticationTimer';
 import { Intro } from '../../components/haseung/Intro';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
 import { GetServerSideProps, NextPage } from 'next';
 import { Seo } from '../../components/common/Seo';
+import { useState } from 'react';
 
 type VerificationNumber = {
   authKey: string;
 };
 
 const SignUpWithEmail: NextPage = () => {
+  const [isOkAuthCode, setIsOkAuthCode] = useState(false);
   const { register, handleSubmit } = useForm<VerificationNumber>();
+  const [authKey, setAuthKey] = useRecoilState(userAuthKey);
   const email = useRecoilValue(userEmailAtom);
-
-  const setAuthKey = useSetRecoilState(userAuthKey);
+  const password = useRecoilValue(userPassword);
+  const nickname = useRecoilValue(userNickName);
   const router = useRouter();
   const onValid = ({ authKey }: VerificationNumber) => {
     axios
       .put(`/api/auth/mail`, { email, authKey })
       .then((res) => {
-        console.log('res', res);
         setAuthKey(res.data.authKey);
+        setIsOkAuthCode(true);
       })
       .catch((error) => console.error('error', error));
-    router.push('/signup-status');
+  };
+  const onClickSignUp = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    axios
+      .post(`/api/auth`, {
+        email,
+        authKey,
+        password,
+        nickname,
+      })
+      .then((res) => console.log('res1', res))
+      .catch((error) => console.error('error', error));
+    alert('가입이 완료되었습니다! 로그인 페이지로 이동할게요.😉');
+    router.push('/login');
   };
   return (
     <>
@@ -60,9 +81,37 @@ const SignUpWithEmail: NextPage = () => {
               border
               my-5"
               />
-              <button className="bg-main-yellow py-3 w-full rounded-[20px] font-bold mb-5">
-                인증하기
-              </button>
+              {!isOkAuthCode ? (
+                <>
+                  <button className="py-3 w-full rounded-[20px] font-bold mb-5 bg-main-yellow">
+                    인증하기
+                  </button>
+                  <button
+                    disabled
+                    type="button"
+                    onClick={onClickSignUp}
+                    className="py-3 w-full rounded-[20px] font-bold mb-5 bg-main-gray"
+                  >
+                    가입하기
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    disabled
+                    className="py-3 w-full rounded-[20px] font-bold mb-5 bg-main-gray"
+                  >
+                    인증하기
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onClickSignUp}
+                    className="py-3 w-full rounded-[20px] font-bold mb-5 bg-main-yellow"
+                  >
+                    가입하기
+                  </button>
+                </>
+              )}
             </form>
           </article>
         </main>
