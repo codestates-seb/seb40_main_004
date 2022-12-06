@@ -97,3 +97,9 @@ export interface AuthProps {
   email: string;
   authKey?: string;
 }
+
+export type DecodedProps = {
+  sub: string;
+  id: number;
+  nickname: string;
+};
