@@ -31,12 +31,14 @@ export const AsideTop = () => {
   const [editInfoMessage, setEditInfoMessage] = useState('');
   const [editGithub, setEditGithub] = useState('');
   const [editBlog, setEditBlog] = useState('');
+  const [editJobType, setEditJobType] = useState('');
   const onClickEdit = () => {
     setIsEdit(true);
     setEditNickname(userDashboard.nickname);
     setEditInfoMessage(userDashboard.infoMessage ?? '');
     setEditGithub(userDashboard.github ?? '');
     setEditBlog(userDashboard.blog ?? '');
+    setEditJobType(userDashboard.jobType ?? '');
   };
   const router = useRouter();
   const onClickCheer = () => {
@@ -44,7 +46,8 @@ export const AsideTop = () => {
   };
   const onSubmitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!/([^가-힣a-z\x20]){1, 7}/i.test(editNickname)) {
+    const reg = new RegExp('^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{0,6}$');
+    if (!reg.test(editNickname)) {
       alert('닉네임은 최소 1글자, 최대 7글자, 자음, 모음 불가입니다');
     } else {
       try {
@@ -53,7 +56,7 @@ export const AsideTop = () => {
           infoMessage: editInfoMessage,
           github: editGithub,
           blog: editBlog,
-          jobType: 'DEVELOPER',
+          jobType: editJobType,
         });
         setIsEdit(false);
         setIsClicked(false);
@@ -143,13 +146,28 @@ export const AsideTop = () => {
             className={`${isClicked ? 'mt-24' : 'mt-2'}`}
             onSubmit={onSubmitForm}
           >
-            <div className="flex justify-between items-baseline">
-              <input
-                className="text-xl font-bold border border-main-gray rounded-full pl-4 w-[238px]"
-                value={editNickname}
-                onChange={(e) => setEditNickname(e.target.value)}
-                placeholder="닉네임"
-              />
+            <div className="flex w-[238px]">
+              <div className="flex justify-between items-center">
+                <input
+                  className="text-xl font-bold border border-main-gray rounded-full pl-4 w-[148px]"
+                  value={editNickname}
+                  onChange={(e) => setEditNickname(e.target.value)}
+                  placeholder="닉네임"
+                />
+              </div>
+              <select
+                id="userState"
+                className="w-full text-xs rounded-full pl-2 py-[0.37rem] my-2 border border-main-gray"
+                value={editJobType}
+                onChange={(e) => setEditJobType(e.target.value)}
+              >
+                <option value="JOB_SEEKER">개발자 취준생</option>
+                <option value="DEVELOPER">현업 개발자</option>
+                <option value="DESIGNER">디자이너</option>
+                <option value="PM">프로덕트 매니저</option>
+                <option value="NON_NORMAL">비개발 직군</option>
+                <option value="DEFAULT">🤔🧑‍💻🤗</option>
+              </select>
             </div>
             <div className="-mt-1">
               <span className="text-xs opacity-80 pl-4">
@@ -235,6 +253,8 @@ export const AsideTop = () => {
                     ? '매니저'
                     : userDashboard.jobType === 'DESIGNER'
                     ? '디자이너'
+                    : userDashboard.jobType === 'DEFAULT'
+                    ? '🤔🧑‍💻🤗'
                     : '?'}
                 </span>
               </div>
