@@ -10,24 +10,23 @@ import { SignUpForm } from '../../components/haseung/SignUpForm';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
 import { GetServerSideProps, NextPage } from 'next';
-import Head from 'next/head';
-import { TitleProps } from '../../libs/interfaces';
+import { Seo } from '../../components/common/Seo';
 
-const SignUp: NextPage<TitleProps> = ({ title = '회원가입' }) => {
+const SignUp: NextPage = () => {
   return (
-    <div className="h-screen">
-      <Head>
-        <title>{title}</title>
-      </Head>
-      <Header />
-      <main className="flex flex-col justify-center items-center h-[90%] bg-white">
-        <article className="text-center">
-          <Intro />
-          <SignUpForm />
-        </article>
-      </main>
-      <Footer />
-    </div>
+    <>
+      <Seo title="회원 가입" />
+      <div className="h-screen">
+        <Header />
+        <main className="flex flex-col justify-center items-center h-[90%] bg-white">
+          <article className="text-center">
+            <Intro />
+            <SignUpForm />
+          </article>
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 };
 

@@ -14,16 +14,13 @@ import { Intro } from '../../components/haseung/Intro';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
 import { GetServerSideProps, NextPage } from 'next';
-import { TitleProps } from '../../libs/interfaces';
-import Head from 'next/head';
+import { Seo } from '../../components/common/Seo';
 
 type VerificationNumber = {
   authKey: string;
 };
 
-const SignUpWithEmail: NextPage<TitleProps> = ({
-  title = '이메일로 인증하기',
-}) => {
+const SignUpWithEmail: NextPage = () => {
   const { register, handleSubmit } = useForm<VerificationNumber>();
   const email = useRecoilValue(userEmailAtom);
 
@@ -40,38 +37,38 @@ const SignUpWithEmail: NextPage<TitleProps> = ({
     router.push('/signup-status');
   };
   return (
-    <div className="h-screen">
-      <Head>
-        <title>{title}</title>
-      </Head>
-      <Header />
-      <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
-        <article className="text-center mt-10 flex flex-col justify-center items-center w-96">
-          <Intro />
-          <section className="text-background-gray font-semibold flex justify-center items-center bg-main-gray w-full h-20 mt-10 rounded-[20px]">
-            이메일로 인증번호가 전송되었습니다!
-          </section>
-          <section className="flex justify-between w-full mt-10">
-            <span className="font-bold">인증번호</span>
-            <AuthenticationTimer />
-          </section>
-          <form onSubmit={handleSubmit(onValid)} className="w-full">
-            <input
-              {...register('authKey', { required: true })}
-              type="text"
-              placeholder="1234"
-              className="rounded-full w-full h-10 pl-4
+    <>
+      <Seo title="회원 가입 - 인증번호 확인" />
+      <div className="h-screen">
+        <Header />
+        <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
+          <article className="text-center mt-10 flex flex-col justify-center items-center w-96">
+            <Intro />
+            <section className="text-background-gray font-semibold flex justify-center items-center bg-main-gray w-full h-20 mt-10 rounded-[20px]">
+              이메일로 인증번호가 전송되었습니다!
+            </section>
+            <section className="flex justify-between w-full mt-10">
+              <span className="font-bold">인증번호</span>
+              <AuthenticationTimer />
+            </section>
+            <form onSubmit={handleSubmit(onValid)} className="w-full">
+              <input
+                {...register('authKey', { required: true })}
+                type="text"
+                placeholder="1234"
+                className="rounded-full w-full h-10 pl-4
               border
               my-5"
-            />
-            <button className="bg-main-yellow py-3 w-full rounded-[20px] font-bold mb-5">
-              인증하기
-            </button>
-          </form>
-        </article>
-      </main>
-      <Footer />
-    </div>
+              />
+              <button className="bg-main-yellow py-3 w-full rounded-[20px] font-bold mb-5">
+                인증하기
+              </button>
+            </form>
+          </article>
+        </main>
+        <Footer />
+      </div>
+    </>
   );
 };
 

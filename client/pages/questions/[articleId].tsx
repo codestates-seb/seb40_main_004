@@ -18,6 +18,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import { articleAuthorIdAtom, isAnswerPostedAtom } from '../../atomsHJ';
 import { useEffect, useRef } from 'react';
 import { BtnTopDown } from '../../components/common/BtnTopDown';
+import { Seo } from '../../components/common/Seo';
 
 type QuestionDetailProps = {
   articleId: string;
@@ -57,9 +58,9 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
       answerCountEl.current.scrollIntoView({ behavior: 'smooth' });
     setIsAnswerPosted(false);
   }, [isAnswerPosted]);
-
   return (
     <>
+      <Seo title={articleData ? articleData.title : '질문/답변'} />
       <Header />
       <main className="max-w-[900px] mx-auto min-h-[80vh] bg-white  p-8 md:p-16 shadow-sm border-[1px] border-gray-200">
         <BtnTopDown />

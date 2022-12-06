@@ -21,6 +21,7 @@ import {
 } from '../../atomsHJ';
 import { ProgressBar } from '../../components/hyejung/ProgressBar';
 import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
+import { Seo } from '../../components/common/Seo';
 
 type MessageForm = {
   message: string;
@@ -47,6 +48,7 @@ const Message: NextPage = () => {
   const reviewRequest = useRecoilValue(reviewRequestAtom);
   return (
     <>
+      <Seo title="응원/후원 - 응원 메세지" />
       <main className="max-w-[1280px] mx-auto min-h-screen p-[60px] space-y-16">
         <section className="flex justify-start">
           <BtnBackArticle articleId={reviewRequest.articleId} />

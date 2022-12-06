@@ -9,15 +9,12 @@ import { LoginForm } from '../../components/haseung/LoginForm';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
 import { GetServerSideProps, NextPage } from 'next';
-import Head from 'next/head';
-import { TitleProps } from '../../libs/interfaces';
+import { Seo } from '../../components/common/Seo';
 
-const Login: NextPage<TitleProps> = ({ title = '로그인' }) => {
+const Login: NextPage = () => {
   return (
     <div className="h-screen">
-      <Head>
-        <title>{title}</title>
-      </Head>
+      <Seo title="로그인" />
       <Header />
       <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
         <article className="text-center">

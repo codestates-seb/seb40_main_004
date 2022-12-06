@@ -19,14 +19,13 @@ import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
 import { keywordAtom } from '../../atomsYW';
 import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
-import Head from 'next/head';
-import { TitleProps } from '../../libs/interfaces';
+import { Seo } from '../../components/common/Seo';
 
 type FormValue = {
   keyword: string;
 };
 
-const Questions: NextPage<TitleProps> = ({ title = 'Q&A' }) => {
+const Questions: NextPage = () => {
   const [pageIndex, setPageIndex] = useState(1);
   const [keyword, setKeyword] = useRecoilState(keywordAtom);
   const [sort, setSort] = useState(['최신순', 'desc']);
@@ -88,9 +87,7 @@ const Questions: NextPage<TitleProps> = ({ title = 'Q&A' }) => {
 
   return (
     <>
-      <Head>
-        <title>{title}</title>
-      </Head>
+      <Seo title="질문/답변" />
       <Header />
       <main className="max-w-[1280px] mx-auto flex space-x-5 p-8 md:p-16 bg-white shadow-sm border-[1px] border-gray-200">
         <form

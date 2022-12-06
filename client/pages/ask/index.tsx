@@ -5,9 +5,9 @@ import { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
 import { Editor } from '../../components/common/Editor';
-import { TitleProps } from '../../libs/interfaces';
+import { Seo } from '../../components/common/Seo';
 
-const Ask: NextPage<TitleProps> = ({ title = '질문 작성하기' }) => {
+const Ask: NextPage = () => {
   const isLogin = useRecoilValue(isLoginAtom);
   const router = useRouter();
   useEffect(() => {
@@ -15,9 +15,7 @@ const Ask: NextPage<TitleProps> = ({ title = '질문 작성하기' }) => {
   }, []);
   return (
     <>
-      <Head>
-        <title>{title}</title>
-      </Head>
+      <Seo title="질문 작성" />
       <Editor />
     </>
   );

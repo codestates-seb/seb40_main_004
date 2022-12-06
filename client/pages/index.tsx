@@ -12,6 +12,7 @@ import { CheerUp } from '../components/yeonwoo/CheerUp';
 import { HallOfFame } from '../components/yeonwoo/HallOfFame';
 import { ListLately } from '../components/yeonwoo/ListLately';
 import dynamic from 'next/dynamic';
+import { Seo } from '../components/common/Seo';
 
 const Calendar = dynamic<any>(
   () => import('../components/yeonwoo/Calendar').then((mod) => mod.Calendar),
@@ -23,6 +24,7 @@ const Calendar = dynamic<any>(
 const Home: NextPage = () => {
   return (
     <>
+      <Seo title="모락모락" />
       <Header />
       <main className="max-w-[1280px] min-h-screen mx-auto">
         <div className="w-[1280px] h-[350px] mx-auto relative flex justify-center items-center">
