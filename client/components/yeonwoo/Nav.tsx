@@ -14,6 +14,11 @@ export const Nav = () => {
           <button>질문/답변</button>
         </Link>
       </li>
+      <li>
+        <Link href="/recruit">
+          <button>채용 일정</button>
+        </Link>
+      </li>
     </ul>
   );
 };
