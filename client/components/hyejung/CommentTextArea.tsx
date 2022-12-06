@@ -55,7 +55,6 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
   };
 
   const onValid: SubmitHandler<FormValue> = (data) => {
-    console.log('here');
     if (isLogin) {
       postComment(data);
       setValue('content', '');
