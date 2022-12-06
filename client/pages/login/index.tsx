@@ -8,10 +8,13 @@
 import { LoginForm } from '../../components/haseung/LoginForm';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
+import { GetServerSideProps, NextPage } from 'next';
+import { Seo } from '../../components/common/Seo';
 
-const Login = () => {
+const Login: NextPage = () => {
   return (
     <div className="h-screen">
+      <Seo title="로그인" />
       <Header />
       <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
         <article className="text-center">
@@ -23,6 +26,15 @@ const Login = () => {
       <Footer />
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
 };
 
 export default Login;

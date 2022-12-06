@@ -4,13 +4,13 @@
  * 최근 수정일: 2022-11-29
  */
 
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { Footer } from '../../components/common/Footer';
 import { Header } from '../../components/common/Header';
+import { Seo } from '../../components/common/Seo';
 import { AsideEditProfile } from '../../components/yeonwoo/AsideEditProfile';
-import { EditAvatar } from '../../components/yeonwoo/EditAvatar';
 import { EditProfileComponent } from '../../components/yeonwoo/EditProfile';
 
 const EditPassword: NextPage = () => {
@@ -25,6 +25,7 @@ const EditPassword: NextPage = () => {
   }, []);
   return (
     <>
+      <Seo title="개인정보 수정 - 패스워드" />
       <Header />
       <main className="w-[1280px] min-h-screen mx-auto flex justify-between mb-12">
         <div className="w-[280px] pt-12">
@@ -40,4 +41,12 @@ const EditPassword: NextPage = () => {
   );
 };
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
+};
 export default EditPassword;

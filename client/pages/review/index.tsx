@@ -20,9 +20,9 @@ import {
 import { ReviewTag } from '../../components/hyejung/ReviewTag';
 import { ProgressBar } from '../../components/hyejung/ProgressBar';
 import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
-import { useRouter } from 'next/router';
 import { userDashboardAtom } from '../../atomsYW';
 import { getIsFromDashboard } from '../../libs/getIsFromDashboard';
+import { Seo } from '../../components/common/Seo';
 
 type ReviewPageProps = {
   prevUrl: string;
@@ -56,6 +56,7 @@ const Review: NextPage<ReviewPageProps> = ({ prevUrl }) => {
 
   return (
     <>
+      <Seo title="응원/후원" />
       <main className="max-w-[1280px] mx-auto min-h-screen p-[60px] space-y-16">
         <section className="flex justify-start">
           <BtnBackArticle articleId={reviewRequest.articleId} />
@@ -112,7 +113,6 @@ const Review: NextPage<ReviewPageProps> = ({ prevUrl }) => {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const prevUrl = ctx.req.headers.referer ?? null;
-
   return {
     props: { prevUrl },
   };

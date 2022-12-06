@@ -4,14 +4,15 @@
  * 최근 수정일: 2022-12-05
  */
 
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { renderingAtom, userDashboardAtom } from '../../../atomsYW';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
+import { Seo } from '../../../components/common/Seo';
 import { AsideBot } from '../../../components/yeonwoo/AsideBot';
 import { AsideMid } from '../../../components/yeonwoo/AsideMid';
 import { AsideTop } from '../../../components/yeonwoo/AsideTop';
@@ -22,7 +23,7 @@ import { client } from '../../../libs/client';
 
 const Dashboard: NextPage = () => {
   const rendering = useRecoilValue(renderingAtom);
-  const setUserDashboard = useSetRecoilState(userDashboardAtom);
+  const [userDashboard, setUserDashboard] = useRecoilState(userDashboardAtom);
   const [userId, setUserId] = useState<string | string[] | undefined>('');
   const router = useRouter();
   const getUser = async () => {
@@ -67,6 +68,13 @@ const Dashboard: NextPage = () => {
 
   return (
     <>
+      <Seo
+        title={
+          userDashboard.nickname !== '탈퇴한 유저'
+            ? userDashboard.nickname
+            : '대시보드'
+        }
+      />
       <Header />
       <main className="w-[1280px] min-h-screen mx-auto flex gap-12 mb-12">
         <div className="w-[305px]">
@@ -109,6 +117,15 @@ const Dashboard: NextPage = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
 };
 
 export default Dashboard;

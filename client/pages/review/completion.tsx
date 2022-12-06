@@ -21,6 +21,7 @@ import {
 import { ProgressBar } from '../../components/hyejung/ProgressBar';
 import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
 import { client } from '../../libs/client';
+import { Seo } from '../../components/common/Seo';
 
 const Completion: NextPage = () => {
   const router = useRouter();
@@ -63,6 +64,7 @@ const Completion: NextPage = () => {
 
   return (
     <>
+      <Seo title="응원/후원 - 완료" />
       <main className="max-w-[1280px] mx-auto min-h-screen p-[60px] space-y-16">
         <section className="flex justify-start">
           <BtnBackArticle articleId={reviewRequest.articleId} />

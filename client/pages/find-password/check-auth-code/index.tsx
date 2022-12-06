@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -7,9 +8,10 @@ import { userEmailAtom } from '../../../atomsHS';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 import { Loader } from '../../../components/common/Loader';
+import { Seo } from '../../../components/common/Seo';
 import { AuthProps } from '../../../libs/interfaces';
 
-const CheckAuthCode = () => {
+const CheckAuthCode: NextPage = () => {
   const { register, handleSubmit } = useForm<AuthProps>({
     mode: 'onChange',
   });
@@ -29,6 +31,7 @@ const CheckAuthCode = () => {
   };
   return (
     <>
+      <Seo title="비밀번호 찾기 - 인증번호 확인" />
       <Header />
       <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
         <form
@@ -64,6 +67,15 @@ const CheckAuthCode = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const content = context.req.url?.split('/')[1];
+  return {
+    props: {
+      content,
+    },
+  };
 };
 
 export default CheckAuthCode;
