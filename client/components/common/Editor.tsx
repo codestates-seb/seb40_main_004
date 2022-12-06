@@ -42,7 +42,7 @@ const options = [
   { tagId: 3, name: 'SPRING' },
   { tagId: 4, name: 'REACT' },
   { tagId: 5, name: 'JAVASCRIPT' },
-  { tagId: 6, name: 'CPLUSCPLUS' },
+  { tagId: 6, name: 'CPLUSPLUS' },
   { tagId: 7, name: 'CSHOP' },
   { tagId: 8, name: 'NEXT' },
   { tagId: 9, name: 'NEST' },
@@ -91,8 +91,8 @@ export const Editor = () => {
       register('content', {
         required: '내용을 입력해주세요!',
         minLength: {
-          message: '내용은 최소 10글자 이상 작성해주세요!🤭',
-          value: 10,
+          message: '내용은 최소 5글자 이상 작성해주세요!🤭',
+          value: 5,
         },
       });
   }, [register]);
@@ -142,10 +142,8 @@ export const Editor = () => {
             setIsSubmitting(false);
             router.push(`questions/${res.data.articleId}`);
           })
-          .catch((error) => {
-            console.error('error', error);
-            // alert('게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!');
-            if (Boolean(tags)) alert('태그를 입력해주세요');
+          .catch(() => {
+            alert('게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!');
           });
       }
     }
@@ -168,6 +166,12 @@ export const Editor = () => {
 
   const handleCancelClick = () => {
     if (confirm('질문 작성을 취소하시겠어요?')) {
+      setIsArticleEdit({
+        isArticleEdit: false,
+        title: '',
+        content: '',
+        articleId: '',
+      });
       router.push('/questions');
     }
   };

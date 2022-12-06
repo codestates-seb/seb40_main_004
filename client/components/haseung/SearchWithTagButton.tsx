@@ -11,7 +11,7 @@ const tags = [
   { tagId: 3, name: 'SPRING' },
   { tagId: 4, name: 'REACT' },
   { tagId: 5, name: 'JAVASCRIPT' },
-  { tagId: 6, name: 'CPLUSCPLUS' },
+  { tagId: 6, name: 'CPLUSPLUS' },
   { tagId: 7, name: 'CSHOP' },
   { tagId: 8, name: 'NEXT' },
   { tagId: 9, name: 'NEST' },
