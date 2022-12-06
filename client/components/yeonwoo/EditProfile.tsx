@@ -104,7 +104,8 @@ export const EditProfileComponent = () => {
   }, [userData]);
   const onSubmitEditProfile = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!/([^가-힣a-z\x20]){1, 7}/i.test(nickname)) {
+    const reg = new RegExp('^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{0,6}$');
+    if (!reg.test(nickname)) {
       alert('닉네임은 최소 1글자, 최대 7글자, 자음, 모음 불가입니다');
     } else {
       if (confirm('프로필 저장 하시겠습니까?')) {
