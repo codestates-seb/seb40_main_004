@@ -47,25 +47,26 @@ export const SignUpForm = () => {
         { message: '비밀번호가 맞지 않습니다.' },
         { shouldFocus: true },
       );
+    } else {
+      router.push('/signup-email');
+      axios
+        .post(`/api/auth/mail`, {
+          email,
+          password,
+          confirmPassword,
+          nickname,
+        })
+        .then(() => {
+          setEmail(email);
+          setPassword(password);
+          setNickName(nickname);
+        })
+        .catch((error) => {
+          console.log('auth error', error);
+          alert('회원가입에 실패하였습니다..! 다시 한 번 확인해주세요.🥲');
+          router.push('/signup');
+        });
     }
-
-    axios
-      .post(`/api/auth/mail`, {
-        email,
-        password,
-        confirmPassword,
-        nickname,
-      })
-      .then(() => {
-        setEmail(email);
-        setPassword(password);
-        setNickName(nickname);
-        router.push('/signup-email');
-      })
-      .catch((error) => {
-        console.log('auth error', error);
-        alert('회원가입에 실패하였습니다..! 다시 한 번 확인해주세요.🥲');
-      });
   };
 
   return (
