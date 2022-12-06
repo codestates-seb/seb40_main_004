@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.constant;
+package com.morakmorak.morak_back_end.config;
 
 public class CacheCosntant {
     public static final String USER_RANK = "userRankList";
