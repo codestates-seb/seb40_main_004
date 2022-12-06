@@ -52,7 +52,7 @@ export const EditProfileComponent = () => {
         { shouldFocus: true },
       );
     } else {
-      if (window.confirm('비밀번호 변경 하시겠습니가?')) {
+      if (confirm('비밀번호 변경 하시겠습니가?')) {
         try {
           await client.patch('/api/auth/password', {
             originalPassword,
@@ -107,7 +107,7 @@ export const EditProfileComponent = () => {
     if (!/([^가-힣a-z\x20]){1, 7}/i.test(nickname)) {
       alert('닉네임은 최소 1글자, 최대 7글자, 자음, 모음 불가입니다');
     } else {
-      if (window.confirm('프로필 저장 하시겠습니까?')) {
+      if (confirm('프로필 저장 하시겠습니까?')) {
         try {
           await client.patch('/api/users/profiles', {
             nickname,
