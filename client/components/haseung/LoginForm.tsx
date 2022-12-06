@@ -14,17 +14,17 @@ import { isLoginAtom } from '../../atomsYW';
 import { SocialLoginBtn } from './SocialLoginBtn';
 import { Loader } from '../common/Loader';
 import { useState } from 'react';
+import { DecodedProps } from '../../libs/interfaces';
+import { ValidationMsg } from '../common/ValildationMsg';
+import { Input } from '../common/Input';
 
 type LoginProps = {
   email: string;
   password: string;
 };
 
-type DecodedProps = {
-  sub: string;
-  id: number;
-  nickname: string;
-};
+const inputClassName = 'rounded-full w-96 h-10 pl-4 border';
+const inputContainerClassName = 'flex flex-col items-start space-y-2 mb-5';
 
 export const LoginForm = () => {
   const setIsLogin = useSetRecoilState(isLoginAtom);
@@ -56,46 +56,49 @@ export const LoginForm = () => {
         alert('로그인에 실패했습니다...! 다시 한 번 확인해주세요.🥲');
       });
   };
-  const { register, handleSubmit } = useForm<LoginProps>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginProps>();
   return (
     <form
       className="flex flex-col mx-auto justify-center items-start mt-10 "
       onSubmit={handleSubmit(onValid)}
     >
-      <label className="font-bold">이메일</label>
-      <input
-        {...register('email', { required: true })}
-        className="rounded-full w-96 h-10 
-        pl-4
-        border
-        mb-5
-        "
-        type="text"
-        placeholder="이메일을 입력해주세요."
-      />
-      <label className="font-bold">비밀번호</label>
-      <input
-        {...register('password', { required: true })}
-        className="rounded-full w-96 h-10 pl-4
-        border
-        mb-5
-        "
-        type="password"
-        autoComplete="off"
-        placeholder="비밀번호를 입력해주세요."
-      />
+      <div className="space-y-4">
+        <Input
+          label="이메일"
+          type="email"
+          placeholder="이메일을 입력해주세요."
+          register={{
+            ...register('email', { required: '이메일을 입력해주세요!' }),
+          }}
+          errors={errors.email?.message}
+        />
+
+        <Input
+          label="비밀번호"
+          type="password"
+          placeholder="비밀번호를 입력해주세요."
+          register={{
+            ...register('password', { required: '비밀번호를 입력해주세요!' }),
+          }}
+          errors={errors.password?.message}
+        />
+      </div>
       <button
         type="submit"
-        className="bg-main-yellow py-3 w-full rounded-[20px] font-bold mb-5"
+        className="bg-main-yellow bg-opacity-80 hover:bg-opacity-100 p-3 w-full rounded-[20px] font-bold my-5"
       >
         로그인
       </button>
       <Link href="/find-password/get-auth-code">
-        <span className="text-xs mt-3 cursor-pointer hover:text-main-gray">
+        <span className="text-xs my-3 cursor-pointer hover:text-main-gray">
           비밀번호를 잊어버리셨나요?
         </span>
       </Link>
-      <span className="text-xs mt-3 cursor-pointer text-main-gray mb-2">
+      <span className="text-xs cursor-pointer text-main-gray mb-6">
         계정이 없으신가요?{' '}
         <Link href="/signup">
           <span className="text-blue-500 hover:text-blue-400">

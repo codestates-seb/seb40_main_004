@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 import { userEmailAtom, userNickName, userPassword } from '../../atomsHS';
+import { Input } from '../common/Input';
 import { Divider } from './Divider';
 import { SocialLoginBtn } from './SocialLoginBtn';
 
@@ -69,109 +70,76 @@ export const SignUpForm = () => {
 
   return (
     <form
-      className="flex flex-col mx-auto justify-center items-start mt-5 space-y-6"
+      className="flex flex-col mx-auto justify-center items-start mt-5"
       onSubmit={handleSubmit(onValid)}
     >
-      <div className="flex flex-col">
-        <label htmlFor="nickname" className="font-bold mr-auto">
-          닉네임
-        </label>
-        <input
-          {...register('nickname', {
-            required: true,
-            pattern: {
-              value: /([^가-힣\x20])/i,
-              message: '자음/모음은 불가능합니다.',
-            },
-            minLength: {
-              value: 1,
-              message: '닉네임은 1글자 이상이어야 합니다.',
-            },
-            maxLength: {
-              value: 7,
-              message: '닉네임은 7글자 이하이어야 합니다.',
-            },
-          })}
-          className="rounded-full w-96 h-10 pl-4 border"
+      <div className="space-y-4">
+        <Input
+          label="닉네임"
           type="text"
           placeholder="닉네임을 입력해주세요."
+          register={{
+            ...register('nickname', {
+              required: '닉네임을 입력해주세요.',
+              pattern: {
+                value: /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{0,6}$/,
+                message: '자음/모음 1자리 이상, 7자리 이하여야 합니다.',
+              },
+            }),
+          }}
+          errors={errors.nickname?.message}
         />
-        <p className="font-bold text-red-500 text-sm text-center mr-auto">
-          {errors.nickname?.message}
-        </p>
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="email" className="font-bold  mr-auto">
-          이메일
-        </label>
-        <input
-          {...register('email', {
-            required: true,
-            pattern: {
-              value: /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i,
-              message: '이메일이 형식에 맞지 않습니다.',
-            },
-          })}
-          className="rounded-full w-96 h-10 
-        pl-4
-        border
-        "
-          type="text"
+
+        <Input
+          label="이메일"
+          type="email"
           placeholder="이메일을 입력해주세요."
+          register={{
+            ...register('email', {
+              required: '이메일을 입력해주세요.',
+              pattern: {
+                value: /^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/i,
+                message: '이메일이 형식에 맞지 않습니다.',
+              },
+            }),
+          }}
+          errors={errors.email?.message}
         />
-        <p className="text-red-500 font-semibold text-sm text-center mr-auto">
-          {errors.email?.message}
-        </p>
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="password" className="font-bold mr-auto">
-          비밀번호
-        </label>
-        <input
-          {...register('password', {
-            required: true,
-            pattern: {
-              value:
-                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
-              message:
-                '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다.',
-            },
-          })}
-          className="rounded-full w-96 h-10 
-        pl-4
-        border
-        "
+
+        <Input
+          label="비밀번호"
           type="password"
           placeholder="비밀번호를 입력해주세요."
-          autoComplete="off"
+          register={{
+            ...register('password', {
+              required: '비밀번호를 입력해주세요.',
+              pattern: {
+                value:
+                  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
+                message:
+                  '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다.',
+              },
+            }),
+          }}
+          errors={errors.password?.message}
         />
-        <p className="font-semibold text-red-500 relative right-0 text-sm mr-auto">
-          {errors.password?.message}
-        </p>
-      </div>
-      <div className="flex flex-col">
-        <label htmlFor="confirmPassword" className="font-bold mr-auto">
-          비밀번호 확인
-        </label>
-        <input
-          {...register('confirmPassword', {
-            required: true,
-          })}
-          className="rounded-full w-96 h-10 
-        pl-4
-        border
-        "
+
+        <Input
+          label="비밀번호 확인"
           type="password"
           placeholder="한번 더 입력해주세요."
-          autoComplete="off"
+          register={{
+            ...register('confirmPassword', {
+              required: '비밀번호를 한번 더 입력해주세요.',
+            }),
+          }}
+          errors={errors.confirmPassword?.message}
         />
-        <p className="font-semibold text-red-500 text-sm text-center mr-auto">
-          {errors.confirmPassword?.message}
-        </p>
       </div>
+
       <button
         type="submit"
-        className="bg-main-yellow py-3 w-full rounded-[20px] font-bold"
+        className="bg-main-yellow bg-opacity-80 hover:bg-opacity-100 p-3 w-full rounded-[20px] font-bold my-5"
       >
         가입하기
       </button>
