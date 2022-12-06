@@ -9,7 +9,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { userEmailAtom, userNickName, userPassword } from '../../atomsHS';
 import { Divider } from './Divider';
 import { SocialLoginBtn } from './SocialLoginBtn';
@@ -22,9 +22,9 @@ type SignUpProps = {
 };
 
 export const SignUpForm = () => {
-  const [email, setEmail] = useRecoilState(userEmailAtom);
-  const [password, setPassword] = useRecoilState(userPassword);
-  const [nickname, setNickName] = useRecoilState(userNickName);
+  const setEmail = useSetRecoilState(userEmailAtom);
+  const setPassword = useSetRecoilState(userPassword);
+  const setNickName = useSetRecoilState(userNickName);
   const router = useRouter();
   const {
     register,
@@ -79,19 +79,20 @@ export const SignUpForm = () => {
         <input
           {...register('nickname', {
             required: true,
+            pattern: {
+              value: /([^가-힣\x20])/i,
+              message: '자음/모음은 불가능합니다.',
+            },
             minLength: {
-              value: 2,
-              message: '닉네임은 2자 이상이어야 합니다.',
+              value: 1,
+              message: '닉네임은 1글자 이상이어야 합니다.',
             },
             maxLength: {
-              value: 16,
-              message: '닉네임은 16자 이하이어야 합니다.',
+              value: 7,
+              message: '닉네임은 7글자 이하이어야 합니다.',
             },
           })}
-          className="rounded-full w-96 h-10 
-        pl-4
-        border
-        "
+          className="rounded-full w-96 h-10 pl-4 border"
           type="text"
           placeholder="닉네임을 입력해주세요."
         />
