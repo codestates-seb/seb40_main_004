@@ -14,7 +14,7 @@ import Link from 'next/link';
 export const SocialLoginBtn = () => {
   return (
     <section className="flex w-full justify-center">
-      <Link href="http://morak-873888559.ap-northeast-2.elb.amazonaws.com:8080/login/oauth2/code/google">
+      <Link href="https://morak-873888559.ap-northeast-2.elb.amazonaws.com:8080/login/oauth2/code/google">
         <button className="bg-main-gray rounded-[20px] w-44 mr-2 h-10">
           <FontAwesomeIcon
             icon={faGoogle}
@@ -22,12 +22,14 @@ export const SocialLoginBtn = () => {
           />
         </button>
       </Link>
-      <button className="bg-main-yellow w-44 mr-2 cursor-pointer rounded-[20px] h-10">
-        <FontAwesomeIcon
-          icon={faComment}
-          className="cursor-pointer h-7 align-middle"
-        />
-      </button>
+      <Link href="http://morak-873888559.ap-northeast-2.elb.amazonaws.com:8080/oauth2/authorization/kakao">
+        <button className="bg-main-yellow w-44 mr-2 cursor-pointer rounded-[20px] h-10">
+          <FontAwesomeIcon
+            icon={faComment}
+            className="cursor-pointer h-7 align-middle"
+          />
+        </button>
+      </Link>
     </section>
   );
 };
