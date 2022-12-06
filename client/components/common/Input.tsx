@@ -19,7 +19,6 @@ export const Input = ({
   type,
   placeholder,
 }: InputProps) => {
-  console.log(register, errors);
   return (
     <section className={inputContainerClassName}>
       <label className="font-bold">{label}</label>
