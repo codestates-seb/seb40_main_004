@@ -5,6 +5,7 @@ import { useSetRecoilState } from 'recoil';
 import { isLoginAtom } from '../../../atomsYW';
 import jwt_decode from 'jwt-decode';
 import { DecodedProps } from '../../../libs/interfaces';
+import { Loader } from '../../../components/common/Loader';
 
 const OAuth2Login = () => {
   // uri 에 담겨오는 리프레시 토큰 추출
@@ -50,7 +51,11 @@ const OAuth2Login = () => {
     handler(RefreshToken);
   }, [RefreshToken]);
 
-  return <div>{RefreshToken}</div>;
+  return (
+    <div className="flex h-screen justify-center items-center">
+      <Loader />
+    </div>
+  );
 };
 
 export default OAuth2Login;
