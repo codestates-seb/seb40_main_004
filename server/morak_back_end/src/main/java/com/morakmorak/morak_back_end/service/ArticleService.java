@@ -107,8 +107,7 @@ public class ArticleService {
                 .forEach(articleTag -> {
                     Tag dbTag = tagService.findVerifiedTagByTagName(articleTag.getTag().getName());
                     ArticleTag reBuildArticleTag = ArticleTag.builder().article(reBuildArticle).tag(dbTag).build();
-                    reBuildArticle.getArticleTags().add(reBuildArticleTag);
-                    dbTag.getArticleTags().add(reBuildArticleTag);
+                    articleTagRepository.save(reBuildArticleTag);
                 });
     }
 
