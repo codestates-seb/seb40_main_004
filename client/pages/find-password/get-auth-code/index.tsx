@@ -1,17 +1,15 @@
 import axios from 'axios';
 import { GetServerSideProps, NextPage } from 'next';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 import { Loader } from '../../../components/common/Loader';
-import { AuthProps, TitleProps } from '../../../libs/interfaces';
+import { Seo } from '../../../components/common/Seo';
+import { AuthProps } from '../../../libs/interfaces';
 
-const GetAuthCode: NextPage<TitleProps> = ({
-  title = '비밀번호 찾기 이메일 확인',
-}) => {
+const GetAuthCode: NextPage = () => {
   const { register, handleSubmit } = useForm<AuthProps>({
     mode: 'onChange',
   });
@@ -28,9 +26,7 @@ const GetAuthCode: NextPage<TitleProps> = ({
   };
   return (
     <>
-      <Head>
-        <title>{title}</title>
-      </Head>
+      <Seo title="비밀번호 찾기 - 인증번호 발송" />
       <Header />
       <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
         <form onSubmit={handleSubmit(onValid)} className="space-y-2">

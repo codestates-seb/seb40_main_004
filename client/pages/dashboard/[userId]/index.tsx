@@ -5,14 +5,14 @@
  */
 
 import { GetServerSideProps, NextPage } from 'next';
-import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { renderingAtom, userDashboardAtom } from '../../../atomsYW';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
+import { Seo } from '../../../components/common/Seo';
 import { AsideBot } from '../../../components/yeonwoo/AsideBot';
 import { AsideMid } from '../../../components/yeonwoo/AsideMid';
 import { AsideTop } from '../../../components/yeonwoo/AsideTop';
@@ -20,11 +20,10 @@ import { CarouselArticle } from '../../../components/yeonwoo/CarouselArticle';
 import { CarouselReview } from '../../../components/yeonwoo/CarouselReview';
 import { Grass } from '../../../components/yeonwoo/Grass';
 import { client } from '../../../libs/client';
-import { TitleProps } from '../../../libs/interfaces';
 
-const Dashboard: NextPage<TitleProps> = ({ title = '대시보드' }) => {
+const Dashboard: NextPage = () => {
   const rendering = useRecoilValue(renderingAtom);
-  const setUserDashboard = useSetRecoilState(userDashboardAtom);
+  const [userDashboard, setUserDashboard] = useRecoilState(userDashboardAtom);
   const [userId, setUserId] = useState<string | string[] | undefined>('');
   const router = useRouter();
   const getUser = async () => {
@@ -69,9 +68,13 @@ const Dashboard: NextPage<TitleProps> = ({ title = '대시보드' }) => {
 
   return (
     <>
-      <Head>
-        <title>{title}</title>
-      </Head>
+      <Seo
+        title={
+          userDashboard.nickname !== '탈퇴한 유저'
+            ? userDashboard.nickname
+            : '대시보드'
+        }
+      />
       <Header />
       <main className="w-[1280px] min-h-screen mx-auto flex gap-12 mb-12">
         <div className="w-[305px]">

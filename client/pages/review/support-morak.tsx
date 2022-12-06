@@ -24,6 +24,7 @@ import {
 import { ProgressBar } from '../../components/hyejung/ProgressBar';
 import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
 import { client } from '../../libs/client';
+import { Seo } from '../../components/common/Seo';
 
 const SupportMorak: NextPage = () => {
   const router = useRouter();
@@ -61,6 +62,7 @@ const SupportMorak: NextPage = () => {
 
   return (
     <>
+      <Seo title="응원/후원 - 모락 전달" />
       <main className="max-w-[1280px] mx-auto min-h-screen p-[60px] space-y-16">
         <section className="flex justify-start">
           <BtnBackArticle articleId={reviewRequest.articleId} />

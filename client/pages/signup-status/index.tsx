@@ -17,10 +17,9 @@ import { Intro } from '../../components/haseung/Intro';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
 import { GetServerSideProps, NextPage } from 'next';
-import Head from 'next/head';
-import { TitleProps } from '../../libs/interfaces';
+import { Seo } from '../../components/common/Seo';
 
-const SelectStatus: NextPage<TitleProps> = ({ title = '직업 선택' }) => {
+const SelectStatus: NextPage = () => {
   const email = useRecoilValue(userEmailAtom);
   const authKey = useRecoilValue(userAuthKey);
   const password = useRecoilValue(userPassword);
@@ -43,48 +42,48 @@ const SelectStatus: NextPage<TitleProps> = ({ title = '직업 선택' }) => {
   };
 
   return (
-    <div className="h-screen">
-      <Head>
-        <title>{title}</title>
-      </Head>
-      <Header />
-      <form className="flex flex-col justify-center items-center h-[79vh] bg-white">
-        <article className="text-center mt-10">
-          <Intro />
-          <section className="text-background-gray font-semibold flex justify-center items-center bg-main-gray w-full h-20 mt-10 rounded-[20px]">
-            마지막 단계입니다! 회원님에 대해서 알려주세요!
-          </section>
-          <fieldset className="flex justify-start flex-col mt-10 leading-8">
-            <div>
-              <input type="radio" name="check" value="newbie" />
-              <label htmlFor="개발자 취준생">개발자 취준생</label>
-            </div>
-            <div>
-              <input type="radio" name="check" value="junior" />
-              <label htmlFor="현업 개발자">현업 개발자</label>
-            </div>
-            <div>
-              <input type="radio" name="check" value="general" />
-              <label htmlFor="개발에 관심있는 일반인">
-                개발에 관심있는 일반인
-              </label>
-            </div>
-          </fieldset>
-          <div
-            onClick={onSelectedStatusClick}
-            className="ml-2 flex justify-center items-center w-[400px] h-12 mt-10 rounded-full"
-          >
-            <button
+    <>
+      <Seo title="회원 가입 - 직업 현황" />
+      <div className="h-screen">
+        <Header />
+        <form className="flex flex-col justify-center items-center h-[79vh] bg-white">
+          <article className="text-center mt-10">
+            <Intro />
+            <section className="text-background-gray font-semibold flex justify-center items-center bg-main-gray w-full h-20 mt-10 rounded-[20px]">
+              마지막 단계입니다! 회원님에 대해서 알려주세요!
+            </section>
+            <fieldset className="flex justify-start flex-col mt-10 leading-8">
+              <div>
+                <input type="radio" name="check" value="newbie" />
+                <label htmlFor="개발자 취준생">개발자 취준생</label>
+              </div>
+              <div>
+                <input type="radio" name="check" value="junior" />
+                <label htmlFor="현업 개발자">현업 개발자</label>
+              </div>
+              <div>
+                <input type="radio" name="check" value="general" />
+                <label htmlFor="개발에 관심있는 일반인">
+                  개발에 관심있는 일반인
+                </label>
+              </div>
+            </fieldset>
+            <div
               onClick={onSelectedStatusClick}
-              className="bg-main-yellow py-3 w-full rounded-[20px] font-bold mb-5"
+              className="ml-2 flex justify-center items-center w-[400px] h-12 mt-10 rounded-full"
             >
-              인증하기
-            </button>
-          </div>
-        </article>
-      </form>
-      <Footer />
-    </div>
+              <button
+                onClick={onSelectedStatusClick}
+                className="bg-main-yellow py-3 w-full rounded-[20px] font-bold mb-5"
+              >
+                인증하기
+              </button>
+            </div>
+          </article>
+        </form>
+        <Footer />
+      </div>
+    </>
   );
 };
 
