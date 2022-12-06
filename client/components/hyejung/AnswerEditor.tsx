@@ -54,7 +54,7 @@ export const AnswerEditor = () => {
     }
   }, [register]);
 
-  // 답변 수정 모드일 경우 동작!
+  // 답변 수정 모드일 경우 페이지의 가장 하단으로 이동 & 수정 데이터 셋팅
   useEffect(() => {
     if (isAnserEdit.isEdit) {
       window.scrollTo({ top: 99999, behavior: 'smooth' });
