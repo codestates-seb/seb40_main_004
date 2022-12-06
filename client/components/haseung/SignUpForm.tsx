@@ -82,16 +82,8 @@ export const SignUpForm = () => {
             ...register('nickname', {
               required: '닉네임을 입력해주세요.',
               pattern: {
-                value: /([^가-힣\x20])/i,
-                message: '자음/모음은 불가능합니다.',
-              },
-              minLength: {
-                value: 1,
-                message: '닉네임은 1글자 이상이어야 합니다.',
-              },
-              maxLength: {
-                value: 7,
-                message: '닉네임은 7글자 이하이어야 합니다.',
+                value: /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{0,6}$/,
+                message: '자음/모음 1자리 이상, 7자리 이하여야 합니다.',
               },
             }),
           }}
