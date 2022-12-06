@@ -127,8 +127,8 @@ export const CarouselReview = () => {
                 >
                   <div>
                     <p>
-                      {review.content.length > 50
-                        ? `${review.content.slice(0, 50)}...`
+                      {review.content.length > 35
+                        ? `${review.content.slice(0, 35)}...`
                         : review.content}
                     </p>
                   </div>

@@ -15,6 +15,7 @@ import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { Pagination } from './Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Loader } from '../common/Loader';
 
 export const QuestionList = ({
   response,
@@ -96,7 +97,7 @@ export const QuestionList = ({
   else
     return (
       <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
-        로딩중~🔥
+        <Loader />
       </div>
     );
 };

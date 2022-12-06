@@ -26,7 +26,7 @@ export const BtnDropdown = () => {
   const router = useRouter();
 
   const onClickLogout = async () => {
-    if (window.confirm('로그아웃 하시겠습니까?')) {
+    if (confirm('로그아웃 하시겠습니까?')) {
       try {
         await axios.delete('/api/auth/token', {
           headers: {
