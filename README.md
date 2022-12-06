@@ -139,6 +139,9 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 
 더 따뜻한 개발 문화를 추구하는, <br/>
 저희는 **모락모락**입니다!
+</br>
+![스크린샷 2022-12-06 오전 10 56 56](https://user-images.githubusercontent.com/104377048/205789821-94201b67-46ec-4aeb-b936-18da736a868f.png)
+
 
 <table>
   <tr>
