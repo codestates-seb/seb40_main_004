@@ -9,7 +9,6 @@ import { CreatedDate } from './CreatedDate';
 import { CommentContainer } from './CommentContainer';
 import { TagList } from './TagList';
 import { UserNickname } from './UserNickname';
-import { mutate } from 'swr';
 import { useRouter } from 'next/router';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
