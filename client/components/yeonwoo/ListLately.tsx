@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { articleList } from '../../interfaces';
+import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 import { client } from '../../libs/client';
 import { elapsedTime } from '../../libs/elapsedTime';
 
@@ -28,10 +29,15 @@ export const ListLately = () => {
 
   return (
     <>
-      <div className="mb-6">
+      <div className="mb-6 ">
         <span className="text-2xl mr-2 font-bold">❓ 최근 질문</span>
         <Link href="/questions">
           <span className="text-xs hover:cursor-pointer">더보기 ＞</span>
+        </Link>
+        <Link href="/ask">
+          <span className="text-xs ml-4 hover:cursor-pointer">
+            📝 질문 작성 ＞
+          </span>
         </Link>
       </div>
       {
@@ -40,7 +46,7 @@ export const ListLately = () => {
             {data &&
               data.slice(0, 5).map((article) => (
                 <div
-                  className="w-[492px] h-16 border-b mb-8"
+                  className="w-[492px] h-18 border-b mb-8"
                   key={article.articleId}
                 >
                   <div className="mb-4">
@@ -52,12 +58,19 @@ export const ListLately = () => {
                       </span>
                     </Link>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center mb-2">
                     <div className="flex">
                       <Link href={`/dashboard/${article.userInfo.userId}`}>
-                        <span className="text-xs hover:cursor-pointer">
-                          {article.userInfo.nickname}
-                        </span>
+                        <div className="text-xs flex gap-2 hover:cursor-pointer">
+                          <span>
+                            {changeGradeEmoji(
+                              article.userInfo.grade
+                                ? article.userInfo.grade
+                                : '',
+                            )}
+                          </span>
+                          <span>{article.userInfo.nickname}</span>
+                        </div>
                       </Link>
                     </div>
                     <div className="flex gap-4">
@@ -83,7 +96,7 @@ export const ListLately = () => {
             {data &&
               data.slice(5).map((article) => (
                 <div
-                  className="w-[492px] h-16 border-b mb-8"
+                  className="w-[492px] h-18 border-b mb-8"
                   key={article.articleId}
                 >
                   <div className="mb-4">
@@ -95,12 +108,19 @@ export const ListLately = () => {
                       </span>
                     </Link>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center mb-2">
                     <div className="flex">
                       <Link href={`/dashboard/${article.userInfo.userId}`}>
-                        <span className="text-xs hover:cursor-pointer">
-                          {article.userInfo.nickname}
-                        </span>
+                        <div className="text-xs flex gap-2 hover:cursor-pointer">
+                          <span>
+                            {changeGradeEmoji(
+                              article.userInfo.grade
+                                ? article.userInfo.grade
+                                : '',
+                            )}
+                          </span>
+                          <span>{article.userInfo.nickname}</span>
+                        </div>
                       </Link>
                     </div>
                     <div className="flex gap-4">
