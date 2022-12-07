@@ -51,9 +51,7 @@ export const BtnUser = () => {
             <Image src="/favicon.ico" width="25px" height="25px" />
           )}
         </div>
-        <span className="">
-          {changeGradeEmoji(dataHeader?.userInfo.grade ?? '')}
-        </span>
+        <span className="">{changeGradeEmoji(grade ?? '')}</span>
         <span className="ml-2">{nickname}</span>
         <FontAwesomeIcon icon={faChevronRight} />
       </button>
