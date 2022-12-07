@@ -27,6 +27,8 @@ export const Header = () => {
       res.data.avatar &&
         res.data.avatar.remotePath &&
         localStorage.setItem('avatarPath', res.data.avatar.remotePath);
+      res.data.userInfo.grade &&
+        localStorage.setItem('grade', res.data.userInfo.grade);
     }
   };
   useEffect(() => {
