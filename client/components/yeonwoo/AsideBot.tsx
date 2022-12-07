@@ -57,7 +57,10 @@ export const AsideBot = () => {
       <div>
         {userDashboard.reviewBadges.map((badge) => (
           <div className="mb-4" key={badge.badge_Id}>
-            <button className="bg-main-yellow rounded-full py-[6px] w-32 text-sm">
+            <button
+              className="bg-main-yellow rounded-full py-[6px] w-32 text-sm"
+              disabled
+            >
               {arrKor[arrEng.indexOf(badge.name)]}
             </button>
           </div>

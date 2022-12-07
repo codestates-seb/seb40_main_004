@@ -18,7 +18,10 @@ export const AsideMid = () => {
       <div>
         {userDashboard.tags.map((tag) => (
           <div className="mb-4" key={tag.tag_Id}>
-            <button className="bg-main-yellow rounded-full py-[6px] w-32 text-sm">
+            <button
+              className="bg-main-yellow rounded-full py-[6px] w-32 text-sm"
+              disabled
+            >
               {changeTagPrettier(tag.name)}
             </button>
           </div>
