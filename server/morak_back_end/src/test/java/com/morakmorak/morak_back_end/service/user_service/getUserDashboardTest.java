@@ -72,6 +72,7 @@ public class getUserDashboardTest extends UserServiceTest {
                 .articleCount(1L)
                 .total(3L)
                 .createdDate(LocalDate.of(2022,1,1))
+                .createdNumber(1)
                 .build();
 
         TagQueryDtoTestImpl tag1 = TagQueryDtoTestImpl
