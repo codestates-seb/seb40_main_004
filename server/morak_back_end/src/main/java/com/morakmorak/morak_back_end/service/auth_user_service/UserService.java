@@ -148,6 +148,7 @@ public class UserService {
                             .commentCount(commentCount)
                             .total(total)
                             .createdDate(e.getKey())
+                            .createdNumber(e.getKey().getDayOfYear())
                             .build();
                 }
         ).collect(Collectors.toList());

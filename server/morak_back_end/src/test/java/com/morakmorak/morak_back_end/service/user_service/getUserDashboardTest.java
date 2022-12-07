@@ -72,6 +72,7 @@ public class getUserDashboardTest extends UserServiceTest {
                 .articleCount(1L)
                 .total(3L)
                 .createdDate(LocalDate.of(2022,1,1))
+                .createdNumber(1)
                 .build();
 
         TagQueryDtoTestImpl tag1 = TagQueryDtoTestImpl
@@ -136,7 +137,7 @@ public class getUserDashboardTest extends UserServiceTest {
 
         LocalDate january1st = LocalDate.now().withDayOfYear(1);
         LocalDate december31st = LocalDate.now().withDayOfYear(365);
-        ActivityDto.Temporary activityDto = ActivityDto.Temporary.builder().count(1L).build();
+        ActivityDto.Temporary activityDto = ActivityDto.Temporary.builder().count(1L).createdDate(LocalDate.of(2022,1,1)).build();
 
         given(userRepository.findById(any())).willReturn(Optional.of(dbUser));
         given(userQueryRepository.getUserDashboardBasicInfo(ID1)).willReturn(dashBoard);
