@@ -161,7 +161,7 @@ export const AsideTop = () => {
                 value={editJobType}
                 onChange={(e) => setEditJobType(e.target.value)}
               >
-                <option value="JOB_SEEKER">개발자 취준생</option>
+                <option value="JOB_SEEKER">취준 개발자</option>
                 <option value="DEVELOPER">현업 개발자</option>
                 <option value="DESIGNER">디자이너</option>
                 <option value="PM">프로덕트 매니저</option>
