@@ -244,7 +244,7 @@ public class DashboardTest extends UserControllerTest {
                                         fieldWithPath("activities[].commentCount").type(NUMBER).description("일일 댓글 작성 수"),
                                         fieldWithPath("activities[].total").type(NUMBER).description("일일 토탈 게시글/댓글 작성 수"),
                                         fieldWithPath("activities[].createdDate").type(STRING).description("해당일"),
-                                        fieldWithPath("activities[].createdNumber").type(STRING).description("해당일을 days of year로 표현"),
+                                        fieldWithPath("activities[].createdNumber").type(NUMBER).description("해당일을 days of year로 표현"),
                                         fieldWithPath("reviews").type(ARRAY).description("받은 리뷰 목록"),
                                         fieldWithPath("reviews[].reviewId").type(NUMBER).description("리뷰 아이디 db 시퀀스값"),
                                         fieldWithPath("reviews[].content").type(STRING).description("리뷰 내용"),
