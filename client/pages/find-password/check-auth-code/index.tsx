@@ -12,9 +12,7 @@ import { Seo } from '../../../components/common/Seo';
 import { AuthProps } from '../../../libs/interfaces';
 
 const CheckAuthCode: NextPage = () => {
-  const { register, handleSubmit } = useForm<AuthProps>({
-    mode: 'onChange',
-  });
+  const { register, handleSubmit } = useForm<AuthProps>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const setEmail = useSetRecoilState(userEmailAtom);
   const router = useRouter();
