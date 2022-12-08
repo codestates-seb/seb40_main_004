@@ -50,11 +50,11 @@ public class Answer extends BaseTime{
 
     @Builder.Default
     @OneToMany(mappedBy = "answer",
-            cascade = CascadeType.PERSIST, orphanRemoval = true)
+             orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "answer")
+    @OneToMany(mappedBy = "answer",orphanRemoval = true)
     private List<Report> reports = new ArrayList<>();
 
     @Builder.Default
@@ -63,11 +63,11 @@ public class Answer extends BaseTime{
     private List<File> files = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "answer")
+    @OneToMany(mappedBy = "answer",orphanRemoval = true )
     private List<AnswerLike> answerLike = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "answer")
+    @OneToMany(mappedBy = "answer",orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();//북마크로직에 답변 북마크 로직 추가 필요
 
     void isMappedWith(Article article) {

@@ -1,15 +1,12 @@
 #!/bin/bash
 
-REPOSITORY= /home/ec2-user/app/server/morak_back_end
+REPOSITORY=/home/ec2-user/app/server
+PROJECT_NAME=morak_back_end
 
-sudo cd $REPOSITORY
+# git clone 받은 위치로 이동
+cd $REPOSITORY/$PROJECT_NAME/
 
-echo "> GIT STASH"
-git stash
-
-echo "> GIT PULL"
-git pull
-
+APP_NAME=morak_back_end
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
 if [ -z $CURRENT_PID ]
@@ -21,6 +18,14 @@ else
   sleep 5
 fi
 
+# git clone 받은 위치로 이동
+cd $REPOSITORY/$PROJECT_NAME/
+
+
+echo "> ll"
+sudo ls -al
+
+
 echo "> GRADLE CHMOD 777"
 sudo chmod 777 ./gradlew
 
@@ -30,9 +35,8 @@ sudo ./gradlew clean
 echo "> GRADLE BUILD"
 sudo ./gradlew build
 
-APP_NAME=morak_back_end
-JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
-JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
+# jar 파일 위치로 이동
+cd build/libs
 
-echo "> $JAR_PATH 배포"
-shdo nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
+echo "> JAR BUILD"
+sudo nohup java -jar morak_back_end-0.0.1-SNAPSHOT.jar &

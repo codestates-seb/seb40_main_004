@@ -10,10 +10,12 @@ import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
+import com.morakmorak.morak_back_end.repository.answer.AnswerQueryRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.user.UserQueryRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -27,7 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.morakmorak.morak_back_end.config.CacheCosntant.*;
 import static com.morakmorak.morak_back_end.entity.enums.ActivityType.*;
+import static com.morakmorak.morak_back_end.entity.enums.UserStatus.*;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 
 @Service
@@ -40,6 +44,7 @@ public class UserService {
     private final TagMapper tagMapper;
     private final UserMapper userMapper;
     private final AnswerRepository answerRepository;
+    private final AnswerQueryRepository answerQueryRepository;
     private final AnswerMapper answerMapper;
 
     public User findVerifiedUserById(Long userId) {
@@ -57,12 +62,13 @@ public class UserService {
         return userMapper.userToEditProfile(dbUser);
     }
 
+    @Cacheable(key = "#request", value = USER_RANK)
     public ResponseMultiplePaging<UserDto.ResponseRanking> getUserRankList(PageRequest request) {
-        Page<User> userRankPage = userQueryRepository.getRankData(request);
-        List<UserDto.ResponseRanking> result = userMapper.toResponseRankDto(userRankPage.getContent());
-        reorderRank(request, result);
+        Page<User> page = userQueryRepository.getRankData(request);
+        List<UserDto.ResponseRanking> dto = userMapper.toResponseRankDto(page.getContent());
+        reorderRank(request, dto);
 
-        return new ResponseMultiplePaging<>(result, userRankPage);
+        return new ResponseMultiplePaging<>(dto, page);
     }
 
     public ActivityDto.Detail findActivityHistoryOn(LocalDate date, Long userId) {
@@ -85,6 +91,9 @@ public class UserService {
     }
 
     public UserDto.ResponseDashBoard findUserDashboard(Long userId) {
+        User user = findVerifiedUserById(userId);
+        checkIfDeletedUser(user);
+
         LocalDate january1st = LocalDate.now().withDayOfYear(1);
         LocalDate december31st = LocalDate.now().withDayOfYear(365);
 
@@ -139,6 +148,7 @@ public class UserService {
                             .commentCount(commentCount)
                             .total(total)
                             .createdDate(e.getKey())
+                            .createdNumber(e.getKey().getDayOfYear())
                             .build();
                 }
         ).collect(Collectors.toList());
@@ -273,9 +283,11 @@ public class UserService {
     }
 
     public ResponseMultiplePaging<AnswerDto.ResponseUserAnswerList> getUserAnswerList(Long userId, int page, int size) {
+
         findVerifiedUserById(userId);
-        Page<Answer> userAnswersInPage = answerRepository.findByUserId(userId, PageRequest.of(page, size,Sort.by("createdAt").descending()));
-        Page<Answer> test = userAnswersInPage;
+
+        Page<Answer> userAnswersInPage = answerQueryRepository.findAnswersByUserId(userId, PageRequest.of(page, size));
+
         List<AnswerDto.ResponseUserAnswerList> userAnswers =
                 userAnswersInPage.getContent().stream().map(
                         userAnswer -> {
@@ -285,7 +297,11 @@ public class UserService {
                             return answerMapper.answerToResponseUserAnswerList(userAnswer, isPicked, answerLikeCount, commentCount);
                         }
                 ).collect(Collectors.toList());
+
         return new ResponseMultiplePaging<>(userAnswers, userAnswersInPage);
     }
 
+    public void checkIfDeletedUser(User user) {
+        if (user.getUserStatus().equals(DELETED)) throw new BusinessLogicException(USER_NOT_FOUND);
+    }
 }

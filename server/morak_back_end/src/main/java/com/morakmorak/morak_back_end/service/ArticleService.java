@@ -13,6 +13,7 @@ import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.repository.article.ArticleLikeRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleTagRepository;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +34,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleMapper articleMapper;
-    private final FileRepository fileRepository;
-    private final TagRepository tagRepository;
     private final UserService userService;
-    private final CategoryRepository categoryRepository;
     private final ArticleLikeRepository articleLikeRepository;
     private final BookmarkRepository bookmarkRepository;
     private final CommentMapper commentMapper;
@@ -44,43 +42,73 @@ public class ArticleService {
     private final PointCalculator pointCalculator;
     private final NotificationRepository notificationRepository;
     private final ReportRepository reportRepository;
+    private final FileService fileService;
+    private final CategoryService categoryService;
+    private final TagService tagService;
 
-    public ArticleDto.ResponseSimpleArticle upload(
-            Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
-            List<FileDto.RequestFileWithId> files, Category category
-    ) {
+    private final ArticleTagRepository articleTagRepository;
+
+    public ArticleDto.ResponseSimpleArticle upload(Article article, UserDto.UserInfo userInfo) {
         User dbUser = userService.findVerifiedUserById(userInfo.getId());
+        Category dbCategory = categoryService.findVerifiedCategoryByName(article.getCategory().getName());
 
-        article.injectUserForMapping(dbUser);
+        Article reBuildArticle = Article.builder()
+                .title(article.getTitle())
+                .content(article.getContent())
+                .category(dbCategory)
+                .user(dbUser)
+                .thumbnail(article.getThumbnail())
+                .build();
 
-        findDbFilesAndInjectWithArticle(article, files);
+        dbCategory.getArticleList().add(reBuildArticle);
+        dbUser.getArticles().add(reBuildArticle);
 
-        findDbTagsAndInjectWithArticle(article, tags);
+        bridgeFileToArticle(article, reBuildArticle);
+        bridgeTagToArticle(article, reBuildArticle);
 
-        findDbCategoryAndInjectWithArticle(article, category);
-
-        Article dbArticle = articleRepository.save(article);
+        Article dbArticle = articleRepository.save(reBuildArticle);
 
         dbUser.addPoint(dbArticle, pointCalculator);
 
         return articleMapper.articleToResponseSimpleArticle(dbArticle.getId());
     }
 
-    public ArticleDto.ResponseSimpleArticle update(Article article, UserDto.UserInfo userInfo, List<TagDto.SimpleTag> tags,
-                                                   List<FileDto.RequestFileWithId> files) {
-        Article dbArticle = findVerifiedArticle(article.getId());
+    public ArticleDto.ResponseSimpleArticle update(Article article, UserDto.UserInfo userInfo) {
 
+        Article dbArticle = findArticleRelationWithUser(article.getId());
         checkArticleStatus(dbArticle);
-
+        checkArticlePerMission(dbArticle, userInfo);
         dbArticle.updateArticleElement(article);
 
-        checkArticlePerMission(dbArticle, userInfo);
-
-        findDbFilesAndInjectWithArticle(dbArticle, files);
-
-        findDbTagsAndInjectWithArticle(dbArticle, tags);
+        deleteOriginTagInArticle(dbArticle);
+        bridgeFileToArticle(article, dbArticle);
+        bridgeTagToArticle(article,dbArticle);
 
         return articleMapper.articleToResponseSimpleArticle(dbArticle.getId());
+    }
+
+    private void deleteOriginTagInArticle(Article dbArticle) {
+        dbArticle.getArticleTags().stream()
+                .forEach(articleTag -> {
+                    articleTag.removeArticleAndTag(dbArticle, articleTag.getTag());
+                    articleTagRepository.delete(articleTag);
+                });
+    }
+
+    private void bridgeFileToArticle(Article article, Article reBuildArticle) {
+        article.getFiles().stream().forEach(file -> {
+            File dbFile = fileService.findVerifiedFileById(file.getId());
+            dbFile.injectArticleForFile(reBuildArticle);
+        });
+    }
+
+    private void bridgeTagToArticle(Article article, Article reBuildArticle) {
+        article.getArticleTags().stream()
+                .forEach(articleTag -> {
+                    Tag dbTag = tagService.findVerifiedTagByTagName(articleTag.getTag().getName());
+                    ArticleTag reBuildArticleTag = ArticleTag.builder().article(reBuildArticle).tag(dbTag).build();
+                    articleTagRepository.save(reBuildArticleTag);
+                });
     }
 
     public Boolean deleteArticle(Long articleId, UserDto.UserInfo userInfo) {
@@ -99,68 +127,52 @@ public class ArticleService {
     }
 
     public Article findVerifiedArticle(Long articleId) {
-        return articleRepository.findById(articleId).orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
+        return articleRepository.findById(articleId)
+                .orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
     }
 
-    public Boolean checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
+    private Article findArticleRelationWithUser(Long articleId) {
+        return articleRepository.findArticleRelationWithUser(articleId)
+                .orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
+    }
+    private void checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
         if (!article.getUser().getId().equals(userInfo.getId())) {
             throw new BusinessLogicException(ErrorCode.INVALID_USER);
         }
-        return true;
     }
 
-    public Boolean findDbCategoryAndInjectWithArticle(Article article, Category category) {
-        Category dbCategory = categoryRepository.findCategoryByName(category.getName())
-                .orElseThrow(() -> new BusinessLogicException(ErrorCode.CATEGORY_NOT_FOUND));
-        article.injectCategoryForMapping(dbCategory);
+    public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticleAsPaging(
+            String category, String keyword, String target, String sort, Integer page, Integer size) {
 
-        return true;
-    }
-
-    public Boolean findDbTagsAndInjectWithArticle(Article article, List<TagDto.SimpleTag> tags) {
-        for (int i = article.getArticleTags().size() - 1; i >= 0; i--) {
-            article.getArticleTags().remove(i);
-        }
-        tags.stream().forEach(tag -> {
-            Tag dbTag = tagRepository.findTagByName(tag.getName())
-                    .orElseThrow(() -> new BusinessLogicException(ErrorCode.TAG_NOT_FOUND));
-            ArticleTag newArticleTag = ArticleTag.builder().article(article).tag(dbTag).build();
-            article.getArticleTags().add(newArticleTag);
-            dbTag.getArticleTags().add(newArticleTag);
-        });
-        return true;
-    }
-
-    public Boolean findDbFilesAndInjectWithArticle(Article article, List<FileDto.RequestFileWithId> files) {
-        files.stream()
-                .forEach(file -> {
-                    File dbFile = fileRepository.findById(file.getFileId())
-                            .orElseThrow(() -> new BusinessLogicException(ErrorCode.FILE_NOT_FOUND));
-                    dbFile.injectArticleForFile(article);
-                });
-        return true;
-    }
-
-    public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticleAsPaging(String category, String keyword, String target, String sort, Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
 
         Page<Article> articles = articleRepository.search(category, keyword, target, sort, pageRequest);
 
-        List<ArticleDto.ResponseListTypeArticle> mapper = articles.getContent().stream().map(article -> {
-            Integer likes = article.getArticleLikes().size();
-            Integer commentCount = article.getComments().size();
-            Integer answerCount = article.getAnswers().size();
-            List<TagDto.SimpleTag> tags = article.getArticleTags().stream()
-                    .map(articleTag -> tagMapper.tagEntityToTagDto(articleTag.getTag())).collect(Collectors.toList());
-            return articleMapper.articleToResponseSearchResultArticle(article, commentCount, answerCount, tags, likes);
-        }).collect(Collectors.toList());
+        List<ArticleDto.ResponseListTypeArticle> mapper = getResponseListTypeArticles(articles);
 
         return new ResponseMultiplePaging<>(mapper, articles);
     }
 
+    private List<ArticleDto.ResponseListTypeArticle> getResponseListTypeArticles(Page<Article> articles) {
+        return articles.getContent().stream().map(article -> {
+
+            Integer likes = article.getArticleLikes().size();
+            Integer commentCount = article.getComments().size();
+            Integer answerCount = article.getAnswers().size();
+
+            List<TagDto.SimpleTag> tags = article.getArticleTags().stream()
+                    .map(articleTag -> tagMapper.tagEntityToTagDto(articleTag.getTag()))
+                    .collect(Collectors.toList());
+
+            return articleMapper.articleToResponseSearchResultArticle(article, commentCount, answerCount, tags, likes);
+        }).collect(Collectors.toList());
+    }
+
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
-        Article dbArticle = findVerifiedArticle(articleId);
-        checkArticleStatus(dbArticle);
+        Article article = findVerifiedArticle(articleId);
+        checkArticleStatus(article);
+        Article dbArticle = article.addClicks();
+
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
 
@@ -181,7 +193,7 @@ public class ArticleService {
                 .map(commentMapper::commentToCommentDto).collect(Collectors.toList());
 
         if (dbArticle.getReports().size() >= 5) {
-            String report = "이 글은 신고가 누적되 더이상 확인하실 수 없습니다.";
+            String report = "이 글은 신고가 누적되어 더이상 확인하실 수 없습니다.";
             return articleMapper.articleToResponseBlockedArticle(dbArticle, isLiked, isBookmarked,
                     report,new ArrayList<>(),new ArrayList<>(),likes);
         }
@@ -216,7 +228,11 @@ public class ArticleService {
                     articleLikeRepository.deleteById(articleLike.getId());
                 },
                 () -> {
-                    ArticleLike articleLike = ArticleLike.builder().article(dbArticle).user(dbUser).build();
+                    ArticleLike articleLike = ArticleLike.builder()
+                            .article(dbArticle)
+                            .user(dbUser)
+                            .build();
+
                     dbArticle.getArticleLikes().add(articleLike);
                     dbUser.getArticleLikes().add(articleLike);
 
@@ -250,7 +266,6 @@ public class ArticleService {
         } else {
             throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
         }
-        
         reportArticle.injectMappingUserAndArticle(dbUser, dbArticle);
         dbArticle.getReports().add(reportArticle);
         dbUser.getReports().add(reportArticle);

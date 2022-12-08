@@ -6,6 +6,7 @@ import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.Avatar;
 import com.morakmorak.morak_back_end.entity.Comment;
 import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.repository.CommentRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.user.AvatarRepository;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import static com.morakmorak.morak_back_end.entity.enums.Grade.*;
 import static com.morakmorak.morak_back_end.util.CommentTestConstants.VALID_COMMENT;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
@@ -102,7 +104,7 @@ public class CommentTest {
         ResultActions perform = mockMvc.perform(post("/articles/{article-id}/comments", savedArticle.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
-                .header(JWT_HEADER, ACCESS_TOKEN)
+                .header(JWT_HEADER, accessToken)
         );
         //then bad request 반환
         perform.andExpect(status().isBadRequest());
@@ -126,7 +128,7 @@ public class CommentTest {
         perform.andExpect(status().isCreated())
                 .andExpect(jsonPath("$[0].userInfo.userId").exists())
                 .andExpect(jsonPath("$[0].userInfo.nickname").exists())
-                .andExpect(jsonPath("$[0].userInfo.grade").isEmpty())
+                .andExpect(jsonPath("$[0].userInfo.grade", is(MATCH.toString())))
                 .andExpect(jsonPath("$[0].avatar.avatarId").exists())
                 .andExpect(jsonPath("$[0].avatar.filename").exists())
                 .andExpect(jsonPath("$[0].avatar.remotePath").exists())
@@ -157,7 +159,7 @@ public class CommentTest {
                 .andExpect(jsonPath("$[0].articleId",is(savedArticle.getId().intValue())))
                 .andExpect(jsonPath("$[0].userInfo.userId",is(savedUser.getId().intValue())))
                 .andExpect(jsonPath("$[0].userInfo.nickname").exists())
-                .andExpect(jsonPath("$[0].userInfo.grade").isEmpty())
+                .andExpect(jsonPath("$[0].userInfo.grade", is(CANDLE.toString())))
                 .andExpect(jsonPath("$[0].avatar.avatarId").exists())
                 .andExpect(jsonPath("$[0].avatar.filename").exists())
                 .andExpect(jsonPath("$[0].avatar.remotePath").exists())
@@ -242,7 +244,7 @@ public class CommentTest {
                 .andExpect(jsonPath("$[0].articleId",is(savedArticle.getId().intValue())))
                 .andExpect(jsonPath("$[0].userInfo.userId",is(savedUser.getId().intValue())))
                 .andExpect(jsonPath("$[0].userInfo.nickname").exists())
-                .andExpect(jsonPath("$[0].userInfo.grade").isEmpty())
+                .andExpect(jsonPath("$[0].userInfo.grade", is(MATCH.toString())))
                 .andExpect(jsonPath("$[0].avatar.avatarId").exists())
                 .andExpect(jsonPath("$[0].avatar.filename").exists())
                 .andExpect(jsonPath("$[0].avatar.remotePath").exists())

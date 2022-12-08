@@ -105,7 +105,7 @@ include::{snippets}/게시글을_수정시_유효성_검증에_실패_400/path-p
 include::{snippets}/게시글을_수정시_유효성_검증에_실패_400/request-fields.adoc[]
 
 ***
-=게시글 삭제
+== 게시글 삭제
 === 성공 204
 
 .http-request

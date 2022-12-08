@@ -118,15 +118,16 @@ public class Article extends BaseTime {
     }
 
     public void updateArticleElement(Article article) {
-        Optional.ofNullable(article.getTitle()).ifPresent(presentTitle -> {
-            this.title = presentTitle;
-        });
-        Optional.ofNullable(article.getContent()).ifPresent(presentContent -> {
-            this.content = presentContent;
-        });
-        Optional.ofNullable(article.getThumbnail()).ifPresent(presentThumbnail -> {
-            this.thumbnail = presentThumbnail;
-        });
+        if (!article.getTitle().isEmpty()) {
+            this.title = article.getTitle();
+        }
+        if (!article.getContent().isEmpty()) {
+            this.content = article.getContent();
+        }
+
+        if (article.getThumbnail() != null) {
+            this.thumbnail = article.getThumbnail();
+        }
     }
 
     public void changeArticleStatus(ArticleStatus articleStatus) {
@@ -163,5 +164,11 @@ public class Article extends BaseTime {
 
     public void injectReview(Review review) {
         this.reviews.add(review);
+    }
+
+
+    public Article addClicks() {
+        this.clicks = this.getClicks() + 1;
+        return this;
     }
 }

@@ -7,7 +7,9 @@ import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +18,14 @@ import java.util.stream.Collectors;
 public class FileService {
     private final FileRepository fileRepository;
     public List<File> createFileListFrom(List<FileDto.RequestFileWithId> fileIdList) {
+        if (ObjectUtils.isEmpty(fileIdList)) {return Collections.emptyList();}
         return fileIdList.stream().map(request ->
-                        fileRepository.findById(request.getFileId()).orElseThrow(()
-                                -> new BusinessLogicException(ErrorCode.FILE_NOT_FOUND)))
+                        findVerifiedFileById(request.getFileId()))
                 .collect(Collectors.toList());
+    }
+
+    public File findVerifiedFileById(Long fileId) {
+        return fileRepository.findById(fileId)
+                .orElseThrow(() -> new BusinessLogicException(ErrorCode.FILE_NOT_FOUND));
     }
 }

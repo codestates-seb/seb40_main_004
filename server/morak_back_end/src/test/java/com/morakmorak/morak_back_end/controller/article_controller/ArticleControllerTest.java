@@ -99,7 +99,7 @@ class ArticleControllerTest {
         given(tagMapper.requestTagWithIdAndNameToTagDto(requestUploadArticle))
                 .willReturn(REQUEST_TAG_WITH_ID_AND_NAMES);
         given(categoryMapper.RequestUploadArticleToCategory(requestUploadArticle)).willReturn(Category.builder().build());
-        given(articleService.upload(any(), any(), any(), any(), any()))
+        given(articleService.upload(any(), any()))
                 .willReturn(responseSimpleArticle);
 
         String content = objectMapper.writeValueAsString(requestUploadArticle);
@@ -156,7 +156,7 @@ class ArticleControllerTest {
         String content = objectMapper.writeValueAsString(requestUploadArticle);
 
         given(articleMapper.requestUploadArticleToEntity(requestUploadArticle)).willReturn(article);
-        given(articleService.upload(any(), any(), any(), any(), any())).willThrow(new BusinessLogicException(ErrorCode.TAG_NOT_FOUND));
+        given(articleService.upload(any(), any())).willThrow(new BusinessLogicException(ErrorCode.TAG_NOT_FOUND));
 
 
         //when

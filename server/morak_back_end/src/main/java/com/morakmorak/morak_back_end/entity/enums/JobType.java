@@ -9,4 +9,5 @@ public enum JobType {
     NON_NORMAL,
     PM,
     DESIGNER,
+    DEFAULT
 }

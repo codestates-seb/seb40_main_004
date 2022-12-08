@@ -4,6 +4,7 @@ package com.morakmorak.morak_back_end.dto;
 import lombok.*;
 import org.springframework.data.domain.Page;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class ResponseMultiplePaging<T> {
+public class ResponseMultiplePaging<T> implements Serializable {
     private List<T> data = new ArrayList<>();
 
     private PageInfo pageInfo;

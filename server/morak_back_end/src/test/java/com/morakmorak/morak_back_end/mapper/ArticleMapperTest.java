@@ -1,9 +1,6 @@
 package com.morakmorak.morak_back_end.mapper;
 
-import com.morakmorak.morak_back_end.dto.ArticleDto;
-import com.morakmorak.morak_back_end.dto.CommentDto;
-import com.morakmorak.morak_back_end.dto.TagDto;
-import com.morakmorak.morak_back_end.dto.UserDto;
+import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
@@ -93,20 +90,67 @@ class ArticleMapperTest {
 
     }
 
+    @Test
+    @DisplayName("requestUploadArticleToEntity 매퍼 작동 테스트")
+    public void requestUploadArticleToEntityTest() throws Exception {
+        //given
+        List<FileDto.RequestFileWithId> files = new ArrayList<>();
+        FileDto.RequestFileWithId fileDto = FileDto.RequestFileWithId.builder().fileId(1L).build();
+        files.add(fileDto);
+
+        TagDto.SimpleTag tagDto = TagDto.SimpleTag.builder().tagId(1L).name(TagName.JAVA).build();
+        List<TagDto.SimpleTag> tags = new ArrayList<>();
+        tags.add(tagDto);
+
+        ArticleDto.RequestUploadArticle requestUploadArticle = ArticleDto.RequestUploadArticle.builder()
+                .title("타이틀입니다.")
+                .content("내용입니다.")
+                .thumbnail(1L)
+                .category(CategoryName.QNA)
+                .fileId(files)
+                .tags(tags)
+                .build();
+
+        //when
+        Article article = articleMapper.requestUploadArticleToEntity(requestUploadArticle);
+        //then
+        assertThat(article.getContent()).isEqualTo(requestUploadArticle.getContent());
+        assertThat(article.getArticleTags().get(0).getTag().getName()).isEqualTo(requestUploadArticle.getTags().get(0).getName());
+        assertThat(article.getFiles().get(0).getId()).isEqualTo(requestUploadArticle.getFileId().get(0).getFileId());
+        assertThat(article.getThumbnail()).isEqualTo(requestUploadArticle.getThumbnail());
+
+    }
+
 
     @Test
     @DisplayName("requestUpdateArticleToEntity 매퍼 작동 테스트")
     public void requestUpdateArticleToEntityTest() throws Exception {
         //given
-        ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleTestConstants.REQUEST_UPDATE_ARTICLE;
+        List<FileDto.RequestFileWithId> files = new ArrayList<>();
+        FileDto.RequestFileWithId fileDto = FileDto.RequestFileWithId.builder().fileId(1L).build();
+        files.add(fileDto);
+
+        TagDto.SimpleTag tagDto = TagDto.SimpleTag.builder().tagId(1L).name(TagName.JAVA).build();
+        List<TagDto.SimpleTag> tags = new ArrayList<>();
+        tags.add(tagDto);
+
+        ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
+                .title("타이틀입니다.")
+                .content("내용입니다.")
+                .thumbnail(1L)
+                .fileId(files)
+                .tags(tags)
+                .build();
 
         //when
         Article article = articleMapper.requestUpdateArticleToEntity(requestUpdateArticle, 1L);
         //then
         assertThat(article.getId()).isEqualTo(1L);
+        assertThat(article.getTitle()).isEqualTo(requestUpdateArticle.getTitle());
         assertThat(article.getContent()).isEqualTo(requestUpdateArticle.getContent());
         assertThat(article.getThumbnail()).isEqualTo(requestUpdateArticle.getThumbnail());
-
+        assertThat(article.getArticleTags().get(0).getTag().getName()).isEqualTo(requestUpdateArticle.getTags().get(0).getName());
+        assertThat(article.getFiles().get(0).getId()).isEqualTo(requestUpdateArticle.getFileId().get(0).getFileId());
     }
 
 

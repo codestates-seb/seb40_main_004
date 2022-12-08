@@ -163,8 +163,6 @@ public class UserRepositoryTest {
         //when
         Page<User> rank = userQueryRepository.getRankData(page);
         //then
-        System.out.println("ddddd" + rank.toList().get(1).getArticles().size());
-        System.out.println(rank.toList().get(1).getArticles().size());
 
         assertThat(rank.toList().get(0).getNickname()).isEqualTo(NICKNAME1);
         assertThat(rank.toList().get(1).getNickname()).isEqualTo(NICKNAME2);

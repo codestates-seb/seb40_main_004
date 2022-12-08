@@ -94,6 +94,7 @@ public class GetUserAnswerTest {
                 get("/users/{user-id}/answers", user.getId())
                         .param("page", "1")
                         .param("size", "50")
+                        .header("User-Agent", "Mozilla 5.0")
         );
 
         //검증
@@ -120,7 +121,7 @@ public class GetUserAnswerTest {
                 .andExpect(jsonPath("$.pageInfo.size").value(50))
                 .andExpect(jsonPath("$.pageInfo.totalElements").value(2))
                 .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
-                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true));
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(false));
     }
     @Test
     @DisplayName("특정 유저 대시보드에서 유저 아이디가 잘못된 경우.")
@@ -130,6 +131,7 @@ public class GetUserAnswerTest {
                 get("/users/-1/answers")
                         .param("page", "1")
                         .param("size", "50")
+                        .header("User-Agent", "Mozilla 5.0")
         );
 
         //검증

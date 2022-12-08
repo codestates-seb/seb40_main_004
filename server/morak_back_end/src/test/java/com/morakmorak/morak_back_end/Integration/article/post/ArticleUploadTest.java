@@ -4,35 +4,41 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.dto.ArticleDto;
 import com.morakmorak.morak_back_end.dto.FileDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
-import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.Category;
+import com.morakmorak.morak_back_end.entity.File;
 import com.morakmorak.morak_back_end.entity.Tag;
+import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
-import com.morakmorak.morak_back_end.repository.*;
+import com.morakmorak.morak_back_end.repository.CategoryRepository;
+import com.morakmorak.morak_back_end.repository.FileRepository;
+import com.morakmorak.morak_back_end.repository.TagRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.ArticleService;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.List;
 
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
+import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ROLE_USER_LIST;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @Transactional
@@ -91,11 +97,9 @@ public class ArticleUploadTest {
 
     }
 
-
-
     @Test
     @DisplayName("게시글 작성시 title이 15자 이상이고 content가 5자 이상이며, 정보글을 작성할때 성공하면 201코드와 DB 시퀀스를 반환한다.")
-    public void upload_suc() throws Exception {
+    public void upload_suc_1() throws Exception {
         //given
         Tag tag = tagRepository.findTagByName(TagName.JAVA).orElseThrow();
         Category category = categoryRepository.findCategoryByName(CategoryName.INFO).orElseThrow();
@@ -127,18 +131,12 @@ public class ArticleUploadTest {
                         .header(JWT_HEADER, accessToken)
                         .content(content)
         );
-
-        //then
-
-        Article article = articleRepository.findArticleByContent("콘텐트입니다. 잘부탁드립니다.").orElseThrow();
-
-        perform.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.articleId").value(article.getId()));
     }
+
 
     @Test
     @DisplayName("게시글 작성시 존재하지 않는 파일를 작성할 경우 FILE_NOT_FOUND 예외를 던지고 404 에러코드를 반환한다. ")
-    public void upload_fail2() throws Exception{
+    public void upload_fail2() throws Exception {
         //given
         Tag tag = tagRepository.findTagByName(TagName.JAVA).orElseThrow();
 
@@ -172,7 +170,7 @@ public class ArticleUploadTest {
 
     @Test
     @DisplayName("게시글 작성시 존재하지 않는 태그를 작성할 경우 TAG_NOT_FOUND 예외를 던지고 404 에러코를 반환한다. ")
-    public void upload_fail1() throws Exception{
+    public void upload_fail1() throws Exception {
         //given
         File file1 = fileRepository.findFileByLocalPath("1").orElseThrow();
         File file2 = fileRepository.findFileByLocalPath("2").orElseThrow();
@@ -204,21 +202,6 @@ public class ArticleUploadTest {
 
         //then
         perform.andExpect(status().isNotFound());
-    }
-
-    @Test
-    @DisplayName("Article Service fusionCategoryWIthArticle 메서드 통과 테스트")
-    public void articleServiceFusionCategoryWIthArticle() throws Exception{
-        //given
-        Category category = Category.builder().name(CategoryName.INFO).build();
-        Article build = Article.builder().build();
-        //when
-        Boolean aBoolean = articleService.findDbCategoryAndInjectWithArticle(build, category);
-        //then
-        Assertions.assertThat(aBoolean).isTrue();
-
-        categoryRepository.deleteAll();
-        userRepository.deleteAll();
     }
 
     @Test

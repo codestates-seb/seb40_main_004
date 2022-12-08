@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.config.RedisContainerTest;
 import com.morakmorak.morak_back_end.dto.AuthDto;
 import com.morakmorak.morak_back_end.entity.User;
+import com.morakmorak.morak_back_end.entity.enums.UserStatus;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepositoryImpl;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
@@ -20,6 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
@@ -486,7 +488,7 @@ public class AuthTest extends RedisContainerTest {
     }
 
     @Test
-    @DisplayName("회원 탈퇴시 요청한 회원의 아이디와 비밀번호가 매치된다면 해당 유저를 삭제하고 204 NO CONTENT 반환")
+    @DisplayName("회원 탈퇴시 요청한 회원의 아이디와 비밀번호가 매치된다면 해당 유저의 status를 DELETED로 변경")
     public void delete_account_success_204() throws Exception {
         //given
         User dbUser = User.builder()
@@ -519,6 +521,6 @@ public class AuthTest extends RedisContainerTest {
         perform
                 .andExpect(status().isNoContent());
 
-        Assertions.assertThat(result).isEmpty();
+        Assertions.assertThat(result.get().getUserStatus()).isEqualTo(UserStatus.DELETED);
     }
 }
