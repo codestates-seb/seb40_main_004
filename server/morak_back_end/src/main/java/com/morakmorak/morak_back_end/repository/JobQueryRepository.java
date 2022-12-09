@@ -2,8 +2,6 @@ package com.morakmorak.morak_back_end.repository;
 
 import com.morakmorak.morak_back_end.dto.JobInfoDto;
 import com.morakmorak.morak_back_end.dto.QJobInfoDto;
-import com.morakmorak.morak_back_end.entity.Job;
-import com.morakmorak.morak_back_end.entity.QJob;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,15 +17,15 @@ import static com.morakmorak.morak_back_end.entity.QJob.*;
 public class JobQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<JobInfoDto> inquiry4MonthsJobData() {
-        LocalDate prevMonth = LocalDate.now().minusMonths(1);
-        LocalDate twoMonthLater = LocalDate.now().plusMonths(2);
+    public List<JobInfoDto> getJobDataOnThisMonth() {
+        LocalDate startDayOfMonth = LocalDate.now().withDayOfMonth(1);
+        LocalDate lastDayOfMonth = LocalDate.now().plusMonths(1).withDayOfMonth(1).minusDays(1);
 
         return jpaQueryFactory.select(new QJobInfoDto(
                 job.id, job.name, job.state, job.careerRequirement, job.url, job.startDate, job.endDate
         ))
                 .from(job)
-                .where(job.startDate.between(Date.valueOf(prevMonth), Date.valueOf(twoMonthLater)))
+                .where(job.startDate.between(Date.valueOf(startDayOfMonth), Date.valueOf(lastDayOfMonth)))
                 .groupBy(job.id)
                 .orderBy(job.startDate.asc())
                 .fetch();
