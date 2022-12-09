@@ -3,10 +3,8 @@ package com.morakmorak.morak_back_end.repository;
 import com.morakmorak.morak_back_end.config.JpaQueryFactoryConfig;
 import com.morakmorak.morak_back_end.dto.JobInfoDto;
 import com.morakmorak.morak_back_end.entity.Job;
-import com.morakmorak.morak_back_end.util.TestConstants;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.api.Assertions;
-import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +12,6 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 
 import javax.persistence.EntityManager;
@@ -44,13 +41,15 @@ public class JobQueryRepositoryTest {
     }
 
     @Test
-    @DisplayName("startDate가 지난 달, 이번 달, 다음 달, 다다음달의 데이터를 오름차순으로 조회한다.")
+    @DisplayName("startDate가 이번달의 데이터를 오름차순으로 조회한다.")
     void findJobData1() {
         //given
-        Date now = Date.valueOf(LocalDate.now());
         Date nextMonth = Date.valueOf(LocalDate.now().plusMonths(1));
         Date nextMonth2 = Date.valueOf(LocalDate.now().plusMonths(2));
         Date prevMonth = Date.valueOf(LocalDate.now().minusMonths(1));
+        Date firstDaysOfThisMonth = Date.valueOf(LocalDate.now().withDayOfMonth(1));
+        Date secondDaysOfThisMonth = Date.valueOf(LocalDate.now().withDayOfMonth(2));
+        Date thirdDaysOfThisMonth = Date.valueOf(LocalDate.now().withDayOfMonth(3));
 
         Job job1 = Job.builder().name(NAME1 + 1)
                 .state("시작")
@@ -66,11 +65,11 @@ public class JobQueryRepositoryTest {
                 .endDate(Date.valueOf("9999-12-31"))
                 .careerRequirement("경력")
                 .url(TISTORY_URL)
-                .startDate(now)
+                .startDate(firstDaysOfThisMonth)
                 .endDate(Date.valueOf("9999-12-31"))
                 .build();
 
-        Job job4 = Job.builder().name(NAME1 + 3)
+        Job job3 = Job.builder().name(NAME1 + 3)
                 .state("시작")
                 .endDate(Date.valueOf("9999-12-31"))
                 .careerRequirement("경력")
@@ -78,7 +77,7 @@ public class JobQueryRepositoryTest {
                 .startDate(nextMonth)
                 .build();
 
-        Job job3 = Job.builder().name(NAME1 + 4)
+        Job job4 = Job.builder().name(NAME1 + 4)
                 .state("시작")
                 .endDate(Date.valueOf("9999-12-31"))
                 .careerRequirement("경력")
@@ -86,19 +85,36 @@ public class JobQueryRepositoryTest {
                 .startDate(nextMonth2)
                 .build();
 
+        Job job5 = Job.builder().name(NAME1 + 5)
+                .state("시작")
+                .endDate(Date.valueOf("9999-12-31"))
+                .careerRequirement("경력")
+                .url(TISTORY_URL)
+                .startDate(secondDaysOfThisMonth)
+                .build();
+
+        Job job6 = Job.builder().name(NAME1 + 6)
+                .state("시작")
+                .endDate(Date.valueOf("9999-12-31"))
+                .careerRequirement("경력")
+                .url(TISTORY_URL)
+                .startDate(thirdDaysOfThisMonth)
+                .build();
+
         entityManager.persist(job1);
         entityManager.persist(job2);
         entityManager.persist(job3);
         entityManager.persist(job4);
+        entityManager.persist(job5);
+        entityManager.persist(job6);
 
         //when
-        List<JobInfoDto> jobInfoDtos = jobQueryRepository.inquiry4MonthsJobData();
+        List<JobInfoDto> jobInfoDtos = jobQueryRepository.getJobDataOnThisMonth();
 
         //then
-        Assertions.assertThat(jobInfoDtos.get(0).getName()).isEqualTo(NAME1+1);
-        Assertions.assertThat(jobInfoDtos.get(1).getName()).isEqualTo(NAME1+2);
-        Assertions.assertThat(jobInfoDtos.get(2).getName()).isEqualTo(NAME1+3);
-        Assertions.assertThat(jobInfoDtos.get(3).getName()).isEqualTo(NAME1+4);
+        Assertions.assertThat(jobInfoDtos.get(0).getStartDate()).isEqualTo(firstDaysOfThisMonth);
+        Assertions.assertThat(jobInfoDtos.get(1).getStartDate()).isEqualTo(secondDaysOfThisMonth);
+        Assertions.assertThat(jobInfoDtos.get(2).getStartDate()).isEqualTo(thirdDaysOfThisMonth);
     }
 
     @Test
@@ -131,7 +147,7 @@ public class JobQueryRepositoryTest {
         entityManager.persist(job2);
 
         //when
-        List<JobInfoDto> jobInfoDtos = jobQueryRepository.inquiry4MonthsJobData();
+        List<JobInfoDto> jobInfoDtos = jobQueryRepository.getJobDataOnThisMonth();
 
         //then
         Assertions.assertThat(jobInfoDtos.isEmpty()).isTrue();

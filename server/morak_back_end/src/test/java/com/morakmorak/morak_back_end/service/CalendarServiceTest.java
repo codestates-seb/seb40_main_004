@@ -25,7 +25,7 @@ public class CalendarServiceTest {
         //given
         JobInfoDto dto = JobInfoDto.builder().url("url").build();
 
-        BDDMockito.given(jobQueryRepository.inquiry4MonthsJobData()).willReturn(List.of(dto));
+        BDDMockito.given(jobQueryRepository.getJobDataOnThisMonth()).willReturn(List.of(dto));
 
         //when
         List<JobInfoDto> response = calendarService.findCalendarData();
