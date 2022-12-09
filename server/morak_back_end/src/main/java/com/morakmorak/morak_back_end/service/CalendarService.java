@@ -15,6 +15,6 @@ public class CalendarService {
 
     @Transactional(readOnly = true)
     public List<JobInfoDto> findCalendarData() {
-        return jobQueryRepository.inquiry4MonthsJobData();
+        return jobQueryRepository.getJobDataOnThisMonth();
     }
 }
