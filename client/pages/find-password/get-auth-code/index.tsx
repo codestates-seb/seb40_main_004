@@ -3,6 +3,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 import { Loader } from '../../../components/common/Loader';
@@ -20,9 +21,21 @@ const GetAuthCode: NextPage = () => {
       .post(`/api/auth/password/support`, { email })
       .then(() => {
         setIsSubmitting(true);
+        toast.success('인증번호가 발송되었습니다! 메일을 확인해주세요😉', {
+          position: 'top-center',
+        });
         router.push('/find-password/check-auth-code');
       })
-      .catch((error) => console.error('error', error));
+      .catch((error) => {
+        console.error('error', error);
+        toast.error(
+          '이메일이 일치하지 않습니다..! 다시 한 번 확인해주세요.🥲',
+          {
+            hideProgressBar: true,
+            position: 'top-center',
+          },
+        );
+      });
   };
   return (
     <>

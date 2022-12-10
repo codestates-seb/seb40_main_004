@@ -7,6 +7,8 @@ import '@fullcalendar/daygrid/main.css';
 // fontAwesome 미리 렌더링 방지
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -15,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <RecoilRoot>
         <div className="bg-background-gray text-font-gray min-h-screen">
           <Component {...pageProps} />
+          <ToastContainer />
         </div>
       </RecoilRoot>
     </>

@@ -21,6 +21,7 @@ import { Footer } from '../../components/common/Footer';
 import { GetServerSideProps, NextPage } from 'next';
 import { Seo } from '../../components/common/Seo';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 type VerificationNumber = {
   authKey: string;
@@ -52,9 +53,23 @@ const SignUpWithEmail: NextPage = () => {
         password,
         nickname,
       })
-      .then((res) => console.log('res1', res))
-      .catch((error) => console.error('error', error));
-    alert('가입이 완료되었습니다! 로그인 페이지로 이동할게요.😉');
+      .then((res) => {
+        console.log('res1', res);
+        toast.success('가입이 완료되었습니다! 로그인 페이지로 이동할게요.😉', {
+          position: 'top-center',
+        });
+      })
+      .catch((error) => {
+        console.error('error', error);
+        toast.error(
+          '인증번호가 올바르지 않습니다..! 다시 한 번 확인해주세요.🥲',
+          {
+            hideProgressBar: true,
+            position: 'top-center',
+          },
+        );
+      });
+
     router.push('/login');
   };
   return (
