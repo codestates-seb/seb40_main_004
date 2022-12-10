@@ -9,7 +9,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
 import { userEmailAtom, userNickName, userPassword } from '../../atomsHS';
 import { Input } from '../common/Input';
@@ -63,19 +63,12 @@ export const SignUpForm = () => {
           setNickName(nickname);
           toast.success(
             '첫번째 단계가 완료되었습니다. 인증번호를 입력해주세요!',
-            {
-              position: 'top-center',
-            },
           );
         })
         .catch((error) => {
           console.log('auth error', error);
           toast.error(
             '회원가입에 실패하였습니다..! 다시 한 번 확인해주세요.🥲',
-            {
-              hideProgressBar: true,
-              position: 'top-center',
-            },
           );
           router.push('/signup');
         });

@@ -55,18 +55,12 @@ const SignUpWithEmail: NextPage = () => {
       })
       .then((res) => {
         console.log('res1', res);
-        toast.success('가입이 완료되었습니다! 로그인 페이지로 이동할게요.😉', {
-          position: 'top-center',
-        });
+        toast.success('가입이 완료되었습니다! 로그인 페이지로 이동할게요.😉');
       })
       .catch((error) => {
         console.error('error', error);
         toast.error(
           '인증번호가 올바르지 않습니다..! 다시 한 번 확인해주세요.🥲',
-          {
-            hideProgressBar: true,
-            position: 'top-center',
-          },
         );
       });
 

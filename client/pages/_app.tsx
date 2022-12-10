@@ -17,7 +17,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <RecoilRoot>
         <div className="bg-background-gray text-font-gray min-h-screen">
           <Component {...pageProps} />
-          <ToastContainer />
+          <ToastContainer
+            theme="colored"
+            autoClose={3000}
+            position="top-center"
+          />
         </div>
       </RecoilRoot>
     </>

@@ -21,20 +21,12 @@ const GetAuthCode: NextPage = () => {
       .post(`/api/auth/password/support`, { email })
       .then(() => {
         setIsSubmitting(true);
-        toast.success('인증번호가 발송되었습니다! 메일을 확인해주세요😉', {
-          position: 'top-center',
-        });
+        toast.success('인증번호가 발송되었습니다! 메일을 확인해주세요😉');
         router.push('/find-password/check-auth-code');
       })
       .catch((error) => {
         console.error('error', error);
-        toast.error(
-          '이메일이 일치하지 않습니다..! 다시 한 번 확인해주세요.🥲',
-          {
-            hideProgressBar: true,
-            position: 'top-center',
-          },
-        );
+        toast.error('이메일이 일치하지 않습니다..! 다시 한 번 확인해주세요.🥲');
       });
   };
   return (

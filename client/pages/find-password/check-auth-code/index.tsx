@@ -23,21 +23,13 @@ const CheckAuthCode: NextPage = () => {
       .then(() => {
         setIsSubmitting(true);
         setEmail(email);
-        toast.success(
-          '임시 비밀번호가 발급되었습니다! 메일을 확인해주세요.😉',
-          {
-            position: 'top-center',
-          },
-        );
+        toast.success('임시 비밀번호가 발급되었습니다! 메일을 확인해주세요.😉');
         router.push('/login');
       })
       .catch((error) => {
         console.error('error', error);
         toast.error(
           '이메일이나 인증번호가 올바르게 입력되었는지 확인해주세요.🥲',
-          {
-            position: 'top-center',
-          },
         );
       });
   };

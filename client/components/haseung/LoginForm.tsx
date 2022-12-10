@@ -50,16 +50,12 @@ export const LoginForm = () => {
         localStorage.setItem('nickname', decoded.nickname);
         setIsSubmitting(true);
         setIsLogin(true);
-        toast.success('로그인 성공!', {
-          position: 'top-center',
-        });
+        toast.success('로그인 성공!');
         router.push('/');
       })
       .catch((err) => {
         console.error(err);
-        toast.error('로그인에 실패했습니다! 다시 한 번 확인해주세요.🥲', {
-          position: 'top-center',
-        });
+        toast.error('로그인에 실패했습니다! 다시 한 번 확인해주세요.🥲');
       });
   };
   const {

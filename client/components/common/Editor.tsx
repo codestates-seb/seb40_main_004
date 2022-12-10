@@ -126,10 +126,7 @@ export const Editor = () => {
           })
           .catch((error) => {
             console.error('error', error);
-            toast.error('게시글 수정에 실패했습니다...🥲', {
-              hideProgressBar: true,
-              position: 'top-center',
-            });
+            toast.error('게시글 수정에 실패했습니다...🥲');
             console.log(
               `title:${title}, content:${content}, fileId:${fileIdList}, tags:${tags}`,
             );
@@ -151,10 +148,6 @@ export const Editor = () => {
           .catch(() => {
             toast.error(
               '게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!',
-              {
-                hideProgressBar: true,
-                position: 'top-center',
-              },
             );
           });
       }
