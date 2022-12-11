@@ -1,8 +1,8 @@
 package com.morakmorak.morak_back_end.mapper;
 
 import com.morakmorak.morak_back_end.dto.ArticleDto;
-
 import com.morakmorak.morak_back_end.dto.CommentDto;
+import com.morakmorak.morak_back_end.dto.FileDto;
 import com.morakmorak.morak_back_end.dto.TagDto;
 import com.morakmorak.morak_back_end.entity.*;
 import org.mapstruct.Mapper;
@@ -10,24 +10,57 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Mapper(componentModel = "spring", typeConversionPolicy = ReportingPolicy.IGNORE)
 public interface ArticleMapper {
 
     @Mapping(target = "category", ignore = true)
-        default  Article requestUploadArticleToEntity(ArticleDto.RequestUploadArticle requestUploadArticle) {
-        return Article.builder().title(requestUploadArticle.getTitle())
+    default  Article requestUploadArticleToEntity(ArticleDto.RequestUploadArticle requestUploadArticle) {
+        return Article.builder()
+                .title(requestUploadArticle.getTitle())
                 .content(requestUploadArticle.getContent())
+                .category(Category.builder().name(requestUploadArticle.getCategory()).build())
+                .articleTags(getArticleTagsFromTagDto(requestUploadArticle.getTags()))
+                .files(getFilesFromFileDto(requestUploadArticle.getFileId()))
                 .thumbnail(requestUploadArticle.getThumbnail())
                 .build();
-
     }
 
-    @Mapping(source = "articleId", target = "id")
-    Article requestUpdateArticleToEntity(ArticleDto.RequestUpdateArticle updateArticle, Long articleId);
+    default Article requestUpdateArticleToEntity(ArticleDto.RequestUpdateArticle updateArticle, Long articleId) {
+        return Article.builder()
+                .id(articleId)
+                .title(updateArticle.getTitle())
+                .content(updateArticle.getContent())
+                .articleTags(getArticleTagsFromTagDto(updateArticle.getTags()))
+                .files(getFilesFromFileDto(updateArticle.getFileId()))
+                .thumbnail(updateArticle.getThumbnail())
+                .build();
+    }
 
+     private static List<ArticleTag> getArticleTagsFromTagDto(List<TagDto.SimpleTag> simpleTags) {
+        List<ArticleTag> articleTags = simpleTags.stream()
+                .map(simpleTag ->
+                        ArticleTag.builder().
+                                tag(Tag.builder()
+                                        .id(simpleTag.getTagId())
+                                        .name(simpleTag.getName())
+                                        .build())
+                                .build())
+                .collect(Collectors.toList());
+        return articleTags;
+    }
 
+     private static List<File> getFilesFromFileDto(List<FileDto.RequestFileWithId> requestFileWithId) {
+        List<File> files = requestFileWithId.stream()
+                .map(fileDto ->
+                        File.builder()
+                                .id(fileDto.getFileId())
+                                .build())
+                .collect(Collectors.toList());
+        return files;
+    }
 
 
     ArticleDto.ResponseSimpleArticle articleToResponseSimpleArticle(Long articleId);

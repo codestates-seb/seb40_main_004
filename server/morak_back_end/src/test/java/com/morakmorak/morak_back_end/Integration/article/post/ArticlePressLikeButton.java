@@ -142,7 +142,7 @@ public class ArticlePressLikeButton {
     }
 
     @Test
-    @DisplayName("로그인 하지 않은 회원이 게시글의 좋아요를 눌렀을경우 404코드와 User_Not_Found 가 리턴된다.")
+    @DisplayName("로그인 하지 않은 회원이 게시글의 좋아요를 눌렀을경우 401")
     public void pressLikeButton_fail2() throws Exception {
         //give
         Article article = Article.builder().title("제목입니다 잘부탁드립니다. 제발 문제가 안생기길 바랍니다.").content("내용입니다. 잘부탁드립니다. 제발 문제가 안생기길 바랍니다.")
@@ -157,7 +157,7 @@ public class ArticlePressLikeButton {
         );
 
         //then
-        perform.andExpect(status().isNotFound());
+        perform.andExpect(status().isUnauthorized());
     }
 
     @Test

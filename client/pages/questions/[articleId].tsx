@@ -1,7 +1,7 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-30
+ * 최근 수정일: 2022-12-09
  * 개요
    - 질문 상세 페이지입니다.
    - 각 질문에 대한 정보, 본문, 답변과 댓글이 렌더링됩니다.
@@ -14,23 +14,28 @@ import { QuestionContent } from '../../components/hyejung/QuestionContent';
 import { AnswerListContainer } from '../../components/hyejung/AnswerContainer';
 import { AnswerEditor } from '../../components/hyejung/AnswerEditor';
 import { useFetch } from '../../libs/useFetchSWR';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilStateLoadable,
+  useSetRecoilState,
+} from 'recoil';
 import { articleAuthorIdAtom, isAnswerPostedAtom } from '../../atomsHJ';
 import { useEffect, useRef } from 'react';
 import { BtnTopDown } from '../../components/common/BtnTopDown';
 import { Seo } from '../../components/common/Seo';
-import { Loader } from '../../components/common/Loader';
+import axios from 'axios';
+import { ArticleDetail } from '../../libs/interfaces';
+import { SWRConfig } from 'swr';
 
 type QuestionDetailProps = {
   articleId: string;
+  article: ArticleDetail;
 };
 
-const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
-  // 게시글 데이터
-  const { data: articleData, isLoading: articleLoading } = useFetch(
-    `/api/articles/${articleId}`,
-  );
-
+const QuestionDetail = ({
+  articleId,
+  article: articleData,
+}: QuestionDetailProps) => {
   // 답변 데이터
   const {
     data: answers,
@@ -44,12 +49,11 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
   const setArticleAuthorId = useSetRecoilState(articleAuthorIdAtom);
 
   useEffect(() => {
-    if (!articleLoading)
-      setArticleAuthorId(articleData.userInfo.userId.toString());
-  }, [articleLoading]);
+    setArticleAuthorId(articleData.userInfo.userId.toString());
+  }, []);
 
   const [isAnswerPosted, setIsAnswerPosted] =
-    useRecoilState(isAnswerPostedAtom);
+    useRecoilStateLoadable(isAnswerPostedAtom);
 
   const answerCountEl = useRef<null | HTMLDivElement>(null);
 
@@ -61,51 +65,42 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
   }, [isAnswerPosted]);
   return (
     <>
-      <Seo title={articleData ? articleData.title : '질문/답변'} />
+      <Seo title={articleData.title} />
       <Header />
       <main className="max-w-[900px] mx-auto min-h-[80vh] bg-white  p-8 md:p-16 shadow-sm border-[1px] border-gray-200">
         <BtnTopDown />
-        {!isLoading ? (
+        <QuestionContent articleId={articleId} article={articleData} />
+        <section className="flex w-full text-lg sm:text-xl space-x-2 items-center">
+          {!isLoading && answerCount ? (
+            <div className="flex flex-col w-full">
+              <div className="flex my-8 space-x-2" ref={answerCountEl}>
+                <h2 className="text-main-yellow font-semibold text-xl sm:text-2xl">
+                  A.
+                </h2>
+                <h2 className="font-semibold text-xl sm:text-2xl">
+                  {answerCount} 개의 답변이 달렸습니다.
+                </h2>
+              </div>
+              <AnswerListContainer
+                initialAnswers={answerData}
+                totalPages={answers.pageInfo.totalPages}
+              />
+            </div>
+          ) : (
+            <div className="flex justify-center my-20 text-main-gray w-full text-base">
+              아직 작성된 답변이 없네요...🥲
+            </div>
+          )}
+        </section>
+        {!articleData?.isClosed && (
           <>
-            <QuestionContent />
-            <section className="flex w-full text-lg sm:text-xl space-x-2 items-center">
-              {!isLoading && answerCount ? (
-                <div className="flex flex-col w-full">
-                  <div className="flex my-8 space-x-2" ref={answerCountEl}>
-                    <h2 className="text-main-yellow font-semibold text-xl sm:text-2xl">
-                      A.
-                    </h2>
-                    <h2 className="font-semibold text-xl sm:text-2xl">
-                      {answerCount} 개의 답변이 달렸습니다.
-                    </h2>
-                  </div>
-                  <AnswerListContainer
-                    initialAnswers={answerData}
-                    totalPages={answers.pageInfo.totalPages}
-                  />
-                </div>
-              ) : (
-                <div className="flex justify-center my-20 text-main-gray w-full text-base">
-                  아직 작성된 답변이 없네요...🥲
-                </div>
-              )}
-            </section>
-
-            {articleData?.isClosed ? null : (
-              <>
-                <article className="mt-10 border-b">
-                  <h2 className="text-xl sm:text-2xl font-bold pb-2">
-                    ✨ 당신의 지식을 공유해주세요!
-                  </h2>
-                </article>
-                <AnswerEditor />
-              </>
-            )}
+            <article className="mt-10 border-b">
+              <h2 className="text-xl sm:text-2xl font-bold pb-2">
+                ✨ 당신의 지식을 공유해주세요!
+              </h2>
+            </article>
+            <AnswerEditor />
           </>
-        ) : (
-          <div className="flex justify-center items-center text-main-gray w-full  min-h-[60vh]">
-            <Loader />
-          </div>
         )}
       </main>
       <Footer />
@@ -114,19 +109,46 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
 };
 
 const Page: NextPage<{
+  article: ArticleDetail;
   id: string;
-}> = ({ id }) => {
+}> = ({ article, id }) => {
+  const keyArticle = `/articles/${id}`;
   return (
     // 질문 본문에 대한 캐시 초기값 설정
-    <QuestionDetail articleId={id} />
+    <SWRConfig
+      value={{
+        fallback: {
+          [keyArticle]: {
+            article,
+          },
+        },
+      }}
+    >
+      <QuestionDetail articleId={id} article={article} />
+    </SWRConfig>
   );
 };
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const id = ctx.params?.articleId;
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+  // 질문 본문 요청
+  const resArticle = await axios.get(`${BASE_URL}/articles/${id}`);
+  const article = resArticle.data;
+
+  // article 데이터가 존재하지 않으면 일단 404 페이지로 이동
+  if (!article) {
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
   return {
     props: {
+      article,
       id,
     },
   };

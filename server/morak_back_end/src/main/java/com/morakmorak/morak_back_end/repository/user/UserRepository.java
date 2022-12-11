@@ -80,7 +80,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "inner join review_badge as rb on rb.badge_id = b.badge_id\n" +
                     "inner join review as r on r.review_id = rb.review_id\n" +
                     "inner join user as u on r.receiver_id = u.user_id\n" +
-                    "where u.user_id = 2\n" +
+                    "where u.user_id = :id\n" +
                     "group by b.badge_id, b.name\n" +
                     "limit 3;"
     )

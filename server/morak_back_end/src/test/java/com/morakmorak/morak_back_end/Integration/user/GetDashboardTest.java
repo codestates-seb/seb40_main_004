@@ -28,7 +28,8 @@ public class GetDashboardTest extends UserTest{
     public void getDashboard_failed() throws Exception {
         //given
         //when then
-        mockMvc.perform(get("/users/-1/dashboard"))
+        mockMvc.perform(get("/users/-1/dashboard")
+                        .header("User-Agent", "Mozilla 5.0"))
                 .andExpect(status().isNotFound());
     }
 
@@ -223,7 +224,8 @@ public class GetDashboardTest extends UserTest{
         int day = LocalDateTime.now().getDayOfMonth();
 
         //when
-        ResultActions perform = mockMvc.perform(get("/users/{id}/dashboard", user.getId()));
+        ResultActions perform = mockMvc.perform(get("/users/{id}/dashboard", user.getId())
+                .header("User-Agent", "Mozilla 5.0"));
 
         System.out.println(article3.getCreatedAt());
         System.out.println(article2.getCreatedAt());

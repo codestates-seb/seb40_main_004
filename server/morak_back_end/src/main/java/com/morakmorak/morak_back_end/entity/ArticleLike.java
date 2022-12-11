@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "article_like")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ArticleLike {
+public class ArticleLike extends BaseTime{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_like_id")

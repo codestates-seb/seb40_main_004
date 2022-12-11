@@ -7,6 +7,9 @@ public enum Grade {
     BRONZE,
     GOLD,
     SILVER,
-    VIP
-    ;
+    VIP,
+    CANDLE,
+    MATCH,
+    BONFIRE,
+    MORAKMORAK;
 }

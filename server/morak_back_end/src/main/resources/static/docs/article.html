@@ -1073,10 +1073,14 @@ Host: localhost:8080
 </tbody>
 </table>
 <hr>
-<div class="paragraph">
-<p>=게시글 삭제
-=== 성공 204</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_게시글_삭제">3. 게시글 삭제</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_성공_204">3.1. 성공 204</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -1121,7 +1125,7 @@ X-Frame-Options: DENY</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_실패_타인의_게시글을_삭제하려할때_403">2.3. 실패 타인의 게시글을 삭제하려할때 403</h3>
+<h3 id="_실패_타인의_게시글을_삭제하려할때_403">3.2. 실패 타인의 게시글을 삭제하려할때 403</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -1175,7 +1179,7 @@ Content-Length: 100
 </div>
 </div>
 <div class="sect2">
-<h3 id="_실패_존재하지_않는_게시글을_삭제할때_404">2.4. 실패 존재하지 않는 게시글을 삭제할때 404</h3>
+<h3 id="_실패_존재하지_않는_게시글을_삭제할때_404">3.3. 실패 존재하지 않는 게시글을 삭제할때 404</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -1232,10 +1236,10 @@ Content-Length: 110
 </div>
 </div>
 <div class="sect1">
-<h2 id="_게시글_조회">3. 게시글 조회</h2>
+<h2 id="_게시글_조회">4. 게시글 조회</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_성공_게시글_검색시_제목으로_검색_200">3.1. 성공 게시글 검색시 제목으로 검색 200</h3>
+<h3 id="_성공_게시글_검색시_제목으로_검색_200">4.1. 성공 게시글 검색시 제목으로 검색 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -1312,8 +1316,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.621101",
-    "lastModifiedAt" : "2022-11-28T09:18:51.621101",
+    "createdAt" : "2022-11-29T22:23:16.333351",
+    "lastModifiedAt" : "2022-11-29T22:23:16.333351",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -1332,8 +1336,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -1488,7 +1492,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_실패_게시글_검색시_존재하지_않는_제목으로_검색_200">3.2. 실패 게시글 검색시 존재하지 않는 제목으로 검색 200</h3>
+<h3 id="_실패_게시글_검색시_존재하지_않는_제목으로_검색_200">4.2. 실패 게시글 검색시 존재하지 않는 제목으로 검색 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -1560,8 +1564,8 @@ Content-Length: 211
     "totalPages" : 0,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -1626,7 +1630,7 @@ Content-Length: 211
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글_검색시_태그명으로_검색_200">3.3. 성공 게시글 검색시 태그명으로 검색 200</h3>
+<h3 id="_성공_게시글_검색시_태그명으로_검색_200">4.3. 성공 게시글 검색시 태그명으로 검색 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -1703,8 +1707,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.960654",
-    "lastModifiedAt" : "2022-11-28T09:18:51.960654",
+    "createdAt" : "2022-11-29T22:23:16.620494",
+    "lastModifiedAt" : "2022-11-29T22:23:16.620494",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -1723,8 +1727,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -1879,7 +1883,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_실패_존재하지_않는_태그명으로_검색_200">3.4. 실패 존재하지 않는 태그명으로 검색 200</h3>
+<h3 id="_실패_존재하지_않는_태그명으로_검색_200">4.4. 실패 존재하지 않는 태그명으로 검색 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -1951,8 +1955,8 @@ Content-Length: 211
     "totalPages" : 0,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -2017,7 +2021,7 @@ Content-Length: 211
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글_내용으로_검색_200">3.5. 성공 게시글 내용으로 검색 200</h3>
+<h3 id="_성공_게시글_내용으로_검색_200">4.5. 성공 게시글 내용으로 검색 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -2094,8 +2098,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.980334",
-    "lastModifiedAt" : "2022-11-28T09:18:51.980334",
+    "createdAt" : "2022-11-29T22:23:16.636579",
+    "lastModifiedAt" : "2022-11-29T22:23:16.636579",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -2114,8 +2118,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -2270,7 +2274,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_실패_존재하지_않는_게시글의_내용_200">3.6. 실패 존재하지 않는 게시글의 내용 200</h3>
+<h3 id="_실패_존재하지_않는_게시글의_내용_200">4.6. 실패 존재하지 않는 게시글의 내용 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -2342,8 +2346,8 @@ Content-Length: 211
     "totalPages" : 0,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -2408,7 +2412,7 @@ Content-Length: 211
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글의_제목과_내용으로_검색_200">3.7. 성공 게시글의 제목과 내용으로 검색 200</h3>
+<h3 id="_성공_게시글의_제목과_내용으로_검색_200">4.7. 성공 게시글의 제목과 내용으로 검색 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -2485,8 +2489,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:52.035295",
-    "lastModifiedAt" : "2022-11-28T09:18:52.035295",
+    "createdAt" : "2022-11-29T22:23:16.680891",
+    "lastModifiedAt" : "2022-11-29T22:23:16.680891",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -2505,8 +2509,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -2661,7 +2665,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_실패_존재하지_않는_게시글의_제목과_내용으로_검색_200">3.8. 실패 존재하지 않는 게시글의 제목과 내용으로 검색 200</h3>
+<h3 id="_실패_존재하지_않는_게시글의_제목과_내용으로_검색_200">4.8. 실패 존재하지 않는 게시글의 제목과 내용으로 검색 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -2733,8 +2737,8 @@ Content-Length: 211
     "totalPages" : 0,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -2799,7 +2803,7 @@ Content-Length: 211
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글_검색시_해당_유저의_아이디로_북마크_조회_성공_200">3.9. 성공 게시글 검색시 해당 유저의 아이디로 북마크 조회 성공 200</h3>
+<h3 id="_성공_게시글_검색시_해당_유저의_아이디로_북마크_조회_성공_200">4.9. 성공 게시글 검색시 해당 유저의 아이디로 북마크 조회 성공 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -2876,8 +2880,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:52.076472",
-    "lastModifiedAt" : "2022-11-28T09:18:52.076472",
+    "createdAt" : "2022-11-29T22:23:16.710706",
+    "lastModifiedAt" : "2022-11-29T22:23:16.710706",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -2896,8 +2900,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -3052,7 +3056,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_실패_게시글_검색시_존재하지_않는_유저의_아이디_또는_북마크가_없을_경우_실패_200">3.10. 실패 게시글 검색시 존재하지 않는 유저의 아이디 또는 북마크가 없을 경우 실패 200</h3>
+<h3 id="_실패_게시글_검색시_존재하지_않는_유저의_아이디_또는_북마크가_없을_경우_실패_200">4.10. 실패 게시글 검색시 존재하지 않는 유저의 아이디 또는 북마크가 없을 경우 실패 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -3124,8 +3128,8 @@ Content-Length: 211
     "totalPages" : 0,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -3190,7 +3194,7 @@ Content-Length: 211
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_최근순_200">3.11. 성공 게시글검색 정렬조건 최근순  200</h3>
+<h3 id="_성공_게시글검색_정렬조건_최근순_200">4.11. 성공 게시글검색 정렬조건 최근순  200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -3267,8 +3271,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.726724",
-    "lastModifiedAt" : "2022-11-28T09:18:51.726724",
+    "createdAt" : "2022-11-29T22:23:16.429566",
+    "lastModifiedAt" : "2022-11-29T22:23:16.429566",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -3287,8 +3291,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -3443,7 +3447,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_오래된순_200">3.12. 성공 게시글검색 정렬조건 오래된순 200</h3>
+<h3 id="_성공_게시글검색_정렬조건_오래된순_200">4.12. 성공 게시글검색 정렬조건 오래된순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -3520,8 +3524,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.747556",
-    "lastModifiedAt" : "2022-11-28T09:18:51.747556",
+    "createdAt" : "2022-11-29T22:23:16.445123",
+    "lastModifiedAt" : "2022-11-29T22:23:16.445123",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -3540,8 +3544,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -3696,7 +3700,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_댓글갯수_최근순_200">3.13. 성공 게시글검색 정렬조건 댓글갯수 최근순 200</h3>
+<h3 id="_성공_게시글검색_정렬조건_댓글갯수_최근순_200">4.13. 성공 게시글검색 정렬조건 댓글갯수 최근순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -3773,8 +3777,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.787753",
-    "lastModifiedAt" : "2022-11-28T09:18:51.787753",
+    "createdAt" : "2022-11-29T22:23:16.476574",
+    "lastModifiedAt" : "2022-11-29T22:23:16.476574",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -3793,8 +3797,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -3949,7 +3953,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_댓글갯수_오래된순_200">3.14. 성공 게시글검색 정렬조건 댓글갯수 오래된순 200</h3>
+<h3 id="_성공_게시글검색_정렬조건_댓글갯수_오래된순_200">4.14. 성공 게시글검색 정렬조건 댓글갯수 오래된순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -4010,7 +4014,7 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 843
+Content-Length: 845
 
 {
   "data" : [ {
@@ -4026,8 +4030,8 @@ Content-Length: 843
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.76767",
-    "lastModifiedAt" : "2022-11-28T09:18:51.76767",
+    "createdAt" : "2022-11-29T22:23:16.461218",
+    "lastModifiedAt" : "2022-11-29T22:23:16.461218",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -4046,8 +4050,8 @@ Content-Length: 843
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -4202,7 +4206,7 @@ Content-Length: 843
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글_정렬조건_좋아요수_최근순_200">3.15. 성공 게시글 정렬조건 좋아요수 최근순 200</h3>
+<h3 id="_성공_게시글_정렬조건_좋아요수_최근순_200">4.15. 성공 게시글 정렬조건 좋아요수 최근순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -4279,8 +4283,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.806974",
-    "lastModifiedAt" : "2022-11-28T09:18:51.806974",
+    "createdAt" : "2022-11-29T22:23:16.495129",
+    "lastModifiedAt" : "2022-11-29T22:23:16.495129",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -4299,8 +4303,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -4455,7 +4459,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_좋아요수_오래된순_200">3.16. 성공 게시글검색 정렬조건 좋아요수 오래된순 200</h3>
+<h3 id="_성공_게시글검색_정렬조건_좋아요수_오래된순_200">4.16. 성공 게시글검색 정렬조건 좋아요수 오래된순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -4516,7 +4520,7 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 843
+Content-Length: 845
 
 {
   "data" : [ {
@@ -4532,8 +4536,8 @@ Content-Length: 843
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.82754",
-    "lastModifiedAt" : "2022-11-28T09:18:51.82754",
+    "createdAt" : "2022-11-29T22:23:16.509212",
+    "lastModifiedAt" : "2022-11-29T22:23:16.509212",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -4552,8 +4556,8 @@ Content-Length: 843
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -4708,7 +4712,7 @@ Content-Length: 843
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_답변수_최근순_200">3.17. 성공 게시글검색 정렬조건 답변수 최근순 200</h3>
+<h3 id="_성공_게시글검색_정렬조건_답변수_최근순_200">4.17. 성공 게시글검색 정렬조건 답변수 최근순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -4785,8 +4789,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.848223",
-    "lastModifiedAt" : "2022-11-28T09:18:51.848223",
+    "createdAt" : "2022-11-29T22:23:16.525099",
+    "lastModifiedAt" : "2022-11-29T22:23:16.525099",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -4805,8 +4809,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -4961,7 +4965,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_답변수_오래된순_200">3.18. 성공 게시글검색 정렬조건 답변수 오래된순 200</h3>
+<h3 id="_성공_게시글검색_정렬조건_답변수_오래된순_200">4.18. 성공 게시글검색 정렬조건 답변수 오래된순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -5038,8 +5042,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.873344",
-    "lastModifiedAt" : "2022-11-28T09:18:51.873344",
+    "createdAt" : "2022-11-29T22:23:16.542215",
+    "lastModifiedAt" : "2022-11-29T22:23:16.542215",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -5058,8 +5062,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -5214,7 +5218,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_채택_안된순_최근순_200">3.19. 성공 게시글검색 정렬조건 채택 안된순 최근순 200</h3>
+<h3 id="_성공_게시글검색_정렬조건_채택_안된순_최근순_200">4.19. 성공 게시글검색 정렬조건 채택 안된순 최근순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -5275,7 +5279,7 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 845
+Content-Length: 843
 
 {
   "data" : [ {
@@ -5291,8 +5295,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.684453",
-    "lastModifiedAt" : "2022-11-28T09:18:51.684453",
+    "createdAt" : "2022-11-29T22:23:16.39641",
+    "lastModifiedAt" : "2022-11-29T22:23:16.39641",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -5311,8 +5315,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -5467,7 +5471,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_채택안된순_오래된순_200">3.20. 성공 게시글검색 정렬조건 채택안된순 오래된순 200</h3>
+<h3 id="_성공_게시글검색_정렬조건_채택안된순_오래된순_200">4.20. 성공 게시글검색 정렬조건 채택안된순 오래된순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -5544,8 +5548,8 @@ Content-Length: 845
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.705553",
-    "lastModifiedAt" : "2022-11-28T09:18:51.705553",
+    "createdAt" : "2022-11-29T22:23:16.414392",
+    "lastModifiedAt" : "2022-11-29T22:23:16.414392",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -5564,8 +5568,8 @@ Content-Length: 845
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -5720,7 +5724,7 @@ Content-Length: 845
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_채택된순_최근순_200">3.21. 성공 게시글검색 정렬조건 채택된순 최근순 200</h3>
+<h3 id="_성공_게시글검색_정렬조건_채택된순_최근순_200">4.21. 성공 게시글검색 정렬조건 채택된순 최근순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -5797,8 +5801,8 @@ Content-Length: 844
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.893946",
-    "lastModifiedAt" : "2022-11-28T09:18:51.893946",
+    "createdAt" : "2022-11-29T22:23:16.559721",
+    "lastModifiedAt" : "2022-11-29T22:23:16.559721",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -5817,8 +5821,8 @@ Content-Length: 844
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -5973,7 +5977,7 @@ Content-Length: 844
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_게시글검색_정렬조건_채택된것_오래된순_200">3.22. 성공 게시글검색 정렬조건 채택된것 오래된순 200</h3>
+<h3 id="_성공_게시글검색_정렬조건_채택된것_오래된순_200">4.22. 성공 게시글검색 정렬조건 채택된것 오래된순 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -6050,8 +6054,8 @@ Content-Length: 844
     } ],
     "commentCount" : 1,
     "answerCount" : 1,
-    "createdAt" : "2022-11-28T09:18:51.917539",
-    "lastModifiedAt" : "2022-11-28T09:18:51.917539",
+    "createdAt" : "2022-11-29T22:23:16.575315",
+    "lastModifiedAt" : "2022-11-29T22:23:16.575315",
     "userInfo" : {
       "userId" : 1,
       "nickname" : "nickname",
@@ -6070,8 +6074,8 @@ Content-Length: 844
     "totalPages" : 1,
     "sort" : {
       "empty" : false,
-      "unsorted" : false,
-      "sorted" : true
+      "sorted" : true,
+      "unsorted" : false
     }
   }
 }</code></pre>
@@ -6229,10 +6233,10 @@ Content-Length: 844
 </div>
 </div>
 <div class="sect1">
-<h2 id="_게시글_상세조회">4. 게시글 상세조회</h2>
+<h2 id="_게시글_상세조회">5. 게시글 상세조회</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_성공_로그인한_회원이_게시글_상세_조회시_200">4.1. 성공 로그인한 회원이 게시글 상세 조회시 200</h3>
+<h3 id="_성공_로그인한_회원이_게시글_상세_조회시_200">5.1. 성공 로그인한 회원이 게시글 상세 조회시 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -6274,7 +6278,7 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 1121
+Content-Length: 1122
 
 {
   "articleId" : 1,
@@ -6290,8 +6294,8 @@ Content-Length: 1121
     "tagId" : 1,
     "name" : "JAVA"
   } ],
-  "createdAt" : "2022-11-28T09:18:51.594317",
-  "lastModifiedAt" : "2022-11-28T09:18:51.594321",
+  "createdAt" : "2022-11-29T22:23:16.305508",
+  "lastModifiedAt" : "2022-11-29T22:23:16.305513",
   "expiredDate" : null,
   "userInfo" : {
     "userId" : 1,
@@ -6318,8 +6322,8 @@ Content-Length: 1121
       "filename" : "fileName",
       "remotePath" : "remotePath"
     },
-    "createdAt" : "2022-11-28T09:18:51.59428",
-    "lastModifiedAt" : "2022-11-28T09:18:51.594294"
+    "createdAt" : "2022-11-29T22:23:16.304948",
+    "lastModifiedAt" : "2022-11-29T22:23:16.304961"
   } ]
 }</code></pre>
 </div>
@@ -6503,7 +6507,7 @@ Content-Length: 1121
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_로그인하지않은_회원이_게시글을_상세_조회시_200">4.2. 성공 로그인하지않은 회원이 게시글을 상세 조회시 200</h3>
+<h3 id="_성공_로그인하지않은_회원이_게시글을_상세_조회시_200">5.2. 성공 로그인하지않은 회원이 게시글을 상세 조회시 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -6560,8 +6564,8 @@ Content-Length: 1124
     "tagId" : 1,
     "name" : "JAVA"
   } ],
-  "createdAt" : "2022-11-28T09:18:51.661786",
-  "lastModifiedAt" : "2022-11-28T09:18:51.661789",
+  "createdAt" : "2022-11-29T22:23:16.379571",
+  "lastModifiedAt" : "2022-11-29T22:23:16.379574",
   "expiredDate" : null,
   "userInfo" : {
     "userId" : 1,
@@ -6588,8 +6592,8 @@ Content-Length: 1124
       "filename" : "fileName",
       "remotePath" : "remotePath"
     },
-    "createdAt" : "2022-11-28T09:18:51.661762",
-    "lastModifiedAt" : "2022-11-28T09:18:51.661779"
+    "createdAt" : "2022-11-29T22:23:16.379551",
+    "lastModifiedAt" : "2022-11-29T22:23:16.379564"
   } ]
 }</code></pre>
 </div>
@@ -6773,7 +6777,7 @@ Content-Length: 1124
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_신고를_5번_이상_받은_게시글_상세_조회시_200">4.3. 성공 신고를 5번 이상 받은 게시글 상세 조회시 200</h3>
+<h3 id="_성공_신고를_5번_이상_받은_게시글_상세_조회시_200">5.3. 성공 신고를 5번 이상 받은 게시글 상세 조회시 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -6828,8 +6832,8 @@ Content-Length: 669
   "isLiked" : true,
   "isBookmarked" : true,
   "tags" : [ ],
-  "createdAt" : "2022-11-28T09:18:52.119836",
-  "lastModifiedAt" : "2022-11-28T09:18:52.119838",
+  "createdAt" : "2022-11-29T22:23:16.739199",
+  "lastModifiedAt" : "2022-11-29T22:23:16.739201",
   "expiredDate" : null,
   "userInfo" : {
     "userId" : 1,
@@ -6964,7 +6968,7 @@ Content-Length: 669
 </table>
 </div>
 <div class="sect2">
-<h3 id="_실패_존재하지_않는_게시글을_상세조회시_404">4.4. 실패 존재하지 않는 게시글을 상세조회시 404</h3>
+<h3 id="_실패_존재하지_않는_게시글을_상세조회시_404">5.4. 실패 존재하지 않는 게시글을 상세조회시 404</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -7020,10 +7024,10 @@ Content-Length: 110
 </div>
 </div>
 <div class="sect1">
-<h2 id="_게시글_좋아요">5. 게시글 좋아요</h2>
+<h2 id="_게시글_좋아요">6. 게시글 좋아요</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_성공_좋아요_등록_200">5.1. 성공 좋아요 등록 200</h3>
+<h3 id="_성공_좋아요_등록_200">6.1. 성공 좋아요 등록 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -7114,7 +7118,7 @@ Content-Length: 76
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_좋아요_취소_200">5.2. 성공 좋아요 취소 200</h3>
+<h3 id="_성공_좋아요_취소_200">6.2. 성공 좋아요 취소 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -7205,7 +7209,7 @@ Content-Length: 76
 </table>
 </div>
 <div class="sect2">
-<h3 id="_실패_로그인하지_않은_유저가_좋아요를_누를때_404">5.3. 실패 로그인하지 않은 유저가 좋아요를 누를때 404</h3>
+<h3 id="_실패_로그인하지_않은_유저가_좋아요를_누를때_404">6.3. 실패 로그인하지 않은 유저가 좋아요를 누를때 404</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -7258,7 +7262,7 @@ Content-Length: 104
 </div>
 </div>
 <div class="sect2">
-<h3 id="_실패_존재하지_않는_게시글의_좋아용를_누를때_404">5.4. 실패 존재하지 않는 게시글의 좋아용를 누를때 404</h3>
+<h3 id="_실패_존재하지_않는_게시글의_좋아용를_누를때_404">6.4. 실패 존재하지 않는 게시글의 좋아용를 누를때 404</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -7315,10 +7319,10 @@ Content-Length: 110
 </div>
 </div>
 <div class="sect1">
-<h2 id="_답변글_좋아요">6. 답변글 좋아요</h2>
+<h2 id="_답변글_좋아요">7. 답변글 좋아요</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_성공_답변글_좋아요_등록_200">6.1. 성공 답변글 좋아요 등록 200</h3>
+<h3 id="_성공_답변글_좋아요_등록_200">7.1. 성공 답변글 좋아요 등록 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -7413,7 +7417,7 @@ Content-Length: 75
 </table>
 </div>
 <div class="sect2">
-<h3 id="_성공_답변글_좋아요_취소_200">6.2. 성공 답변글 좋아요 취소 200</h3>
+<h3 id="_성공_답변글_좋아요_취소_200">7.2. 성공 답변글 좋아요 취소 200</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -7508,7 +7512,7 @@ Content-Length: 75
 </table>
 </div>
 <div class="sect2">
-<h3 id="_실패_로그인하지_않은_회원이_답변글_좋아요를_누를때_404">6.3. 실패 로그인하지 않은 회원이 답변글 좋아요를 누를때 404</h3>
+<h3 id="_실패_로그인하지_않은_회원이_답변글_좋아요를_누를때_404">7.3. 실패 로그인하지 않은 회원이 답변글 좋아요를 누를때 404</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -7561,7 +7565,7 @@ Content-Length: 104
 </div>
 </div>
 <div class="sect2">
-<h3 id="_실패_존재하지_않는_답변글에_좋아요를_누를때_404">6.4. 실패 존재하지 않는 답변글에 좋아요를 누를때 404</h3>
+<h3 id="_실패_존재하지_않는_답변글에_좋아요를_누를때_404">7.4. 실패 존재하지 않는 답변글에 좋아요를 누를때 404</h3>
 <div class="listingblock">
 <div class="title">http-request</div>
 <div class="content">
@@ -7622,10 +7626,10 @@ Content-Length: 110
 </div>
 </div>
 <div class="sect1">
-<h2 id="_게시글_신고">7. 게시글 신고</h2>
+<h2 id="_게시글_신고">8. 게시글 신고</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_성공_로그인한_회원이_게시글_신고_201">7.1. 성공 로그인한 회원이 게시글 신고 201</h3>
+<h3 id="_성공_로그인한_회원이_게시글_신고_201">8.1. 성공 로그인한 회원이 게시글 신고 201</h3>
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
@@ -7732,7 +7736,7 @@ Content-Length: 20
 </table>
 </div>
 <div class="sect2">
-<h3 id="_실패_로그인한_회원이_존재하지_않는_게시글_신고_404">7.2. 실패 로그인한 회원이 존재하지 않는 게시글 신고 404</h3>
+<h3 id="_실패_로그인한_회원이_존재하지_않는_게시글_신고_404">8.2. 실패 로그인한 회원이 존재하지 않는 게시글 신고 404</h3>
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
@@ -7820,7 +7824,7 @@ Content-Length: 110
 </div>
 </div>
 <div class="sect2">
-<h3 id="_실패_로그인하지_않은_회원이_게시글_신고_404">7.3. 실패 로그인하지 않은 회원이 게시글 신고 404</h3>
+<h3 id="_실패_로그인하지_않은_회원이_게시글_신고_404">8.3. 실패 로그인하지 않은 회원이 게시글 신고 404</h3>
 <div class="listingblock">
 <div class="title">HTTP request</div>
 <div class="content">
@@ -7912,7 +7916,7 @@ Content-Length: 104
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-11-26 05:21:05 +0900
+Last updated 2022-11-29 22:22:51 +0900
 </div>
 </div>
 </body>

@@ -10,7 +10,7 @@ name: Java CI with Gradle
 on:
   push:
     branches:
-      - 'main'
+      - 'dev/server'
 
 env:
   S3_BUCKET_NAME: morakmorak
@@ -31,28 +31,43 @@ jobs:
         with:
           java-version: 11
 
-      - uses: actions/checkout@v2
-      - run: touch ./server/morak_back_end/src/main/resources/application.yml
-      - run: echo "${{ secrets.APPLICATION_MAIN }}" > server/morak_back_end/src/main/resources/application.yml
-
-      - uses: actions/upload-artifact@v2
+       # [1] application.yml 생성
+      - name: Set yaml file 
+        uses: microsoft/variable-substitution@v1
         with:
-          name: application.yml
-          path: ./server/morak_back_end/src/main/resources/application.yml
+          files: ${{ env.RESOURCE_PATH }} 
+        env:
+          spring.datasource.url: ${{ secrets.RDS_URL }}
+          spring.datasource.username: ${{ secrets.RDS_USERNAME }}
+          spring.datasource.password: ${{ secrets.RDS_PASSWORD }}
+          spring.redis.host: ${{ secrets.REDIS_HOST }}
+          spring.redis.port: ${{ secrets.REDIS_PORT }}
+          
+          spring.security.oauth2.client.registration.kakao.client-id: ${{ secrets.OAUTH_KAKAO_ID }}
+          spring.security.oauth2.client.registration.kakao.redirect-uri: ${{ secrets.OAUTH_KAKAO_URI }}
+          
+          
+          spring.security.oauth2.client.registration.google.client-id: ${{ secrets.OAUTH_GOOGLE_ID }}
+          spring.security.oauth2.client.registration.google.client-secret: ${{ secrets.OAUTH_GOOGLE_PASSWORD }}
+          
+          spring.security.oauth2.client.provider.kakao.authorization-uri: ${{ secrets.PROVIDER_AUTH_URI }}
+          spring.security.oauth2.client.provider.kakao.token-uri: ${{ secrets.PROVIDER_TOKEN_URI }}
+          spring.security.oauth2.client.provider.kakao.user-info-uri: ${{ secrets.PROVIDER_INFO_URI }}
+          
+          spring.mail.host: ${{ secrets.MAIL_HOST }}
+          spring.mail.username: ${{ secrets.MAIL_USERNAME }}
+          spring.mail.password: ${{ secrets.MAIL_PASSWORD }}
+          spring.mail.port: ${{ secrets.MAIL_PORT }}
+          
+          jwt.secretKey: ${{ secrets.SECURITY_SECRET_KEY }}
+          jwt.refreshKey: ${{ secrets.SECURITY_REFRESH_KEY }}
+          
+          cloud.aws.credentials.accessKey: ${{ secrets.AWS_ACCESS_KEY }}
+          cloud.aws.credentials.secretKey: ${{ secrets.AWS_SECRET_KEY }}
+          cloud.aws.s3.bucket: ${{ secrets.AWS_IMAGE_BUCKET_NAME }}
+          
+          webdriver.chrome.location: ${{ secrets.CHROME_DRIVER_LOCATION }}
 
-      - name: Download chromedriver
-        run: |
-          wget -q -O tmp.zip https://chromedriver.storage.googleapis.com/81.0.4044.69/chromedriver_linux64.zip
-          unzip tmp.zip && rm tmp.zip
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./server/morak_back_end/gradlew
-        shell: bash
-
-        # [2] build
-      - name: Build with Gradle
-        run: cd server/morak_back_end; ./gradlew build
-        shell: bash
 
         # [3] save build
       - name: Make zip file
