@@ -13,6 +13,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { confirmAlert } from 'react-confirm-alert';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -170,20 +171,27 @@ export const Editor = () => {
   };
 
   const handleCancelClick = () => {
-    if (confirm('질문 작성을 취소하시겠어요?')) {
-      setIsArticleEdit({
-        isArticleEdit: false,
-        title: '',
-        content: '',
-        articleId: '',
-      });
-      // toast('취소됨', {
-      //   hideProgressBar: true,
-      //   autoClose: 2000,
-      //   type: 'success',
-      // });
-      router.push('/questions');
-    }
+    confirmAlert({
+      message: '질문 작성을 취소하시겠어요?',
+      buttons: [
+        {
+          label: 'YES',
+          onClick: () => {
+            setIsArticleEdit({
+              isArticleEdit: false,
+              title: '',
+              content: '',
+              articleId: '',
+            });
+            toast.success('글 작성이 취소되었습니다.');
+            router.push('/questions');
+          },
+        },
+        {
+          label: 'NO',
+        },
+      ],
+    });
   };
 
   const quillRef = useRef<any>(null);
