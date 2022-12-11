@@ -9,7 +9,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
 import { userEmailAtom, userNickName, userPassword } from '../../atomsHS';
 import { Input } from '../common/Input';
