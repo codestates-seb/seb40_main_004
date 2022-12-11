@@ -15,7 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.morakmorak.morak_back_end.entity.enums.Grade.*;
+import static com.morakmorak.morak_back_end.entity.enums.JobType.DEFAULT;
+import static com.morakmorak.morak_back_end.entity.enums.UserStatus.*;
 
 @Entity
 @Getter
@@ -39,8 +44,9 @@ public class User extends BaseTime {
 
     private String phone;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private UserStatus userStatus;
+    private UserStatus userStatus = RUNNING;
 
     private String infoMessage;
 
@@ -52,7 +58,8 @@ public class User extends BaseTime {
     private Boolean isJobSeeker;
 
     @Enumerated(EnumType.STRING)
-    private JobType jobType;
+    @Builder.Default
+    private JobType jobType = DEFAULT;
 
     private Boolean gender;
 
@@ -66,8 +73,9 @@ public class User extends BaseTime {
 
     private String blog;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private Grade grade;
+    private Grade grade = CANDLE;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "avartar_id")
@@ -93,10 +101,6 @@ public class User extends BaseTime {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
     private List<Article> articles = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private List<Deposit> deposits = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(mappedBy = "user")
@@ -157,7 +161,7 @@ public class User extends BaseTime {
                 .stream().map(e -> e.getRole().getRoleName().toString())
                 .collect(Collectors.toList());
 
-        if (roles.size() == 0) roles = List.of("Role_User");
+        if (roles.size() == 0) roles = List.of("ROLE_USER");
         return roles;
     }
 
@@ -181,20 +185,53 @@ public class User extends BaseTime {
 
     public void addPoint(Object object, PointCalculator pointCalculator) {
         this.point += pointCalculator.calculatePaymentPoint(object);
+        updateGrade();
     }
 
     public void minusPoint(Object object, PointCalculator pointCalculator) {
         this.point -= pointCalculator.calculatePaymentPoint(object);
+        updateGrade();
     }
 
-    public void setAvatar(Avatar avatar) {
+    private Grade checkGradeUpdatable() {
+        if (this.point >= 20000) {
+            return MORAKMORAK;
+        } else if (this.point >= 10000) {
+            return BONFIRE;
+        } else if (this.point >= 5000) {
+            return CANDLE;
+        } else {
+            return MATCH;
+        }
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    private void updateGrade() {
+        this.grade = checkGradeUpdatable();
+    }
+
+    public void changeAvatar(Avatar avatar) {
         this.avatar = avatar;
+    }
+
+    public void changeStatus(UserStatus status) {
+        this.userStatus = status;
+    }
+
+    public Boolean checkIfRemovedOrBlockedUser() {
+        return this.getUserStatus().equals(BLOCKED) || this.getUserStatus().equals(DELETED);
+    }
+
+    public void setRandomEmail() {
+        this.email += UUID.randomUUID().toString();
     }
 
     public void deleteAvatar() {
         this.avatar = null;
     }
-
     public void addNotification(Notification notification) {
         this.notifications.add(notification);
     }
@@ -204,5 +241,4 @@ public class User extends BaseTime {
     public void receivePoint(Integer pointToReceive) {
         this.point +=pointToReceive;
     }
-
 }

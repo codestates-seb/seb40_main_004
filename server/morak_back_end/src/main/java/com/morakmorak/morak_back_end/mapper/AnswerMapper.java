@@ -21,6 +21,7 @@ public interface AnswerMapper {
     @Mapping(source="answer.user.avatar.remotePath",target="avatar.remotePath")
     @Mapping(source="answer.createdAt",target="createdAt")
     AnswerDto.ResponseListTypeAnswer answerToResponseListTypeAnswer(Answer answer, Boolean isPicked, Boolean isLiked, Integer answerLikeCount, CommentDto.Response commentPreview, Integer commentCount);
+    @Mapping(source="answer.article.id",target="articleId")
     @Mapping(source="answer.id",target="answerId")
     @Mapping(source="answer.content",target="content")
     @Mapping(source="answer.user.id",target="userInfo.userId")

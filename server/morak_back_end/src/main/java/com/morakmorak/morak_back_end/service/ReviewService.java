@@ -65,8 +65,10 @@ public class ReviewService {
         User verifiedReceiver = userService.findVerifiedUserById(receiverId);
 
         checkRemainingPoints(verifiedSender, reviewWithoutBadges.getPoint());
-        donatePoint(verifiedSender, verifiedReceiver, reviewWithoutBadges.getPoint());
+        donatePoint(verifiedSender, verifiedReceiver, reviewWithoutBadges.getPoint());;
+
         Review reviewNotSaved = reviewWithoutBadges.addSender(verifiedSender).addReciever(verifiedReceiver);
+        injectBadgesOnReview(reviewNotSaved, badgeDtoList);
 
         NotificationGenerator generator = NotificationGenerator.of(reviewNotSaved);
         Notification notification = generator.generateNotification();

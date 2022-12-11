@@ -8,12 +8,14 @@ import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.UserRole;
+import com.morakmorak.morak_back_end.entity.enums.UserStatus;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.repository.user.RoleRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRoleRepository;
+import com.morakmorak.morak_back_end.security.util.SecurityConstants;
 import com.morakmorak.morak_back_end.service.mail_service.MailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.entity.enums.RoleName.ROLE_USER;
+import static com.morakmorak.morak_back_end.entity.enums.UserStatus.*;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.*;
 import static com.morakmorak.morak_back_end.service.mail_service.MailSenderImpl.*;
@@ -43,6 +46,7 @@ public class AuthService {
 
     public AuthDto.ResponseToken loginUser(User user) {
         User dbUser = findUserByEmailOrThrowException(user.getEmail());
+        if (dbUser.checkIfRemovedOrBlockedUser()) throw new BusinessLogicException(ACCOUNT_INACCESSIBLE);
 
         if (!userPasswordManager.comparePasswordWithUser(dbUser, user)) {
             throw new BusinessLogicException(INVALID_USER);
@@ -103,6 +107,8 @@ public class AuthService {
         String refreshToken = tokenGenerator.generateRefreshToken(user);
         String accessToken = tokenGenerator.generateAccessToken(user);
 
+        saveRefreshToken(refreshToken, redisUser);
+
         return AuthDto.ResponseToken
                 .builder()
                 .accessToken(accessToken)
@@ -161,7 +167,9 @@ public class AuthService {
 
         if (!userPasswordManager.comparePasswordWithUser(dbUser, requestUser)) throw new BusinessLogicException(MISMATCHED_PASSWORD);
 
-        userRepository.delete(dbUser);
+        dbUser.changeStatus(DELETED);
+        dbUser.setRandomEmail();
+        
         return Boolean.TRUE;
     }
 

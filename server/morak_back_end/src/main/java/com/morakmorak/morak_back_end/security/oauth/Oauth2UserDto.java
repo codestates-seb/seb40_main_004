@@ -22,6 +22,8 @@ public class Oauth2UserDto {
                                    Map<String, Object> attributes) {
         if (registrationId.equals("google")) {
             return ofGoogle(usernameAttributeName, attributes);
+        } else if (registrationId.equals("kakao")) {
+            return ofKakao(usernameAttributeName, attributes);
         }
 
         throw new IllegalArgumentException();
@@ -34,8 +36,22 @@ public class Oauth2UserDto {
                 .attributes(attributes)
                 .email((String)attributes.get("email"))
                 .picture((String)attributes.get("picture"))
-                .provider((String)attributes.get("provider"))
+                .provider("google")
                 .nameAttributeKey(usernameAttributeName)
                 .build();
+    }
+
+    private static Oauth2UserDto ofKakao(String usernameAttributeName,
+                                         Map<String, Object> attributes) {
+        return Oauth2UserDto.builder()
+                .email((String)((Map)attributes.get("kakao_account")).get("email"))
+                .picture((String)((Map)attributes.get("properties")).get("profile_image"))
+                .provider("kakao")
+                .nameAttributeKey(usernameAttributeName)
+                .build();
+    }
+
+    private void addRandomNickname(String randomNickname) {
+        this.name = randomNickname;
     }
 }

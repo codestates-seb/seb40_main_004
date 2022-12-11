@@ -98,11 +98,7 @@ class Update_ArticleController {
 
         given(articleMapper.requestUpdateArticleToEntity(request, 1L))
                 .willReturn(Article.builder().build());
-        given(tagMapper.requestTagWithIdAndNameToTagDto(request))
-                .willReturn(List.of(TagDto.SimpleTag.builder().build()));
-        given(fileMapper.RequestFileWithIdToFile(request))
-                .willReturn(List.of(FileDto.RequestFileWithId.builder().build()));
-        given(articleService.update(any(), any(), any(), any()))
+        given(articleService.update(any(), any()))
                 .willReturn(response);
 
         String content = objectMapper.writeValueAsString(request);
@@ -145,7 +141,7 @@ class Update_ArticleController {
     }
 
     @Test
-    @DisplayName("게시글을 수정할때 유효성 검증에 실패한 경우 400에러를 던진다. ")
+    @DisplayName("게시글을 수정할때 제목 유효성 검증에 실패한 경우 400에러를 던진다. ")
     public void articleUpdate_fail1() throws Exception {
         //given
         ArticleDto.RequestUpdateArticle requestUploadArticle = ArticleDto.RequestUpdateArticle.builder()
@@ -198,7 +194,7 @@ class Update_ArticleController {
                 .build();
 
         String content = objectMapper.writeValueAsString(requestUploadArticle);
-        given(articleService.update(any(), any(), any(), any())).willThrow(new BusinessLogicException(ErrorCode.NO_ACCESS_TO_THAT_OBJECT));
+        given(articleService.update(any(), any())).willThrow(new BusinessLogicException(ErrorCode.NO_ACCESS_TO_THAT_OBJECT));
 
         //when
         ResultActions perform =
@@ -230,4 +226,123 @@ class Update_ArticleController {
                                 )
                         )));
     }
+    @Test
+    @DisplayName("게시글을 수정할때 내용의 글자가 5글자보다 짧다면 유효성 검증에 실패하고 400 Bad_Request 를 리턴한다.")
+    public void articleUpdate_fail3() throws Exception {
+        //given
+        ArticleDto.RequestUpdateArticle request = ArticleDto.RequestUpdateArticle.builder()
+                .title("타이틀입니다. 잘부탁드립니다. 부탁드립니다.")
+                .content("콘")
+                .fileId(List.of(FileDto.RequestFileWithId.builder().fileId(1L).build()))
+                .tags(List.of(TagDto.SimpleTag.builder().name(TagName.JAVA).tagId(1L).build()))
+                .thumbnail(1L)
+                .build();
+
+        String content = objectMapper.writeValueAsString(request);
+        //when
+        ResultActions perform = mockMvc.perform(
+                patch("/articles/{article-id}",1)
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                        "게시글_수정할때_내용의_길이가_5글자보다_짧을경우_경우_실패_400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다.")
+                        ),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("게시글을 수정할때 태그를 한개라도 보내지 않을 경우 유효성 검증에 실패하고 400 Bad_Request 를 리턴한다.")
+    public void articleUpdate_fail4() throws Exception {
+        //given
+        ArticleDto.RequestUpdateArticle request = ArticleDto.RequestUpdateArticle.builder()
+                .title("타이틀입니다. 잘부탁드립니다. 부탁드립니다.")
+                .content("콘")
+                .fileId(List.of(FileDto.RequestFileWithId.builder().fileId(1L).build()))
+                .thumbnail(1L)
+                .build();
+
+        String content = objectMapper.writeValueAsString(request);
+        //when
+        ResultActions perform = mockMvc.perform(
+                patch("/articles/{article-id}",1)
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+        //then
+        perform.andExpect(status().isBadRequest())
+                .andDo(document(
+                        "게시글_수정할때_태그를_한개라도_보내지_않을경우_실패_400",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다.")
+                        ),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        )
+                ));
+    }
+
+    @Test
+    @DisplayName("게시글을 수정할때 본인의 게시글이 아닌 글을 수정하려할떄 InValid_User 를 리턴한다.")
+    public void articleUpdate_fail5() throws Exception {
+        //given
+        ArticleDto.RequestUpdateArticle request = ArticleDto.RequestUpdateArticle.builder()
+                .title("타이틀입니다. 잘부탁드립니다. 부탁드립니다.").content("콘텐트입니다. 잘부탁드립니다.")
+                .fileId(List.of(FileDto.RequestFileWithId.builder().fileId(1L).build()))
+                .tags(List.of(TagDto.SimpleTag.builder().name(TagName.JAVA).tagId(1L).build()))
+                .thumbnail(1L)
+                .build();
+        ArticleDto.ResponseSimpleArticle response = ArticleDto.ResponseSimpleArticle.builder().articleId(1L).build();
+
+        given(articleMapper.requestUpdateArticleToEntity(request, 1L))
+                .willReturn(Article.builder().build());
+        given(articleService.update(any(), any()))
+                .willThrow(new BusinessLogicException(ErrorCode.INVALID_USER));
+
+        String content = objectMapper.writeValueAsString(request);
+        //when
+        ResultActions perform = mockMvc.perform(
+                patch("/articles/{article-id}",1)
+                        .header(JWT_HEADER, ACCESS_TOKEN)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content)
+        );
+        //then
+        perform.andExpect(status().isUnauthorized())
+                .andDo(document(
+                        "게시글_수정시_남의_글을_수정하려고_할경우_실패_401",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("article-id").description("게시글의 아이디 입니다.")
+                        ),
+                        requestHeaders(
+                                headerWithName(JWT_HEADER).description("access token")
+                        ),
+                        requestFields(
+                                List.of(
+                                        fieldWithPath("title").type(JsonFieldType.STRING).description("글의 제목입니다."),
+                                        fieldWithPath("content").type(JsonFieldType.STRING).description("글의 본문입니다."),
+                                        fieldWithPath("tags[].tagId").type(JsonFieldType.NUMBER).description("태그 아이디 입니다."),
+                                        fieldWithPath("tags[].name").type(JsonFieldType.STRING).description("태그 이름입니다."),
+                                        fieldWithPath("fileId[].fileId").type(JsonFieldType.NUMBER).description("파일 아이디 입니다."),
+                                        fieldWithPath("thumbnail").type(JsonFieldType.NUMBER).description("글의 썸네일 아이디 입니다.")
+                                )
+                        )
+                ));
+    }
+
 }

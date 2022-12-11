@@ -138,7 +138,7 @@ public class PostAnswerTest {
                 .build();
         em.persist(avatar);
 
-        User user = User.builder().nickname("nickname").grade(Grade.BRONZE).avatar(avatar).build();
+        User user = User.builder().nickname("nickname").grade(Grade.CANDLE).avatar(avatar).build();
 
         Article article = Article.builder().title("테스트 타이틀입니다.")
                 .content("콘탠트입니다. 질문을 많이 올려주세요.")
@@ -175,12 +175,68 @@ public class PostAnswerTest {
                 .andExpect(jsonPath("$.pageInfo.size").value(5))
                 .andExpect(jsonPath("$.pageInfo.totalElements").value(1))
                 .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
-                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(true));
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(false));
+    }
+    @Test
+    @DisplayName("파일 첨부하지 않아도 답변은 성공적으로 처리, 201 ")
+    void postAnswer_success_2() throws Exception {
+        //given
+        Category qna = Category.builder().name(CategoryName.QNA).build();
+        articleRepository.save(Article.builder().user(savedUser).category(qna).articleStatus(ArticleStatus.POSTING).isClosed(false).build());
+        Article validArticle = articleRepository.findByUserId(savedUser.getId()).orElseThrow(() -> new AssertionError());
+
+        AnswerDto.RequestPostAnswer request = AnswerDto.RequestPostAnswer.builder().content("10자이상 유효한 내용의 답변").build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        Avatar avatar = Avatar.builder().remotePath("remotePath")
+                .originalFilename("fileName")
+                .build();
+        em.persist(avatar);
+
+        User user = User.builder().nickname("nickname").grade(Grade.CANDLE).avatar(avatar).build();
+
+        Article article = Article.builder().title("테스트 타이틀입니다.")
+                .content("콘탠트입니다. 질문을 많이 올려주세요.")
+                .category(qna)
+                .user(user)
+                .build();
+
+        qna.getArticleList().add(article);
+        em.persist(article);
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, user.getId(), ROLE_USER_LIST, NICKNAME1);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                post("/articles/{article-id}/answers", article.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json)
+                        .header(JWT_HEADER, accessToken)
+        );
+        //then
+        perform.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.data[0:1].answerId").exists())
+                .andExpect(jsonPath("$.data[0:1].content").exists())
+                .andExpect(jsonPath("$.data[0:1].answerLikeCount").exists())
+                .andExpect(jsonPath("$.data[0:1].isPicked").value(false))
+                .andExpect(jsonPath("$.data[0:1].commentCount").value(0))
+                .andExpect(jsonPath("$.data[0:1].createdAt").exists())
+                .andExpect(jsonPath("$.data[0:1].userInfo.userId").value(user.getId().intValue()))
+                .andExpect(jsonPath("$.data[0:1].userInfo.nickname").exists())
+                .andExpect(jsonPath("$.data[0:1].userInfo.grade").exists())
+                .andExpect(jsonPath("$.data[0:1].avatar.avatarId").value(avatar.getId().intValue()))
+                .andExpect(jsonPath("$.data[0:1].avatar.filename").exists())
+                .andExpect(jsonPath("$.data[0:1].avatar.remotePath").exists())
+                .andExpect(jsonPath("$.pageInfo.page").value(1))
+                .andExpect(jsonPath("$.pageInfo.size").value(5))
+                .andExpect(jsonPath("$.pageInfo.totalElements").value(1))
+                .andExpect(jsonPath("$.pageInfo.totalPages").value(1))
+                .andExpect(jsonPath("$.pageInfo.sort.sorted").value(false));
     }
 
     @Test
     @DisplayName("답변 작성시 작성자의 포인트가 증가한다.")
-    void postAnswer_success_2() throws Exception {
+    void postAnswer_success_3() throws Exception {
         //given
         articleRepository.save(Article.builder()
                 .user(savedUser)
@@ -231,7 +287,7 @@ public class PostAnswerTest {
 
     @Test
     @DisplayName("답변 작성시 질문자에 대한 알림 객체가 생성된다.")
-    void postAnswer_success_3() throws Exception {
+    void postAnswer_success_4() throws Exception {
         //given
         articleRepository.save(Article.builder()
                 .user(savedUser)

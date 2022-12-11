@@ -1,5 +1,6 @@
 package com.morakmorak.morak_back_end.security.oauth;
 
+import com.morakmorak.morak_back_end.domain.RandomKeyGenerator;
 import com.morakmorak.morak_back_end.entity.Role;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.UserRole;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import static com.morakmorak.morak_back_end.entity.enums.RoleName.ROLE_USER;
 
@@ -27,6 +29,7 @@ import static com.morakmorak.morak_back_end.entity.enums.RoleName.ROLE_USER;
 @RequiredArgsConstructor
 public class CustomOauth2Service implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UserRoleRepository userRoleRepository;
+    private final RandomKeyGenerator randomKeyGenerator;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
@@ -45,17 +48,21 @@ public class CustomOauth2Service implements OAuth2UserService<OAuth2UserRequest,
                 .getUserNameAttributeName();
 
         Oauth2UserDto oauth2UserDto = Oauth2UserDto.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-
         User user = userMapper.toOAuthEntity(oauth2UserDto);
 
+        saveIfNotSavedUser(oauth2UserDto, user);
+
+        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(ROLE_USER.toString())),
+                oAuth2User.getAttributes(), userNameAttributeName);
+    }
+
+    private void saveIfNotSavedUser(Oauth2UserDto oauth2UserDto, User user) {
         if ( userRepository.findUserByEmail(user.getEmail()).isEmpty() ) {
+            String randomNickname = generateOAuthRandomNickname(oauth2UserDto.getProvider());
+            user.changeNickname(randomNickname);
+            user.changePassword(UUID.randomUUID().toString());
             saveUserAndAddBasicRole(user);
         }
-
-        DefaultOAuth2User defaultOAuth2User = new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(ROLE_USER.toString())),
-                oAuth2User.getAttributes(), userNameAttributeName);
-
-        return defaultOAuth2User;
     }
 
     private void saveUserAndAddBasicRole(User user) {
@@ -67,5 +74,18 @@ public class CustomOauth2Service implements OAuth2UserService<OAuth2UserRequest,
                 .build();
 
         userRoleRepository.save(userRole);
+    }
+
+    private String generateOAuthRandomNickname(String provider) {
+        switch (provider) {
+            case "kakao":
+                return "모락카오" + randomKeyGenerator.generateTemporaryNicknameCode();
+            case "github":
+                return "모락허브" + randomKeyGenerator.generateTemporaryNicknameCode();
+            case "google":
+                return "모락구글" + randomKeyGenerator.generateTemporaryNicknameCode();
+            default:
+                throw new IllegalArgumentException();
+        }
     }
 }

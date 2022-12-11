@@ -1,31 +1,42 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-REPOSITORY=/home/ec2-user/app
+REPOSITORY=/home/ec2-user/app/server
+PROJECT_NAME=morak_back_end
 
-echo "> 현재 구동 중인 애플리케이션 pid 확인"
+# git clone 받은 위치로 이동
+cd $REPOSITORY/$PROJECT_NAME/
 
-CURRENT_PID=$(pgrep -fla java | grep hayan | awk '{print $1}')
+APP_NAME=morak_back_end
+CURRENT_PID=$(pgrep -f $APP_NAME)
 
-echo "현재 구동 중인 애플리케이션 pid: $CURRENT_PID"
-
-if [ -z "$CURRENT_PID" ]; then
-  echo "현재 구동 중인 애플리케이션이 없으므로 종료하지 않습니다."
+if [ -z $CURRENT_PID ]
+then
+  echo "> 종료할것 없음."
 else
-  echo "> kill -15 $CURRENT_PID"
-  kill -15 $CURRENT_PID
+  echo "> kill -9 $CURRENT_PID"
+  sudo kill -15 $CURRENT_PID
   sleep 5
 fi
 
-echo "> 새 애플리케이션 배포"
+# git clone 받은 위치로 이동
+cd $REPOSITORY/$PROJECT_NAME/
 
-JAR_NAME=$(ls -tr $REPOSITORY/*SNAPSHOT.jar | tail -n 1)
 
-echo "> JAR NAME: $JAR_NAME"
+echo "> ll"
+sudo ls -al
 
-echo "> $JAR_NAME 에 실행권한 추가"
 
-chmod +x $JAR_NAME
+echo "> GRADLE CHMOD 777"
+sudo chmod 777 ./gradlew
 
-echo "> $JAR_NAME 실행"
+echo "> GRADLE CLEAN"
+sudo ./gradlew clean
 
-nohup java -jar -Duser.timezone=Asia/Seoul $JAR_NAME >> $REPOSITORY/nohup.out 2>&1 &
+echo "> GRADLE BUILD"
+sudo ./gradlew build
+
+# jar 파일 위치로 이동
+cd build/libs
+
+echo "> JAR BUILD"
+sudo nohup java -jar morak_back_end-0.0.1-SNAPSHOT.jar &

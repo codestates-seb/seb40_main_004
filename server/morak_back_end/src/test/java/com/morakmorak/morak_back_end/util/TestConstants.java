@@ -14,8 +14,8 @@ public class TestConstants {
     public final static String PASSWORD2 = "passWORD321!";
     public final static Long ID1 = 1L;
     public final static Long ID2 = 2L;
-    public final static String NICKNAME1 = "testUser1";
-    public final static String NICKNAME2 = "testUser2";
+    public final static String NICKNAME1 = "test1";
+    public final static String NICKNAME2 = "test2";
 
     public final static String NAME1 = "김민수";
     public final static String NAME2 = "임지민";

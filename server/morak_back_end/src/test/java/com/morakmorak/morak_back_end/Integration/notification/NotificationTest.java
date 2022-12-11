@@ -108,7 +108,8 @@ public class NotificationTest {
         // given
         // when
         ResultActions perform = mockMvc.perform(get("/notifications?page=1&size=10")
-                .header(JWT_HEADER, accessToken));
+                .header(JWT_HEADER, accessToken)
+                .header("User-Agent", "Mozilla 5.0"));
 
         // then
         perform.andExpect(status().isOk())
@@ -144,7 +145,8 @@ public class NotificationTest {
         Long id = notifications.get(0).getId();
         String uri = notifications.get(0).getUri();
         //when
-        ResultActions perform = mockMvc.perform(get("/notifications/{id}", id));
+        ResultActions perform = mockMvc.perform(get("/notifications/{id}", id)
+                .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isPermanentRedirect())

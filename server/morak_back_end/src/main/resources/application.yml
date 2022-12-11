@@ -1,4 +1,96 @@
 spring:
   config:
-    import:
-      - classpath:/application-local.yml
+    activate:
+      on-profile:
+  jpa:
+    hibernate:
+      ddl-auto: validate # create update create-update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        default_batch_fetch_size: 500
+    database: mysql
+    open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  datasource:
+    url: ""
+    username: ""
+    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: ""
+    port:
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ""
+            client-secret: ""
+            scope:
+              - email
+              - profile
+          kakao:
+            client-id: ""
+            redirect-uri: ""
+            authorization-grant-type: authorization_code
+            client-authentication-method: POST
+            client-name: Kakao
+            scope:
+              - profile_image
+              - account_email
+        provider:
+          kakao:
+            authorization-uri: ""
+            token-uri: ""
+            user-info-uri: ""
+            user-name-attribute: id
+  mail:
+    host: ""
+    username: ""
+    password: ""
+    port:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+            protocols: TLSv1.2
+logging:
+  level:
+    root: error
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+jwt:
+  secretKey: ""
+  refreshKey: ""
+
+cloud:
+  aws:
+    credentials:
+      accessKey: ""
+      secretKey: ""
+    s3:
+      bucket: ""
+      dir: image
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+webdriver:
+  chrome:
+    location: ""

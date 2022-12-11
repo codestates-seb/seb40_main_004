@@ -60,7 +60,8 @@ public class UserTest {
         User user = User.builder().build();
         userRepository.save(user);
         //when
-        ResultActions perform = mockMvc.perform(get("/users/{user-id}/dashboard/activities/{date}", user.getId(), "20022-01-01"));
+        ResultActions perform = mockMvc.perform(get("/users/{user-id}/dashboard/activities/{date}", user.getId(), "20022-01-01")
+                .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isBadRequest());
@@ -73,7 +74,8 @@ public class UserTest {
         User user = User.builder().build();
         userRepository.save(user);
         //when
-        ResultActions perform = mockMvc.perform(get("/users/{user-id}/dashboard/activities/{date}", user.getId(), "2002-01-01"));
+        ResultActions perform = mockMvc.perform(get("/users/{user-id}/dashboard/activities/{date}", user.getId(), "2002-01-01")
+                .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isRequestedRangeNotSatisfiable());
@@ -87,7 +89,8 @@ public class UserTest {
         User user = User.builder().build();
         userRepository.save(user);
         //when
-        ResultActions perform = mockMvc.perform(get("/users/{user-id}/dashboard/activities/{date}", user.getId(), date));
+        ResultActions perform = mockMvc.perform(get("/users/{user-id}/dashboard/activities/{date}", user.getId(), date)
+                .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isOk());
@@ -117,7 +120,8 @@ public class UserTest {
         }
 
         //when
-        ResultActions perform = mockMvc.perform(get("/users/{user-id}/dashboard/activities/{date}", user.getId(), date));
+        ResultActions perform = mockMvc.perform(get("/users/{user-id}/dashboard/activities/{date}", user.getId(), date)
+                .header("User-Agent", "Mozilla 5.0"));
 
         //then
         perform.andExpect(status().isOk());
