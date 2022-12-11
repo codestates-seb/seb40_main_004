@@ -13,6 +13,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isLoginAtom, renderingAtom, userDashboardAtom } from '../../atomsYW';
 import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 import { client } from '../../libs/client';
+import { inspectNicknameDuplication } from '../../libs/inspectNicknameDuplication';
 import { uploadImg } from '../../libs/uploadS3';
 
 export const AsideTop = () => {
@@ -96,6 +97,11 @@ export const AsideTop = () => {
       console.error(error);
     }
   };
+
+  const onBlurNickname = () => {
+    inspectNicknameDuplication(userDashboard.nickname, editNickname);
+  };
+
   return (
     <>
       {isEdit ? (
@@ -150,9 +156,10 @@ export const AsideTop = () => {
               <div className="flex justify-between items-center">
                 <input
                   className="text-xl font-bold border border-main-gray rounded-full pl-4 w-[148px]"
+                  placeholder="닉네임"
                   value={editNickname}
                   onChange={(e) => setEditNickname(e.target.value)}
-                  placeholder="닉네임"
+                  onBlur={onBlurNickname}
                 />
               </div>
               <select
