@@ -3,6 +3,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
 import { userEmailAtom } from '../../../atomsHS';
 import { Footer } from '../../../components/common/Footer';
@@ -12,9 +13,7 @@ import { Seo } from '../../../components/common/Seo';
 import { AuthProps } from '../../../libs/interfaces';
 
 const CheckAuthCode: NextPage = () => {
-  const { register, handleSubmit } = useForm<AuthProps>({
-    mode: 'onChange',
-  });
+  const { register, handleSubmit } = useForm<AuthProps>({ mode: 'onChange' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const setEmail = useSetRecoilState(userEmailAtom);
   const router = useRouter();
@@ -24,10 +23,15 @@ const CheckAuthCode: NextPage = () => {
       .then(() => {
         setIsSubmitting(true);
         setEmail(email);
-        alert('임시 비밀번호가 발급되었습니다! 메일을 확인해주세요.');
+        toast.success('임시 비밀번호가 발급되었습니다! 메일을 확인해주세요.😉');
         router.push('/login');
       })
-      .catch((error) => console.error('error', error));
+      .catch((error) => {
+        console.error('error', error);
+        toast.error(
+          '이메일이나 인증번호가 올바르게 입력되었는지 확인해주세요.🥲',
+        );
+      });
   };
   return (
     <>
