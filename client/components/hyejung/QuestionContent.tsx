@@ -17,7 +17,7 @@ import { client } from '../../libs/client';
 import { BtnBookmark } from './BtnBookmark';
 import { isArticleEditAtom } from '../../atomsHJ';
 import { ArticleDetail } from '../../libs/interfaces';
-import { useEffect } from 'react';
+import { useFetch } from '../../libs/useFetchSWR';
 
 type QuestionContentProps = {
   articleId: string;
@@ -31,6 +31,8 @@ export const QuestionContent = ({
   const router = useRouter();
   const isLogin = useRecoilValue(isLoginAtom);
   const setArticleEdit = useSetRecoilState(isArticleEditAtom);
+
+  const { data } = useFetch(`/api/articles/${articleId}`);
 
   let currUserId: any = '';
   if (typeof window !== 'undefined') {
@@ -86,8 +88,12 @@ export const QuestionContent = ({
               </article>
             </section>
             <div className="flex space-x-1">
-              <BtnLike isLiked={article.isLiked} likes={article.likes} />
-              <BtnBookmark isBookmarked={article.isBookmarked} />
+              {data && (
+                <>
+                  <BtnLike isLiked={data.isLiked} likes={data.likes} />
+                  <BtnBookmark isBookmarked={data.isBookmarked} />
+                </>
+              )}
             </div>
           </div>
         </section>
