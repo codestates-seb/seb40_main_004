@@ -42,7 +42,12 @@ export const HallOfFame = () => {
                 <Link href={`/dashboard/${rank.userId}`}>
                   <div className="w-[45px] h-[45px] rounded-full overflow-hidden hover:cursor-pointer">
                     {errorAvatarId.includes(rank.avatar?.avatarId) ? (
-                      <Image src="/favicon.ico" width="45px" height="45px" />
+                      <Image
+                        src="/favicon.ico"
+                        width="45px"
+                        height="45px"
+                        alt="rank"
+                      />
                     ) : (
                       <Image
                         src={
@@ -50,6 +55,7 @@ export const HallOfFame = () => {
                         }
                         width="45px"
                         height="45px"
+                        alt="rank"
                         onError={() =>
                           setIsErrorAvatarId((prev) => [
                             ...prev,
