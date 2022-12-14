@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.sql.Date;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,10 +26,10 @@ public class CalendarServiceTest {
         //given
         JobInfoDto dto = JobInfoDto.builder().url("url").build();
 
-        BDDMockito.given(jobQueryRepository.getJobDataOnThisMonth()).willReturn(List.of(dto));
+        BDDMockito.given(jobQueryRepository.getJobDateOn(Date.valueOf("9999-12-31"))).willReturn(List.of(dto));
 
         //when
-        List<JobInfoDto> response = calendarService.findCalendarData();
+        List<JobInfoDto> response = calendarService.findCalendarData(Date.valueOf("9999-12-31"));
 
         //then
         Assertions.assertThat(response.size()).isEqualTo(1);

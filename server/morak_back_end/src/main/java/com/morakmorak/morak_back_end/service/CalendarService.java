@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -14,7 +16,7 @@ public class CalendarService {
     private final JobQueryRepository jobQueryRepository;
 
     @Transactional(readOnly = true)
-    public List<JobInfoDto> findCalendarData() {
-        return jobQueryRepository.getJobDataOnThisMonth();
+    public List<JobInfoDto> findCalendarData(Date date) {
+        return jobQueryRepository.getJobDateOn(date);
     }
 }
