@@ -109,7 +109,8 @@ public class JobQueryRepositoryTest {
         entityManager.persist(job6);
 
         //when
-        List<JobInfoDto> jobInfoDtos = jobQueryRepository.getJobDataOnThisMonth();
+        Date date = Date.valueOf(LocalDate.now());
+        List<JobInfoDto> jobInfoDtos = jobQueryRepository.getJobDateOn(date);
 
         //then
         Assertions.assertThat(jobInfoDtos.get(0).getStartDate()).isEqualTo(firstDaysOfThisMonth);
@@ -147,7 +148,7 @@ public class JobQueryRepositoryTest {
         entityManager.persist(job2);
 
         //when
-        List<JobInfoDto> jobInfoDtos = jobQueryRepository.getJobDataOnThisMonth();
+        List<JobInfoDto> jobInfoDtos = jobQueryRepository.getJobDateOn(Date.valueOf("9999-12-31"));
 
         //then
         Assertions.assertThat(jobInfoDtos.isEmpty()).isTrue();

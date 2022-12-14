@@ -112,7 +112,8 @@ public class CalendarTest {
         entityManager.persist(job6);
 
         //when
-        ResultActions perform = mockMvc.perform(get("/calendars")
+        String date = LocalDate.now().toString();
+        ResultActions perform = mockMvc.perform(get("/calendars/{date}", date)
                 .header("User-Agent", "Mozilla 5.0"));
 
         //then
@@ -151,7 +152,8 @@ public class CalendarTest {
         entityManager.persist(job2);
 
         //when
-        ResultActions perform = mockMvc.perform(get("/calendars")
+        String date = LocalDate.now().toString();
+        ResultActions perform = mockMvc.perform(get("/calendars/{date}", date)
                 .header("User-Agent", "Mozilla 5.0"));
 
         //then
