@@ -17,9 +17,9 @@ import static com.morakmorak.morak_back_end.entity.QJob.*;
 public class JobQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<JobInfoDto> getJobDataOnThisMonth() {
-        LocalDate startDayOfMonth = LocalDate.now().withDayOfMonth(1);
-        LocalDate lastDayOfMonth = LocalDate.now().plusMonths(1).withDayOfMonth(1).minusDays(1);
+    public List<JobInfoDto> getJobDateOn(Date date) {
+        LocalDate startDayOfMonth = date.toLocalDate().withDayOfMonth(1);
+        LocalDate lastDayOfMonth = date.toLocalDate().plusMonths(1).withDayOfMonth(1).minusDays(1);
 
         return jpaQueryFactory.select(new QJobInfoDto(
                 job.id, job.name, job.state, job.careerRequirement, job.url, job.startDate, job.endDate
