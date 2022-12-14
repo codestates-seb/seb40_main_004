@@ -17,7 +17,7 @@ import { client } from '../../libs/client';
 import { BtnBookmark } from './BtnBookmark';
 import { isArticleEditAtom } from '../../atomsHJ';
 import { ArticleDetail } from '../../libs/interfaces';
-import { useFetch } from '../../libs/useFetchSWR';
+import { useEffect, useState } from 'react';
 
 type QuestionContentProps = {
   articleId: string;
@@ -32,7 +32,15 @@ export const QuestionContent = ({
   const isLogin = useRecoilValue(isLoginAtom);
   const setArticleEdit = useSetRecoilState(isArticleEditAtom);
 
-  const { data } = useFetch(`/api/articles/${articleId}`);
+  // 좋아요, 북마크 여부 확인을 위한 데이터 요청
+  const [articleData, setArticleData] = useState<ArticleDetail>();
+  useEffect(() => {
+    async function getLikeBookmark() {
+      const data = await client.get(`/api/articles/${articleId}`);
+      setArticleData(data.data);
+    }
+    getLikeBookmark();
+  }, []);
 
   let currUserId: any = '';
   if (typeof window !== 'undefined') {
@@ -88,10 +96,13 @@ export const QuestionContent = ({
               </article>
             </section>
             <div className="flex space-x-1">
-              {data && (
+              {articleData && (
                 <>
-                  <BtnLike isLiked={data.isLiked} likes={data.likes} />
-                  <BtnBookmark isBookmarked={data.isBookmarked} />
+                  <BtnLike
+                    isLiked={articleData.isLiked}
+                    likes={article.likes}
+                  />
+                  <BtnBookmark isBookmarked={articleData.isBookmarked} />
                 </>
               )}
             </div>
