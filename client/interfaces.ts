@@ -57,6 +57,7 @@ export interface userDashboard {
         commentCount: number;
         total: number;
         createdDate: string;
+        createdNumber: number;
       }[]
     | []; // 수정 필요
   reviews:
