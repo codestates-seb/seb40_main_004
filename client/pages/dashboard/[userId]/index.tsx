@@ -83,7 +83,7 @@ const Dashboard: NextPage = () => {
           <AsideBot />
         </div>
         <div className="w-full">
-          {/* <Grass /> */}
+          <Grass />
           <div className="mb-8 flex items-baseline">
             <div className="border-b-2 border-main-orange py-4 pr-6">
               <Link href={`/dashboard/${router.query.userId}`}>
