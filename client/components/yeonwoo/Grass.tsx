@@ -8,9 +8,6 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { userDashboardAtom } from '../../atomsYW';
 
-// y 축은 7 로 나눈 나머지
-// x 축은 7 로 나눈 몫 올림 - 1
-
 const arrX: number[] = [];
 const arrY: number[] = [];
 const arrCreatedNumber: number[][] = [[-1, -1]];
@@ -41,7 +38,6 @@ interface IActicity {
 export const Grass = () => {
   const userDashboard = useRecoilValue(userDashboardAtom);
   const [activity, setActivity] = useState<IActicity | null>(null);
-  const [rendering, setRendering] = useState(false);
 
   useEffect(() => {
     const total = userDashboard.activities
