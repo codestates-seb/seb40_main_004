@@ -61,7 +61,7 @@ export const Grass = () => {
       createdDate: '2022',
       createdNumber: 0,
     });
-  }, []);
+  }, [userDashboard]);
 
   const onClick = (activity: IActicity | undefined) => {
     if (activity) setActivity(activity);
