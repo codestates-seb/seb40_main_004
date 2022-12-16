@@ -42,7 +42,6 @@ export const SignUpForm = () => {
     nickname,
   }) => {
     if (password !== confirmPassword) {
-      console.log('비밀번호 다름');
       setError(
         'confirmPassword',
         { message: '비밀번호가 맞지 않습니다.' },
