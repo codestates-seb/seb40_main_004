@@ -29,12 +29,15 @@ export const SearchBar = () => {
   };
   return (
     <form className="w-full" onSubmit={handleSubmit(onValid)}>
+      <label htmlFor="검색" className="mr-3">
+        검색
+      </label>
       <input
         type="text"
-        className="w-[90%] border border-solid border-font-gray rounded-full pl-2"
+        className="w-[80%] border border-solid border-font-gray rounded-full pl-2"
         {...register('keyword')}
       />
-      <button>
+      <button type="button">
         <FontAwesomeIcon
           icon={faMagnifyingGlass}
           className="relative -left-6"
