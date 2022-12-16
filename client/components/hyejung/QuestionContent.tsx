@@ -17,7 +17,7 @@ import { client } from '../../libs/client';
 import { BtnBookmark } from './BtnBookmark';
 import { isArticleEditAtom } from '../../atomsHJ';
 import { ArticleDetail } from '../../libs/interfaces';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 type QuestionContentProps = {
   articleId: string;
@@ -31,6 +31,16 @@ export const QuestionContent = ({
   const router = useRouter();
   const isLogin = useRecoilValue(isLoginAtom);
   const setArticleEdit = useSetRecoilState(isArticleEditAtom);
+
+  // 좋아요, 북마크 여부 확인을 위한 데이터 요청
+  const [articleData, setArticleData] = useState<ArticleDetail>();
+  useEffect(() => {
+    async function getLikeBookmark() {
+      const data = await client.get(`/api/articles/${articleId}`);
+      setArticleData(data.data);
+    }
+    getLikeBookmark();
+  }, []);
 
   let currUserId: any = '';
   if (typeof window !== 'undefined') {
@@ -86,8 +96,15 @@ export const QuestionContent = ({
               </article>
             </section>
             <div className="flex space-x-1">
-              <BtnLike isLiked={article.isLiked} likes={article.likes} />
-              <BtnBookmark isBookmarked={article.isBookmarked} />
+              {articleData && (
+                <>
+                  <BtnLike
+                    isLiked={articleData.isLiked}
+                    likes={article.likes}
+                  />
+                  <BtnBookmark isBookmarked={articleData.isBookmarked} />
+                </>
+              )}
             </div>
           </div>
         </section>
