@@ -46,7 +46,7 @@ export const HallOfFame = () => {
                         src="/favicon.ico"
                         width="45px"
                         height="45px"
-                        alt="rank"
+                        alt="avatar"
                       />
                     ) : (
                       <Image
@@ -55,7 +55,7 @@ export const HallOfFame = () => {
                         }
                         width="45px"
                         height="45px"
-                        alt="rank"
+                        alt="avatar"
                         onError={() =>
                           setIsErrorAvatarId((prev) => [
                             ...prev,
