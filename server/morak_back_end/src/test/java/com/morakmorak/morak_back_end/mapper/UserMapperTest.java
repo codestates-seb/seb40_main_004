@@ -119,7 +119,7 @@ class UserMapperTest {
                 .build();
 
         Article article = Article.builder().user(user).build();
-        article.injectUserForMapping(user);
+        article.injectTo(user);
 
         Comment comment = Comment.builder().user(user).article(article).build();
         comment.mapArticleAndUser();
