@@ -35,9 +35,9 @@ public class Notification extends BaseTime {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Notification of(String messsage, String uri, User receiver) {
+    public static Notification of(String message, String uri, User receiver) {
         return Notification.builder()
-                .message(messsage)
+                .message(message)
                 .uri(uri)
                 .user(receiver)
                 .build();

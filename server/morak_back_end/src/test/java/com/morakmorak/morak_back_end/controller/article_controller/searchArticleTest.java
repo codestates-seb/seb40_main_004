@@ -125,7 +125,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -300,7 +300,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -421,7 +421,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -597,7 +597,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -723,7 +723,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -900,7 +900,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -1023,7 +1023,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -1200,7 +1200,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -1323,7 +1323,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -1501,7 +1501,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -1627,7 +1627,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -1804,7 +1804,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -1981,7 +1981,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -2158,7 +2158,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -2335,7 +2335,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -2512,7 +2512,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -2689,7 +2689,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -2866,7 +2866,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -3043,7 +3043,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -3220,7 +3220,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -3399,7 +3399,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -3576,7 +3576,7 @@ public class searchArticleTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -3756,7 +3756,7 @@ public class searchArticleTest {
 
         info.getArticleList().add(article);
 
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -3931,7 +3931,7 @@ public class searchArticleTest {
 
         info.getArticleList().add(article);
 
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
@@ -4086,7 +4086,7 @@ public class searchArticleTest {
 
         info.getArticleList().add(article);
 
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
 
         List<Article> articles = new ArrayList<>();
         articles.add(article);
