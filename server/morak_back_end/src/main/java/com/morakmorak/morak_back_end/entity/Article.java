@@ -134,32 +134,25 @@ public class Article extends BaseTime {
         this.answers.add(answer);
         answer.isMappedWith(this);
     }
+
     public Boolean isClosedArticle() {
-        if (this.isClosed) {
-            return true;
-        }return false;
+        return this.isClosed;
     }
 
     public Boolean isQuestion() {
-        if (this.category.getName() == CategoryName.QNA) {
-            return true;
-        }return false;
+        return this.category.getName() == CategoryName.QNA;
     }
 
     public Boolean statusIsPosting() {
-        if (this.articleStatus == ArticleStatus.POSTING) {
-            return true;
-        }
-        return false;
+        return this.articleStatus == ArticleStatus.POSTING;
     }
 
     public void addReview(Review review) {
         this.reviews.add(review);
     }
 
-
-    public Article addClicks() {
-        this.clicks = this.getClicks() + 1;
+    public Article plusClicks() {
+        this.clicks++;
         return this;
     }
 }
