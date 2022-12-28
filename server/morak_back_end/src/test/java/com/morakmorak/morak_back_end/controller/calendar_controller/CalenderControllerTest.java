@@ -71,9 +71,9 @@ public class CalenderControllerTest {
                 .build();
 
         List<JobInfoDto> response = List.of(dto, dto);
-        BDDMockito.given(calendarService.findCalendarData()).willReturn(response);
+        BDDMockito.given(calendarService.findCalendarData(Date.valueOf("9999-12-31"))).willReturn(response);
         //when
-        ResultActions perform = mockMvc.perform(get("/calendars"));
+        ResultActions perform = mockMvc.perform(get("/calendars/9999-12-31"));
 
         //then
         perform.andExpect(status().isOk())

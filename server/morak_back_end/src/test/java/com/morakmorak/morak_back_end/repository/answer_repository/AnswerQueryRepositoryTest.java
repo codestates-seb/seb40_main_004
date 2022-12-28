@@ -62,13 +62,13 @@ public class AnswerQueryRepositoryTest {
         user_article = Article.builder().user(user).isClosed(true).build();
 
         user_answer = Answer.builder().user(user).isPicked(false).article(user_article).build();
-        user_answer.injectUser(user);
+        user_answer.injectTo(user);
 
         other_answer = Answer.builder().user(other).isPicked(false).article(user_article).build();
-        other_answer.injectUser(other);
+        other_answer.injectTo(other);
 
         picked_answer = Answer.builder().user(picked_user).isPicked(true).article(user_article).build();
-        picked_answer.injectUser(picked_user);
+        picked_answer.injectTo(picked_user);
 
         user_article.getAnswers().add(user_answer);
         user_article.getAnswers().add(other_answer);

@@ -49,8 +49,8 @@ public class ReviewService {
 
             injectBadgesOnReview(reviewWithoutBadges, badgeDtoList);
             donatePoint(verifiedRequestUser, receiver, reviewWithoutBadges.getPoint());
-            reviewWithoutBadges.mapAnswer(verifiedAnswer).mapArticle(verifiedArticle).changeAnswerArticleStatus();
-            Review reviewNotSaved = reviewWithoutBadges.addSender(verifiedRequestUser).addReciever(receiver);
+            reviewWithoutBadges.injectTo(verifiedAnswer).injectTo(verifiedArticle).changeAnswerArticleStatus();
+            Review reviewNotSaved = reviewWithoutBadges.addSender(verifiedRequestUser).addReceiver(receiver);
 
             NotificationGenerator generator = NotificationGenerator.of(reviewNotSaved);
             Notification notification = generator.generateNotification();
@@ -67,7 +67,7 @@ public class ReviewService {
         checkRemainingPoints(verifiedSender, reviewWithoutBadges.getPoint());
         donatePoint(verifiedSender, verifiedReceiver, reviewWithoutBadges.getPoint());;
 
-        Review reviewNotSaved = reviewWithoutBadges.addSender(verifiedSender).addReciever(verifiedReceiver);
+        Review reviewNotSaved = reviewWithoutBadges.addSender(verifiedSender).addReceiver(verifiedReceiver);
         injectBadgesOnReview(reviewNotSaved, badgeDtoList);
 
         NotificationGenerator generator = NotificationGenerator.of(reviewNotSaved);

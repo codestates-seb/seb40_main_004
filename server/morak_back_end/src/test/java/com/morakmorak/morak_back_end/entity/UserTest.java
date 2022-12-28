@@ -2,7 +2,6 @@ package com.morakmorak.morak_back_end.entity;
 
 import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -116,7 +115,7 @@ class UserTest {
         Avatar avatar = Avatar.builder().remotePath(CONTENT1).build();
 
         //when
-        user.injectAvatar(avatar);
+        user.injectTo(avatar);
 
         //then
         assertThat(user.getAvatar().getRemotePath()).isEqualTo(CONTENT1);
@@ -145,7 +144,7 @@ class UserTest {
         given(pointCalculator.calculatePaymentPoint(article)).willReturn(10);
 
         //when
-        user.addPoint(article, pointCalculator);
+        user.plusPoint(article, pointCalculator);
 
         //then
         assertThat(user.getPoint()).isEqualTo(10);
@@ -331,7 +330,7 @@ class UserTest {
         given(pointCalculator.calculatePaymentPoint(article)).willReturn(49000);
 
         //when
-        user.addPoint(article, pointCalculator);
+        user.plusPoint(article, pointCalculator);
 
         //then
         assertThat(user.getGrade()).isEqualTo(MORAKMORAK);

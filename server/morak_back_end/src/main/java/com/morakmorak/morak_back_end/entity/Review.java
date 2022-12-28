@@ -52,21 +52,21 @@ public class Review extends BaseTime {
         this.sender.getWrittenReviews().add(this);
         return this;
     }
-    public Review addReciever(User user) {
+    public Review addReceiver(User user) {
         this.receiver = user;
         this.receiver.getReceivedReviews().add(this);
         return this;
     }
 
-    public Review mapAnswer(Answer verifiedAnswer) {
+    public Review injectTo(Answer verifiedAnswer) {
         this.answer = verifiedAnswer;
         this.answer.injectReview(this);
         return this;
     }
 
-    public Review mapArticle(Article verifiedArticle) {
+    public Review injectTo(Article verifiedArticle) {
         this.article = verifiedArticle;
-        this.article.injectReview(this);
+        this.article.addReview(this);
         return this;
     }
     public Review changeAnswerArticleStatus() {

@@ -1,16 +1,8 @@
 package com.morakmorak.morak_back_end.Integration.user;
 
-import com.morakmorak.morak_back_end.config.RedisConfig;
 import com.morakmorak.morak_back_end.entity.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.test.web.servlet.ResultActions;
-
-import java.util.Optional;
 
 import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME1;
 import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME2;
@@ -18,7 +10,6 @@ import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
 public class getUserRankTest extends UserTest {
@@ -33,14 +24,14 @@ public class getUserRankTest extends UserTest {
         Article article_user1 = Article.builder().user(user).build();
         Article article_user2 = Article.builder().user(user).build();
 
-        article_user1.injectUserForMapping(user);
-        article_user2.injectUserForMapping(user);
+        article_user1.injectTo(user);
+        article_user2.injectTo(user);
 
         Article article_other1 = Article.builder().user(other).build();
-        article_other1.injectUserForMapping(other);
+        article_other1.injectTo(other);
 
         Answer answer_other1 = Answer.builder().user(other).article(article_user1).build();
-        answer_other1.injectUser(other);
+        answer_other1.injectTo(other);
 
         ArticleLike articleLike1_user = ArticleLike.builder().article(article_user1).user(other).build();
         ArticleLike articleLike2_user = ArticleLike.builder().article(article_user1).user(other).build();

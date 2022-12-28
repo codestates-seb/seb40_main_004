@@ -68,7 +68,7 @@ public class ArticleService {
 
         Article dbArticle = articleRepository.save(reBuildArticle);
 
-        dbUser.addPoint(dbArticle, pointCalculator);
+        dbUser.plusPoint(dbArticle, pointCalculator);
 
         return articleMapper.articleToResponseSimpleArticle(dbArticle.getId());
     }
@@ -78,7 +78,7 @@ public class ArticleService {
         Article dbArticle = findArticleRelationWithUser(article.getId());
         checkArticleStatus(dbArticle);
         checkArticlePerMission(dbArticle, userInfo);
-        dbArticle.updateArticleElement(article);
+        dbArticle.changeArticle(article);
 
         deleteOriginTagInArticle(dbArticle);
         bridgeFileToArticle(article, dbArticle);
@@ -90,7 +90,7 @@ public class ArticleService {
     private void deleteOriginTagInArticle(Article dbArticle) {
         dbArticle.getArticleTags().stream()
                 .forEach(articleTag -> {
-                    articleTag.removeArticleAndTag(dbArticle, articleTag.getTag());
+                    articleTag.removeTo(dbArticle, articleTag.getTag());
                     articleTagRepository.delete(articleTag);
                 });
     }
@@ -98,7 +98,7 @@ public class ArticleService {
     private void bridgeFileToArticle(Article article, Article reBuildArticle) {
         article.getFiles().stream().forEach(file -> {
             File dbFile = fileService.findVerifiedFileById(file.getId());
-            dbFile.injectArticleForFile(reBuildArticle);
+            dbFile.injectTo(reBuildArticle);
         });
     }
 
@@ -171,7 +171,7 @@ public class ArticleService {
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
         Article article = findVerifiedArticle(articleId);
         checkArticleStatus(article);
-        Article dbArticle = article.addClicks();
+        Article dbArticle = article.plusClicks();
 
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
@@ -242,7 +242,7 @@ public class ArticleService {
                         notificationRepository.save(notification);
                     }
 
-                    dbUser.addPoint(articleLike, pointCalculator);
+                    dbUser.plusPoint(articleLike, pointCalculator);
                 }
         );
 
@@ -266,7 +266,7 @@ public class ArticleService {
         } else {
             throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
         }
-        reportArticle.injectMappingUserAndArticle(dbUser, dbArticle);
+        reportArticle.injectTo(dbUser, dbArticle);
         dbArticle.getReports().add(reportArticle);
         dbUser.getReports().add(reportArticle);
 

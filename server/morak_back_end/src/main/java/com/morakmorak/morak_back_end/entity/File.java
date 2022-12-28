@@ -36,11 +36,12 @@ public class File extends BaseTime{
         this.remotePath = remotePath;
     }
 
-    public void injectArticleForFile(Article article) {
+    public void injectTo(Article article) {
         this.article = article;
         article.getFiles().add(this);
     }
-    public void attachToAnswer(Answer answer) {
+
+    public void injectTo(Answer answer) {
         this.answer = answer;
         answer.getFiles().add(this);
     }
