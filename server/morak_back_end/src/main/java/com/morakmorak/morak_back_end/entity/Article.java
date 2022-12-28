@@ -14,7 +14,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Getter
@@ -101,7 +100,7 @@ public class Article extends BaseTime {
     private List<Answer> answers = new ArrayList<>();
 
 
-    public void injectUserForMapping(User user) {
+    public void injectTo(User user) {
         if (this.user != null) {
             this.user.getArticles().remove(this);
         }
@@ -110,21 +109,13 @@ public class Article extends BaseTime {
         user.getArticles().add(this);
     }
 
-    public void injectCategoryForMapping(Category category) {
-        this.category = category;
-        if (!category.getArticleList().contains(this)) {
-            category.getArticleList().add(this);
-        }
-    }
-
-    public void updateArticleElement(Article article) {
+    public void changeArticle(Article article) {
         if (!article.getTitle().isEmpty()) {
             this.title = article.getTitle();
         }
         if (!article.getContent().isEmpty()) {
             this.content = article.getContent();
         }
-
         if (article.getThumbnail() != null) {
             this.thumbnail = article.getThumbnail();
         }
@@ -162,7 +153,7 @@ public class Article extends BaseTime {
         return false;
     }
 
-    public void injectReview(Review review) {
+    public void addReview(Review review) {
         this.reviews.add(review);
     }
 
