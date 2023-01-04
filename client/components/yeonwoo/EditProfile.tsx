@@ -12,6 +12,7 @@ import { useSetRecoilState } from 'recoil';
 import { dataHeaderAtom, isLoginAtom, renderingAtom } from '../../atomsYW';
 import { userDashboard } from '../../interfaces';
 import { client } from '../../libs/client';
+import { inspectNicknameDuplication } from '../../libs/inspectNicknameDuplication';
 
 interface IChangePassword {
   originalPassword: string;
@@ -148,6 +149,10 @@ export const EditProfileComponent = () => {
       }
     }
   };
+
+  const onBlurNickname = () => {
+    inspectNicknameDuplication(userData?.nickname ?? '', nickname);
+  };
   return (
     <>
       {pathname === '/edit-profile' ? (
@@ -164,6 +169,7 @@ export const EditProfileComponent = () => {
               className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
+              onBlur={onBlurNickname}
             />
             <label htmlFor="message">메세지</label>
             <input

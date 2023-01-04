@@ -9,10 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isLoginAtom, renderingAtom, userDashboardAtom } from '../../atomsYW';
 import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 import { client } from '../../libs/client';
+import { inspectNicknameDuplication } from '../../libs/inspectNicknameDuplication';
 import { uploadImg } from '../../libs/uploadS3';
 
 export const AsideTop = () => {
@@ -42,13 +44,13 @@ export const AsideTop = () => {
   };
   const router = useRouter();
   const onClickCheer = () => {
-    isLogin ? router.push('/review') : alert('로그인이 필요합니다.');
+    isLogin ? router.push('/review') : toast.error('로그인이 필요합니다.');
   };
   const onSubmitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const reg = new RegExp('^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{0,6}$');
     if (!reg.test(editNickname)) {
-      alert('닉네임은 최소 1글자, 최대 7글자, 자음, 모음 불가입니다');
+      toast.error('닉네임은 최소 1글자, 최대 7글자, 자음, 모음 불가입니다');
     } else {
       try {
         await client.patch('/api/users/profiles', {
@@ -62,7 +64,7 @@ export const AsideTop = () => {
         setIsClicked(false);
         setRenderingHeader((prev) => !prev);
       } catch (error) {
-        alert('에러가 발생했습니다 다시 시도해주세요');
+        toast.error('에러가 발생했습니다 다시 시도해주세요');
         console.error(error);
       }
     }
@@ -77,10 +79,10 @@ export const AsideTop = () => {
       const file = files && files[0];
       await uploadImg(res.data.preSignedUrl, file);
       setIsClicked(false);
-      alert('프로필이 정상적으로 변경되었습니다!');
+      toast.error('프로필이 정상적으로 변경되었습니다!');
       setRenderingHeader((prev) => !prev);
     } catch (error) {
-      alert('오류가 발생했습니다. 다시 시도해주세요!');
+      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
     }
   };
 
@@ -89,13 +91,18 @@ export const AsideTop = () => {
       await client.delete('/api/users/profiles/avatars');
       localStorage.removeItem('avatarPath');
       setIsClicked(false);
-      alert('프로필이 정상적으로 삭제되었습니다!');
+      toast.error('프로필이 정상적으로 삭제되었습니다!');
       setRenderingHeader((prev) => !prev);
     } catch (error) {
-      alert('오류가 발생했습니다. 다시 시도해주세요!');
+      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
       console.error(error);
     }
   };
+
+  const onBlurNickname = () => {
+    inspectNicknameDuplication(userDashboard.nickname, editNickname);
+  };
+
   return (
     <>
       {isEdit ? (
@@ -150,9 +157,10 @@ export const AsideTop = () => {
               <div className="flex justify-between items-center">
                 <input
                   className="text-xl font-bold border border-main-gray rounded-full pl-4 w-[148px]"
+                  placeholder="닉네임"
                   value={editNickname}
                   onChange={(e) => setEditNickname(e.target.value)}
-                  placeholder="닉네임"
+                  onBlur={onBlurNickname}
                 />
               </div>
               <select

@@ -1,9 +1,8 @@
 import axios from 'axios';
+import { getAccessToken, getRefreshToken, setTokens } from './tokens';
 
-let accessToken: any = '';
-if (typeof window !== 'undefined') {
-  accessToken = localStorage.getItem('accessToken');
-}
+const accessToken = getAccessToken();
+const refreshToken = getRefreshToken();
 
 export const refreshAccessToken = async () => {
   return axios
@@ -12,7 +11,7 @@ export const refreshAccessToken = async () => {
       {},
       {
         headers: {
-          RefreshToken: localStorage.getItem('refreshToken'),
+          RefreshToken: refreshToken,
           'ngrok-skip-browser-warning': '111',
         },
       },
@@ -20,14 +19,18 @@ export const refreshAccessToken = async () => {
     .then((res) => {
       const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
         res.data;
-      localStorage.setItem('accessToken', newAccessToken);
-      localStorage.setItem('refreshToken', newRefreshToken);
+      setTokens(newAccessToken, newRefreshToken);
 
       return { newAccessToken, newRefreshToken };
     })
     .catch((err) => {
-      if (err.response.status === 404) {
-        console.log(404);
+      // 리프레시 토큰이 만료가 된 경우
+      if (err.response.status === 401) {
+        localStorage.clear();
+        window.location.href = '/login';
+      }
+      // 중복 요청으로 갱신 이전 리프레시 토큰이 넘어가는 경우
+      else if (err.response.status === 404) {
         window.location.reload();
       }
     });
@@ -87,5 +90,4 @@ client.interceptors.response.use(
 1. 같은 페이지 내에서 새로고침을 할 때는 401 에러가 뜨면 바로 갱신이 되어서 put 요청에서 404 에러가 발생하지 않는다.
 2. 다른 페이지로 이동을 하게되면 401 에러가 발생해서 put 요청이 들어가는데, 이 때 404 에러가 발생한다.
 3. 그러면 put 요청이 발생했는데 404 에러가 떴다 => 그러면 메시지를 띄우고 새로고침을 해버리자.
-
 */

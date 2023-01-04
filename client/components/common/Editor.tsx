@@ -13,7 +13,9 @@ import {
   useRef,
   useState,
 } from 'react';
+import { confirmAlert } from 'react-confirm-alert';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { isArticleEditAtom } from '../../atomsHJ';
 import { categoryAtom } from '../../atomsHS';
@@ -125,7 +127,7 @@ export const Editor = () => {
           })
           .catch((error) => {
             console.error('error', error);
-            alert('게시글 수정에 실패했습니다...🥲');
+            toast.error('게시글 수정에 실패했습니다...🥲');
             console.log(
               `title:${title}, content:${content}, fileId:${fileIdList}, tags:${tags}`,
             );
@@ -143,8 +145,11 @@ export const Editor = () => {
             setIsSubmitting(false);
             router.push(`questions/${res.data.articleId}`);
           })
+
           .catch(() => {
-            alert('게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!');
+            toast.error(
+              '게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!',
+            );
           });
       }
     }
@@ -166,15 +171,27 @@ export const Editor = () => {
   };
 
   const handleCancelClick = () => {
-    if (confirm('질문 작성을 취소하시겠어요?')) {
-      setIsArticleEdit({
-        isArticleEdit: false,
-        title: '',
-        content: '',
-        articleId: '',
-      });
-      router.push('/questions');
-    }
+    confirmAlert({
+      message: '질문 작성을 취소하시겠어요?',
+      buttons: [
+        {
+          label: 'YES',
+          onClick: () => {
+            setIsArticleEdit({
+              isArticleEdit: false,
+              title: '',
+              content: '',
+              articleId: '',
+            });
+            toast.success('글 작성이 취소되었습니다.');
+            router.push('/questions');
+          },
+        },
+        {
+          label: 'NO',
+        },
+      ],
+    });
   };
 
   const quillRef = useRef<any>(null);
@@ -243,7 +260,6 @@ export const Editor = () => {
 
   return (
     <form onSubmit={handleSubmit(onValid, onInvalid)} className="h-full p-8">
-      {/* 제목 */}
       <section className="space-y-3 pb-5">
         <article className="flex items-baseline space-x-3">
           <label htmlFor="제목" className="font-bold flex">
@@ -265,7 +281,6 @@ export const Editor = () => {
           placeholder="제목을 입력해주세요!"
         />
       </section>
-      {/* 본문 */}
       <section className="space-y-3 pb-5 relative">
         <article className="flex items-baseline space-x-3">
           <label htmlFor="본문" className="font-bold flex">

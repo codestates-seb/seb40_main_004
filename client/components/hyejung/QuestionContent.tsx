@@ -1,10 +1,9 @@
 /*
  * 책임 작성자: 박혜정
  * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-30
+ * 최근 수정일: 2022-12-09
  */
 
-import { QuestionTitle } from './QuestionTitle';
 import { CreatedDate } from './CreatedDate';
 import { CommentContainer } from './CommentContainer';
 import { TagList } from './TagList';
@@ -15,25 +14,40 @@ import { isLoginAtom } from '../../atomsYW';
 import { BtnLike } from './BtnLike';
 import { QuestionMainText } from './QuestionMainText';
 import { client } from '../../libs/client';
-import { useFetch } from '../../libs/useFetchSWR';
 import { BtnBookmark } from './BtnBookmark';
 import { isArticleEditAtom } from '../../atomsHJ';
+import { ArticleDetail } from '../../libs/interfaces';
+import { useEffect, useState } from 'react';
 
-export const QuestionContent = () => {
+type QuestionContentProps = {
+  articleId: string;
+  article: ArticleDetail;
+};
+
+export const QuestionContent = ({
+  articleId,
+  article,
+}: QuestionContentProps) => {
   const router = useRouter();
-  const { articleId } = router.query;
-
   const isLogin = useRecoilValue(isLoginAtom);
   const setArticleEdit = useSetRecoilState(isArticleEditAtom);
 
-  const { data: article, isLoading } = useFetch(`/api/articles/${articleId}`);
+  // 좋아요, 북마크 여부 확인을 위한 데이터 요청
+  const [articleData, setArticleData] = useState<ArticleDetail>();
+  useEffect(() => {
+    async function getLikeBookmark() {
+      const data = await client.get(`/api/articles/${articleId}`);
+      setArticleData(data.data);
+    }
+    getLikeBookmark();
+  }, []);
 
   let currUserId: any = '';
   if (typeof window !== 'undefined') {
     currUserId = localStorage.getItem('userId');
   }
-  const authorId = isLoading || article.userInfo.userId;
-  const isClosed = isLoading || article.isClosed;
+  const authorId = article.userInfo.userId;
+  const isClosed = article.isClosed;
 
   const onDelete = () => {
     if (confirm('게시글을 삭제하시겠습니까...?')) {
@@ -62,49 +76,57 @@ export const QuestionContent = () => {
 
   return (
     <main className="flex flex-col w-full pb-6 border-b">
-      {!isLoading ? (
-        <>
-          <section className="flex flex-col space-y-4 border-b pb-3">
-            <QuestionTitle title={article.title} />
-            <div className="flex justify-between items-center">
-              <section className="flex w-full justify-between">
-                <article className="space-x-3 flex items-end">
-                  <UserNickname
-                    nickname={article.userInfo.nickname}
-                    userId={article.userInfo.userId}
-                    grade={article.userInfo.grade}
+      <>
+        <section className="flex flex-col space-y-4 border-b pb-3">
+          <section className="flex w-full text-2xl sm:text-3xl space-x-2">
+            {article.category === 'QNA' && (
+              <h1 className="text-main-yellow font-semibold">Q.</h1>
+            )}
+            <h1>{article.title}</h1>
+          </section>
+          <div className="flex justify-between items-center">
+            <section className="flex w-full justify-between">
+              <article className="space-x-3 flex items-end">
+                <UserNickname
+                  nickname={article.userInfo.nickname}
+                  userId={article.userInfo.userId}
+                  grade={article.userInfo.grade}
+                />
+                <CreatedDate createdAt={article.createdAt} />
+              </article>
+            </section>
+            <div className="flex space-x-1">
+              {articleData && (
+                <>
+                  <BtnLike
+                    isLiked={articleData.isLiked}
+                    likes={article.likes}
                   />
-                  <CreatedDate createdAt={article.createdAt} />
-                </article>
-              </section>
-              <div className="flex space-x-1">
-                <BtnLike isLiked={article.isLiked} likes={article.likes} />
-                <BtnBookmark isBookmarked={article.isBookmarked} />
-              </div>
+                  <BtnBookmark isBookmarked={articleData.isBookmarked} />
+                </>
+              )}
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section className="p-6">
-            <QuestionMainText>{article.content}</QuestionMainText>
-            <div className="flex justify-between items-end space-y-3 sm:space-y-0 py-4 flex-col sm:flex-row">
-              <TagList tags={article.tags} />
+        <section className="p-6">
+          <QuestionMainText>{article.content}</QuestionMainText>
+          <div className="flex justify-between items-end space-y-3 sm:space-y-0 py-4 flex-col sm:flex-row">
+            <TagList tags={article.tags} />
 
-              {isLogin && !isClosed && authorId.toString() === currUserId ? (
-                <article className="space-x-2 text-sm w-[80px] flex justify-end">
-                  <button onClick={onEdit}>수정</button>
-                  <button onClick={onDelete}>삭제</button>
-                </article>
-              ) : null}
-            </div>
-          </section>
+            {isLogin && !isClosed && authorId.toString() === currUserId && (
+              <article className="space-x-2 text-sm w-[80px] flex justify-end">
+                <button onClick={onEdit}>수정</button>
+                <button onClick={onDelete}>삭제</button>
+              </article>
+            )}
+          </div>
+        </section>
 
-          <section className="space-y-3 border-l pl-4">
-            <CommentContainer />
-          </section>
-        </>
-      ) : (
-        <div>Loading...</div>
-      )}
+        <section className="space-y-3 border-l pl-4">
+          <CommentContainer />
+        </section>
+      </>
     </main>
   );
 };
