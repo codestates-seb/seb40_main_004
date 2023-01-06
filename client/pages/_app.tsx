@@ -25,10 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         ></meta>
 
         {/* Facebook Meta Tags  */}
-        <meta
-          property="og:url"
-          content="https://seb40-main-004.vercel.app/"
-        ></meta>
+        <meta property="og:url" content="morakmorak.vercel.app/"></meta>
         <meta property="og:type" content="website"></meta>
         <meta property="og:title" content="모락모락"></meta>
         <meta
@@ -39,14 +36,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 
         {/* Twitter Meta Tags  */}
         <meta name="twitter:card" content="../public/morak-main-1.png"></meta>
-        <meta
-          property="twitter:domain"
-          content="seb40-main-004.vercel.app"
-        ></meta>
-        <meta
-          property="twitter:url"
-          content="https://seb40-main-004.vercel.app/"
-        ></meta>
+        <meta property="twitter:domain" content="morakmorak.vercel.app/"></meta>
+        <meta property="twitter:url" content="morakmorak.vercel.app/"></meta>
         <meta name="twitter:title" content="모락모락"></meta>
         <meta
           name="twitter:description"
