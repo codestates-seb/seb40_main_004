@@ -246,7 +246,6 @@ public class ArticleUpdateTest {
         //then
         perform.andExpect(status().isNotFound());
     }
-
     @Test
     @DisplayName("게시글 수정시 존재하지 않는 태그를 작성할 경우 TAG_NOT_FOUND 예외를 던지고 404 에러코드를 반환한다. ")
     public void update_fail2() throws Exception{
@@ -285,15 +284,22 @@ public class ArticleUpdateTest {
     }
 
     @Test
-    @DisplayName("게시글 수정시 유효성 검증에 통과하지 못하면 BAD_REQUEST 예외를 던지고 400 에러코드를 반환한다. ")
+    @DisplayName("게시글 수정시 제목의 길이가 5글자 보다 짧을 경우 유효성 검증에 통과하지 못하면 BAD_REQUEST 예외를 던지고 400 에러코드를 반환한다. ")
     public void update_fail3() throws Exception{
         //given
         Article article = articleRepository.findArticleByContent("콘텐트입니다. 잘부탁드립니다.").orElseThrow(() -> new RuntimeException("뭐지?"));
-
         ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
-
+                .title("안녕")
+                .content("콘텐트입니다. 잘부탁드립니다.")
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(555L).build()))
+                .fileId(List.of(FileDto.RequestFileWithId.builder()
+                        .fileId(1212L).build(), FileDto.RequestFileWithId.builder()
+                        .fileId(12312L).build()))
+                .thumbnail(5555L)
 
                 .build();
+
 
         String content = objectMapper.writeValueAsString(requestUpdateArticle);
         //id
@@ -311,5 +317,72 @@ public class ArticleUpdateTest {
         //then
         perform.andExpect(status().isBadRequest());
     }
+
+    @Test
+    @DisplayName("게시글 수정시 내용의 길이가 5글자 보다 짧을 경우 유효성 검증에 통과하지 못하면 BAD_REQUEST 예외를 던지고 400 에러코드를 반환한다. ")
+    public void update_fail4() throws Exception{
+        //given
+        Article article = articleRepository.findArticleByContent("콘텐트입니다. 잘부탁드립니다.").orElseThrow(() -> new RuntimeException("뭐지?"));
+        ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
+                .title("안녕")
+                .content("콘")
+                .tags(List.of(TagDto.SimpleTag.builder()
+                        .tagId(555L).build()))
+                .fileId(List.of(FileDto.RequestFileWithId.builder()
+                        .fileId(1212L).build(), FileDto.RequestFileWithId.builder()
+                        .fileId(12312L).build()))
+                .thumbnail(5555L)
+
+                .build();
+
+
+        String content = objectMapper.writeValueAsString(requestUpdateArticle);
+        //id
+        Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST,NICKNAME1);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                patch("/articles/" +article.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(JWT_HEADER, accessToken)
+                        .content(content)
+        );
+        //then
+        perform.andExpect(status().isBadRequest());
+    }
+    @Test
+    @DisplayName("게시글 수정시 태그를 보내지 않을경우 유효성 검증에 실패하고 Bad_Request 예외를 던지고 400 에러코드를 반환한다. ")
+    public void update_fail10() throws Exception{
+        //given
+        Article article = articleRepository.findArticleByContent("콘텐트입니다. 잘부탁드립니다.").orElseThrow(() -> new RuntimeException("뭐지?"));
+
+        ArticleDto.RequestUpdateArticle requestUpdateArticle = ArticleDto.RequestUpdateArticle.builder()
+                .title("안녕하세요 새로운 타이틀입니다. 수정부탁드립니다. 타이틀은 신경씁니다.").content("콘텐트입니다. 잘부탁드립니다.")
+                .fileId(List.of(FileDto.RequestFileWithId.builder()
+                        .fileId(5L).build(), FileDto.RequestFileWithId.builder()
+                        .fileId(5L).build()))
+                .thumbnail(5555L)
+                .build();
+
+        String content = objectMapper.writeValueAsString(requestUpdateArticle);
+        //id
+        Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
+
+        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST,NICKNAME1);
+
+        //when
+        ResultActions perform = mockMvc.perform(
+                patch("/articles/"+article.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header(JWT_HEADER, accessToken)
+                        .content(content)
+        );
+
+        //then
+        perform.andExpect(status().isBadRequest());
+    }
+
 }
 

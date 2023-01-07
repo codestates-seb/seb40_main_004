@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.security.filter;
 
 import com.morakmorak.morak_back_end.security.token.JwtAuthenticationToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.security.util.SecurityConstants.JWT_PREFIX;
 
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final AuthenticationManager authenticationManager;
 
@@ -34,10 +36,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         doFilter(request, response, filterChain);
-    }
-
-    private String getToken(String authorizeHeader) {
-        String[] tokenArr = authorizeHeader.split(" ");
-        return tokenArr[1];
     }
 }

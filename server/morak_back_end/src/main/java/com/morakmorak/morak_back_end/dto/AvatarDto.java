@@ -4,13 +4,15 @@ import com.querydsl.core.annotations.QueryProjection;
 import com.morakmorak.morak_back_end.entity.Avatar;
 import lombok.*;
 
+import java.io.Serializable;
+
 public class AvatarDto {
     @Getter
     @Builder
     @ToString
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class SimpleResponse {
+    public static class SimpleResponse implements Serializable {
         private Long avatarId;
         private String filename;
         private String remotePath;

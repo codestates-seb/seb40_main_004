@@ -10,7 +10,7 @@ public enum TagName {
     SPRING("Spring"),
     REACT("react.Js"),
     JAVASCRIPT("javascript"),
-    CPLUSCPLUS("C++"),
+    CPLUSPLUS("C++"),
     CSHOP("C#"),
     NEXT("next.js"),
     NEST("nest.js"),

@@ -66,7 +66,7 @@ class ArticleQueryRepositoryImplTest {
                     .articleLikes(articleLikes)
                     .build();
             info.getArticleList().add(article);
-            articleTagJava.injectMappingForArticleAndTag(article);
+            articleTagJava.injectTo(article);
             em.persist(article);
         }
 
@@ -87,7 +87,7 @@ class ArticleQueryRepositoryImplTest {
                     .articleLikes(articleLikes)
                     .build();
             qna.getArticleList().add(article);
-            articleTagC.injectMappingForArticleAndTag(article);
+            articleTagC.injectTo(article);
             em.persist(article);
         }
 

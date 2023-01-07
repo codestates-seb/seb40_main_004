@@ -19,6 +19,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.morakmorak.morak_back_end.entity.enums.Grade.*;
+import static com.morakmorak.morak_back_end.entity.enums.JobType.DEFAULT;
 import static com.morakmorak.morak_back_end.entity.enums.UserStatus.*;
 
 @Entity
@@ -57,7 +58,8 @@ public class User extends BaseTime {
     private Boolean isJobSeeker;
 
     @Enumerated(EnumType.STRING)
-    private JobType jobType;
+    @Builder.Default
+    private JobType jobType = DEFAULT;
 
     private Boolean gender;
 
@@ -159,11 +161,11 @@ public class User extends BaseTime {
                 .stream().map(e -> e.getRole().getRoleName().toString())
                 .collect(Collectors.toList());
 
-        if (roles.size() == 0) roles = List.of("Role_User");
+        if (roles.size() == 0) roles = List.of("ROLE_USER");
         return roles;
     }
 
-    public void injectAvatar(Avatar avatar) {
+    public void injectTo(Avatar avatar) {
         this.avatar = avatar;
     }
 
@@ -181,7 +183,7 @@ public class User extends BaseTime {
         this.articles.add(article);
     }
 
-    public void addPoint(Object object, PointCalculator pointCalculator) {
+    public void plusPoint(Object object, PointCalculator pointCalculator) {
         this.point += pointCalculator.calculatePaymentPoint(object);
         updateGrade();
     }

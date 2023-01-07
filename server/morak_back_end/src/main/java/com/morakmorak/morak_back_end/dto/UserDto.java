@@ -10,6 +10,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.util.List;
 
 import static com.morakmorak.morak_back_end.dto.DtoValidConstants.INVALID_NICKNAME;
@@ -49,7 +50,7 @@ public class UserDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SimpleEditProfile {
         @NotBlank
-        @Pattern(regexp = "^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{2,16}$", message = INVALID_NICKNAME)// 영문, 숫자, 한글 2자 이상 16자 이하(공백 및 초성, 자음 불가능)
+        @Pattern(regexp = "^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{0,6}$", message = INVALID_NICKNAME)// 영문, 숫자, 한글 2자 이상 16자 이하(공백 및 초성, 자음 불가능)
         private String nickname;
         private String infoMessage;
         private String github;
@@ -62,7 +63,7 @@ public class UserDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ResponseRanking {
+    public static class ResponseRanking implements Serializable {
         private Long userId;
         private String nickname;
         private String infoMessage;

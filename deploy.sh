@@ -40,4 +40,3 @@ cd build/libs
 
 echo "> JAR BUILD"
 sudo nohup java -jar morak_back_end-0.0.1-SNAPSHOT.jar &
-

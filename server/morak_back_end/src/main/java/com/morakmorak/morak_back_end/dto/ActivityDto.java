@@ -49,6 +49,7 @@ public class ActivityDto {
                 Long commentCount;
                 Long total;
                 LocalDate createdDate;
+                Integer createdNumber;
         }
 
         @Getter

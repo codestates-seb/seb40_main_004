@@ -44,8 +44,8 @@ public class Oauth2UserDto {
     private static Oauth2UserDto ofKakao(String usernameAttributeName,
                                          Map<String, Object> attributes) {
         return Oauth2UserDto.builder()
-                .email((String)attributes.get("email"))
-                .picture((String)attributes.get("profile_image_url"))
+                .email((String)((Map)attributes.get("kakao_account")).get("email"))
+                .picture((String)((Map)attributes.get("properties")).get("profile_image"))
                 .provider("kakao")
                 .nameAttributeKey(usernameAttributeName)
                 .build();

@@ -85,29 +85,26 @@ public class Answer extends BaseTime{
             return true;
         }return false;
     }
-
-    public Answer injectUser(User verifiedUser) {
+    public Answer injectTo(User verifiedUser) {
         this.user = verifiedUser;
         verifiedUser.getAnswers().add(this);
         return this;
     }
-    public Answer injectArticle(Article verifiedArticle) {
+    public Answer injectTo(Article verifiedArticle) {
         this.article = verifiedArticle;
         verifiedArticle.getAnswers().add(this);
         return this;
     }
-    public Answer updateAnswer(Answer answerChanges) {
+    public Answer changeAnswer(Answer answerChanges) {
         Optional.ofNullable(answerChanges.getContent())
                 .ifPresent(changedContent-> {
             this.content= changedContent;
         });
         return this;
     }
-
     public boolean hasPermissionWith(User userWhoAccess) {
         return this.user.getId() == userWhoAccess.getId() ? true : false;
     }
-
     public void injectReview(Review newReview) {
         this.review = newReview;
     }

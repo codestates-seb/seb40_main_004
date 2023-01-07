@@ -15,6 +15,7 @@ import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.user.UserQueryRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.morakmorak.morak_back_end.config.CacheCosntant.*;
 import static com.morakmorak.morak_back_end.entity.enums.ActivityType.*;
 import static com.morakmorak.morak_back_end.entity.enums.UserStatus.*;
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
@@ -60,6 +62,7 @@ public class UserService {
         return userMapper.userToEditProfile(dbUser);
     }
 
+    @Cacheable(key = "#request", value = USER_RANK)
     public ResponseMultiplePaging<UserDto.ResponseRanking> getUserRankList(PageRequest request) {
         Page<User> page = userQueryRepository.getRankData(request);
         List<UserDto.ResponseRanking> dto = userMapper.toResponseRankDto(page.getContent());
@@ -145,6 +148,7 @@ public class UserService {
                             .commentCount(commentCount)
                             .total(total)
                             .createdDate(e.getKey())
+                            .createdNumber(e.getKey().getDayOfYear())
                             .build();
                 }
         ).collect(Collectors.toList());

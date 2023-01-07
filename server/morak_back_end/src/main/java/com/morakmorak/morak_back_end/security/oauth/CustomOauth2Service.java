@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import static com.morakmorak.morak_back_end.entity.enums.RoleName.ROLE_USER;
 
@@ -59,6 +60,7 @@ public class CustomOauth2Service implements OAuth2UserService<OAuth2UserRequest,
         if ( userRepository.findUserByEmail(user.getEmail()).isEmpty() ) {
             String randomNickname = generateOAuthRandomNickname(oauth2UserDto.getProvider());
             user.changeNickname(randomNickname);
+            user.changePassword(UUID.randomUUID().toString());
             saveUserAndAddBasicRole(user);
         }
     }

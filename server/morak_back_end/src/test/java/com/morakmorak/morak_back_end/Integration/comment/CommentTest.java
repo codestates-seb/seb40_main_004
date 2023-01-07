@@ -104,7 +104,7 @@ public class CommentTest {
         ResultActions perform = mockMvc.perform(post("/articles/{article-id}/comments", savedArticle.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
-                .header(JWT_HEADER, ACCESS_TOKEN)
+                .header(JWT_HEADER, accessToken)
         );
         //then bad request 반환
         perform.andExpect(status().isBadRequest());
