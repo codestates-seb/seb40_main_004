@@ -23,7 +23,7 @@ public class ArticleTag extends BaseTime{
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    public void injectMappingForArticleAndTag(Article article) {
+    public void injectTo(Article article) {
         this.article = article;
     }
 
@@ -32,7 +32,7 @@ public class ArticleTag extends BaseTime{
         this.tag.getArticleTags().add(this);
     }
 
-    public void removeArticleAndTag(Article article, Tag tag) {
+    public void removeTo(Article article, Tag tag) {
         this.article = null;
         this.tag = null;
     }

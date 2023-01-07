@@ -165,7 +165,7 @@ public class User extends BaseTime {
         return roles;
     }
 
-    public void injectAvatar(Avatar avatar) {
+    public void injectTo(Avatar avatar) {
         this.avatar = avatar;
     }
 
@@ -183,7 +183,7 @@ public class User extends BaseTime {
         this.articles.add(article);
     }
 
-    public void addPoint(Object object, PointCalculator pointCalculator) {
+    public void plusPoint(Object object, PointCalculator pointCalculator) {
         this.point += pointCalculator.calculatePaymentPoint(object);
         updateGrade();
     }

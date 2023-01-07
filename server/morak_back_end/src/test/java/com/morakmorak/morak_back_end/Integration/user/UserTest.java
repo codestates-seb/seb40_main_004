@@ -3,10 +3,8 @@ package com.morakmorak.morak_back_end.Integration.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.controller.UserController;
 import com.morakmorak.morak_back_end.entity.*;
-import com.morakmorak.morak_back_end.entity.enums.*;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -20,9 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-import static com.morakmorak.morak_back_end.util.SecurityTestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -109,9 +105,9 @@ public class UserTest {
             ArticleLike articleLike = ArticleLike.builder().article(article).user(user).build();
             Answer answer = Answer.builder().article(article).user(user).build();
             Comment comment = Comment.builder().article(article).content(CONTENT2).build();
-            article.injectUserForMapping(user);
-            answer.injectUser(user);
-            comment.injectUser(user);
+            article.injectTo(user);
+            answer.injectTo(user);
+            comment.injectTo(user);
 
             entityManager.persist(article);
             entityManager.persist(articleLike);

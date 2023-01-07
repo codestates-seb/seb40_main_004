@@ -112,7 +112,7 @@ public class ArticleGetTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
         em.persist(article);
 
         user.getArticles().add(article);
@@ -185,7 +185,7 @@ public class ArticleGetTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
         em.persist(article);
 
         user.getArticles().add(article);
@@ -241,7 +241,7 @@ public class ArticleGetTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
         em.persist(article);
 
         user.getArticles().add(article);
@@ -542,7 +542,7 @@ public class ArticleGetTest {
                 .user(user)
                 .build();
         info.getArticleList().add(article);
-        articleTagJava.injectMappingForArticleAndTag(article);
+        articleTagJava.injectTo(article);
         em.persist(articleTagJava);
         em.persist(article);
 

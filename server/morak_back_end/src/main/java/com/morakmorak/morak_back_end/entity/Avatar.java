@@ -1,6 +1,5 @@
 package com.morakmorak.morak_back_end.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,7 +27,7 @@ public class Avatar extends BaseTime{
     @OneToOne(mappedBy = "avatar", cascade = CascadeType.PERSIST)
     private User user;
 
-    public void setUser(User user) {
+    public void injectTo(User user) {
         this.user = user;
     }
 }
