@@ -1,20 +1,14 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-03
- */
-
-import { BtnUser } from '../yeonwoo/BtnUser';
-import { BtnLogin } from '../yeonwoo/BtnLogin';
-import { Logo } from '../yeonwoo/Logo';
-import { Nav } from '../yeonwoo/Nav';
-import { SearchBar } from '../yeonwoo/SearchBar';
-import { BtnDropdown } from '../yeonwoo/BtnDropdown';
+import { BtnUser } from './BtnUser';
+import { BtnLogin } from './BtnLogin';
+import { Logo } from './Logo';
+import { Nav } from './Nav';
+import { SearchBar } from './SearchBar';
+import { BtnDropdown } from './BtnDropdown';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { dataHeaderAtom, isLoginAtom, renderingAtom } from '../../atomsYW';
+import { dataHeaderAtom, isLoginAtom, renderingAtom } from '../../../atomsYW';
 import { useEffect } from 'react';
-import { client } from '../../libs/client';
-import { IDataHeader } from '../../interfaces';
+import { client } from '../../../libs/client';
+import { IDataHeader } from '../../../interfaces';
 
 export const Header = () => {
   const [isLogin, setIsLogin] = useRecoilState(isLoginAtom);

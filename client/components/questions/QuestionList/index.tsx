@@ -1,23 +1,16 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-12-11
- * 최근 수정일: 2022-12-11
- * 개요: 정보글 리스트를 표시합니다.
- */
-
 import Link from 'next/link';
-import { QuestionListProps } from '../../libs/interfaces';
-import { elapsedTime } from '../../libs/elapsedTime';
+import { QuestionListProps } from '../../../libs/interfaces';
+import { elapsedTime } from '../../../libs/elapsedTime';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
 
-import { Pagination } from '../haseung/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Loader } from '../common/Loader';
+import { Pagination } from '../../common/Pagination';
+import { Loader } from '../../common/Loader';
 
-export const InformsList = ({
+export const QuestionList = ({
   response,
   isLoading,
   pageIndex,
@@ -29,7 +22,16 @@ export const InformsList = ({
         {response.data.map((article: QuestionListProps) => (
           <section className="py-4 space-y-4 " key={article.articleId}>
             <article className="space-x-2">
-              <Link href={`/informations/${article.articleId}`}>
+              {article.isClosed ? (
+                <FontAwesomeIcon
+                  icon={solidCheck}
+                  className="fa-lg text-main-orange"
+                />
+              ) : (
+                <FontAwesomeIcon icon={voidCheck} className="fa-lg" />
+              )}
+
+              <Link href={`/questions/${article.articleId}`}>
                 <span className="text-lg font-bold hover:cursor-pointer">
                   {article?.title?.length >= 35
                     ? `${article?.title?.slice(0, 35)}...`
@@ -64,7 +66,7 @@ export const InformsList = ({
                 </div>
                 <div className="flex gap-2">
                   <FontAwesomeIcon icon={faComment} size="xs" />
-                  <span className="text-xs">{article.commentCount}</span>
+                  <span className="text-xs">{article.answerCount}</span>
                 </div>
               </article>
             </section>

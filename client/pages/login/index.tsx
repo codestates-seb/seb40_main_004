@@ -1,15 +1,8 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-01 (박혜정)
- * 개요: 로그인에 대한 form을 표시합니다.
- */
-
-import { LoginForm } from '../../components/haseung/LoginForm';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
 import { GetServerSideProps, NextPage } from 'next';
 import { Seo } from '../../components/common/Seo';
+import { LoginForm } from '../../components/login/LoginForm';
 
 const Login: NextPage = () => {
   return (

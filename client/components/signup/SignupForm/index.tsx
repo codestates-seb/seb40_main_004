@@ -1,20 +1,13 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-01(박혜정)
- * 개요: 가입하기 버튼에 인증번호 발송 페이지로 가는 링크 추가
- */
-
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
-import { userEmailAtom, userNickName, userPassword } from '../../atomsHS';
-import { Input } from '../common/Input';
-import { Divider } from './Divider';
-import { SocialLoginBtn } from './SocialLoginBtn';
+import { userEmailAtom, userNickName, userPassword } from '../../../atomsHS';
+import { Input } from '../../common/Input';
+import { SocialLoginBtn } from '../../common/SocialLoginBtn';
+import { Divider } from '../SignupForm/Divider';
 
 type SignUpProps = {
   email: string;
@@ -42,7 +35,6 @@ export const SignUpForm = () => {
     nickname,
   }) => {
     if (password !== confirmPassword) {
-      console.log('비밀번호 다름');
       setError(
         'confirmPassword',
         { message: '비밀번호가 맞지 않습니다.' },

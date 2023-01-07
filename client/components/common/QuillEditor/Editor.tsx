@@ -1,9 +1,3 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-04(박혜정)
- */
-
 import { useRouter } from 'next/router';
 import {
   ChangeEvent,
@@ -17,14 +11,14 @@ import { confirmAlert } from 'react-confirm-alert';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { isArticleEditAtom } from '../../atomsHJ';
-import { categoryAtom } from '../../atomsHS';
-import { client } from '../../libs/client';
-import { getFileUrl, uploadImg } from '../../libs/uploadS3';
-import { Select, SelectOption } from '../haseung/Select';
-import { QuillEditor } from '../hyejung/QuillEditor';
-import { Loader } from './Loader';
-import { ValidationMsg } from './ValildationMsg';
+import { isArticleEditAtom } from '../../../atomsHJ';
+import { categoryAtom } from '../../../atomsHS';
+import { client } from '../../../libs/client';
+import { getFileUrl, uploadImg } from '../../../libs/uploadS3';
+import { Select, SelectOption } from './Select';
+import { QuillEditor } from '.';
+import { Loader } from '../Loader';
+import { ValidationMsg } from '../ValildationMsg';
 
 type ContentProps = {
   title: string;

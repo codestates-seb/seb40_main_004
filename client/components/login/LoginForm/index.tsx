@@ -1,31 +1,22 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-01(박혜정)
- */
-
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import jwt_decode from 'jwt-decode';
 import { useSetRecoilState } from 'recoil';
-import { isLoginAtom } from '../../atomsYW';
-import { SocialLoginBtn } from './SocialLoginBtn';
-import { Loader } from '../common/Loader';
 import { useState } from 'react';
-import { DecodedProps } from '../../libs/interfaces';
-import { ValidationMsg } from '../common/ValildationMsg';
-import { Input } from '../common/Input';
 import { toast } from 'react-toastify';
+import { DecodedProps } from '../../../libs/interfaces';
+import { isLoginAtom } from '../../../atomsYW';
+import { Input } from '../../common/Input';
+
+import { Loader } from '../../common/Loader';
+import { SocialLoginBtn } from '../../common/SocialLoginBtn';
 
 type LoginProps = {
   email: string;
   password: string;
 };
-
-const inputClassName = 'rounded-full w-96 h-10 pl-4 border';
-const inputContainerClassName = 'flex flex-col items-start space-y-2 mb-5';
 
 export const LoginForm = () => {
   const setIsLogin = useSetRecoilState(isLoginAtom);
