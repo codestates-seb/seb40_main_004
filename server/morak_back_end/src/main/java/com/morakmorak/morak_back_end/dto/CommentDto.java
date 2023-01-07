@@ -21,6 +21,7 @@ public class CommentDto {
         public String content;
     }
 
+
     @Getter
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

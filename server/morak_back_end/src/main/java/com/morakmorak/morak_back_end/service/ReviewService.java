@@ -36,7 +36,6 @@ public class ReviewService {
 
         Answer verifiedAnswer = answerService.findVerifiedAnswerById(answerId);
 
-        User articleAuthor = verifiedArticle.getUser();
         User receiver = verifiedAnswer.getUser();
 
         checkRequestUserIsAuthor(verifiedArticle, verifiedRequestUser);
