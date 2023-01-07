@@ -1,14 +1,17 @@
-package com.morakmorak.morak_back_end.service;
+package com.morakmorak.morak_back_end.service.answer_service;
 
 import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.AnswerDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
-import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.Answer;
+import com.morakmorak.morak_back_end.entity.AnswerLike;
+import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.repository.answer.AnswerLikeRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
+import com.morakmorak.morak_back_end.service.AnswerService;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
