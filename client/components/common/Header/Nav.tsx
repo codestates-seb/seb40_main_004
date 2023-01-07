@@ -1,9 +1,3 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-11
- */
-
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';

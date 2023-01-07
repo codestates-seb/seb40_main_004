@@ -1,14 +1,8 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-12-11
- * 최근 수정일: 2022-12-11
- */
-
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetServerSideProps, NextPage } from 'next';
 import { Header } from '../../components/common/Header';
-import { SearchWithTagButton } from '../../components/haseung/SearchWithTagButton';
+import { SearchWithTagButton } from '../../components/questions/SearchWithTagButton';
 import { Footer } from '../../components/common/Footer';
 import { useEffect, useState } from 'react';
 import { useFetch } from '../../libs/useFetchSWR';
@@ -19,7 +13,7 @@ import { useRecoilState } from 'recoil';
 import { keywordAtom } from '../../atomsYW';
 import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
 import { Seo } from '../../components/common/Seo';
-import { InformsList } from '../../components/yeonwoo/InformsList';
+import { InformsList } from '../../components/informations/InformsList';
 
 type FormValue = {
   keyword: string;

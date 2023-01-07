@@ -1,25 +1,24 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-06(박혜정)
- */
+import { useEffect, useState } from 'react';
+import { GetServerSideProps, NextPage } from 'next';
+import Link from 'next/link';
+
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { GetServerSideProps, NextPage } from 'next';
-import { Header } from '../../components/common/Header';
-import { QuestionList } from '../../components/haseung/QuestionList';
-import { SearchWithTagButton } from '../../components/haseung/SearchWithTagButton';
-import { Footer } from '../../components/common/Footer';
-import { useEffect, useState } from 'react';
-import { useFetch } from '../../libs/useFetchSWR';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import Link from 'next/link';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+
+import { Header } from '../../components/common/Header';
+import { QuestionList } from '../../components/questions/QuestionList';
+import { SearchWithTagButton } from '../../components/questions/SearchWithTagButton';
+import { Footer } from '../../components/common/Footer';
+import { Seo } from '../../components/common/Seo';
+
+import { useFetch } from '../../libs/useFetchSWR';
+
 import { useRecoilState } from 'recoil';
 import { keywordAtom } from '../../atomsYW';
 import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
-import { Seo } from '../../components/common/Seo';
 
 type FormValue = {
   keyword: string;

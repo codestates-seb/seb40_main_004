@@ -13,7 +13,7 @@ import { useFetch } from '../../libs/useFetchSWR';
 import { mutate as patchMutate } from 'swr';
 import { isLoginAtom, renderingAtom } from '../../atomsYW';
 import { getFileUrl, uploadImg } from '../../libs/uploadS3';
-import { QuillEditor } from './QuillEditor';
+import { QuillEditor } from '../common/QuillEditor';
 import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
 
 type FormValue = {

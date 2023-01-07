@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useRecoilValue } from 'recoil';
 import { isLoginAtom } from '../../atomsYW';
-import { Editor } from '../../components/common/Editor';
+import { Editor } from '../../components/common/QuillEditor/Editor';
 import { Seo } from '../../components/common/Seo';
 
 const Ask: NextPage = () => {

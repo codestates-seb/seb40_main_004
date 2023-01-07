@@ -1,17 +1,11 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-03
- */
-
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { dataHeaderAtom } from '../../atomsYW';
-import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
+import { dataHeaderAtom } from '../../../atomsYW';
+import { changeGradeEmoji } from '../../../libs/changeGradeEmoji';
 
 export const BtnUser = () => {
   const dataHeader = useRecoilValue(dataHeaderAtom);

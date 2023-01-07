@@ -1,17 +1,11 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-14
- */
-
 type Developer = {
   name: string;
   github: string;
   blog: string;
 };
 
-import { MorakLogo } from '../hyejung/MorakLogo';
-import { DeveloperLink } from '../hyejung/DeveloperLink';
+import { MorakLogo } from '../MorakLogo';
+import { DeveloperLink } from './DeveloperLink';
 
 const developers: Developer[] = [
   {

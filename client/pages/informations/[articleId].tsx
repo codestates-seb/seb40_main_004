@@ -1,9 +1,3 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-12-09
- * 최근 수정일: 2022-12-09
- */
-
 import { GetServerSideProps, NextPage } from 'next';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
