@@ -8,7 +8,7 @@ import {
   userEmailAtom,
   userNickName,
   userPassword,
-} from '../../../atoms/usersAtom';
+} from '../../../atoms/userAtom';
 
 import { Input } from '../../common/Input';
 import { SocialLoginBtn } from '../../common/SocialLoginBtn';
