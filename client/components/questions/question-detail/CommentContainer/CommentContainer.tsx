@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { useFetch } from '../../../../libs/useFetchSWR';
 import { useRecoilState } from 'recoil';
-import { isCommentOpenAtom } from '../../../../atomsHJ';
+import { isCommentOpenAtom } from '../../../../atoms/commentAtom';
 
 type CommentList = {
   comments: CommentResp[];

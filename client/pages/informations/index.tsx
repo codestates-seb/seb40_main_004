@@ -10,7 +10,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
-import { keywordAtom } from '../../atomsYW';
+import { keywordAtom } from '../../atoms/keywordAtom';
 import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
 import { Seo } from '../../components/common/Seo';
 import { InformsList } from '../../components/informations/InformsList';
@@ -128,7 +128,7 @@ const Questions: NextPage = () => {
                 </ul>
               ) : null}
             </div>
-            <Link href="/ask">
+            <Link href="/post">
               <button
                 className="bg-main-orange bg-opacity-80 py-1.5 px-4 rounded-md text-font-gray hover:bg-main-orange hover:opacity-100 w-28 transition-all"
                 onClick={checkIsLogin}

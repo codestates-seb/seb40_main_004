@@ -5,10 +5,13 @@ import { Nav } from './Nav';
 import { SearchBar } from './SearchBar';
 import { BtnDropdown } from './BtnDropdown';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { dataHeaderAtom, isLoginAtom, renderingAtom } from '../../../atomsYW';
+
 import { useEffect } from 'react';
 import { client } from '../../../libs/client';
 import { IDataHeader } from '../../../interfaces';
+import { dataHeaderAtom } from '../../../atoms/userAtom';
+import { isLoginAtom } from '../../../atoms/loginAtom';
+import { renderingAtom } from '../../../atoms/renderingAtom';
 
 export const Header = () => {
   const [isLogin, setIsLogin] = useRecoilState(isLoginAtom);

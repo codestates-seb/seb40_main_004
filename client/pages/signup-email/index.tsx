@@ -6,17 +6,16 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
+import { Header } from '../../components/common/Header';
+import { Footer } from '../../components/common/Footer';
+import { Seo } from '../../components/common/Seo';
+import { AuthenticationTimer } from '../../components/signup-email/AuthenticationTimer';
 import {
   userAuthKey,
   userEmailAtom,
   userNickName,
   userPassword,
-} from '../../atomsHS';
-
-import { Header } from '../../components/common/Header';
-import { Footer } from '../../components/common/Footer';
-import { Seo } from '../../components/common/Seo';
-import { AuthenticationTimer } from '../../components/signup-email/AuthenticationTimer';
+} from '../../atoms/userAtom';
 
 type VerificationNumber = {
   authKey: string;

@@ -12,7 +12,8 @@ import { ArticleDetail } from '../../libs/interfaces';
 
 import { useFetch } from '../../libs/useFetchSWR';
 
-import { articleAuthorIdAtom, isAnswerPostedAtom } from '../../atomsHJ';
+import { articleAuthorIdAtom } from '../../atoms/articleAtom';
+import { isAnswerPostedAtom } from '../../atoms/answerAtom';
 import { AnswerEditor } from '../../components/questions/question-detail/AnswerContent/AnswerEditor';
 import { BtnTopDown } from '../../components/common/BtnTopDown';
 import { QuestionContent } from '../../components/questions/question-detail/QuestionContent/QuestionContent';

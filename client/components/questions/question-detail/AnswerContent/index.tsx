@@ -6,11 +6,10 @@ import { Answer } from '../../../../libs/interfaces';
 import { elapsedTime } from '../../../../libs/elapsedTime';
 import { useEffect, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  articleAuthorIdAtom,
-  isAnswerEditAtom,
-  reviewRequestAtom,
-} from '../../../../atomsHJ';
+import { articleAuthorIdAtom } from '../../../../atoms/articleAtom';
+import { isAnswerEditAtom } from '../../../../atoms/answerAtom';
+import { reviewRequestAtom } from '../../../../atoms/reviewAtom';
+
 import { client } from '../../../../libs/client';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';

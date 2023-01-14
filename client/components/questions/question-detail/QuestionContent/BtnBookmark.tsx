@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { client } from '../../../../libs/client';
 import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';
-import { isLoginAtom } from '../../../../atomsYW';
+import { isLoginAtom } from '../../../../atoms/loginAtom';
 import { useRecoilValue } from 'recoil';
 
 type BtnBookmarkProps = {

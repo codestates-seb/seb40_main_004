@@ -1,15 +1,12 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-20
- * 최근 수정일: 2022-12-03
- */
-
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-import { dataHeaderAtom, isLoginAtom, renderingAtom } from '../../atomsYW';
+import { isLoginAtom } from '../../atoms/loginAtom';
+import { renderingAtom } from '../../atoms/renderingAtom';
+import { dataHeaderAtom } from '../../atoms/userAtom';
+
 import { userDashboard } from '../../interfaces';
 import { client } from '../../libs/client';
 import { inspectNicknameDuplication } from '../../libs/inspectNicknameDuplication';

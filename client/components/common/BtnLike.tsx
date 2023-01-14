@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import { client } from '../../libs/client';
 import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
 import { useRecoilValue } from 'recoil';
-import { isLoginAtom } from '../../atomsYW';
+import { isLoginAtom } from '../../atoms/loginAtom';
 
 type BtnLikeProps = {
   isLiked: boolean;

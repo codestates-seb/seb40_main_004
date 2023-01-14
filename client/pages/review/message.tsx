@@ -6,14 +6,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  reviewTagsAtom,
-  reviewContentAtom,
-  reviewRequestAtom,
-} from '../../atomsHJ';
+
 import { ProgressBar } from '../../components/review/ProgressBar';
 import { BtnBackArticle } from '../../components/review/BtnBackArticle';
 import { Seo } from '../../components/common/Seo';
+import {
+  reviewContentAtom,
+  reviewRequestAtom,
+  reviewTagsAtom,
+} from '../../atoms/reviewAtom';
 
 type MessageForm = {
   message: string;

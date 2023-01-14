@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { useSetRecoilState } from 'recoil';
-import { keywordAtom } from '../../../atomsYW';
+import { keywordAtom } from '../../../atoms/keywordAtom';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 

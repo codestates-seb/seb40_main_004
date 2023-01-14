@@ -11,7 +11,10 @@ import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isLoginAtom, renderingAtom, userDashboardAtom } from '../../atomsYW';
+import { isLoginAtom } from '../../atoms/loginAtom';
+import { renderingAtom } from '../../atoms/renderingAtom';
+import { userDashboardAtom } from '../../atoms/userAtom';
+
 import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 import { client } from '../../libs/client';
 import { inspectNicknameDuplication } from '../../libs/inspectNicknameDuplication';

@@ -4,7 +4,12 @@ import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
-import { userEmailAtom, userNickName, userPassword } from '../../../atomsHS';
+import {
+  userEmailAtom,
+  userNickName,
+  userPassword,
+} from '../../../atoms/usersAtom';
+
 import { Input } from '../../common/Input';
 import { SocialLoginBtn } from '../../common/SocialLoginBtn';
 import { Divider } from '../SignupForm/Divider';
