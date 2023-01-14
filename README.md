@@ -16,7 +16,7 @@
 서툰 질문이 부끄럽고, 날선 답변이 두려우셨다면<br/>
 모락모락에서 함께해요!<br/>
 <br/>
-**배포링크** : [https://seb40-main-004.vercel.app](https://seb40-main-004.vercel.app/)
+**배포링크** : [https://morakmorak.vercel.app/](https://morakmorak.vercel.app/)
 
 **깃허브** : [https://github.com/codestates-seb/seb40_main_004](https://github.com/codestates-seb/seb40_main_004)
 
