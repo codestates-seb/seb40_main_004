@@ -1,9 +1,3 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-05
- */
-
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -13,12 +7,11 @@ import { renderingAtom, userDashboardAtom } from '../../../atomsYW';
 import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 import { Seo } from '../../../components/common/Seo';
-import { AsideBot } from '../../../components/yeonwoo/AsideBot';
-import { AsideMid } from '../../../components/yeonwoo/AsideMid';
-import { AsideTop } from '../../../components/yeonwoo/AsideTop';
-import { CarouselAnswers } from '../../../components/yeonwoo/CarouselAnswers';
-import { CarouselReview } from '../../../components/yeonwoo/CarouselReview';
-import { Grass } from '../../../components/yeonwoo/Grass';
+import { AsideBot } from '../../../components/dashboard/AsideBot';
+import { AsideMid } from '../../../components/dashboard/AsideMid';
+import { AsideTop } from '../../../components/dashboard/AsideTop';
+import { CarouselAnswers } from '../../../components/dashboard/CarouselAnswers';
+import { CarouselReview } from '../../../components/dashboard/CarouselReview';
 import { client } from '../../../libs/client';
 
 const DashboardAnswers: NextPage = () => {

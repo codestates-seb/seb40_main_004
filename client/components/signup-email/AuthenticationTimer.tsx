@@ -1,9 +1,3 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-16
- * 최근 수정일: 2022-11-16
- */
-
 import { useEffect, useState } from 'react';
 
 export const AuthenticationTimer = () => {

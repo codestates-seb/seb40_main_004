@@ -1,15 +1,8 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-24
- * 최근 수정일: 2022-11-30
- */
-
-import { useFetch } from '../../libs/useFetchSWR';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { AnswerProps } from './AnswerContent';
-import { Answer } from '../../libs/interfaces';
-import { AnswerContent } from './AnswerContent';
+import { useFetch } from '../../../../libs/useFetchSWR';
+import { Answer } from '../../../../libs/interfaces';
+import { AnswerContent, AnswerProps } from './index';
 
 type AnswerListProps = {
   index: number;

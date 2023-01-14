@@ -1,20 +1,15 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-28
- */
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { isAnswerEditAtom, isAnswerPostedAtom } from '../../atomsHJ';
-import { client } from '../../libs/client';
-import { useFetch } from '../../libs/useFetchSWR';
+import { isAnswerEditAtom, isAnswerPostedAtom } from '../../../../atomsHJ';
+import { client } from '../../../../libs/client';
+import { useFetch } from '../../../../libs/useFetchSWR';
 import { mutate as patchMutate } from 'swr';
-import { isLoginAtom, renderingAtom } from '../../atomsYW';
-import { getFileUrl, uploadImg } from '../../libs/uploadS3';
-import { QuillEditor } from '../common/QuillEditor';
-import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
+import { isLoginAtom, renderingAtom } from '../../../../atomsYW';
+import { getFileUrl, uploadImg } from '../../../../libs/uploadS3';
+import { QuillEditor } from '../../../common/QuillEditor';
+import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';
 
 type FormValue = {
   content: string;

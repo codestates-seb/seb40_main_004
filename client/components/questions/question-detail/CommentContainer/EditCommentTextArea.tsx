@@ -1,15 +1,10 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-28
- * 최근 수정일: 2022-11-28
- */
-import { Button } from '../common/Button';
+import { Button } from '../../../common/Button';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
-import { client } from '../../libs/client';
+import { client } from '../../../../libs/client';
 import { mutate } from 'swr';
-import { useFetch } from '../../libs/useFetchSWR';
-import { CommentResp } from '../../libs/interfaces';
-import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
+import { useFetch } from '../../../../libs/useFetchSWR';
+import { CommentResp } from '../../../../libs/interfaces';
+import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';
 
 type TextAreaProps = {
   url: string;

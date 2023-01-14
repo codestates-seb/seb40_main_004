@@ -1,14 +1,8 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-12-07
- * 최근 수정일: 2022-12-07
- */
-
 import { NextPage } from 'next';
 import { Footer } from '../../components/common/Footer';
 import { Header } from '../../components/common/Header';
 import { Seo } from '../../components/common/Seo';
-import { ListRecruit } from '../../components/yeonwoo/ListRecruit';
+import { ListRecruit } from '../../components/reqruit/ListRecruit';
 
 const Recruit: NextPage = () => {
   return (

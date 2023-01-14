@@ -1,16 +1,11 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-20
- * 최근 수정일: 2022-11-29
- */
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBookmark as SolidBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as VoidBookmark } from '@fortawesome/free-regular-svg-icons';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { client } from '../../libs/client';
-import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
-import { isLoginAtom } from '../../atomsYW';
+import { client } from '../../../../libs/client';
+import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';
+import { isLoginAtom } from '../../../../atomsYW';
 import { useRecoilValue } from 'recoil';
 
 type BtnBookmarkProps = {

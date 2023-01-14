@@ -1,18 +1,12 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-28
- */
-
 import { useRouter } from 'next/router';
 import { Comment } from './Comment';
 import { CommentTextArea } from './CommentTextArea';
-import { CommentResp } from '../../libs/interfaces';
+import { CommentResp } from '../../../../libs/interfaces';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { useFetch } from '../../libs/useFetchSWR';
+import { useFetch } from '../../../../libs/useFetchSWR';
 import { useRecoilState } from 'recoil';
-import { isCommentOpenAtom } from '../../atomsHJ';
+import { isCommentOpenAtom } from '../../../../atomsHJ';
 
 type CommentList = {
   comments: CommentResp[];
