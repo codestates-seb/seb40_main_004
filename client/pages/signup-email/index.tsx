@@ -11,10 +11,10 @@ import { Footer } from '../../components/common/Footer';
 import { Seo } from '../../components/common/Seo';
 import { AuthenticationTimer } from '../../components/signup-email/AuthenticationTimer';
 import {
-  userAuthKey,
+  userAuthKeyAtom,
   userEmailAtom,
-  userNickName,
-  userPassword,
+  userNickNameAtom,
+  userPasswordAtom,
 } from '../../atoms/userAtom';
 
 type VerificationNumber = {
@@ -24,10 +24,10 @@ type VerificationNumber = {
 const SignUpWithEmail: NextPage = () => {
   const [isOkAuthCode, setIsOkAuthCode] = useState(false);
   const { register, handleSubmit } = useForm<VerificationNumber>();
-  const [authKey, setAuthKey] = useRecoilState(userAuthKey);
+  const [authKey, setAuthKey] = useRecoilState(userAuthKeyAtom);
   const email = useRecoilValue(userEmailAtom);
-  const password = useRecoilValue(userPassword);
-  const nickname = useRecoilValue(userNickName);
+  const password = useRecoilValue(userPasswordAtom);
+  const nickname = useRecoilValue(userNickNameAtom);
   const router = useRouter();
   const onValid = ({ authKey }: VerificationNumber) => {
     axios

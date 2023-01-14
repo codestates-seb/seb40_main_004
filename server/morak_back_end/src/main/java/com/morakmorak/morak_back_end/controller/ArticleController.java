@@ -17,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/articles")
@@ -28,71 +27,67 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final ArticleMapper articleMapper;
-    private final TagMapper tagMapper;
-    private final FileMapper fileMapper;
-    private final CategoryMapper categoryMapper;
 
     @PostMapping
-    public ResponseEntity uploadArticle(@Valid @RequestBody ArticleDto.RequestUploadArticle requestUploadArticle,
-                                        @RequestUser UserDto.UserInfo userInfo) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ArticleDto.ResponseSimpleArticle uploadArticle(@Valid @RequestBody ArticleDto.RequestUploadArticle requestUploadArticle,
+                                                          @RequestUser UserDto.UserInfo userInfo) {
 
         Article article = articleMapper.requestUploadArticleToEntity(requestUploadArticle);
-        ArticleDto.ResponseSimpleArticle upload = articleService.upload(article,userInfo);
-        return new ResponseEntity<>(upload, HttpStatus.CREATED);
+        return articleService.upload(article, userInfo);
     }
 
     @PatchMapping("/{article-id}")
-    public ResponseEntity updateArticle(@Valid @RequestBody ArticleDto.RequestUpdateArticle requestUpdateArticle,
-                                        @RequestUser UserDto.UserInfo userInfo,
-                                        @PathVariable("article-id") Long articleId) {
+    @ResponseStatus(HttpStatus.OK)
+    public ArticleDto.ResponseSimpleArticle updateArticle(@Valid @RequestBody ArticleDto.RequestUpdateArticle requestUpdateArticle,
+                                                          @RequestUser UserDto.UserInfo userInfo,
+                                                          @PathVariable("article-id") Long articleId) {
         Article article = articleMapper.requestUpdateArticleToEntity(requestUpdateArticle, articleId);
-        ArticleDto.ResponseSimpleArticle update = articleService.update(article, userInfo);
-        return new ResponseEntity<>(update, HttpStatus.OK);
+        return articleService.update(article, userInfo);
     }
 
     @DeleteMapping("/{article-id}")
-    public ResponseEntity deleteArticle(@PathVariable("article-id") Long articleId,
-                                        @RequestUser UserDto.UserInfo userInfo) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteArticle(@PathVariable("article-id") Long articleId,
+                              @RequestUser UserDto.UserInfo userInfo) {
         articleService.deleteArticle(articleId, userInfo);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping
-    public ResponseEntity searchArticle(@Param("category") String category,
-                                        @Param("keyword") String keyword,
-                                        @Param("target") String target,
-                                        @Param("sort") String sort,
-                                        @RequestParam("page") Integer page,
-                                        @RequestParam("size") Integer size) {
-        ResponseMultiplePaging responseMultiplePaging =
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> searchArticle(@Param("category") String category,
+                                                                                    @Param("keyword") String keyword,
+                                                                                    @Param("target") String target,
+                                                                                    @Param("sort") String sort,
+                                                                                    @RequestParam("page") Integer page,
+                                                                                    @RequestParam("size") Integer size) {
+        ResponseMultiplePaging<ArticleDto.ResponseListTypeArticle> responseMultiplePaging =
                 articleService.searchArticleAsPaging(category, keyword, target, sort, page, size);
-        return new ResponseEntity(responseMultiplePaging, HttpStatus.OK);
+        return responseMultiplePaging;
     }
 
     @GetMapping("/{article-id}")
-    public ResponseEntity findDetailArticle(@RequestUser UserDto.UserInfo userInfo,
-                                            @PathVariable("article-id") Long articleId) {
-        ArticleDto.ResponseDetailArticle result =
-                articleService.findDetailArticle(articleId, userInfo);
-        return new ResponseEntity(result, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public ArticleDto.ResponseDetailArticle findDetailArticle(@RequestUser UserDto.UserInfo userInfo,
+                                                              @PathVariable("article-id") Long articleId) {
+        return articleService.findDetailArticle(articleId, userInfo);
     }
 
     @PostMapping("/{article-id}/likes")
-    public ResponseEntity pressLikeButton(@RequestUser UserDto.UserInfo userInfo,
-                                          @PathVariable("article-id") Long articleId) {
-        ArticleDto.ResponseArticleLike responseArticleLike =
-                articleService.pressLikeButton(articleId, userInfo);
-        return new ResponseEntity(responseArticleLike, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public ArticleDto.ResponseArticleLike pressLikeButton(@RequestUser UserDto.UserInfo userInfo,
+                                                          @PathVariable("article-id") Long articleId) {
+        return articleService.pressLikeButton(articleId, userInfo);
     }
 
     @PostMapping("/{article-id}/reports")
-    public ResponseEntity reportArticle(@PathVariable("article-id") Long articleId,
-                                        @RequestBody ArticleDto.RequestReportArticle reportArticle,
-                                        @RequestUser UserDto.UserInfo userInfo) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ArticleDto.ResponseReportArticle reportArticle(@PathVariable("article-id") Long articleId,
+                                                          @RequestBody ArticleDto.RequestReportArticle reportArticle,
+                                                          @RequestUser UserDto.UserInfo userInfo) {
         Report report = articleMapper.requestReportArticleToReport(reportArticle);
-        ArticleDto.ResponseReportArticle responseReportArticle =
-                articleService.reportArticle(articleId, userInfo, report);
-        return new ResponseEntity(responseReportArticle, HttpStatus.CREATED);
+
+        return articleService.reportArticle(articleId, userInfo, report);
     }
 
 }

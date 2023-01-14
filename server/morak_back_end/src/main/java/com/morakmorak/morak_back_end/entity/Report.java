@@ -1,7 +1,6 @@
 package com.morakmorak.morak_back_end.entity;
 
 
-import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import lombok.*;
 
@@ -39,7 +38,7 @@ public class Report extends BaseTime {
     @JoinColumn(name = "answer_id")
     private Answer answer;
 
-    public void injectMappingUserAndArticle(User user, Article article) {
+    public void injectTo(User user, Article article) {
         this.user = user;
         this.article = article;
     }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { wrap } from 'popmotion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,7 +8,7 @@ import {
   faChevronRight,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilValue } from 'recoil';
-import { userDashboardAtom } from '../../atomsYW';
+import { userDashboardAtom } from '../../atoms/userAtom';
 
 const variants = {
   enter: (direction: number) => {

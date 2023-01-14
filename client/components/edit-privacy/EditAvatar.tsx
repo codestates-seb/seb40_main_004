@@ -1,9 +1,3 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-20
- * 최근 수정일: 2022-12-03
- */
-
 import Image from 'next/image';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';

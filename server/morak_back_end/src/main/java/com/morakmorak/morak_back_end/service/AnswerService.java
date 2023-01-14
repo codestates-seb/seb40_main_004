@@ -35,12 +35,10 @@ public class AnswerService {
     private final UserService userService;
     private final AnswerRepository answerRepository;
     private final AnswerQueryRepository answerQueryRepository;
-    private final BookmarkRepository bookmarkRepository;
     private final AnswerLikeRepository answerLikeRepository;
     private final AnswerMapper answerMapper;
     private final NotificationRepository notificationRepository;
     private final PointCalculator pointCalculator;
-    private final FileRepository fileRepository;
 
     int page=0;
     int size=5;
@@ -53,19 +51,19 @@ public class AnswerService {
         checkArticleIsQna(verifiedArticle);
         checkArticleIsOpen(verifiedArticle);
 
-        answerNotSaved.injectUser(verifiedUser);
+        answerNotSaved.injectTo(verifiedUser);
         answerRepository.save(answerNotSaved);
 
-        answerNotSaved.injectArticle(verifiedArticle);
+        answerNotSaved.injectTo(verifiedArticle);
         answerRepository.save(answerNotSaved);
 
-        fileList.stream().forEach(file -> file.attachToAnswer(answerNotSaved));
+        fileList.stream().forEach(file -> file.injectTo(answerNotSaved));
         Answer savedAnswer = answerRepository.save(answerNotSaved);
 
         NotificationGenerator generator = NotificationGenerator.of(verifiedUser, savedAnswer);
         Notification notification = generator.generateNotification();
 
-        verifiedUser.addPoint(savedAnswer, pointCalculator);
+        verifiedUser.plusPoint(savedAnswer, pointCalculator);
         notificationRepository.save(notification);
 
         return readAllAnswersForUser(articleId, userId, page, size);
@@ -96,7 +94,7 @@ public class AnswerService {
         checkAnswerIsPicked(verifiedAnswer);
 
         attachFilesToAnswer(verifiedAnswer, answerChanges.getFiles());
-        verifiedAnswer.updateAnswer(answerChanges);
+        verifiedAnswer.changeAnswer(answerChanges);
 
         return readAllAnswersForUser(articleId, userId, page, size);
     }
@@ -159,7 +157,7 @@ public class AnswerService {
                     AnswerLike answerLike = AnswerLike.builder().answer(dbAnswer).user(dbUser).build();
                     dbAnswer.getAnswerLike().add(answerLike);
                     dbUser.getAnswerLikes().add(answerLike);
-                    dbUser.addPoint(answerLike, pointCalculator);
+                    dbUser.plusPoint(answerLike, pointCalculator);
 
                     if (dbAnswer.getAnswerLike().size() % 10 == 0) {
                         NotificationGenerator generator = NotificationGenerator.of(answerLike, dbAnswer.getAnswerLike().size());
@@ -180,7 +178,7 @@ public class AnswerService {
 
     public void attachFilesToAnswer(Answer answer, List<File> fileList) {
         fileList.stream().forEach(file -> {
-            file.attachToAnswer(answer);
+            file.injectTo(answer);
         });
     }
 

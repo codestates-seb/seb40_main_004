@@ -1,9 +1,3 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-12-04
- */
-
 import { faBloggerB, faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';

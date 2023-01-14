@@ -185,7 +185,7 @@ public class PostReviewTest {
     @DisplayName("정상적인 요청 시 created 반환되며, 포인트의 경우 sender는 차감, receiver는 증가된다.")
     void donatePoint_success_1() throws Exception {
         //user에게 50포인트 존재
-        user.addPoint(Answer.builder().build(), pointCalculator);
+        user.plusPoint(Answer.builder().build(), pointCalculator);
         Integer user_InitialPoint = user.getPoint();
         Integer user1_InitialPoint = user1.getPoint();
         ReviewDto.RequestPostReview request = ReviewDto.RequestPostReview.builder().content("15글자 이상의 정성스러운 답변").badges(validBadges).point(Optional.of(10)).build();

@@ -16,7 +16,6 @@ export const Comment = ({
   articleId,
   content,
   createdAt,
-  lastModifiedAt,
   userInfo,
   avatar,
 }: CommentResp) => {

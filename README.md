@@ -5,12 +5,18 @@
 ##  가장 따뜻한 개발자 커뮤니티, 모락모락
 ![ 모락모락](https://user-images.githubusercontent.com/102589253/205538117-219ce4e9-068c-4e9f-a373-38ce000a50f1.png)
 
+## Version
+1.0.0 `배포`  
+1.1.0 `HTTPS 적용` 
+
+---
+
 🎇처음 개발을 시작했던 때를 기억하시나요?<br/>
 외계어 같은 코드와 읽어도 이해되지 않는 문서, 기나긴 에러코드까지… <br/>
 서툰 질문이 부끄럽고, 날선 답변이 두려우셨다면<br/>
 모락모락에서 함께해요!<br/>
 <br/>
-**배포링크** : [https://seb40-main-004.vercel.app](https://seb40-main-004.vercel.app/)
+**배포링크** : [https://morakmorak.vercel.app/](https://morakmorak.vercel.app/)
 
 **깃허브** : [https://github.com/codestates-seb/seb40_main_004](https://github.com/codestates-seb/seb40_main_004)
 
