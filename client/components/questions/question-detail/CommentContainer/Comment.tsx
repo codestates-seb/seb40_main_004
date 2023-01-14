@@ -8,7 +8,7 @@ import { mutate } from 'swr';
 import { useState } from 'react';
 import { EditCommentTextArea } from './EditCommentTextArea';
 import { useRecoilValue } from 'recoil';
-import { isLoginAtom } from '../../../../atomsYW';
+import { isLoginAtom } from '../../../../atoms/loginAtom';
 
 export const Comment = ({
   answerId,

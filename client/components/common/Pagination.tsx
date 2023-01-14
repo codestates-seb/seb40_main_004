@@ -1,5 +1,4 @@
-import { useRecoilState } from 'recoil';
-import { currPagesIndexAtom } from '../../atomsHJ';
+import { useState } from 'react';
 
 type PaginationProps = {
   setPageIndex: any;
@@ -29,8 +28,7 @@ export const Pagination = ({
     setPageIndex(value);
   };
 
-  const [currPagesIndex, setCurrPagesIndex] =
-    useRecoilState(currPagesIndexAtom);
+  const [currPagesIndex, setCurrPagesIndex] = useState(0);
   const totalPagesGroup = getTotalPagesArr(totalPage);
   const currPagesGroup = totalPagesGroup[currPagesIndex];
 

@@ -10,7 +10,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { dataHeaderAtom, isLoginAtom } from '../../../atomsYW';
+import { isLoginAtom } from '../../../atoms/loginAtom';
+import { dataHeaderAtom } from '../../../atoms/userAtom';
 
 export const BtnDropdown = () => {
   const [dropdown, setDropdown] = useState(false);

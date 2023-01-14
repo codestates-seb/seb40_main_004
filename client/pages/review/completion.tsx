@@ -9,7 +9,7 @@ import {
   reviewContentAtom,
   reviewPointAtom,
   reviewRequestAtom,
-} from '../../atomsHJ';
+} from '../../atoms/reviewAtom';
 import { ProgressBar } from '../../components/review/ProgressBar';
 import { BtnBackArticle } from '../../components/review/BtnBackArticle';
 import { client } from '../../libs/client';

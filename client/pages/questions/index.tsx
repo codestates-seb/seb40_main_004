@@ -17,7 +17,7 @@ import { Seo } from '../../components/common/Seo';
 import { useFetch } from '../../libs/useFetchSWR';
 
 import { useRecoilState } from 'recoil';
-import { keywordAtom } from '../../atomsYW';
+import { keywordAtom } from '../../atoms/keywordAtom';
 import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
 
 type FormValue = {
@@ -150,7 +150,7 @@ const Questions: NextPage = () => {
                 </ul>
               ) : null}
             </div>
-            <Link href="/ask">
+            <Link href="/post">
               <button
                 className="bg-main-orange bg-opacity-80 py-1.5 px-4 rounded-md text-font-gray hover:bg-main-orange hover:opacity-100 w-28 transition-all"
                 onClick={checkIsLogin}

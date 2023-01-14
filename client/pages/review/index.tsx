@@ -4,17 +4,19 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
+
+import { ReviewTag } from '../../components/review/ReviewTag';
+import { ProgressBar } from '../../components/review/ProgressBar';
+import { BtnBackArticle } from '../../components/review/BtnBackArticle';
+
+import { getIsFromDashboard } from '../../libs/getIsFromDashboard';
+import { Seo } from '../../components/common/Seo';
 import {
   reviewRequestAtom,
   reviewTagsAtom,
   reviewTagsEnumAtom,
-} from '../../atomsHJ';
-import { ReviewTag } from '../../components/review/ReviewTag';
-import { ProgressBar } from '../../components/review/ProgressBar';
-import { BtnBackArticle } from '../../components/review/BtnBackArticle';
-import { userDashboardAtom } from '../../atomsYW';
-import { getIsFromDashboard } from '../../libs/getIsFromDashboard';
-import { Seo } from '../../components/common/Seo';
+} from '../../atoms/reviewAtom';
+import { userDashboardAtom } from '../../atoms/userAtom';
 
 type ReviewPageProps = {
   prevUrl: string;

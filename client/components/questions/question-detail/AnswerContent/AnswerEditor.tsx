@@ -2,11 +2,15 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { isAnswerEditAtom, isAnswerPostedAtom } from '../../../../atomsHJ';
+import {
+  isAnswerEditAtom,
+  isAnswerPostedAtom,
+} from '../../../../atoms/answerAtom';
+import { isLoginAtom } from '../../../../atoms/loginAtom';
+import { renderingAtom } from '../../../../atoms/renderingAtom';
 import { client } from '../../../../libs/client';
 import { useFetch } from '../../../../libs/useFetchSWR';
 import { mutate as patchMutate } from 'swr';
-import { isLoginAtom, renderingAtom } from '../../../../atomsYW';
 import { getFileUrl, uploadImg } from '../../../../libs/uploadS3';
 import { QuillEditor } from '../../../common/QuillEditor';
 import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';

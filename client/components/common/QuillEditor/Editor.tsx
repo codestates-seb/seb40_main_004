@@ -10,15 +10,14 @@ import {
 import { confirmAlert } from 'react-confirm-alert';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { isArticleEditAtom } from '../../../atomsHJ';
-import { categoryAtom } from '../../../atomsHS';
+import { useRecoilState } from 'recoil';
 import { client } from '../../../libs/client';
 import { getFileUrl, uploadImg } from '../../../libs/uploadS3';
 import { Select, SelectOption } from './Select';
 import { QuillEditor } from '.';
 import { Loader } from '../Loader';
 import { ValidationMsg } from '../ValildationMsg';
+import { isArticleEditAtom } from '../../../atoms/articleAtom';
 
 type ContentProps = {
   title: string;
@@ -68,7 +67,7 @@ export const Editor = () => {
   });
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<SelectOption[]>([options[1]]);
-  const category = useRecoilValue(categoryAtom);
+  const category = 'QNA';
   const [fileIdList, setFileIdList] = useState<any>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isArticleEdit, setIsArticleEdit] = useRecoilState(isArticleEditAtom);
@@ -101,7 +100,7 @@ export const Editor = () => {
     else {
       setIsSubmitting(true);
       setTagsError('');
-      if (isArticleEdit.isArticleEdit) {
+      if (isArticleEditAtom.isArticleEdit) {
         client
           .patch(`/api/articles/${isArticleEdit.articleId}`, {
             title,

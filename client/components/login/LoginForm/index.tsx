@@ -7,11 +7,12 @@ import { useSetRecoilState } from 'recoil';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { DecodedProps } from '../../../libs/interfaces';
-import { isLoginAtom } from '../../../atomsYW';
+
 import { Input } from '../../common/Input';
 
 import { Loader } from '../../common/Loader';
 import { SocialLoginBtn } from '../../common/SocialLoginBtn';
+import { isLoginAtom } from '../../../atoms/loginAtom';
 
 type LoginProps = {
   email: string;

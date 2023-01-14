@@ -4,9 +4,11 @@ import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 
 import { mutate } from 'swr';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isLoginAtom, renderingAtom } from '../../../../atomsYW';
+
 import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';
 import { client } from '../../../../libs/client';
+import { isLoginAtom } from '../../../../atoms/loginAtom';
+import { renderingAtom } from '../../../../atoms/renderingAtom';
 
 type TextAreaProps = {
   answerId?: number;

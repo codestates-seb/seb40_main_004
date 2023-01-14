@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { reviewTagsAtom } from '../../atomsHJ';
+import { reviewTagsAtom } from '../../atoms/reviewAtom';
 
 type TagProps = {
   children: string;

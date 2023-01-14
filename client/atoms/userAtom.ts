@@ -1,9 +1,24 @@
 import { atom } from 'recoil';
-import { IDataHeader, userDashboard } from './interfaces';
+import { IDataHeader, userDashboard } from '../interfaces';
 
-export const isLoginAtom = atom({
-  key: 'isLogin',
-  default: false,
+export const userEmailAtom = atom({
+  key: 'email',
+  default: '',
+});
+
+export const userAuthKey = atom({
+  key: 'auth',
+  default: '',
+});
+
+export const userPassword = atom({
+  key: 'password',
+  default: '',
+});
+
+export const userNickName = atom({
+  key: 'nickName',
+  default: '',
 });
 
 export const userDashboardAtom = atom<userDashboard>({
@@ -32,17 +47,8 @@ export const userDashboardAtom = atom<userDashboard>({
   },
 });
 
+// 현재 로그인된 유저의 포인트를 포함한 모든 정보
 export const dataHeaderAtom = atom<IDataHeader | null>({
   key: 'dataHeader',
   default: null,
-});
-
-export const renderingAtom = atom({
-  key: 'rendering',
-  default: true,
-});
-
-export const keywordAtom = atom({
-  key: 'keyword',
-  default: '',
 });

@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isArticleEditAtom } from '../../../../atomsHJ';
-import { isLoginAtom } from '../../../../atomsYW';
+import { isArticleEditAtom } from '../../../../atoms/articleAtom';
+import { isLoginAtom } from '../../../../atoms/loginAtom';
 
 import { ArticleDetail } from '../../../../libs/interfaces';
 import { BtnBookmark } from './BtnBookmark';
