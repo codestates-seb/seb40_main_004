@@ -10,7 +10,8 @@ import {
   faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilValue } from 'recoil';
-import { userDashboardAtom } from '../../atomsYW';
+import { userDashboardAtom } from '../../atoms/userAtom';
+
 import Link from 'next/link';
 import { changeTagPrettier } from '../../libs/changeTagPrettier';
 

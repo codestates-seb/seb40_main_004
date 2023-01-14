@@ -1,11 +1,5 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-12-03
- */
-
 import { useRecoilValue } from 'recoil';
-import { userDashboardAtom } from '../../atomsYW';
+import { userDashboardAtom } from '../../atoms/userAtom';
 import { changeTagPrettier } from '../../libs/changeTagPrettier';
 
 export const AsideMid = () => {

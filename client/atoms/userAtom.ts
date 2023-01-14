@@ -6,17 +6,17 @@ export const userEmailAtom = atom({
   default: '',
 });
 
-export const userAuthKey = atom({
+export const userAuthKeyAtom = atom({
   key: 'auth',
   default: '',
 });
 
-export const userPassword = atom({
+export const userPasswordAtom = atom({
   key: 'password',
   default: '',
 });
 
-export const userNickName = atom({
+export const userNickNameAtom = atom({
   key: 'nickName',
   default: '',
 });
