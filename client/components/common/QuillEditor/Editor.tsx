@@ -100,7 +100,7 @@ export const Editor = () => {
     else {
       setIsSubmitting(true);
       setTagsError('');
-      if (isArticleEditAtom.isArticleEdit) {
+      if (isArticleEdit.isArticleEdit) {
         client
           .patch(`/api/articles/${isArticleEdit.articleId}`, {
             title,

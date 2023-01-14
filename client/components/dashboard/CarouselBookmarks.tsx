@@ -1,9 +1,3 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-27
- * 최근 수정일: 2022-11-27
- */
-
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
