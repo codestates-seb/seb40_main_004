@@ -1,23 +1,18 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-09
- */
-
-import { CreatedDate } from './CreatedDate';
-import { CommentContainer } from './CommentContainer';
-import { TagList } from './TagList';
-import { UserNickname } from './UserNickname';
 import { useRouter } from 'next/router';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isLoginAtom } from '../../atomsYW';
-import { BtnLike } from './BtnLike';
-import { QuestionMainText } from './QuestionMainText';
-import { client } from '../../libs/client';
-import { BtnBookmark } from './BtnBookmark';
-import { isArticleEditAtom } from '../../atomsHJ';
-import { ArticleDetail } from '../../libs/interfaces';
 import { useEffect, useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isArticleEditAtom } from '../../../../atomsHJ';
+import { isLoginAtom } from '../../../../atomsYW';
+
+import { ArticleDetail } from '../../../../libs/interfaces';
+import { BtnBookmark } from './BtnBookmark';
+import { BtnLike } from '../../../common/BtnLike';
+import { CommentContainer } from '../CommentContainer/CommentContainer';
+import { CreatedDate } from '../../../common/CreatedDate';
+import { QuestionMainText } from './QuestionMainText';
+import { TagList } from '../../../common/TagList';
+import { UserNickname } from '../../../common/UserNickname';
+import { client } from '../../../../libs/client';
 
 type QuestionContentProps = {
   articleId: string;

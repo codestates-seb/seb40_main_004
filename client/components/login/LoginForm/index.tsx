@@ -70,7 +70,6 @@ export const LoginForm = () => {
             }}
             errors={errors.email?.message}
           />
-
           <Input
             label="비밀번호"
             type="password"

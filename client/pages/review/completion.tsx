@@ -1,11 +1,3 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-30
- * 개요
-   - 채택을 최종적으로 마무리하는 페이지입니다.
- */
-
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -18,8 +10,8 @@ import {
   reviewPointAtom,
   reviewRequestAtom,
 } from '../../atomsHJ';
-import { ProgressBar } from '../../components/hyejung/ProgressBar';
-import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
+import { ProgressBar } from '../../components/review/ProgressBar';
+import { BtnBackArticle } from '../../components/review/BtnBackArticle';
 import { client } from '../../libs/client';
 import { Seo } from '../../components/common/Seo';
 

@@ -1,29 +1,24 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-30
- */
 import { ProfileImage } from './ProfileImage';
 import { AnswerMainText } from './AnswerMainText';
-import { BtnLike } from './BtnLike';
-import { CommentContainer } from './CommentContainer';
-import { Answer } from '../../libs/interfaces';
-import { elapsedTime } from '../../libs/elapsedTime';
+import { BtnLike } from '../../../common/BtnLike';
+import { CommentContainer } from '../CommentContainer/CommentContainer';
+import { Answer } from '../../../../libs/interfaces';
+import { elapsedTime } from '../../../../libs/elapsedTime';
 import { useEffect, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   articleAuthorIdAtom,
   isAnswerEditAtom,
   reviewRequestAtom,
-} from '../../atomsHJ';
-import { client } from '../../libs/client';
+} from '../../../../atomsHJ';
+import { client } from '../../../../libs/client';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
+import { changeGradeEmoji } from '../../../../libs/changeGradeEmoji';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =
@@ -45,7 +40,7 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
   const answerElement = useRef<null | HTMLDivElement>(null);
   const isAnswerEdit = useRecoilValue(isAnswerEditAtom);
 
-  let currUserId: any = '';
+  let currUserId: string | null = '';
   if (typeof window !== 'undefined') {
     currUserId = localStorage.getItem('userId');
   }

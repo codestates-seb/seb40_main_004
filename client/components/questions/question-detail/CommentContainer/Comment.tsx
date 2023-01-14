@@ -1,22 +1,14 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-11-28
- * 개요:
-   - 질문/답변에 대한 코멘트를 렌더링합니다.
- */
+import { UserNickname } from '../../../common/UserNickname';
+import { CreatedDate } from '../../../common/CreatedDate';
+import { ProfileImage } from '../AnswerContent/ProfileImage';
 
-import { UserNickname } from './UserNickname';
-import { CreatedDate } from './CreatedDate';
-import { ProfileImage } from './ProfileImage';
-
-import { CommentResp } from '../../libs/interfaces';
-import { client } from '../../libs/client';
+import { CommentResp } from '../../../../libs/interfaces';
+import { client } from '../../../../libs/client';
 import { mutate } from 'swr';
 import { useState } from 'react';
 import { EditCommentTextArea } from './EditCommentTextArea';
 import { useRecoilValue } from 'recoil';
-import { isLoginAtom } from '../../atomsYW';
+import { isLoginAtom } from '../../../../atomsYW';
 
 export const Comment = ({
   answerId,
