@@ -1,31 +1,23 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-09
- * 개요
-   - 질문 상세 페이지입니다.
-   - 각 질문에 대한 정보, 본문, 답변과 댓글이 렌더링됩니다.
- */
-
 import { GetServerSideProps, NextPage } from 'next';
+import { useEffect, useRef } from 'react';
+import { useRecoilStateLoadable, useSetRecoilState } from 'recoil';
+import axios from 'axios';
+import { SWRConfig } from 'swr';
+
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
-import { QuestionContent } from '../../components/hyejung/QuestionContent';
-import { AnswerListContainer } from '../../components/hyejung/AnswerContainer';
-import { AnswerEditor } from '../../components/hyejung/AnswerEditor';
-import { useFetch } from '../../libs/useFetchSWR';
-import {
-  useRecoilState,
-  useRecoilStateLoadable,
-  useSetRecoilState,
-} from 'recoil';
-import { articleAuthorIdAtom, isAnswerPostedAtom } from '../../atomsHJ';
-import { useEffect, useRef } from 'react';
-import { BtnTopDown } from '../../components/common/BtnTopDown';
 import { Seo } from '../../components/common/Seo';
-import axios from 'axios';
+
 import { ArticleDetail } from '../../libs/interfaces';
-import { SWRConfig } from 'swr';
+
+import { useFetch } from '../../libs/useFetchSWR';
+
+import { articleAuthorIdAtom } from '../../atoms/articleAtom';
+import { isAnswerPostedAtom } from '../../atoms/answerAtom';
+import { AnswerEditor } from '../../components/questions/question-detail/AnswerContent/AnswerEditor';
+import { BtnTopDown } from '../../components/common/BtnTopDown';
+import { QuestionContent } from '../../components/questions/question-detail/QuestionContent/QuestionContent';
+import { AnswerListContainer } from '../../components/questions/question-detail/AnswerContent/AnswerContainer';
 
 type QuestionDetailProps = {
   articleId: string;

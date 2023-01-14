@@ -1,27 +1,21 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-15
- * 최근 수정일: 2022-12-01(박혜정)
- */
-
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { GetServerSideProps, NextPage } from 'next';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
+import { Header } from '../../components/common/Header';
+import { Footer } from '../../components/common/Footer';
+import { Seo } from '../../components/common/Seo';
+import { AuthenticationTimer } from '../../components/signup-email/AuthenticationTimer';
 import {
   userAuthKey,
   userEmailAtom,
   userNickName,
   userPassword,
-} from '../../atomsHS';
-import { AuthenticationTimer } from '../../components/haseung/AuthenticationTimer';
-import { Intro } from '../../components/haseung/Intro';
-import { Header } from '../../components/common/Header';
-import { Footer } from '../../components/common/Footer';
-import { GetServerSideProps, NextPage } from 'next';
-import { Seo } from '../../components/common/Seo';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+} from '../../atoms/userAtom';
 
 type VerificationNumber = {
   authKey: string;
@@ -73,7 +67,10 @@ const SignUpWithEmail: NextPage = () => {
         <Header />
         <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
           <article className="text-center mt-10 flex flex-col justify-center items-center w-96">
-            <Intro />
+            <h3 className="font-bold text-2xl text-font-gray">이메일 인증</h3>
+            <h3 className="mt-4 text-font-gray">
+              따뜻한 개발 문화에 동참하세요!
+            </h3>
             <section className="text-background-gray font-semibold flex justify-center items-center bg-main-gray w-full h-20 mt-10 rounded-[20px]">
               이메일로 인증번호가 전송되었습니다!
             </section>

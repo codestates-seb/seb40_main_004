@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useSetRecoilState } from 'recoil';
-import { isLoginAtom } from '../../../atomsYW';
+import { isLoginAtom } from '../../../atoms/loginAtom';
 import jwt_decode from 'jwt-decode';
 import { DecodedProps } from '../../../libs/interfaces';
 import { Loader } from '../../../components/common/Loader';

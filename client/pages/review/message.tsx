@@ -1,11 +1,3 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-30
- * 개요
-   - 답변 작성자에 대한 후기 메시지를 작성할 수 있는 페이지입니다.
- */
-
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -14,14 +6,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+
+import { ProgressBar } from '../../components/review/ProgressBar';
+import { BtnBackArticle } from '../../components/review/BtnBackArticle';
+import { Seo } from '../../components/common/Seo';
 import {
-  reviewTagsAtom,
   reviewContentAtom,
   reviewRequestAtom,
-} from '../../atomsHJ';
-import { ProgressBar } from '../../components/hyejung/ProgressBar';
-import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
-import { Seo } from '../../components/common/Seo';
+  reviewTagsAtom,
+} from '../../atoms/reviewAtom';
 
 type MessageForm = {
   message: string;

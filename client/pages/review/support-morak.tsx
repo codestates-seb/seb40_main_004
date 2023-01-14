@@ -1,11 +1,3 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-20
- * 개요
-   - 질문 작성자가 자유롭게 모락(경험치)을 후원할 수 있는 페이지 입니다.
- */
-
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -20,9 +12,9 @@ import {
   reviewRequestAtom,
   reviewTagsAtom,
   reviewPointAtom,
-} from '../../atomsHJ';
-import { ProgressBar } from '../../components/hyejung/ProgressBar';
-import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
+} from '../../atoms/reviewAtom';
+import { ProgressBar } from '../../components/review/ProgressBar';
+import { BtnBackArticle } from '../../components/review/BtnBackArticle';
 import { client } from '../../libs/client';
 import { Seo } from '../../components/common/Seo';
 

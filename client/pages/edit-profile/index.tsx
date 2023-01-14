@@ -1,18 +1,12 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-29
- * 최근 수정일: 2022-11-29
- */
-
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { Footer } from '../../components/common/Footer';
 import { Header } from '../../components/common/Header';
 import { Seo } from '../../components/common/Seo';
-import { AsideEditProfile } from '../../components/yeonwoo/AsideEditProfile';
-import { EditAvatar } from '../../components/yeonwoo/EditAvatar';
-import { EditProfileComponent } from '../../components/yeonwoo/EditProfile';
+import { AsideEditProfile } from '../../components/edit-privacy/AsideEditProfile';
+import { EditAvatar } from '../../components/edit-privacy/EditAvatar';
+import { EditProfileComponent } from '../../components/edit-privacy/EditProfile';
 
 const EditProfile: NextPage = () => {
   const router = useRouter();

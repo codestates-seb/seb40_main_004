@@ -1,28 +1,22 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-30
- * 개요
-   - 답변을 채택할 때 리뷰 태그를 선택할 수 있는 페이지 입니다.
- */
-
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
+
+import { ReviewTag } from '../../components/review/ReviewTag';
+import { ProgressBar } from '../../components/review/ProgressBar';
+import { BtnBackArticle } from '../../components/review/BtnBackArticle';
+
+import { getIsFromDashboard } from '../../libs/getIsFromDashboard';
+import { Seo } from '../../components/common/Seo';
 import {
   reviewRequestAtom,
   reviewTagsAtom,
   reviewTagsEnumAtom,
-} from '../../atomsHJ';
-import { ReviewTag } from '../../components/hyejung/ReviewTag';
-import { ProgressBar } from '../../components/hyejung/ProgressBar';
-import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
-import { userDashboardAtom } from '../../atomsYW';
-import { getIsFromDashboard } from '../../libs/getIsFromDashboard';
-import { Seo } from '../../components/common/Seo';
+} from '../../atoms/reviewAtom';
+import { userDashboardAtom } from '../../atoms/userAtom';
 
 type ReviewPageProps = {
   prevUrl: string;

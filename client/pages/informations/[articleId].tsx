@@ -1,18 +1,12 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-12-09
- * 최근 수정일: 2022-12-09
- */
-
 import { GetServerSideProps, NextPage } from 'next';
 import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
-import { QuestionContent } from '../../components/hyejung/QuestionContent';
 import { BtnTopDown } from '../../components/common/BtnTopDown';
 import { Seo } from '../../components/common/Seo';
 import axios from 'axios';
 import { ArticleDetail } from '../../libs/interfaces';
 import { SWRConfig } from 'swr';
+import { QuestionContent } from '../../components/questions/question-detail/QuestionContent/QuestionContent';
 
 type QuestionDetailProps = {
   articleId: string;
