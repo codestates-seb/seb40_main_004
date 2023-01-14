@@ -1,10 +1,3 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-12-07
- * 최근 수정일: 2022-12-07
- */
-
-import Link from 'next/link';
 import { ICalendar } from '../../interfaces';
 import { useFetch } from '../../libs/useFetchSWR';
 import { Loader } from '../common/Loader';

@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
 import {
   userEmailAtom,
-  userNickName,
-  userPassword,
+  userNickNameAtom,
+  userPasswordAtom,
 } from '../../../atoms/userAtom';
 
 import { Input } from '../../common/Input';
@@ -23,8 +23,8 @@ type SignUpProps = {
 
 export const SignUpForm = () => {
   const setEmail = useSetRecoilState(userEmailAtom);
-  const setPassword = useSetRecoilState(userPassword);
-  const setNickName = useSetRecoilState(userNickName);
+  const setPassword = useSetRecoilState(userPasswordAtom);
+  const setNickName = useSetRecoilState(userNickNameAtom);
   const router = useRouter();
   const {
     register,

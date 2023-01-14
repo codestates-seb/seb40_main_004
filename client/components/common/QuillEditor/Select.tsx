@@ -1,9 +1,3 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-12-04(박혜정)
- */
-
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';

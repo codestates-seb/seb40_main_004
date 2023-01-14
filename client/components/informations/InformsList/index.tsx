@@ -3,8 +3,6 @@ import { QuestionListProps } from '../../../libs/interfaces';
 import { elapsedTime } from '../../../libs/elapsedTime';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
-import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { Pagination } from '../../common/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
