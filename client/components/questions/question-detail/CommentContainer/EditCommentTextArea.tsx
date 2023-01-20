@@ -3,7 +3,7 @@ import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { client } from '../../../../libs/client';
 import { mutate } from 'swr';
 import { useFetch } from '../../../../libs/useFetchSWR';
-import { CommentResp } from '../../../../libs/interfaces';
+import { CommentResp } from '../../../../types/comment';
 import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';
 
 type TextAreaProps = {

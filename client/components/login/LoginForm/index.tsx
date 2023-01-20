@@ -6,7 +6,7 @@ import jwt_decode from 'jwt-decode';
 import { useSetRecoilState } from 'recoil';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { DecodedProps } from '../../../libs/interfaces';
+import { DecodedResp } from '../../../types/login';
 
 import { Input } from '../../common/Input';
 
@@ -33,7 +33,7 @@ export const LoginForm = () => {
         const accessToken = res.data.accessToken;
         const refreshToken = res.data.refreshToken;
         const avatarPath = res.data.avatarPath;
-        const decoded: DecodedProps = jwt_decode(accessToken);
+        const decoded: DecodedResp = jwt_decode(accessToken);
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('avatarPath', avatarPath);

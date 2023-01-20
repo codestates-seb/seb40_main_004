@@ -8,7 +8,7 @@ import { Header } from '../../components/common/Header';
 import { Footer } from '../../components/common/Footer';
 import { Seo } from '../../components/common/Seo';
 
-import { ArticleDetail } from '../../libs/interfaces';
+import { ArticleDetail } from '../../types/article';
 
 import { useFetch } from '../../libs/useFetchSWR';
 

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { UserInfo } from '../../libs/interfaces';
+import { UserInfo } from '../../types/user';
 import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 
 export const UserNickname = ({ nickname, userId, grade }: UserInfo) => {

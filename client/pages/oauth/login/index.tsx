@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useSetRecoilState } from 'recoil';
 import { isLoginAtom } from '../../../atoms/loginAtom';
 import jwt_decode from 'jwt-decode';
-import { DecodedProps } from '../../../libs/interfaces';
+import { DecodedResp } from '../../../types/login';
 import { Loader } from '../../../components/common/Loader';
 
 const OAuth2Login = () => {
@@ -29,7 +29,7 @@ const OAuth2Login = () => {
       .then((res) => {
         // 해당 요청에 성공했을 경우, 데이터 추출하여 로컬스토리지 저장
         const { accessToken, refreshToken, avatarPath } = res.data;
-        const decoded: DecodedProps = jwt_decode(accessToken);
+        const decoded: DecodedResp = jwt_decode(accessToken);
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('avatarPath', avatarPath);

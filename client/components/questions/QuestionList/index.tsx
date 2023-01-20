@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { QuestionListProps } from '../../../libs/interfaces';
+import { ArticleListProps } from '../../../types/article';
 import { elapsedTime } from '../../../libs/elapsedTime';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -19,7 +19,7 @@ export const QuestionList = ({
   if (!isLoading && response && response.data.length)
     return (
       <main className="flex flex-col w-full divide-y min-h-screen">
-        {response.data.map((article: QuestionListProps) => (
+        {response.data.map((article: ArticleListProps) => (
           <section className="py-4 space-y-4 " key={article.articleId}>
             <article className="space-x-2">
               {article.isClosed ? (

@@ -4,7 +4,7 @@ import { Footer } from '../../components/common/Footer';
 import { BtnTopDown } from '../../components/common/BtnTopDown';
 import { Seo } from '../../components/common/Seo';
 import axios from 'axios';
-import { ArticleDetail } from '../../libs/interfaces';
+import { ArticleDetail } from '../../types/article';
 import { SWRConfig } from 'swr';
 import { QuestionContent } from '../../components/questions/question-detail/QuestionContent/QuestionContent';
 

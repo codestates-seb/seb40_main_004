@@ -1,12 +1,26 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { rankList } from '../../interfaces';
 import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 import { client } from '../../libs/client';
+import { Avatar } from '../../types/user';
+
+export interface RankList {
+  userId: number;
+  nickname: string;
+  infoMessage: string | null;
+  point: number;
+  grade: string | null;
+  jobType: string | null;
+  articleCount: number;
+  likeCount: number;
+  answerCount: number;
+  rank: number;
+  avatar: Avatar | null;
+}
 
 export const HallOfFame = () => {
-  const [ranks, setRanks] = useState<rankList[] | null>(null);
+  const [ranks, setRanks] = useState<RankList[] | null>(null);
   const [errorAvatarId, setIsErrorAvatarId] = useState<(number | undefined)[]>(
     [],
   );

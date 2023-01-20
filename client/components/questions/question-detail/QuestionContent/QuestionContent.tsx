@@ -4,7 +4,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isArticleEditAtom } from '../../../../atoms/articleAtom';
 import { isLoginAtom } from '../../../../atoms/loginAtom';
 
-import { ArticleDetail } from '../../../../libs/interfaces';
+import { ArticleDetail } from '../../../../types/article';
 import { BtnBookmark } from './BtnBookmark';
 import { BtnLike } from '../../../common/BtnLike';
 import { CommentContainer } from '../CommentContainer/CommentContainer';

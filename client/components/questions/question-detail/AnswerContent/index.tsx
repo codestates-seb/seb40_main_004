@@ -2,7 +2,7 @@ import { ProfileImage } from './ProfileImage';
 import { AnswerMainText } from './AnswerMainText';
 import { BtnLike } from '../../../common/BtnLike';
 import { CommentContainer } from '../CommentContainer/CommentContainer';
-import { Answer } from '../../../../libs/interfaces';
+import { Answer } from '../../../../types/answer';
 import { elapsedTime } from '../../../../libs/elapsedTime';
 import { useEffect, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';

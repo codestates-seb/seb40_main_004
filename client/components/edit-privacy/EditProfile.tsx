@@ -7,7 +7,7 @@ import { isLoginAtom } from '../../atoms/loginAtom';
 import { renderingAtom } from '../../atoms/renderingAtom';
 import { dataHeaderAtom } from '../../atoms/userAtom';
 
-import { userDashboard } from '../../interfaces';
+import { UserDashboard } from '../../types/dashboard';
 import { client } from '../../libs/client';
 import { inspectNicknameDuplication } from '../../libs/inspectNicknameDuplication';
 
@@ -24,7 +24,7 @@ export const EditProfileComponent = () => {
   const [pathname, setPathname] = useState('');
   const [userId, setUserId] = useState('');
   const [accessToken, setAccessToken] = useState('');
-  const [userData, setUserData] = useState<userDashboard>();
+  const [userData, setUserData] = useState<UserDashboard>();
   const [nickname, setNickname] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
   const [github, setGithub] = useState('');
