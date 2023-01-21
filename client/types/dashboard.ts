@@ -1,4 +1,4 @@
-export interface userDashboard {
+export interface UserDashboard {
   userId: number;
   email: string;
   nickname: string;
@@ -71,75 +71,4 @@ export interface userDashboard {
         };
       }[]
     | []; // 수정 필요
-}
-
-export interface articleList {
-  articleId: number;
-  category: string;
-  title: string;
-  clicks: number;
-  likes: number;
-  isClosed: boolean;
-  tags: [
-    {
-      tagId: number;
-      name: string;
-    },
-  ];
-  commentCount: number;
-  answerCount: number;
-  createdAt: string;
-  lastModifiedAt: string;
-  userInfo: {
-    userId: number;
-    nickname: string;
-    grade: string | null;
-  };
-  avatar: {
-    avatarId: number | null;
-    filename: string | null;
-    remotePath: string | null;
-  };
-}
-
-export interface rankList {
-  userId: number;
-  nickname: string;
-  infoMessage: string | null;
-  point: number;
-  grade: string | null;
-  jobType: string | null;
-  articleCount: number;
-  likeCount: number;
-  answerCount: number;
-  rank: number;
-  avatar: {
-    avatarId: number;
-    filename: string;
-    remotePath: string;
-  } | null;
-}
-
-export interface IDataHeader {
-  point: number;
-  userInfo: {
-    userId: number;
-    nickname: string;
-    grade: string;
-  };
-  avatar: {
-    avatarId: number | null;
-    filename: string | null;
-    remotePath: string | null;
-  } | null;
-}
-
-export interface ICalendar {
-  jobId: number;
-  name: string;
-  state: string;
-  careerRequirement: string;
-  url: string;
-  startDate: string;
-  endDate: string;
 }

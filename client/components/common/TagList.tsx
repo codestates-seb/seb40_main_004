@@ -2,7 +2,7 @@ type TagListProps = {
   tags: Tags[];
 };
 
-import { Tags } from '../../libs/interfaces';
+import { Tags } from '../../types/article';
 import { BtnTag } from './BtnTag';
 
 export const TagList = ({ tags }: TagListProps) => {

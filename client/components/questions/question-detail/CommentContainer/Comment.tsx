@@ -2,7 +2,7 @@ import { UserNickname } from '../../../common/UserNickname';
 import { CreatedDate } from '../../../common/CreatedDate';
 import { ProfileImage } from '../AnswerContent/ProfileImage';
 
-import { CommentResp } from '../../../../libs/interfaces';
+import { CommentResp } from '../../../../types/comment';
 import { client } from '../../../../libs/client';
 import { mutate } from 'swr';
 import { useState } from 'react';

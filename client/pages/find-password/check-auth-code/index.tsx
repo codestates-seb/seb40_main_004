@@ -10,14 +10,14 @@ import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 import { Loader } from '../../../components/common/Loader';
 import { Seo } from '../../../components/common/Seo';
-import { AuthProps } from '../../../libs/interfaces';
+import { AuthResp } from '../../../types/login';
 
 const CheckAuthCode: NextPage = () => {
-  const { register, handleSubmit } = useForm<AuthProps>({ mode: 'onChange' });
+  const { register, handleSubmit } = useForm<AuthResp>({ mode: 'onChange' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const setEmail = useSetRecoilState(userEmailAtom);
   const router = useRouter();
-  const onValid = ({ email, authKey }: AuthProps) => {
+  const onValid = ({ email, authKey }: AuthResp) => {
     axios
       .post(`/api/auth/password/recovery`, { email, authKey })
       .then(() => {

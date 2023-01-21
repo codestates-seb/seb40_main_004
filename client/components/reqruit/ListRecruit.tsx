@@ -1,4 +1,4 @@
-import { ICalendar } from '../../interfaces';
+import { ICalendar } from '../../types/calendar';
 import { useFetch } from '../../libs/useFetchSWR';
 import { Loader } from '../common/Loader';
 

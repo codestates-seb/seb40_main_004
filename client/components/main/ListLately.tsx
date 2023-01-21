@@ -3,13 +3,13 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { articleList } from '../../interfaces';
+import { ArticleListProps } from '../../types/article';
 import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
 import { client } from '../../libs/client';
 import { elapsedTime } from '../../libs/elapsedTime';
 
 export const ListLately = () => {
-  const [data, setData] = useState<articleList[] | null>(null);
+  const [data, setData] = useState<ArticleListProps[] | null>(null);
   const getList = async () => {
     const res = await client.get(
       '/api/articles?category=QNA&keyword=null&target=null&sort=desc&page=1&size=10',

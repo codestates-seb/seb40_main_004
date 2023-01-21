@@ -8,15 +8,15 @@ import { Footer } from '../../../components/common/Footer';
 import { Header } from '../../../components/common/Header';
 import { Loader } from '../../../components/common/Loader';
 import { Seo } from '../../../components/common/Seo';
-import { AuthProps } from '../../../libs/interfaces';
+import { AuthResp } from '../../../types/login';
 
 const GetAuthCode: NextPage = () => {
-  const { register, handleSubmit } = useForm<AuthProps>({
+  const { register, handleSubmit } = useForm<AuthResp>({
     mode: 'onChange',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const onValid = ({ email }: AuthProps) => {
+  const onValid = ({ email }: AuthResp) => {
     axios
       .post(`/api/auth/password/support`, { email })
       .then(() => {

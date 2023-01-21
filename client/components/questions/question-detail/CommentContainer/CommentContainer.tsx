@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { Comment } from './Comment';
 import { CommentTextArea } from './CommentTextArea';
-import { CommentResp } from '../../../../libs/interfaces';
+import { CommentResp } from '../../../../types/comment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { useFetch } from '../../../../libs/useFetchSWR';
