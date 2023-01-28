@@ -1,23 +1,25 @@
 import { ProfileImage } from './ProfileImage';
 import { AnswerMainText } from './AnswerMainText';
-import { BtnLike } from '../../../common/BtnLike';
 import { CommentContainer } from '../CommentContainer/CommentContainer';
-import { Answer } from '../../../../types/answer';
-import { elapsedTime } from '../../../../libs/elapsedTime';
 import { useEffect, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { articleAuthorIdAtom } from '../../../../atoms/articleAtom';
-import { isAnswerEditAtom } from '../../../../atoms/answerAtom';
-import { reviewRequestAtom } from '../../../../atoms/reviewAtom';
 
-import { client } from '../../../../libs/client';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
-import { changeGradeEmoji } from '../../../../libs/changeGradeEmoji';
+import { Answer } from '@type/answer';
+
+import { isAnswerEditAtom } from '@atoms/answerAtom';
+import { articleAuthorIdAtom } from '@atoms/articleAtom';
+import { reviewRequestAtom } from '@atoms/reviewAtom';
+
+import { client } from '@libs/client';
+import { changeGradeEmoji } from '@libs/changeGradeEmoji';
+import { elapsedTime } from '@libs/elapsedTime';
+import { BtnLike } from '@components/common/BtnLike';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =

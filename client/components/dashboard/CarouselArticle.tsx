@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { wrap } from 'popmotion';
@@ -10,10 +9,11 @@ import {
   faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilValue } from 'recoil';
-import { userDashboardAtom } from '../../atoms/userAtom';
 
 import Link from 'next/link';
-import { changeTagPrettier } from '../../libs/changeTagPrettier';
+import { userDashboardAtom } from '@atoms/userAtom';
+
+import { changeTagPrettier } from '@libs/changeTagPrettier';
 
 const variants = {
   enter: (direction: number) => {

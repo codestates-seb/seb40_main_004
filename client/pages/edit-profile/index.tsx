@@ -1,12 +1,13 @@
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { Footer } from '../../components/common/Footer';
-import { Header } from '../../components/common/Header';
-import { Seo } from '../../components/common/Seo';
-import { AsideEditProfile } from '../../components/edit-privacy/AsideEditProfile';
-import { EditAvatar } from '../../components/edit-privacy/EditAvatar';
-import { EditProfileComponent } from '../../components/edit-privacy/EditProfile';
+
+import { Footer } from '@components/common/Footer';
+import { Header } from '@components/common/Header';
+import { Seo } from '@components/common/Seo';
+import { AsideEditProfile } from '@components/edit-privacy/AsideEditProfile';
+import { EditAvatar } from '@components/edit-privacy/EditAvatar';
+import { EditProfileComponent } from '@components/edit-privacy/EditProfile';
 
 const EditProfile: NextPage = () => {
   const router = useRouter();

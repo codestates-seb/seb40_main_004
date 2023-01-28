@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useRecoilValue } from 'recoil';
-import { isLoginAtom } from '../atoms/loginAtom';
+
+import { isLoginAtom } from '@atoms/loginAtom';
 
 export const useCheckClickIsLogin = () => {
   const isLogin = useRecoilValue(isLoginAtom);

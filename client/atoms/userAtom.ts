@@ -1,6 +1,6 @@
+import { IDataHeader } from '@type/user';
+import { UserDashboard } from '@type/dashboard';
 import { atom } from 'recoil';
-import { IDataHeader } from '../types/user';
-import { UserDashboard } from '../types/dashboard';
 
 export const userEmailAtom = atom({
   key: 'email',

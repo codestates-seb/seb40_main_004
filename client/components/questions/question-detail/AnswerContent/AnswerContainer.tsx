@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useFetch } from '../../../../libs/useFetchSWR';
-import { Answer } from '../../../../types/answer';
 import { AnswerContent, AnswerProps } from './index';
+
+import { useFetch } from '@libs/useFetchSWR';
+
+import { Answer } from '@type/answer';
 
 type AnswerListProps = {
   index: number;

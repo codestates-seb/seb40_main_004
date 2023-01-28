@@ -1,19 +1,22 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilValue } from 'recoil';
+
 import {
   reviewTagsAtom,
   reviewContentAtom,
   reviewPointAtom,
   reviewRequestAtom,
-} from '../../atoms/reviewAtom';
-import { ProgressBar } from '../../components/review/ProgressBar';
-import { BtnBackArticle } from '../../components/review/BtnBackArticle';
-import { client } from '../../libs/client';
-import { Seo } from '../../components/common/Seo';
+} from '@atoms/reviewAtom';
+
+import { ProgressBar } from '@components/review/ProgressBar';
+import { BtnBackArticle } from '@components/review/BtnBackArticle';
+import { Seo } from '@components/common/Seo';
+
+import { client } from '@libs/client';
 
 const Completion: NextPage = () => {
   const router = useRouter();
@@ -40,7 +43,7 @@ const Completion: NextPage = () => {
     client
       .post(url, payload)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         alert('🔥후기가 전송되었습니다! 따듯한 후기 고마워요!🔥');
         if (reviewRequest.dashboardUrl) {
           router.replace(reviewRequest.dashboardUrl);

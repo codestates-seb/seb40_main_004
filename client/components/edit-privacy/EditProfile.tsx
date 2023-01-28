@@ -3,13 +3,15 @@ import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-import { isLoginAtom } from '../../atoms/loginAtom';
-import { renderingAtom } from '../../atoms/renderingAtom';
-import { dataHeaderAtom } from '../../atoms/userAtom';
 
-import { UserDashboard } from '../../types/dashboard';
-import { client } from '../../libs/client';
-import { inspectNicknameDuplication } from '../../libs/inspectNicknameDuplication';
+import { isLoginAtom } from '@atoms/loginAtom';
+import { renderingAtom } from '@atoms/renderingAtom';
+import { dataHeaderAtom } from '@atoms/userAtom';
+
+import { client } from '@libs/client';
+import { inspectNicknameDuplication } from '@libs/inspectNicknameDuplication';
+
+import { UserDashboard } from '@type/dashboard';
 
 interface IChangePassword {
   originalPassword: string;

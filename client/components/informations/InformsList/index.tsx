@@ -1,12 +1,14 @@
 import Link from 'next/link';
-import { ArticleListProps } from '../../../types/article';
-import { elapsedTime } from '../../../libs/elapsedTime';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
-import { Pagination } from '../../common/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Loader } from '../../common/Loader';
+import { ArticleListProps } from '@type/article';
+
+import { elapsedTime } from '@libs/elapsedTime';
+
+import { Loader } from '@components/common/Loader';
+import { Pagination } from '@components/common/Pagination';
 
 export const InformsList = ({
   response,

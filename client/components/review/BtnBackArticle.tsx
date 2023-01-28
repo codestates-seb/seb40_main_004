@@ -2,7 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
-import { reviewRequestAtom } from '../../atoms/reviewAtom';
+
+import { reviewRequestAtom } from '@atoms/reviewAtom';
 
 type BtnBackArticleProp = {
   articleId: string;

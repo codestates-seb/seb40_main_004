@@ -11,13 +11,15 @@ import { confirmAlert } from 'react-confirm-alert';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useRecoilState } from 'recoil';
-import { client } from '../../../libs/client';
-import { getFileUrl, uploadImg } from '../../../libs/uploadS3';
 import { Select, SelectOption } from './Select';
 import { QuillEditor } from '.';
 import { Loader } from '../Loader';
 import { ValidationMsg } from '../ValildationMsg';
-import { isArticleEditAtom } from '../../../atoms/articleAtom';
+
+import { isArticleEditAtom } from '@atoms/articleAtom';
+
+import { client } from '@libs/client';
+import { getFileUrl, uploadImg } from '@libs/uploadS3';
 
 type ContentProps = {
   title: string;
