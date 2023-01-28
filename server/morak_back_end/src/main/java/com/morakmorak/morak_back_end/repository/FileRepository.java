@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface FileRepository extends JpaRepository<File, Long> {
     Optional<File> findFileByLocalPath(String localPath);
 
+    Optional<File> findById(Long fileId);
+
 }

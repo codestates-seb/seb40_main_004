@@ -13,7 +13,7 @@ import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.service.AnswerService;
+import com.morakmorak.morak_back_end.service.answer_service.AnswerService;
 import com.morakmorak.morak_back_end.service.ArticleService;
 import com.morakmorak.morak_back_end.service.NotificationService;
 import com.morakmorak.morak_back_end.service.ReviewService;

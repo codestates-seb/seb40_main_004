@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.service;
+package com.morakmorak.morak_back_end.service.file_service;
 
 import com.morakmorak.morak_back_end.dto.FileDto;
 import com.morakmorak.morak_back_end.entity.File;
