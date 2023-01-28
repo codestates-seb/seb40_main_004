@@ -1,42 +1,20 @@
-import { UserInfo } from './user';
-import { Avatar } from './user';
+import { Base } from './base';
+// import { UserInfo } from './user';
+// import { Avatar } from './user';
 
 export interface Tags {
   tagId: number;
   name: string;
 }
 
-export interface ArticleDetail {
-  articleId: number;
-  category: string;
-  title: string;
-  content: string;
-  clicks: number;
-  likes: number;
-  isClosed: boolean;
+export interface ArticleDetail extends Base {
   isLiked: boolean;
   isBookmarked: boolean;
-  createdAt: string;
-  lastModifiedAt: string;
   expiredDate: null;
-  tags: Tags[];
-  userInfo: UserInfo;
-  avatar: Avatar;
   comments: Comment[];
 }
 
-export interface ArticleListProps {
+export interface ArticleListProps extends Base {
   answerCount: number;
-  articleId: number;
-  category: string;
-  clicks: number;
-  createdAt: string;
-  isClosed: boolean;
-  lastModifiedAt: string;
-  likes: number;
-  title: string;
   commentCount: number;
-  avatar: Avatar;
-  tags: Tags[];
-  userInfo: UserInfo;
 }
