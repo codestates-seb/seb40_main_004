@@ -70,7 +70,7 @@ export const QuestionContent = ({
       content: article.content,
       articleId: articleId as string,
     });
-    router.push(`/ask`);
+    router.push(`/post`);
   };
 
   return (

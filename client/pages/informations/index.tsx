@@ -135,10 +135,10 @@ const Questions: NextPage = () => {
             </div>
             <Link href="/post">
               <button
-                className="bg-main-orange bg-opacity-80 py-1.5 px-4 rounded-md text-font-gray hover:bg-main-orange hover:opacity-100 w-28 transition-all"
+                className="bg-main-orange bg-opacity-80 py-1.5 px-2 rounded-md text-font-gray hover:bg-main-orange hover:opacity-100 w-28 transition-all"
                 onClick={checkIsLogin}
               >
-                질문하기
+                글 작성하기
               </button>
             </Link>
           </article>

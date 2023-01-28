@@ -1,13 +1,6 @@
-import { UserInfo } from './user';
-import { Avatar } from './user';
+import { Base } from './base';
 
-export interface CommentResp {
+export interface CommentResp extends Base {
   answerId?: number | null;
   commentId: number;
-  articleId: number;
-  content: string;
-  createdAt: string;
-  lastModifiedAt: string;
-  userInfo: UserInfo;
-  avatar: Avatar;
 }
