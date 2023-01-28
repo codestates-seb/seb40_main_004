@@ -60,14 +60,10 @@ const CheckAuthCode: NextPage = () => {
             className="rounded-full w-96 h-10 pl-4 border"
           />
           <button className="bg-main-yellow bg-opacity-80 py-3 w-full rounded-[20px] font-bold mb-5 hover:bg-main-yellow">
-            임시 비밀번호 발급
+            {isSubmitting ? <Loader /> : '임시 비밀번호 발급'}
           </button>
           <p className="text-center relative top-20 font-bold text-xl">
-            {isSubmitting ? (
-              <>
-                <Loader /> <span>임시 비밀번호 전송 중....</span>
-              </>
-            ) : null}
+            {isSubmitting ? <span>임시 비밀번호 전송 중....</span> : null}
           </p>
         </form>
       </main>
