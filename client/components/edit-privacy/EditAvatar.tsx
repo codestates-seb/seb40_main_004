@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { renderingAtom } from '../../atoms/renderingAtom';
-import { dataHeaderAtom } from '../../atoms/userAtom';
 
-import { client } from '../../libs/client';
-import { uploadImg } from '../../libs/uploadS3';
+import { renderingAtom } from '@atoms/renderingAtom';
+import { dataHeaderAtom } from '@atoms/userAtom';
+
+import { client } from '@libs/client';
+import { uploadImg } from '@libs/uploadS3';
 
 export const EditAvatar = () => {
   const setRenderingHeader = useSetRecoilState(renderingAtom);

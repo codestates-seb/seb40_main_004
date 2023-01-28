@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
-import { client } from '../../libs/client';
-import { Avatar } from '../../types/user';
 
+import { changeGradeEmoji } from '@libs/changeGradeEmoji';
+import { client } from '@libs/client';
+
+import { Avatar } from '@type/user';
 export interface RankList {
   userId: number;
   nickname: string;

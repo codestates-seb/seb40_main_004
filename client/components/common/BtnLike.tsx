@@ -3,16 +3,18 @@ import { faHeart as SolidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as VoidHeart } from '@fortawesome/free-regular-svg-icons';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { client } from '../../libs/client';
-import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
 import { useRecoilValue } from 'recoil';
-import { isLoginAtom } from '../../atoms/loginAtom';
+
+import { client } from '@libs/client';
+import { isLoginAtom } from '@atoms/loginAtom';
+import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
 
 type BtnLikeProps = {
   isLiked: boolean;
   answerId?: number;
-  likes: number;
+  likes?: number;
 };
+
 export const BtnLike = ({ isLiked, answerId, likes }: BtnLikeProps) => {
   // 좋아요 요청을 위한 articleId
   const router = useRouter();

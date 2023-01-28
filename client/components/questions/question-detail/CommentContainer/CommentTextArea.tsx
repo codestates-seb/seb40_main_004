@@ -1,14 +1,17 @@
 import { useRouter } from 'next/router';
-import { Button } from '../../../common/Button';
+
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 
 import { mutate } from 'swr';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';
-import { client } from '../../../../libs/client';
-import { isLoginAtom } from '../../../../atoms/loginAtom';
-import { renderingAtom } from '../../../../atoms/renderingAtom';
+import { Button } from '@components/common/Button';
+
+import { isLoginAtom } from '@atoms/loginAtom';
+import { renderingAtom } from '@atoms/renderingAtom';
+
+import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
+import { client } from '@libs/client';
 
 type TextAreaProps = {
   answerId?: number;

@@ -1,20 +1,20 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
 import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { ProgressBar } from '../../components/review/ProgressBar';
-import { BtnBackArticle } from '../../components/review/BtnBackArticle';
-import { Seo } from '../../components/common/Seo';
 import {
   reviewContentAtom,
   reviewRequestAtom,
   reviewTagsAtom,
-} from '../../atoms/reviewAtom';
+} from '@atoms/reviewAtom';
+
+import { Seo } from '@components/common/Seo';
+import { BtnBackArticle } from '@components/review/BtnBackArticle';
+import { ProgressBar } from '@components/review/ProgressBar';
 
 type MessageForm = {
   message: string;

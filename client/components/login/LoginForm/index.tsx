@@ -6,13 +6,14 @@ import jwt_decode from 'jwt-decode';
 import { useSetRecoilState } from 'recoil';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { DecodedResp } from '../../../types/login';
 
-import { Input } from '../../common/Input';
+import { DecodedResp } from '@type/login';
 
-import { Loader } from '../../common/Loader';
-import { SocialLoginBtn } from '../../common/SocialLoginBtn';
-import { isLoginAtom } from '../../../atoms/loginAtom';
+import { Input } from '@components/common/Input';
+import { Loader } from '@components/common/Loader';
+import { SocialLoginBtn } from '@components/common/SocialLoginBtn';
+
+import { isLoginAtom } from '@atoms/loginAtom';
 
 type LoginProps = {
   email: string;

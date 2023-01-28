@@ -1,6 +1,6 @@
-import { ICalendar } from '../../types/calendar';
-import { useFetch } from '../../libs/useFetchSWR';
-import { Loader } from '../common/Loader';
+import { Loader } from '@components/common/Loader';
+import { useFetch } from '@libs/useFetchSWR';
+import { ICalendar } from '@type/calendar';
 
 export const ListRecruit = () => {
   const {

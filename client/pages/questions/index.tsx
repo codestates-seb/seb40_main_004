@@ -8,17 +8,18 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
-import { Header } from '../../components/common/Header';
-import { QuestionList } from '../../components/questions/QuestionList';
-import { SearchWithTagButton } from '../../components/questions/SearchWithTagButton';
-import { Footer } from '../../components/common/Footer';
-import { Seo } from '../../components/common/Seo';
-
-import { useFetch } from '../../libs/useFetchSWR';
-
 import { useRecoilState } from 'recoil';
-import { keywordAtom } from '../../atoms/keywordAtom';
-import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
+
+import { keywordAtom } from '@atoms/keywordAtom';
+
+import { Seo } from '@components/common/Seo';
+import { Header } from '@components/common/Header';
+import { SearchWithTagButton } from '@components/questions/SearchWithTagButton';
+import { QuestionList } from '@components/questions/QuestionList';
+import { Footer } from '@components/common/Footer';
+
+import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
+import { useFetch } from '@libs/useFetchSWR';
 
 type FormValue = {
   keyword: string;

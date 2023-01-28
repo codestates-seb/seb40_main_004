@@ -1,5 +1,5 @@
+import { userDashboardAtom } from '@atoms/userAtom';
 import { useRecoilValue } from 'recoil';
-import { userDashboardAtom } from '../../atoms/userAtom';
 
 const arrKor = [
   '친절한',

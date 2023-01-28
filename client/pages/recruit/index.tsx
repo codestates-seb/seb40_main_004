@@ -1,8 +1,9 @@
 import { NextPage } from 'next';
-import { Footer } from '../../components/common/Footer';
-import { Header } from '../../components/common/Header';
-import { Seo } from '../../components/common/Seo';
-import { ListRecruit } from '../../components/reqruit/ListRecruit';
+
+import { Footer } from '@components/common/Footer';
+import { Header } from '@components/common/Header';
+import { Seo } from '@components/common/Seo';
+import { ListRecruit } from '@components/recruit/ListRecruit';
 
 const Recruit: NextPage = () => {
   return (

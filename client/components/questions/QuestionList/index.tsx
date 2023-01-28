@@ -1,14 +1,17 @@
 import Link from 'next/link';
-import { ArticleListProps } from '../../../types/article';
-import { elapsedTime } from '../../../libs/elapsedTime';
+
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Pagination } from '../../common/Pagination';
-import { Loader } from '../../common/Loader';
+
+import { ArticleListProps } from '@type/article';
+import { elapsedTime } from '@libs/elapsedTime';
+
+import { Pagination } from '@components/common/Pagination';
+import { Loader } from '@components/common/Loader';
 
 export const QuestionList = ({
   response,

@@ -1,19 +1,20 @@
+import { QuillEditor } from '@components/common/QuillEditor';
+
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  isAnswerEditAtom,
-  isAnswerPostedAtom,
-} from '../../../../atoms/answerAtom';
-import { isLoginAtom } from '../../../../atoms/loginAtom';
-import { renderingAtom } from '../../../../atoms/renderingAtom';
-import { client } from '../../../../libs/client';
-import { useFetch } from '../../../../libs/useFetchSWR';
+
 import { mutate as patchMutate } from 'swr';
-import { getFileUrl, uploadImg } from '../../../../libs/uploadS3';
-import { QuillEditor } from '../../../common/QuillEditor';
-import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';
+
+import { isAnswerEditAtom, isAnswerPostedAtom } from '@atoms/answerAtom';
+import { isLoginAtom } from '@atoms/loginAtom';
+import { renderingAtom } from '@atoms/renderingAtom';
+
+import { client } from '@libs/client';
+import { getFileUrl, uploadImg } from '@libs/uploadS3';
+import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
+import { useFetch } from '@libs/useFetchSWR';
 
 type FormValue = {
   content: string;

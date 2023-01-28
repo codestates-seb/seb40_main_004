@@ -2,10 +2,14 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useSetRecoilState } from 'recoil';
-import { isLoginAtom } from '../../../atoms/loginAtom';
+
 import jwt_decode from 'jwt-decode';
-import { DecodedResp } from '../../../types/login';
-import { Loader } from '../../../components/common/Loader';
+
+import { isLoginAtom } from '@atoms/loginAtom';
+
+import { DecodedResp } from '@type/login';
+
+import { Loader } from '@components/common/Loader';
 
 const OAuth2Login = () => {
   // uri 에 담겨오는 리프레시 토큰 추출

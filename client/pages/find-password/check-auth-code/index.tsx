@@ -5,12 +5,15 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
-import { userEmailAtom } from '../../../atoms/userAtom';
-import { Footer } from '../../../components/common/Footer';
-import { Header } from '../../../components/common/Header';
-import { Loader } from '../../../components/common/Loader';
-import { Seo } from '../../../components/common/Seo';
-import { AuthResp } from '../../../types/login';
+
+import { Footer } from '@components/common/Footer';
+import { Header } from '@components/common/Header';
+import { Loader } from '@components/common/Loader';
+import { Seo } from '@components/common/Seo';
+
+import { userEmailAtom } from '@atoms/userAtom';
+
+import { AuthResp } from '@type/login';
 
 const CheckAuthCode: NextPage = () => {
   const { register, handleSubmit } = useForm<AuthResp>({ mode: 'onChange' });

@@ -6,20 +6,19 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { Header } from '../../components/common/Header';
-import { Footer } from '../../components/common/Footer';
-import { Seo } from '../../components/common/Seo';
-import { AuthenticationTimer } from '../../components/signup-email/AuthenticationTimer';
 import {
   userAuthKeyAtom,
   userEmailAtom,
   userNickNameAtom,
   userPasswordAtom,
-} from '../../atoms/userAtom';
+} from '@atoms/userAtom';
 
-type VerificationNumber = {
-  authKey: string;
-};
+import { Seo } from '@components/common/Seo';
+import { Header } from '@components/common/Header';
+import { AuthenticationTimer } from '@components/signup-email/AuthenticationTimer';
+import { Footer } from '@components/common/Footer';
+
+type VerificationNumber = { authKey: string };
 
 const SignUpWithEmail: NextPage = () => {
   const [isOkAuthCode, setIsOkAuthCode] = useState(false);
