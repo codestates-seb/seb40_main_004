@@ -3,9 +3,11 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useRecoilValue } from 'recoil';
-import { isLoginAtom } from '../../atoms/loginAtom';
-import { Editor } from '../../components/common/QuillEditor/Editor';
-import { Seo } from '../../components/common/Seo';
+
+import { isLoginAtom } from '@atoms/loginAtom';
+
+import { Editor } from '@components/common/QuillEditor/Editor';
+import { Seo } from '@components/common/Seo';
 
 const Ask: NextPage = () => {
   const isLogin = useRecoilValue(isLoginAtom);

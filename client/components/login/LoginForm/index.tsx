@@ -6,13 +6,14 @@ import jwt_decode from 'jwt-decode';
 import { useSetRecoilState } from 'recoil';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { DecodedProps } from '../../../libs/interfaces';
 
-import { Input } from '../../common/Input';
+import { DecodedResp } from '@type/login';
 
-import { Loader } from '../../common/Loader';
-import { SocialLoginBtn } from '../../common/SocialLoginBtn';
-import { isLoginAtom } from '../../../atoms/loginAtom';
+import { Input } from '@components/common/Input';
+import { Loader } from '@components/common/Loader';
+import { SocialLoginBtn } from '@components/common/SocialLoginBtn';
+
+import { isLoginAtom } from '@atoms/loginAtom';
 
 type LoginProps = {
   email: string;
@@ -33,7 +34,7 @@ export const LoginForm = () => {
         const accessToken = res.data.accessToken;
         const refreshToken = res.data.refreshToken;
         const avatarPath = res.data.avatarPath;
-        const decoded: DecodedProps = jwt_decode(accessToken);
+        const decoded: DecodedResp = jwt_decode(accessToken);
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('avatarPath', avatarPath);

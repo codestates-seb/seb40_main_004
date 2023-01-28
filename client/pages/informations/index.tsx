@@ -1,19 +1,24 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetServerSideProps, NextPage } from 'next';
-import { Header } from '../../components/common/Header';
-import { SearchWithTagButton } from '../../components/questions/SearchWithTagButton';
-import { Footer } from '../../components/common/Footer';
+
 import { useEffect, useState } from 'react';
-import { useFetch } from '../../libs/useFetchSWR';
+
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Link from 'next/link';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState } from 'recoil';
-import { keywordAtom } from '../../atoms/keywordAtom';
-import { useCheckClickIsLogin } from '../../libs/useCheckIsLogin';
-import { Seo } from '../../components/common/Seo';
-import { InformsList } from '../../components/informations/InformsList';
+
+import { keywordAtom } from '@atoms/keywordAtom';
+
+import { Seo } from '@components/common/Seo';
+import { Header } from '@components/common/Header';
+import { InformsList } from '@components/informations/InformsList';
+import { Footer } from '@components/common/Footer';
+import { SearchWithTagButton } from '@components/questions/SearchWithTagButton';
+
+import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
+import { useFetch } from '@libs/useFetchSWR';
 
 type FormValue = {
   keyword: string;
@@ -130,10 +135,10 @@ const Questions: NextPage = () => {
             </div>
             <Link href="/post">
               <button
-                className="bg-main-orange bg-opacity-80 py-1.5 px-4 rounded-md text-font-gray hover:bg-main-orange hover:opacity-100 w-28 transition-all"
+                className="bg-main-orange bg-opacity-80 py-1.5 px-2 rounded-md text-font-gray hover:bg-main-orange hover:opacity-100 w-28 transition-all"
                 onClick={checkIsLogin}
               >
-                질문하기
+                글 작성하기
               </button>
             </Link>
           </article>

@@ -4,15 +4,17 @@ import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
+
+import { Divider } from '../SignupForm/Divider';
+
 import {
   userEmailAtom,
   userNickNameAtom,
   userPasswordAtom,
-} from '../../../atoms/userAtom';
+} from '@atoms/userAtom';
 
-import { Input } from '../../common/Input';
-import { SocialLoginBtn } from '../../common/SocialLoginBtn';
-import { Divider } from '../SignupForm/Divider';
+import { Input } from '@components/common/Input';
+import { SocialLoginBtn } from '@components/common/SocialLoginBtn';
 
 type SignUpProps = {
   email: string;

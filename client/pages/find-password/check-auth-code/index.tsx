@@ -5,19 +5,22 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
-import { userEmailAtom } from '../../../atoms/userAtom';
-import { Footer } from '../../../components/common/Footer';
-import { Header } from '../../../components/common/Header';
-import { Loader } from '../../../components/common/Loader';
-import { Seo } from '../../../components/common/Seo';
-import { AuthProps } from '../../../libs/interfaces';
+
+import { Footer } from '@components/common/Footer';
+import { Header } from '@components/common/Header';
+import { Loader } from '@components/common/Loader';
+import { Seo } from '@components/common/Seo';
+
+import { userEmailAtom } from '@atoms/userAtom';
+
+import { AuthResp } from '@type/login';
 
 const CheckAuthCode: NextPage = () => {
-  const { register, handleSubmit } = useForm<AuthProps>({ mode: 'onChange' });
+  const { register, handleSubmit } = useForm<AuthResp>({ mode: 'onChange' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const setEmail = useSetRecoilState(userEmailAtom);
   const router = useRouter();
-  const onValid = ({ email, authKey }: AuthProps) => {
+  const onValid = ({ email, authKey }: AuthResp) => {
     axios
       .post(`/api/auth/password/recovery`, { email, authKey })
       .then(() => {
@@ -57,14 +60,10 @@ const CheckAuthCode: NextPage = () => {
             className="rounded-full w-96 h-10 pl-4 border"
           />
           <button className="bg-main-yellow bg-opacity-80 py-3 w-full rounded-[20px] font-bold mb-5 hover:bg-main-yellow">
-            임시 비밀번호 발급
+            {isSubmitting ? <Loader /> : '임시 비밀번호 발급'}
           </button>
           <p className="text-center relative top-20 font-bold text-xl">
-            {isSubmitting ? (
-              <>
-                <Loader /> <span>임시 비밀번호 전송 중....</span>
-              </>
-            ) : null}
+            {isSubmitting ? <span>임시 비밀번호 전송 중....</span> : null}
           </p>
         </form>
       </main>

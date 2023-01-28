@@ -1,12 +1,14 @@
 import Link from 'next/link';
-import { QuestionListProps } from '../../../libs/interfaces';
-import { elapsedTime } from '../../../libs/elapsedTime';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
-import { Pagination } from '../../common/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Loader } from '../../common/Loader';
+import { ArticleListProps } from '@type/article';
+
+import { elapsedTime } from '@libs/elapsedTime';
+
+import { Loader } from '@components/common/Loader';
+import { Pagination } from '@components/common/Pagination';
 
 export const InformsList = ({
   response,
@@ -17,7 +19,7 @@ export const InformsList = ({
   if (!isLoading && response && response.data.length)
     return (
       <main className="flex flex-col w-full divide-y min-h-screen">
-        {response.data.map((article: QuestionListProps) => (
+        {response.data.map((article: ArticleListProps) => (
           <section className="py-4 space-y-4 " key={article.articleId}>
             <article className="space-x-2">
               <Link href={`/informations/${article.articleId}`}>

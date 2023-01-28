@@ -1,6 +1,7 @@
 import { useRecoilValue } from 'recoil';
-import { userDashboardAtom } from '../../atoms/userAtom';
-import { changeTagPrettier } from '../../libs/changeTagPrettier';
+
+import { userDashboardAtom } from '@atoms/userAtom';
+import { changeTagPrettier } from '@libs/changeTagPrettier';
 
 export const AsideMid = () => {
   const userDashboard = useRecoilValue(userDashboardAtom);

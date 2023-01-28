@@ -1,8 +1,9 @@
-import { Header } from '../../components/common/Header';
-import { Footer } from '../../components/common/Footer';
 import { GetServerSideProps, NextPage } from 'next';
-import { Seo } from '../../components/common/Seo';
-import { LoginForm } from '../../components/login/LoginForm';
+
+import { Footer } from '@components/common/Footer';
+import { Header } from '@components/common/Header';
+import { Seo } from '@components/common/Seo';
+import { LoginForm } from '@components/login/LoginForm';
 
 const Login: NextPage = () => {
   return (

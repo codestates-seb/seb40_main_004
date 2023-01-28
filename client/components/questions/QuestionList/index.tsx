@@ -1,14 +1,17 @@
 import Link from 'next/link';
-import { QuestionListProps } from '../../../libs/interfaces';
-import { elapsedTime } from '../../../libs/elapsedTime';
+
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faCircleCheck as voidCheck } from '@fortawesome/free-regular-svg-icons';
 import { faCircleCheck as solidCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Pagination } from '../../common/Pagination';
-import { Loader } from '../../common/Loader';
+
+import { ArticleListProps } from '@type/article';
+import { elapsedTime } from '@libs/elapsedTime';
+
+import { Pagination } from '@components/common/Pagination';
+import { Loader } from '@components/common/Loader';
 
 export const QuestionList = ({
   response,
@@ -19,7 +22,7 @@ export const QuestionList = ({
   if (!isLoading && response && response.data.length)
     return (
       <main className="flex flex-col w-full divide-y min-h-screen">
-        {response.data.map((article: QuestionListProps) => (
+        {response.data.map((article: ArticleListProps) => (
           <section className="py-4 space-y-4 " key={article.articleId}>
             <article className="space-x-2">
               {article.isClosed ? (

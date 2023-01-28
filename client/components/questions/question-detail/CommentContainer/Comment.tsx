@@ -1,14 +1,17 @@
-import { UserNickname } from '../../../common/UserNickname';
-import { CreatedDate } from '../../../common/CreatedDate';
-import { ProfileImage } from '../AnswerContent/ProfileImage';
-
-import { CommentResp } from '../../../../libs/interfaces';
-import { client } from '../../../../libs/client';
-import { mutate } from 'swr';
 import { useState } from 'react';
-import { EditCommentTextArea } from './EditCommentTextArea';
 import { useRecoilValue } from 'recoil';
-import { isLoginAtom } from '../../../../atoms/loginAtom';
+import { mutate } from 'swr';
+import { ProfileImage } from '../AnswerContent/ProfileImage';
+import { EditCommentTextArea } from './EditCommentTextArea';
+
+import { isLoginAtom } from '@atoms/loginAtom';
+
+import { CreatedDate } from '@components/common/CreatedDate';
+import { UserNickname } from '@components/common/UserNickname';
+
+import { client } from '@libs/client';
+
+import { CommentResp } from '@type/comment';
 
 export const Comment = ({
   answerId,
@@ -18,7 +21,7 @@ export const Comment = ({
   createdAt,
   userInfo,
   avatar,
-}: CommentResp) => {
+}: Omit<CommentResp, 'title'>) => {
   let currUserId: any = '';
   if (typeof window !== 'undefined') {
     currUserId = localStorage.getItem('userId');

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { wrap } from 'popmotion';
@@ -11,8 +10,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { client } from '../../libs/client';
-import { changeTagPrettier } from '../../libs/changeTagPrettier';
+
+import { client } from '@libs/client';
+import { changeTagPrettier } from '@libs/changeTagPrettier';
 
 const variants = {
   enter: (direction: number) => {

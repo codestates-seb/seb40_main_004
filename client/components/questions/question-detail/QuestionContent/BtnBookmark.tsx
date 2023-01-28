@@ -3,10 +3,13 @@ import { faBookmark as SolidBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as VoidBookmark } from '@fortawesome/free-regular-svg-icons';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { client } from '../../../../libs/client';
-import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';
-import { isLoginAtom } from '../../../../atoms/loginAtom';
+
 import { useRecoilValue } from 'recoil';
+
+import { isLoginAtom } from '@atoms/loginAtom';
+
+import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
+import { client } from '@libs/client';
 
 type BtnBookmarkProps = {
   isBookmarked: boolean;

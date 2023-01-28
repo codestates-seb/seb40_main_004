@@ -1,10 +1,14 @@
-import { Button } from '../../../common/Button';
 import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
-import { client } from '../../../../libs/client';
+
 import { mutate } from 'swr';
-import { useFetch } from '../../../../libs/useFetchSWR';
-import { CommentResp } from '../../../../libs/interfaces';
-import { useCheckClickIsLogin } from '../../../../libs/useCheckIsLogin';
+
+import { client } from '@libs/client';
+import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
+import { useFetch } from '@libs/useFetchSWR';
+
+import { Button } from '@components/common/Button';
+
+import { CommentResp } from '@type/comment';
 
 type TextAreaProps = {
   url: string;

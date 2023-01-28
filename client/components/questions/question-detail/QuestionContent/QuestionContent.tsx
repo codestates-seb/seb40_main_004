@@ -1,18 +1,22 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isArticleEditAtom } from '../../../../atoms/articleAtom';
-import { isLoginAtom } from '../../../../atoms/loginAtom';
 
-import { ArticleDetail } from '../../../../libs/interfaces';
 import { BtnBookmark } from './BtnBookmark';
-import { BtnLike } from '../../../common/BtnLike';
-import { CommentContainer } from '../CommentContainer/CommentContainer';
-import { CreatedDate } from '../../../common/CreatedDate';
 import { QuestionMainText } from './QuestionMainText';
-import { TagList } from '../../../common/TagList';
-import { UserNickname } from '../../../common/UserNickname';
-import { client } from '../../../../libs/client';
+import { CommentContainer } from '../CommentContainer/CommentContainer';
+
+import { isArticleEditAtom } from '@atoms/articleAtom';
+import { isLoginAtom } from '@atoms/loginAtom';
+
+import { UserNickname } from '@components/common/UserNickname';
+import { CreatedDate } from '@components/common/CreatedDate';
+import { BtnLike } from '@components/common/BtnLike';
+import { TagList } from '@components/common/TagList';
+
+import { ArticleDetail } from '@type/article';
+
+import { client } from '@libs/client';
 
 type QuestionContentProps = {
   articleId: string;
@@ -66,7 +70,7 @@ export const QuestionContent = ({
       content: article.content,
       articleId: articleId as string,
     });
-    router.push(`/ask`);
+    router.push(`/post`);
   };
 
   return (

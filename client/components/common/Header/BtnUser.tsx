@@ -4,8 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { dataHeaderAtom } from '../../../atoms/userAtom';
-import { changeGradeEmoji } from '../../../libs/changeGradeEmoji';
+
+import { dataHeaderAtom } from '@atoms/userAtom';
+import { changeGradeEmoji } from '@libs/changeGradeEmoji';
 
 export const BtnUser = () => {
   const dataHeader = useRecoilValue(dataHeaderAtom);

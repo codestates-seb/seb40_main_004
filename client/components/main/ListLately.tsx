@@ -1,15 +1,17 @@
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { articleList } from '../../interfaces';
-import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
-import { client } from '../../libs/client';
-import { elapsedTime } from '../../libs/elapsedTime';
+
+import { changeGradeEmoji } from '@libs/changeGradeEmoji';
+import { client } from '@libs/client';
+import { elapsedTime } from '@libs/elapsedTime';
+import { ArticleListProps } from '@type/article';
 
 export const ListLately = () => {
-  const [data, setData] = useState<articleList[] | null>(null);
+  const [data, setData] = useState<ArticleListProps[] | null>(null);
   const getList = async () => {
     const res = await client.get(
       '/api/articles?category=QNA&keyword=null&target=null&sort=desc&page=1&size=10',
@@ -28,7 +30,7 @@ export const ListLately = () => {
         <Link href="/questions">
           <span className="text-xs hover:cursor-pointer">더보기 ＞</span>
         </Link>
-        <Link href="/ask">
+        <Link href="/post">
           <span className="text-xs ml-4 hover:cursor-pointer">
             📝 질문 작성 ＞
           </span>

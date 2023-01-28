@@ -1,5 +1,6 @@
+import { IDataHeader } from '@type/user';
+import { UserDashboard } from '@type/dashboard';
 import { atom } from 'recoil';
-import { IDataHeader, userDashboard } from '../interfaces';
 
 export const userEmailAtom = atom({
   key: 'email',
@@ -21,7 +22,7 @@ export const userNickNameAtom = atom({
   default: '',
 });
 
-export const userDashboardAtom = atom<userDashboard>({
+export const userDashboardAtom = atom<UserDashboard>({
   key: 'userDashboard',
   default: {
     userId: 0,

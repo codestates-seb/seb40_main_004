@@ -1,12 +1,15 @@
 import { useRouter } from 'next/router';
 import { Comment } from './Comment';
 import { CommentTextArea } from './CommentTextArea';
-import { CommentResp } from '../../../../libs/interfaces';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
-import { useFetch } from '../../../../libs/useFetchSWR';
+
 import { useRecoilState } from 'recoil';
-import { isCommentOpenAtom } from '../../../../atoms/commentAtom';
+
+import { CommentResp } from '@type/comment';
+import { isCommentOpenAtom } from '@atoms/commentAtom';
+import { useFetch } from '@libs/useFetchSWR';
 
 type CommentList = {
   comments: CommentResp[];

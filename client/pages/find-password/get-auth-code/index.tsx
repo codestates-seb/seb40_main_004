@@ -4,19 +4,21 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { Footer } from '../../../components/common/Footer';
-import { Header } from '../../../components/common/Header';
-import { Loader } from '../../../components/common/Loader';
-import { Seo } from '../../../components/common/Seo';
-import { AuthProps } from '../../../libs/interfaces';
+
+import { Footer } from '@components/common/Footer';
+import { Header } from '@components/common/Header';
+import { Loader } from '@components/common/Loader';
+import { Seo } from '@components/common/Seo';
+
+import { AuthResp } from '@type/login';
 
 const GetAuthCode: NextPage = () => {
-  const { register, handleSubmit } = useForm<AuthProps>({
+  const { register, handleSubmit } = useForm<AuthResp>({
     mode: 'onChange',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const onValid = ({ email }: AuthProps) => {
+  const onValid = ({ email }: AuthResp) => {
     axios
       .post(`/api/auth/password/support`, { email })
       .then(() => {
@@ -43,14 +45,10 @@ const GetAuthCode: NextPage = () => {
             className="rounded-full w-full h-10 pl-4 border"
           />
           <button className="bg-main-yellow bg-opacity-80 py-3 w-full rounded-[20px] font-bold  hover:bg-main-yellow">
-            인증번호 발송
+            {isSubmitting ? <Loader /> : '인증번호 발송'}
           </button>
           <p className="text-center relative top-20 font-bold text-xl">
-            {isSubmitting ? (
-              <>
-                <Loader /> <span>인증번호 전송 중....</span>
-              </>
-            ) : null}
+            {isSubmitting ? <span>인증번호 전송 중....</span> : null}
           </p>
         </form>
       </main>

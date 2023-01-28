@@ -5,14 +5,15 @@ import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { isLoginAtom } from '../../atoms/loginAtom';
-import { renderingAtom } from '../../atoms/renderingAtom';
-import { userDashboardAtom } from '../../atoms/userAtom';
 
-import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
-import { client } from '../../libs/client';
-import { inspectNicknameDuplication } from '../../libs/inspectNicknameDuplication';
-import { uploadImg } from '../../libs/uploadS3';
+import { isLoginAtom } from '@atoms/loginAtom';
+import { renderingAtom } from '@atoms/renderingAtom';
+import { userDashboardAtom } from '@atoms/userAtom';
+
+import { changeGradeEmoji } from '@libs/changeGradeEmoji';
+import { client } from '@libs/client';
+import { inspectNicknameDuplication } from '@libs/inspectNicknameDuplication';
+import { uploadImg } from '@libs/uploadS3';
 
 export const AsideTop = () => {
   const isLogin = useRecoilValue(isLoginAtom);
@@ -76,7 +77,7 @@ export const AsideTop = () => {
       const file = files && files[0];
       await uploadImg(res.data.preSignedUrl, file);
       setIsClicked(false);
-      toast.error('프로필이 정상적으로 변경되었습니다!');
+      toast.success('프로필이 정상적으로 변경되었습니다!');
       setRenderingHeader((prev) => !prev);
     } catch (error) {
       toast.error('오류가 발생했습니다. 다시 시도해주세요!');

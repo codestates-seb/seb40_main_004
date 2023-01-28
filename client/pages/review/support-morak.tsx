@@ -1,22 +1,25 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faChevronRight,
   faChevronDown,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilValue, useRecoilState } from 'recoil';
+
 import {
+  reviewPointAtom,
   reviewRequestAtom,
   reviewTagsAtom,
-  reviewPointAtom,
-} from '../../atoms/reviewAtom';
-import { ProgressBar } from '../../components/review/ProgressBar';
-import { BtnBackArticle } from '../../components/review/BtnBackArticle';
-import { client } from '../../libs/client';
-import { Seo } from '../../components/common/Seo';
+} from '@atoms/reviewAtom';
+
+import { client } from '@libs/client';
+
+import { Seo } from '@components/common/Seo';
+import { BtnBackArticle } from '@components/review/BtnBackArticle';
+import { ProgressBar } from '@components/review/ProgressBar';
 
 const SupportMorak: NextPage = () => {
   const router = useRouter();

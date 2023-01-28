@@ -3,13 +3,15 @@ import { useRouter } from 'next/router';
 import { FormEvent, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
-import { isLoginAtom } from '../../atoms/loginAtom';
-import { renderingAtom } from '../../atoms/renderingAtom';
-import { dataHeaderAtom } from '../../atoms/userAtom';
 
-import { userDashboard } from '../../interfaces';
-import { client } from '../../libs/client';
-import { inspectNicknameDuplication } from '../../libs/inspectNicknameDuplication';
+import { isLoginAtom } from '@atoms/loginAtom';
+import { renderingAtom } from '@atoms/renderingAtom';
+import { dataHeaderAtom } from '@atoms/userAtom';
+
+import { client } from '@libs/client';
+import { inspectNicknameDuplication } from '@libs/inspectNicknameDuplication';
+
+import { UserDashboard } from '@type/dashboard';
 
 interface IChangePassword {
   originalPassword: string;
@@ -24,7 +26,7 @@ export const EditProfileComponent = () => {
   const [pathname, setPathname] = useState('');
   const [userId, setUserId] = useState('');
   const [accessToken, setAccessToken] = useState('');
-  const [userData, setUserData] = useState<userDashboard>();
+  const [userData, setUserData] = useState<UserDashboard>();
   const [nickname, setNickname] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
   const [github, setGithub] = useState('');

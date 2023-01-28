@@ -74,7 +74,11 @@ client.interceptors.response.use(
     // 기존 요청을 저장해둔다.
     const originalRequest = config;
     // 만약 그 에러가 401 에러라면
-    if (status === 401 || status === 403) {
+    if (
+      status === 401
+      // 에러 확인을 위해 임시적으로 주석처리
+      // || status === 403
+    ) {
       6;
       const response = await refreshAccessToken();
       originalRequest.headers.Authorization = response?.newAccessToken;

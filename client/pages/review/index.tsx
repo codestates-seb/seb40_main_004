@@ -1,22 +1,23 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { ReviewTag } from '../../components/review/ReviewTag';
-import { ProgressBar } from '../../components/review/ProgressBar';
-import { BtnBackArticle } from '../../components/review/BtnBackArticle';
+import { getIsFromDashboard } from '@libs/getIsFromDashboard';
 
-import { getIsFromDashboard } from '../../libs/getIsFromDashboard';
-import { Seo } from '../../components/common/Seo';
+import { Seo } from '@components/common/Seo';
+import { BtnBackArticle } from '@components/review/BtnBackArticle';
+import { ProgressBar } from '@components/review/ProgressBar';
+import { ReviewTag } from '@components/review/ReviewTag';
+
 import {
   reviewRequestAtom,
   reviewTagsAtom,
   reviewTagsEnumAtom,
-} from '../../atoms/reviewAtom';
-import { userDashboardAtom } from '../../atoms/userAtom';
+} from '@atoms/reviewAtom';
+import { userDashboardAtom } from '@atoms/userAtom';
 
 type ReviewPageProps = {
   prevUrl: string;

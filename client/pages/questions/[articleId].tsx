@@ -4,20 +4,20 @@ import { useRecoilStateLoadable, useSetRecoilState } from 'recoil';
 import axios from 'axios';
 import { SWRConfig } from 'swr';
 
-import { Header } from '../../components/common/Header';
-import { Footer } from '../../components/common/Footer';
-import { Seo } from '../../components/common/Seo';
+import { ArticleDetail } from '@type/article';
 
-import { ArticleDetail } from '../../libs/interfaces';
+import { useFetch } from '@libs/useFetchSWR';
 
-import { useFetch } from '../../libs/useFetchSWR';
+import { articleAuthorIdAtom } from '@atoms/articleAtom';
+import { isAnswerPostedAtom } from '@atoms/answerAtom';
 
-import { articleAuthorIdAtom } from '../../atoms/articleAtom';
-import { isAnswerPostedAtom } from '../../atoms/answerAtom';
-import { AnswerEditor } from '../../components/questions/question-detail/AnswerContent/AnswerEditor';
-import { BtnTopDown } from '../../components/common/BtnTopDown';
-import { QuestionContent } from '../../components/questions/question-detail/QuestionContent/QuestionContent';
-import { AnswerListContainer } from '../../components/questions/question-detail/AnswerContent/AnswerContainer';
+import { Seo } from '@components/common/Seo';
+import { Header } from '@components/common/Header';
+import { BtnTopDown } from '@components/common/BtnTopDown';
+import { QuestionContent } from '@components/questions/question-detail/QuestionContent/QuestionContent';
+import { AnswerListContainer } from '@components/questions/question-detail/AnswerContent/AnswerContainer';
+import { AnswerEditor } from '@components/questions/question-detail/AnswerContent/AnswerEditor';
+import { Footer } from '@components/common/Footer';
 
 type QuestionDetailProps = {
   articleId: string;

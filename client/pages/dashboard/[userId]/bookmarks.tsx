@@ -3,18 +3,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { renderingAtom } from '../../../atoms/renderingAtom';
-import { userDashboardAtom } from '../../../atoms/userAtom';
-import { Footer } from '../../../components/common/Footer';
-import { Header } from '../../../components/common/Header';
-import { Seo } from '../../../components/common/Seo';
-import { AsideBot } from '../../../components/dashboard/AsideBot';
-import { AsideMid } from '../../../components/dashboard/AsideMid';
-import { AsideTop } from '../../../components/dashboard/AsideTop';
-import { CarouselBookmarks } from '../../../components/dashboard/CarouselBookmarks';
-import { CarouselReview } from '../../../components/dashboard/CarouselReview';
 
-import { client } from '../../../libs/client';
+import { renderingAtom } from '@atoms/renderingAtom';
+import { userDashboardAtom } from '@atoms/userAtom';
+
+import { client } from '@libs/client';
+
+import { Footer } from '@components/common/Footer';
+import { Header } from '@components/common/Header';
+import { Seo } from '@components/common/Seo';
+import { AsideBot } from '@components/dashboard/AsideBot';
+import { AsideMid } from '@components/dashboard/AsideMid';
+import { AsideTop } from '@components/dashboard/AsideTop';
+import { CarouselBookmarks } from '@components/dashboard/CarouselBookmarks';
+import { CarouselReview } from '@components/dashboard/CarouselReview';
 
 const DashboardBookmarks: NextPage = () => {
   const rendering = useRecoilValue(renderingAtom);
