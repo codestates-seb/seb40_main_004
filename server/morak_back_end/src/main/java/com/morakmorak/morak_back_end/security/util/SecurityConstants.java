@@ -13,7 +13,7 @@ public class SecurityConstants {
     public final static String EMAIL = "email";
     public static final String NICKNAME = "nickname";
 
-    public final static String REDIRECT_URL_OAUTH2 = "https://seb40-main-004.vercel.app/oauth/login";
+    public final static String REDIRECT_URL_OAUTH2 = "https://morakmorak.vercel.app/oauth/login";
     public final static String ACCESS_TOKEN = "AccessToken";
 
     public final static Long AUTH_KEY_EXPIRATION_PERIOD = 300000L;

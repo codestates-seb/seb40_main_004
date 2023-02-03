@@ -62,7 +62,8 @@ public class UserServiceTest {
     @DisplayName("상세 활동 내역을 조회하려는 유저를 찾을 수 없으면 BusinessLogicException이 발생한다")
     void findActivity_failed() {
         //given
-        LocalDate date = LocalDate.parse("2022-01-01");
+        int year = LocalDate.now().getYear();
+        LocalDate date = LocalDate.parse(year + "-01-01");
 
         //when //then
         assertThatThrownBy(() -> userService.findActivityHistoryOn(date, ID1)).isInstanceOf(BusinessLogicException.class);
@@ -92,7 +93,8 @@ public class UserServiceTest {
     @DisplayName("해당 날짜에 아무런 데이터가 없더라도 예외가 발생하지 않는다.")
     void findActivity_success() {
         //given
-        LocalDate date = LocalDate.parse("2022-01-01");
+        int year = LocalDate.now().getYear();
+        LocalDate date = LocalDate.parse(year + "-01-01");
 
         given(userRepository.findById(ID1)).willReturn(Optional.of(User.builder().build()));
         given(userQueryRepository.getWrittenCommentHistoryOn(date, ID1)).willReturn(List.of());
@@ -113,7 +115,8 @@ public class UserServiceTest {
     @DisplayName("반환 값을 조합하여 ActivityDto.Detail 객체를 반환한다")
     void findActivity_success2() {
         //given
-        LocalDate date = LocalDate.parse("2022-01-01");
+        int year = LocalDate.now().getYear();
+        LocalDate date = LocalDate.parse(year + "-01-01");
 
         ActivityDto.Article article = ActivityDto.Article.builder()
                 .articleId(1L)
