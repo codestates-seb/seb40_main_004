@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -171,11 +170,9 @@ public class ArticleService {
         }).collect(Collectors.toList());
     }
 
-    public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo, HttpServletRequest request, HttpServletResponse response) {
+    public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo, Cookie[] cookies, HttpServletResponse response) {
         Article dbArticle = findVerifiedArticle(articleId);
         checkArticleStatus(dbArticle);
-
-        Cookie[] cookies = request.getCookies();
 
         verifyClickCountPlus( dbArticle, response, cookies);
 
