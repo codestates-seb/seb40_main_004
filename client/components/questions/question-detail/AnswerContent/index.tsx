@@ -1,6 +1,6 @@
 import { ProfileImage } from './ProfileImage';
 import { AnswerMainText } from './AnswerMainText';
-import { CommentContainer } from '../CommentContainer/CommentContainer';
+import { CommentContainer } from '../Comment/index';
 import { useEffect, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 

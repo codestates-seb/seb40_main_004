@@ -12,6 +12,7 @@ import { UserNickname } from '@components/common/UserNickname';
 import { client } from '@libs/client';
 
 import { CommentResp } from '@type/comment';
+import { toast } from 'react-toastify';
 
 export const Comment = ({
   answerId,
@@ -40,12 +41,12 @@ export const Comment = ({
       client
         .delete(url)
         .then(() => {
-          alert('삭제가 완료되었습니다!');
+          toast.success('삭제가 완료되었습니다!');
           mutate(mutateUrl);
         })
         .catch((err) => {
+          toast.error('삭제에 실패했습니다.');
           console.error(err);
-          alert('삭제에 실패했습니다.');
         });
     }
   };
