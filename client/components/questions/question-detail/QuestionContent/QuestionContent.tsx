@@ -4,7 +4,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { BtnBookmark } from './BtnBookmark';
 import { QuestionMainText } from './QuestionMainText';
-import { CommentContainer } from '../CommentContainer/CommentContainer';
+import { CommentContainer } from '../Comment/index';
 
 import { isArticleEditAtom } from '@atoms/articleAtom';
 import { isLoginAtom } from '@atoms/loginAtom';
@@ -123,7 +123,7 @@ export const QuestionContent = ({
         </section>
 
         <section className="space-y-3 border-l pl-4">
-          <CommentContainer />
+          <CommentContainer commentPreview={article.comments?.[0]} />
         </section>
       </>
     </main>

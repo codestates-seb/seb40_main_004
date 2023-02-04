@@ -12,6 +12,7 @@ import { renderingAtom } from '@atoms/renderingAtom';
 
 import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
 import { client } from '@libs/client';
+import { toast } from 'react-toastify';
 
 type TextAreaProps = {
   answerId?: number;
@@ -50,7 +51,7 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
         setRenderingHeader((prev) => !prev);
       })
       .catch((err) => {
-        alert('코멘트 등록에 실패했습니다...!');
+        toast.error('코멘트 등록에 실패했습니다...!');
         console.log(err);
       });
   };
@@ -66,7 +67,7 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
 
   const onInvalid: SubmitErrorHandler<FormValue> = () => {
     if (isLogin) {
-      alert('코멘트를 입력해주세요!');
+      toast.error('코멘트를 입력해주세요!');
     } else {
       checkIsLogin();
     }

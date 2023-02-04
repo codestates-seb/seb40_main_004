@@ -9,6 +9,7 @@ import { useFetch } from '@libs/useFetchSWR';
 import { Button } from '@components/common/Button';
 
 import { CommentResp } from '@type/comment';
+import { toast } from 'react-toastify';
 
 type TextAreaProps = {
   url: string;
@@ -52,8 +53,8 @@ export const EditCommentTextArea = ({
     patchComment(data);
   };
 
-  const onInvalid: SubmitErrorHandler<FormValue> = (data) => {
-    alert('코멘트를 입력해주세요!');
+  const onInvalid: SubmitErrorHandler<FormValue> = () => {
+    toast.error('코멘트를 입력해주세요!');
   };
 
   return (
