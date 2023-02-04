@@ -10,18 +10,10 @@ import { useFetch } from '@libs/useFetchSWR';
 import { useState } from 'react';
 
 type CommentList = {
-  commentPreview?: CommentResp;
-  answerId?: number;
-  url: string;
   comments: CommentResp[];
 };
 
-const CommentList = ({
-  comments,
-  commentPreview,
-  url,
-  answerId,
-}: CommentList) => {
+const CommentList = ({ comments }: CommentList) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return isOpen ? (
@@ -73,10 +65,7 @@ type CommentContainerProps = {
   commentPreview?: CommentResp;
 };
 
-export const CommentContainer = ({
-  answerId,
-  commentPreview,
-}: CommentContainerProps) => {
+export const CommentContainer = ({ answerId }: CommentContainerProps) => {
   // 현재 게시글 id
   const router = useRouter();
   const { articleId } = router.query;
@@ -93,14 +82,7 @@ export const CommentContainer = ({
     <>
       <h3 className="text-xl font-bold">{comments?.length || 0} 코멘트</h3>
       <section className="space-y-8 pt-4">
-        {comments?.length > 0 && (
-          <CommentList
-            commentPreview={commentPreview}
-            url={url}
-            answerId={answerId}
-            comments={comments}
-          />
-        )}
+        {comments?.length > 0 && <CommentList comments={comments} />}
         <CommentTextArea answerId={answerId} />
       </section>
     </>
