@@ -123,7 +123,7 @@ export const QuestionContent = ({
         </section>
 
         <section className="space-y-3 border-l pl-4">
-          <CommentContainer commentPreview={article.comments?.[0]} />
+          <CommentContainer />
         </section>
       </>
     </main>
