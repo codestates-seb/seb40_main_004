@@ -70,7 +70,7 @@ public class ArticleController {
                                                               @PathVariable("article-id") Long articleId,
                                                               HttpServletRequest request,
                                                               HttpServletResponse response) {
-        return articleService.findDetailArticle(articleId, userInfo, request, response);
+        return articleService.findDetailArticle(articleId, userInfo, request.getCookies(), response);
     }
 
     @PostMapping("/{article-id}/likes")
