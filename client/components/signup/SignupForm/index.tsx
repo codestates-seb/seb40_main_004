@@ -82,7 +82,9 @@ export const SignUpForm = () => {
             }}
           />
           {errors.nickname?.type === 'pattern' ? (
-            <p>자음/모음 1자리 이상, 7자리 이하여야 합니다.</p>
+            <p className="font-bold text-red-500">
+              자음/모음 1자리 이상, 7자리 이하여야 합니다.
+            </p>
           ) : null}
           <Input
             label="이메일"
@@ -96,7 +98,9 @@ export const SignUpForm = () => {
             }}
           />
           {errors.email?.type === 'pattern' ? (
-            <p>이메일이 형식에 맞지 않습니다.</p>
+            <p className="font-bold text-red-500">
+              이메일이 형식에 맞지 않습니다.
+            </p>
           ) : null}
           <Input
             label="비밀번호"
@@ -111,7 +115,7 @@ export const SignUpForm = () => {
             }}
           />
           {errors.password?.type === 'pattern' ? (
-            <p>
+            <p className=" font-bold text-red-500 ">
               비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다.
             </p>
           ) : null}
