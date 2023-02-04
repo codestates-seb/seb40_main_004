@@ -9,7 +9,7 @@ import { Seo } from '@components/common/Seo';
 import { AuthResp } from '@type/login';
 
 import useCheckAuth from '../useCheckAuth';
-import { authCheckCode } from 'api/api';
+import { authCheckCode } from 'api/authCheckAndSetCodeApi';
 
 const CheckAuthCode: NextPage = () => {
   const {
