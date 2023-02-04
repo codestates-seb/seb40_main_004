@@ -1,40 +1,39 @@
-import axios from 'axios';
 import { GetServerSideProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { useSetRecoilState } from 'recoil';
 
 import { Footer } from '@components/common/Footer';
 import { Header } from '@components/common/Header';
 import { Loader } from '@components/common/Loader';
 import { Seo } from '@components/common/Seo';
 
-import { userEmailAtom } from '@atoms/userAtom';
-
 import { AuthResp } from '@type/login';
 
+import useCheckAuth from '../useCheckAuth';
+import { authCheckCode } from 'api/api';
+
 const CheckAuthCode: NextPage = () => {
-  const { register, handleSubmit } = useForm<AuthResp>({ mode: 'onChange' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const setEmail = useSetRecoilState(userEmailAtom);
-  const router = useRouter();
-  const onValid = ({ email, authKey }: AuthResp) => {
-    axios
-      .post(`/api/auth/password/recovery`, { email, authKey })
-      .then(() => {
-        setIsSubmitting(true);
-        setEmail(email);
-        toast.success('임시 비밀번호가 발급되었습니다! 메일을 확인해주세요.😉');
-        router.push('/login');
-      })
-      .catch((error) => {
-        console.error('error', error);
-        toast.error(
-          '이메일이나 인증번호가 올바르게 입력되었는지 확인해주세요.🥲',
-        );
-      });
+  const {
+    register,
+    handleSubmit,
+    isSubmitting,
+    setIsSubmitting,
+    router,
+    setEmail,
+  } = useCheckAuth();
+
+  const onValid = async ({ email, authKey }: AuthResp) => {
+    try {
+      authCheckCode(email, authKey);
+      setIsSubmitting(true);
+      setEmail(email);
+      toast.success('임시 비밀번호가 발급되었습니다! 메일을 확인해주세요.😉');
+      router.push('/login');
+    } catch (error) {
+      console.error('error', error);
+      toast.error(
+        '이메일이나 인증번호가 올바르게 입력되었는지 확인해주세요.🥲',
+      );
+    }
   };
   return (
     <>
