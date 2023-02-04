@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -14,6 +13,7 @@ import { Loader } from '@components/common/Loader';
 import { SocialLoginBtn } from '@components/common/SocialLoginBtn';
 
 import { isLoginAtom } from '@atoms/loginAtom';
+import { authentiCate } from 'api/api';
 
 type LoginProps = {
   email: string;
@@ -24,32 +24,35 @@ export const LoginForm = () => {
   const setIsLogin = useSetRecoilState(isLoginAtom);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const onValid = ({ email, password }: LoginProps) => {
-    axios
-      .post(`/api/auth/token`, {
-        email,
-        password,
-      })
-      .then((res) => {
-        const accessToken = res.data.accessToken;
-        const refreshToken = res.data.refreshToken;
-        const avatarPath = res.data.avatarPath;
-        const decoded: DecodedResp = jwt_decode(accessToken);
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('avatarPath', avatarPath);
-        localStorage.setItem('email', decoded.sub);
-        localStorage.setItem('userId', String(decoded.id));
-        localStorage.setItem('nickname', decoded.nickname);
-        setIsSubmitting(true);
-        setIsLogin(true);
-        toast.success('로그인 성공!');
-        router.push('/');
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error('로그인에 실패했습니다! 다시 한 번 확인해주세요.🥲');
+
+  const onValid = async ({ email, password }: LoginProps) => {
+    try {
+      const res = await authentiCate(email, password);
+      const { accessToken, refreshToken, avatarPath } = res.data;
+      const decoded: DecodedResp = jwt_decode(accessToken);
+
+      const data = {
+        accessToken,
+        refreshToken,
+        avatarPath,
+        email: decoded.sub,
+        userId: String(decoded.id),
+        nickname: decoded.nickname,
+      };
+
+      Object.entries(data).forEach(([key, value]) => {
+        localStorage.setItem(key, value);
       });
+
+      setIsLogin(true);
+      toast.success('로그인이 완료되었습니다!');
+      router.push('/');
+    } catch (err) {
+      console.error(err);
+      toast.error('로그인에 실패했습니다! 다시 한 번 확인해주세요.🥲');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   const {
     register,
