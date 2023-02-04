@@ -7,8 +7,9 @@ import { Loader } from '@components/common/Loader';
 import { Seo } from '@components/common/Seo';
 
 import { AuthResp } from '@type/login';
-import useCheckAuth from '../useCheckAuth';
+import { useCheckAuth } from '../../../hooks/useCheckAuth';
 import { authGetCode } from 'api/authCheckAndSetCodeApi';
+import { Input } from '@components/common/Input';
 
 const GetAuthCode: NextPage = () => {
   const { register, handleSubmit, isSubmitting, setIsSubmitting, router } =
@@ -31,11 +32,11 @@ const GetAuthCode: NextPage = () => {
       <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
         <form onSubmit={handleSubmit(onValid)} className="space-y-2">
           <label className="font-bold flex-col flex mx-2 mb-2">이메일</label>
-          <input
-            {...register('email', { required: true })}
+          <Input
+            label="이메일"
             type="text"
-            placeholder="이메일을 입력하세요."
-            className="rounded-full w-full h-10 pl-4 border"
+            placeholder="이메일을 입력해주세요."
+            register={{ ...register('email', { required: true }) }}
           />
           <button className="bg-main-yellow bg-opacity-80 py-3 w-full rounded-[20px] font-bold  hover:bg-main-yellow">
             {isSubmitting ? <Loader /> : '인증번호 발송'}

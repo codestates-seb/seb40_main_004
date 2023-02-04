@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 
-const useCheckAuth = () => {
+export const useCheckAuth = () => {
   const { register, handleSubmit } = useForm<AuthResp>({ mode: 'onChange' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const setEmail = useSetRecoilState(userEmailAtom);
@@ -20,5 +20,3 @@ const useCheckAuth = () => {
     router,
   };
 };
-
-export default useCheckAuth;
