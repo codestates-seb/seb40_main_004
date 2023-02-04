@@ -8,8 +8,9 @@ import { Seo } from '@components/common/Seo';
 
 import { AuthResp } from '@type/login';
 
-import useCheckAuth from '../useCheckAuth';
+import { useCheckAuth } from '../../../hooks/useCheckAuth';
 import { authCheckCode } from 'api/authCheckAndSetCodeApi';
+import { Input } from '@components/common/Input';
 
 const CheckAuthCode: NextPage = () => {
   const {
@@ -45,18 +46,18 @@ const CheckAuthCode: NextPage = () => {
           className="flex flex-col mx-auto justify-center items-start mt-10 space-y-2"
         >
           <label className="font-bold flex-col flex mx-2">이메일</label>
-          <input
-            {...register('email', { required: true })}
-            className="rounded-full w-96 h-10 pl-4 border"
+          <Input
+            label="이메일"
             type="text"
             placeholder="이메일을 입력해주세요."
+            register={{ ...register('email', { required: true }) }}
           />
           <label className="font-bold flex-col flex mx-2">인증번호</label>
-          <input
-            {...register('authKey', { required: true })}
+          <Input
+            label="인증번호"
             type="text"
             placeholder="인증번호를 입력하세요."
-            className="rounded-full w-96 h-10 pl-4 border"
+            register={{ ...register('authKey', { required: true }) }}
           />
           <button className="bg-main-yellow bg-opacity-80 py-3 w-full rounded-[20px] font-bold mb-5 hover:bg-main-yellow">
             {isSubmitting ? <Loader /> : '임시 비밀번호 발급'}
