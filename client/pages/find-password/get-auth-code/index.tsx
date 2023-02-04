@@ -1,8 +1,4 @@
-import axios from 'axios';
 import { GetServerSideProps, NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import { Footer } from '@components/common/Footer';
@@ -11,25 +7,22 @@ import { Loader } from '@components/common/Loader';
 import { Seo } from '@components/common/Seo';
 
 import { AuthResp } from '@type/login';
+import useCheckAuth from '../useCheckAuth';
+import { authGetCode } from 'api/authCheckAndSetCodeApi';
 
 const GetAuthCode: NextPage = () => {
-  const { register, handleSubmit } = useForm<AuthResp>({
-    mode: 'onChange',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
-  const onValid = ({ email }: AuthResp) => {
-    axios
-      .post(`/api/auth/password/support`, { email })
-      .then(() => {
-        setIsSubmitting(true);
-        toast.success('인증번호가 발송되었습니다! 메일을 확인해주세요😉');
-        router.push('/find-password/check-auth-code');
-      })
-      .catch((error) => {
-        console.error('error', error);
-        toast.error('이메일이 일치하지 않습니다..! 다시 한 번 확인해주세요.🥲');
-      });
+  const { register, handleSubmit, isSubmitting, setIsSubmitting, router } =
+    useCheckAuth();
+  const onValid = async ({ email }: AuthResp) => {
+    try {
+      setIsSubmitting(true);
+      authGetCode(email);
+      toast.success('인증번호가 발송되었습니다! 메일을 확인해주세요😉');
+      router.push('/find-password/check-auth-code');
+    } catch (error) {
+      console.error('error', error);
+      toast.error('이메일이 일치하지 않습니다..! 다시 한 번 확인해주세요.🥲');
+    }
   };
   return (
     <>

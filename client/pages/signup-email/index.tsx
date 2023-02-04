@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -17,6 +16,7 @@ import { Seo } from '@components/common/Seo';
 import { Header } from '@components/common/Header';
 import { AuthenticationTimer } from '@components/signup-email/AuthenticationTimer';
 import { Footer } from '@components/common/Footer';
+import { authSetKey, signUpWithEmailAndKey } from 'api/signUpApi';
 
 type VerificationNumber = { authKey: string };
 
@@ -28,36 +28,26 @@ const SignUpWithEmail: NextPage = () => {
   const password = useRecoilValue(userPasswordAtom);
   const nickname = useRecoilValue(userNickNameAtom);
   const router = useRouter();
-  const onValid = ({ authKey }: VerificationNumber) => {
-    axios
-      .put(`/api/auth/mail`, { email, authKey })
-      .then((res) => {
-        setAuthKey(res.data.authKey);
-        setIsOkAuthCode(true);
-      })
-      .catch((error) => console.error('error', error));
+  const onValid = async ({ authKey }: VerificationNumber) => {
+    try {
+      const res = await authSetKey(email, authKey);
+      setAuthKey(res.data.authKey);
+      setIsOkAuthCode(true);
+    } catch (error) {
+      console.error('error', error);
+    }
   };
-  const onClickSignUp = (e: React.MouseEvent<HTMLElement>) => {
+  const onClickSignUp = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    axios
-      .post(`/api/auth`, {
-        email,
-        authKey,
-        password,
-        nickname,
-      })
-      .then((res) => {
-        console.log('res1', res);
-        toast.success('가입이 완료되었습니다! 로그인 페이지로 이동할게요.😉');
-      })
-      .catch((error) => {
-        console.error('error', error);
-        toast.error(
-          '인증번호가 올바르지 않습니다..! 다시 한 번 확인해주세요.🥲',
-        );
-      });
-
-    router.push('/login');
+    try {
+      signUpWithEmailAndKey(email, authKey, password, nickname);
+      toast.success('가입이 완료되었습니다! 로그인 페이지로 이동할게요.😉');
+    } catch (error) {
+      console.error('error', error);
+      toast.error('인증번호가 올바르지 않습니다..! 다시 한 번 확인해주세요.🥲');
+    } finally {
+      router.push('/login');
+    }
   };
   return (
     <>
