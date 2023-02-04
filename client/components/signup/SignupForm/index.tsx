@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -15,6 +14,7 @@ import {
 
 import { Input } from '@components/common/Input';
 import { SocialLoginBtn } from '@components/common/SocialLoginBtn';
+import { signUpWithEmail } from 'api/api';
 
 type SignUpProps = {
   email: string;
@@ -35,7 +35,7 @@ export const SignUpForm = () => {
     formState: { errors },
   } = useForm<SignUpProps>();
 
-  const onValid: SubmitHandler<SignUpProps> = ({
+  const onValid: SubmitHandler<SignUpProps> = async ({
     email,
     password,
     confirmPassword,
@@ -47,30 +47,19 @@ export const SignUpForm = () => {
         { message: '비밀번호가 맞지 않습니다.' },
         { shouldFocus: true },
       );
-    } else {
+      return;
+    }
+    try {
       router.push('/signup-email');
-      axios
-        .post(`/api/auth/mail`, {
-          email,
-          password,
-          confirmPassword,
-          nickname,
-        })
-        .then(() => {
-          setEmail(email);
-          setPassword(password);
-          setNickName(nickname);
-          toast.success(
-            '첫번째 단계가 완료되었습니다. 인증번호를 입력해주세요!',
-          );
-        })
-        .catch((error) => {
-          console.log('auth error', error);
-          toast.error(
-            '회원가입에 실패하였습니다..! 다시 한 번 확인해주세요.🥲',
-          );
-          router.push('/signup');
-        });
+      signUpWithEmail(email, password, confirmPassword, nickname);
+      setEmail(email);
+      setPassword(password);
+      setNickName(nickname);
+      toast.success('첫번째 단계가 완료되었습니다. 인증번호를 입력해주세요!');
+    } catch (error) {
+      console.log('auth error', error);
+      toast.error('회원가입에 실패하였습니다..! 다시 한 번 확인해주세요.🥲');
+      router.push('/signup');
     }
   };
 
