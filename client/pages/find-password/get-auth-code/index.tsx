@@ -8,7 +8,7 @@ import { Seo } from '@components/common/Seo';
 
 import { AuthResp } from '@type/login';
 import useCheckAuth from '../useCheckAuth';
-import { authGetCode } from 'api/api';
+import { authGetCode } from 'api/authCheckAndSetCodeApi';
 
 const GetAuthCode: NextPage = () => {
   const { register, handleSubmit, isSubmitting, setIsSubmitting, router } =

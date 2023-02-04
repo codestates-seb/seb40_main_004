@@ -16,7 +16,7 @@ import { Seo } from '@components/common/Seo';
 import { Header } from '@components/common/Header';
 import { AuthenticationTimer } from '@components/signup-email/AuthenticationTimer';
 import { Footer } from '@components/common/Footer';
-import { authSetKey, signUpWithEmailAndKey } from 'api/api';
+import { authSetKey, signUpWithEmailAndKey } from 'api/signUpApi';
 
 type VerificationNumber = { authKey: string };
 

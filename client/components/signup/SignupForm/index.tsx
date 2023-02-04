@@ -14,7 +14,7 @@ import {
 
 import { Input } from '@components/common/Input';
 import { SocialLoginBtn } from '@components/common/SocialLoginBtn';
-import { signUpWithEmail } from 'api/api';
+import { signUpWithEmail } from 'api/signUpApi';
 
 type SignUpProps = {
   email: string;

@@ -1,25 +1,5 @@
 import axios from 'axios';
-
-export const authentiCate = async (email: string, password: string) => {
-  const res = await axios.post(`/api/auth/token`, { email, password });
-  return res;
-};
-
-export const authCheckCode = async (
-  email: string,
-  authKey: string | undefined,
-) => {
-  return await axios.post(`/api/auth/password/recovery`, {
-    email,
-    authKey,
-  });
-};
-
-export const authGetCode = async (email: string) => {
-  return await axios.post(`/api/auth/password/support`, {
-    email,
-  });
-};
+import { makePostRequest } from './makePostRequest';
 
 export const signUpWithEmail = async (
   email: string,
@@ -27,7 +7,7 @@ export const signUpWithEmail = async (
   confirmPassword: string,
   nickname: string,
 ) => {
-  return await axios.post(`/api/auth/mail`, {
+  makePostRequest(`/api/auth/mail`, {
     email,
     password,
     confirmPassword,
@@ -41,7 +21,7 @@ export const signUpWithEmailAndKey = async (
   confirmPassword: string,
   nickname: string,
 ) => {
-  return await axios.post(`/api/auth`, {
+  makePostRequest(`/api/auth`, {
     email,
     password,
     confirmPassword,

@@ -13,7 +13,7 @@ import { Loader } from '@components/common/Loader';
 import { SocialLoginBtn } from '@components/common/SocialLoginBtn';
 
 import { isLoginAtom } from '@atoms/loginAtom';
-import { authentiCate } from 'api/api';
+import { authentiCate } from 'api/loginApi';
 
 type LoginProps = {
   email: string;
