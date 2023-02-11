@@ -183,7 +183,7 @@ public class UserRepositoryTest {
         User user = User.builder().build();
         entityManager.persist(user);
 
-        BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(2022,1,6,0,0,0)));
+        BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(LocalDate.now().getYear(),1,6,0,0,0)));
 
         for (int i=0; i<10; i++) {
             Article article = Article.builder().user(user).build();
@@ -192,7 +192,7 @@ public class UserRepositoryTest {
         }
 
         for (int i=1; i<=5; i++) {
-            BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(2022,1,i,0,0,0)));
+            BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(LocalDate.now().getYear(),1,i,0,0,0)));
             Article article = Article.builder().user(user).build();
             article.injectTo(user);
             entityManager.persist(article);
@@ -216,8 +216,8 @@ public class UserRepositoryTest {
         // given
         User user = User.builder().build();
         entityManager.persist(user);
+        BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(LocalDate.now().getYear(),1,6,0,0,0)));
 
-        BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(2022,1,6,0,0,0)));
 
         for (int i=0; i<10; i++) {
             Article article = Article.builder().user(user).build();
@@ -229,7 +229,7 @@ public class UserRepositoryTest {
         }
 
         for (int i=1; i<=5; i++) {
-            BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(2022,1,i,0,0,0)));
+            BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(LocalDate.now().getYear(),1,i,0,0,0)));
             Article article = Article.builder().user(user).build();
             Answer answer = Answer.builder().article(article).user(user).build();
             article.injectTo(user);
@@ -257,7 +257,7 @@ public class UserRepositoryTest {
         User user = User.builder().build();
         entityManager.persist(user);
 
-        BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(2022,1,6,0,0,0)));
+        BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(LocalDate.now().getYear(),1,6,0,0,0)));
 
         for (int i=0; i<10; i++) {
             Article article = Article.builder().user(user).build();
@@ -269,7 +269,7 @@ public class UserRepositoryTest {
         }
 
         for (int i=1; i<=5; i++) {
-            BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(2022,1,i,0,0,0)));
+            BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(LocalDate.now().getYear(),1,i,0,0,0)));
             Article article = Article.builder().user(user).build();
             Comment comment = Comment.builder().article(article).user(user).build();
             article.injectTo(user);

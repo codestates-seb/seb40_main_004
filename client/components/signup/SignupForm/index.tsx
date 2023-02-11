@@ -51,7 +51,7 @@ export const SignUpForm = () => {
     }
     try {
       router.push('/signup-email');
-      signUpWithEmail(email, password, confirmPassword, nickname);
+      signUpWithEmail({ email, password, confirmPassword, nickname });
       setEmail(email);
       setPassword(password);
       setNickName(nickname);
