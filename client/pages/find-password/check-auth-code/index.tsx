@@ -45,14 +45,12 @@ const CheckAuthCode: NextPage = () => {
           onSubmit={handleSubmit(onValid)}
           className="flex flex-col mx-auto justify-center items-start mt-10 space-y-2"
         >
-          <label className="font-bold flex-col flex mx-2">이메일</label>
           <Input
             label="이메일"
             type="text"
             placeholder="이메일을 입력해주세요."
             register={{ ...register('email', { required: true }) }}
           />
-          <label className="font-bold flex-col flex mx-2">인증번호</label>
           <Input
             label="인증번호"
             type="text"

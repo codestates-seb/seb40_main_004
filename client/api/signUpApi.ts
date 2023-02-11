@@ -1,41 +1,25 @@
 import axios from 'axios';
 import { makePostRequest } from './makePostRequest';
 
-export const signUpWithEmail = async (
-  email: string,
-  password: string,
-  confirmPassword: string,
-  nickname: string,
-) => {
-  makePostRequest(`/api/auth/mail`, {
-    email,
-    password,
-    confirmPassword,
-    nickname,
-  });
+type UserCredentials = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  nickname: string;
 };
 
-export const signUpWithEmailAndKey = async (
-  email: string,
-  password: string,
-  confirmPassword: string,
-  nickname: string,
-) => {
-  makePostRequest(`/api/auth`, {
-    email,
-    password,
-    confirmPassword,
-    nickname,
-  });
+export const signUpWithEmail = async (cridentials: UserCredentials) => {
+  makePostRequest(`/api/auth/mail`, { cridentials });
+};
+
+export const signUpWithEmailAndKey = async (cridentials: UserCredentials) => {
+  makePostRequest(`/api/auth`, { cridentials });
 };
 
 export const authSetKey = async (
   email: string,
   authKey: string | undefined,
 ) => {
-  const res = await axios.put(`/api/auth/mail`, {
-    email,
-    authKey,
-  });
+  const res = await axios.put(`/api/auth/mail`, { email, authKey });
   return res;
 };
