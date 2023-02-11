@@ -61,8 +61,6 @@ const CommentList = ({ comments }: CommentList) => {
 
 type CommentContainerProps = {
   answerId?: number;
-  comments?: CommentResp;
-  commentPreview?: CommentResp;
 };
 
 export const CommentContainer = ({ answerId }: CommentContainerProps) => {
