@@ -1,5 +1,5 @@
-import axios from 'axios';
+import { client } from './../libs/client';
 
 export const makePostRequest = async (endpoint: string, data: object) => {
-  return await axios.post(endpoint, data);
+  return await client.post(endpoint, data);
 };
