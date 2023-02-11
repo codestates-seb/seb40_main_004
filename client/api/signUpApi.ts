@@ -4,7 +4,8 @@ import { makePostRequest } from './makePostRequest';
 type UserCredentials = {
   email: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
+  authKey?: string;
   nickname: string;
 };
 

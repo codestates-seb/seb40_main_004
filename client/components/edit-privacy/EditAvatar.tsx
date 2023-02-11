@@ -7,6 +7,7 @@ import { dataHeaderAtom } from '@atoms/userAtom';
 
 import { client } from '@libs/client';
 import { uploadImg } from '@libs/uploadS3';
+import { toast } from 'react-toastify';
 
 export const EditAvatar = () => {
   const setRenderingHeader = useSetRecoilState(renderingAtom);
@@ -28,10 +29,10 @@ export const EditAvatar = () => {
       }, 2000);*/
       }
       setIsClicked(false);
-      alert('프로필이 정상적으로 변경되었습니다!');
+      toast.success('프로필이 정상적으로 변경되었습니다!');
       setRenderingHeader((prev) => !prev);
     } catch (error) {
-      alert('오류가 발생했습니다. 다시 시도해주세요!');
+      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
     }
   };
   const onClickDelete = async () => {
@@ -39,12 +40,11 @@ export const EditAvatar = () => {
       await client.delete('/api/users/profiles/avatars');
       localStorage.removeItem('avatarPath');
       setIsClicked(false);
-      alert('프로필이 정상적으로 삭제되었습니다!');
+      toast.success('프로필이 정상적으로 삭제되었습니다!');
       setRenderingHeader((prev) => !prev);
       setAvatarPath('/favicon.ico');
     } catch (error) {
-      alert('오류가 발생했습니다. 다시 시도해주세요!');
-      console.error(error);
+      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
     }
   };
   useEffect(() => {

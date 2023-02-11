@@ -17,6 +17,7 @@ import { BtnBackArticle } from '@components/review/BtnBackArticle';
 import { Seo } from '@components/common/Seo';
 
 import { client } from '@libs/client';
+import { toast } from 'react-toastify';
 
 const Completion: NextPage = () => {
   const router = useRouter();
@@ -44,7 +45,7 @@ const Completion: NextPage = () => {
       .post(url, payload)
       .then((res) => {
         // console.log(res.data);
-        alert('🔥후기가 전송되었습니다! 따듯한 후기 고마워요!🔥');
+        toast.success('🔥후기가 전송되었습니다! 따듯한 후기 고마워요!🔥');
         if (reviewRequest.dashboardUrl) {
           router.replace(reviewRequest.dashboardUrl);
         } else {
@@ -52,7 +53,7 @@ const Completion: NextPage = () => {
         }
       })
       .catch((err) => {
-        alert('답변 채택에 실패했습니다.🥲');
+        toast.error('답변 채택에 실패했습니다.🥲');
         console.log(err);
       });
   };

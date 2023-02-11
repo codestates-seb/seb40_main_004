@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 import { confirmAlert } from 'react-confirm-alert';
-import { useForm, SubmitHandler, SubmitErrorHandler } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useRecoilState } from 'recoil';
 import { Select, SelectOption } from './Select';
@@ -20,6 +20,7 @@ import { isArticleEditAtom } from '@atoms/articleAtom';
 
 import { client } from '@libs/client';
 import { getFileUrl, uploadImg } from '@libs/uploadS3';
+import ReactQuill from 'react-quill';
 
 type ContentProps = {
   title: string;
@@ -70,7 +71,7 @@ export const Editor = () => {
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<SelectOption[]>([options[1]]);
   const category = 'QNA';
-  const [fileIdList, setFileIdList] = useState<any>([]);
+  const [fileIdList, setFileIdList] = useState<{ fileId: string }[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isArticleEdit, setIsArticleEdit] = useRecoilState(isArticleEditAtom);
   const [tagsError, setTagsError] = useState('');
@@ -97,64 +98,41 @@ export const Editor = () => {
 
   const editorContent = watch('content');
 
-  const onValid: SubmitHandler<ContentProps> = ({ title, content }) => {
-    if (!tags.length) setTagsError('최소 한 개 이상의 태그를 선택해주세요!');
-    else {
+  const onValid: SubmitHandler<ContentProps> = async ({ title, content }) => {
+    try {
+      if (!tags.length) {
+        setTagsError('최소 한 개 이상의 태그를 선택해주세요!');
+        return;
+      }
+
       setIsSubmitting(true);
       setTagsError('');
-      if (isArticleEdit.isArticleEdit) {
-        client
-          .patch(`/api/articles/${isArticleEdit.articleId}`, {
-            title,
-            content,
-            fileId: fileIdList,
-            tags,
-          })
-          .then((res) => {
-            setIsSubmitting(true);
-            setIsArticleEdit({
-              isArticleEdit: false,
-              title: '',
-              content: '',
-              articleId: '',
-            });
-            router.push(`questions/${res.data.articleId}`);
-          })
-          .catch((error) => {
-            console.error('error', error);
-            toast.error('게시글 수정에 실패했습니다...🥲');
-            console.log(
-              `title:${title}, content:${content}, fileId:${fileIdList}, tags:${tags}`,
-            );
-          });
-      } else {
-        client
-          .post(`/api/articles`, {
-            title,
-            content,
-            category,
-            fileId: fileIdList,
-            tags,
-          })
-          .then((res) => {
-            setIsSubmitting(false);
-            router.push(`questions/${res.data.articleId}`);
-          })
 
-          .catch(() => {
-            toast.error(
-              '게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!',
-            );
-          });
-      }
-    }
-  };
+      const isEditing = isArticleEdit.isArticleEdit;
+      const api = isEditing ? 'patch' : 'post';
+      const url = isEditing
+        ? `/api/articles/${isArticleEdit.articleId}`
+        : `/api/articles`;
+      const payload = {
+        title,
+        content,
+        [isEditing ? 'fileId' : 'category']: isEditing ? fileIdList : category,
+        tags,
+      };
 
-  const onInvalid: SubmitErrorHandler<ContentProps> = () => {
-    if (!tags.length) {
-      setTagsError('최소 한 개 이상의 태그를 선택해주세요!');
-    } else {
-      setTagsError('');
+      const { data } = await client[api](url, payload);
+      setIsArticleEdit((prevState) => ({
+        ...prevState,
+        isArticleEdit: false,
+        title: '',
+        content: '',
+        articleId: '',
+      }));
+      setIsSubmitting(false);
+      router.push(`questions/${data.articleId}`);
+    } catch (error) {
+      console.error(error);
+      toast.error('게시글 작성에 실패했습니다...🥲 다시 한 번 확인해주세요!');
     }
   };
 
@@ -189,7 +167,7 @@ export const Editor = () => {
     });
   };
 
-  const quillRef = useRef<any>(null);
+  const quillRef = useRef<ReactQuill>(null);
   const imageHandler = useCallback(async () => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
@@ -208,17 +186,25 @@ export const Editor = () => {
         const newFiledIdList = fileIdList;
         setFileIdList(newFiledIdList);
 
-        const range = quillRef.current.getEditorSelection();
-        setTimeout(() => {
-          quillRef.current
-            .getEditor()
-            .insertEmbed(range.index, 'image', imageUrl);
-          quillRef.current.getEditor().setSelection(range.index + 1);
-          const myInput = document.body.querySelector(
-            ':scope > input',
-          ) as HTMLInputElement;
-          myInput.remove();
-        }, 500);
+        const range = quillRef.current?.getEditorSelection();
+        if (quillRef.current && range) {
+          if (typeof range.index === 'number')
+            setTimeout(() => {
+              const index = range.index;
+              quillRef.current
+                ?.getEditor()
+                .insertEmbed(index, 'image', imageUrl);
+              quillRef.current
+                ?.getEditor()
+                .setSelection({ index: range.index + 1, length: 0 });
+              const myInput = document.body.querySelector(
+                ':scope > input',
+              ) as HTMLInputElement;
+              myInput.remove();
+            }, 500);
+        } else {
+          console.error('Error: range is null.');
+        }
       }
     };
   }, []);
@@ -254,7 +240,7 @@ export const Editor = () => {
   );
 
   return (
-    <form onSubmit={handleSubmit(onValid, onInvalid)} className="h-full p-8">
+    <form onSubmit={handleSubmit(onValid)} className="h-full p-8">
       <section className="space-y-3 pb-5">
         <article className="flex items-baseline space-x-3">
           <label htmlFor="제목" className="font-bold flex">

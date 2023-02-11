@@ -7,13 +7,14 @@ import { AsideEditProfile } from '@components/edit-privacy/AsideEditProfile';
 import { EditProfileComponent } from '@components/edit-privacy/EditProfile';
 import { Footer } from '@components/common/Footer';
 import { Header } from '@components/common/Header';
+import { toast } from 'react-toastify';
 
 const EditPassword: NextPage = () => {
   const router = useRouter();
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (!localStorage.getItem('refreshToken')) {
-        alert('로그인이 필요한 페이지입니다');
+        toast.error('로그인이 필요한 페이지입니다');
         router.push('/');
       }
     }

@@ -18,6 +18,7 @@ import { ArticleDetail } from '@type/article';
 
 import { client } from '@libs/client';
 import { useFetch } from '@libs/useFetchSWR';
+import { toast } from 'react-toastify';
 
 type QuestionContentProps = {
   articleId: string;
@@ -53,12 +54,12 @@ export const QuestionContent = ({ articleId }: QuestionContentProps) => {
       client
         .delete(`/api/articles/${articleId}`)
         .then(() => {
-          alert('게시글이 삭제되었습니다. 게시글 목록으로 돌아갑니다.');
+          toast.success('게시글이 삭제되었습니다. 게시글 목록으로 돌아갑니다.');
           router.replace(`/questions`);
         })
         .catch((err) => {
           console.log(err);
-          alert('답변 삭제에 실패했습니다.');
+          toast.error('답변 삭제에 실패했습니다.');
         });
     }
   };
@@ -113,6 +114,20 @@ export const QuestionContent = ({ articleId }: QuestionContentProps) => {
             <QuestionMainText>{article?.content}</QuestionMainText>
             <div className="flex justify-between items-end space-y-3 sm:space-y-0 py-4 flex-col sm:flex-row">
               <TagList tags={article?.tags} />
+
+              {isLogin && !isClosed && authorId.toString() === currUserId && (
+                <article className="space-x-2 text-sm w-[80px] flex justify-end">
+                  <button onClick={onEdit}>수정</button>
+                  <button onClick={onDelete}>삭제</button>
+                </article>
+              )}
+            </div>
+          </section>
+
+          <section className="p-6">
+            <QuestionMainText>{article.content}</QuestionMainText>
+            <div className="flex justify-between items-end space-y-3 sm:space-y-0 py-4 flex-col sm:flex-row">
+              <TagList tags={article.tags} />
 
               {isLogin && !isClosed && authorId.toString() === currUserId && (
                 <article className="space-x-2 text-sm w-[80px] flex justify-end">

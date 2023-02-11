@@ -20,6 +20,7 @@ import { client } from '@libs/client';
 import { changeGradeEmoji } from '@libs/changeGradeEmoji';
 import { elapsedTime } from '@libs/elapsedTime';
 import { BtnLike } from '@components/common/BtnLike';
+import { toast } from 'react-toastify';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =
@@ -58,12 +59,12 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
       client
         .delete(`/api/articles/${articleId}/answers/${answer.answerId}`)
         .then(() => {
-          alert('삭제가 완료되었습니다!');
+          toast.success('삭제가 완료되었습니다!');
           mutate(`/api/articles/${articleId}/answers?page=1&size=5`);
         })
         .catch((err) => {
           console.error(err);
-          alert('답변 삭제에 실패했습니다.');
+          toast.error('답변 삭제에 실패했습니다.');
         });
     }
   };
