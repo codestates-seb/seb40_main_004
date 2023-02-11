@@ -31,7 +31,6 @@ const GetAuthCode: NextPage = () => {
       <Header />
       <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
         <form onSubmit={handleSubmit(onValid)} className="space-y-2">
-          <label className="font-bold flex-col flex mx-2 mb-2">이메일</label>
           <Input
             label="이메일"
             type="text"

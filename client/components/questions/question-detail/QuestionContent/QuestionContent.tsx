@@ -17,6 +17,7 @@ import { TagList } from '@components/common/TagList';
 import { ArticleDetail } from '@type/article';
 
 import { client } from '@libs/client';
+import { toast } from 'react-toastify';
 
 type QuestionContentProps = {
   articleId: string;
@@ -53,12 +54,12 @@ export const QuestionContent = ({
       client
         .delete(`/api/articles/${articleId}`)
         .then(() => {
-          alert('게시글이 삭제되었습니다. 게시글 목록으로 돌아갑니다.');
+          toast.success('게시글이 삭제되었습니다. 게시글 목록으로 돌아갑니다.');
           router.replace(`/questions`);
         })
         .catch((err) => {
           console.log(err);
-          alert('답변 삭제에 실패했습니다.');
+          toast.error('답변 삭제에 실패했습니다.');
         });
     }
   };

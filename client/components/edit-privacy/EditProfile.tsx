@@ -12,6 +12,7 @@ import { client } from '@libs/client';
 import { inspectNicknameDuplication } from '@libs/inspectNicknameDuplication';
 
 import { UserDashboard } from '@type/dashboard';
+import { toast } from 'react-toastify';
 
 interface IChangePassword {
   originalPassword: string;
@@ -58,10 +59,10 @@ export const EditProfileComponent = () => {
             originalPassword,
             newPassword,
           });
-          alert('비밀번호가 정상적으로 변경 되었습니다');
+          toast.success('비밀번호가 정상적으로 변경 되었습니다');
           router.push('/');
         } catch (error) {
-          alert(`에러 발생 : ${error}`);
+          toast.error(`에러 발생 : ${error}`);
         }
       }
     }
@@ -121,7 +122,7 @@ export const EditProfileComponent = () => {
           setRenderingHeader((prev) => !prev);
           router.push('/');
         } catch (error) {
-          alert(`에러 발생 : ${error}`);
+          toast.error(`에러 발생 : ${error}`);
         }
       }
     }
