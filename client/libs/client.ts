@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { getAccessToken, getRefreshToken, setTokens } from './tokens';
 
-const accessToken = getAccessToken();
-const refreshToken = getRefreshToken();
-
+// 액세스 토큰을 갱신하는 로직
 export const refreshAccessToken = async () => {
-  return axios
-    .put(
+  const refreshToken = getRefreshToken();
+
+  try {
+    const res = await axios.put(
       `/api/auth/token`,
       {},
       {
@@ -15,42 +15,42 @@ export const refreshAccessToken = async () => {
           'ngrok-skip-browser-warning': '111',
         },
       },
-    )
-    .then((res) => {
-      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-        res.data;
-      setTokens(newAccessToken, newRefreshToken);
+    );
 
-      return { newAccessToken, newRefreshToken };
-    })
-    .catch((err) => {
-      // 리프레시 토큰이 만료가 된 경우
-      if (err.response.status === 401) {
-        localStorage.clear();
-        window.location.href = '/login';
-      }
-      // 중복 요청으로 갱신 이전 리프레시 토큰이 넘어가는 경우
-      else if (err.response.status === 404) {
-        window.location.reload();
-      }
-    });
+    const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+      res.data;
+    setTokens(newAccessToken, newRefreshToken);
+
+    return { newAccessToken, newRefreshToken };
+  } catch (error: any) {
+    // 리프레시 토큰의 권한이 없거나, 리프레시 토큰이 유효하지 않은 경우
+    // 로그인 페이지로 이동합니다.
+    if (
+      (error.response && error.response.status === 401) ||
+      error.response.status === 404
+    ) {
+      localStorage.clear();
+      window.location.href = '/login';
+      throw new Error('Refresh token이 유효하지 않습니다.');
+    } else {
+      throw error;
+    }
+  }
 };
-
+// 액세스 토큰을 심어서 요청을 보낸다.
 export const client = axios.create({
   headers: {
     withCredentials: true,
-    Authorization: accessToken,
-    'Content-Type': `application/json`,
-    'ngrok-skip-browser-warning': '111',
   },
 });
 
+// request 요청 가로채어 액세스 토큰 심어서 보내준다.
 client.interceptors.request.use(
   async (config) => {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = getAccessToken();
     config.headers = {
       withCredentials: true,
-      Authorization: `${accessToken}`,
+      Authorization: accessToken,
       'Content-Type': `application/json`,
       'ngrok-skip-browser-warning': '111',
     };
@@ -61,6 +61,7 @@ client.interceptors.request.use(
   },
 );
 
+// response 요청 가로챈다.
 client.interceptors.response.use(
   (response) => {
     return response;
@@ -71,27 +72,22 @@ client.interceptors.response.use(
       config,
       response: { status },
     } = error;
-    // 기존 요청을 저장해둔다.
-    const originalRequest = config;
-    // 만약 그 에러가 401 에러라면
-    if (
-      status === 401
-      // 에러 확인을 위해 임시적으로 주석처리
-      // || status === 403
-    ) {
-      6;
-      const response = await refreshAccessToken();
-      originalRequest.headers.Authorization = response?.newAccessToken;
-      client.defaults.headers.common['Authorization'] =
-        response?.newRefreshToken;
-      return client(originalRequest);
+    // 응답에 대한 에러 코드가 401인 경우 - 인증이 되지 않았으므로 갱신 필요
+    if (status === 401) {
+      // 액세스 토큰을 갱신하는 요청을 보내고 그 결과값을 저장.
+      const { newAccessToken } = await refreshAccessToken();
+      // put 요청 이후 새로운 요청 config 생성
+      const modifiedConfig = {
+        ...config,
+        headers: {
+          ...config.headers,
+          // 새로운 액세스 토큰으로 교체한다.
+          Authorization: newAccessToken,
+        },
+      };
+      // 변경된 새로운 요청 config로 변경하여 다시 요청한다.
+      return client(modifiedConfig);
     }
     return Promise.reject(error);
   },
 );
-
-/*
-1. 같은 페이지 내에서 새로고침을 할 때는 401 에러가 뜨면 바로 갱신이 되어서 put 요청에서 404 에러가 발생하지 않는다.
-2. 다른 페이지로 이동을 하게되면 401 에러가 발생해서 put 요청이 들어가는데, 이 때 404 에러가 발생한다.
-3. 그러면 put 요청이 발생했는데 404 에러가 떴다 => 그러면 메시지를 띄우고 새로고침을 해버리자.
-*/
