@@ -15,6 +15,7 @@ import { client } from '@libs/client';
 import { getFileUrl, uploadImg } from '@libs/uploadS3';
 import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
 import { useFetch } from '@libs/useFetchSWR';
+import { toast } from 'react-toastify';
 
 type FormValue = {
   content: string;
@@ -86,14 +87,14 @@ export const AnswerEditor = () => {
     const newAnswers = response.data;
     mutate({ currAnswers, ...newAnswers }, { revalidate: false })
       .then(() => {
-        alert('답변이 성공적으로 등록되었습니다!');
+        toast.success('답변이 성공적으로 등록되었습니다!');
         isAnswerPosted(true);
         setValue('content', '');
         trigger('content');
         setFileIdList([]);
       })
       .catch((err) => {
-        alert('답변 등록에 실패했습니다...!');
+        toast.error('답변 등록에 실패했습니다...!');
         console.log(err);
       });
   };
@@ -110,7 +111,7 @@ export const AnswerEditor = () => {
       { revalidate: false },
     )
       .then(() => {
-        alert('답변을 수정하였습니다!');
+        toast.success('답변을 수정하였습니다!');
         isAnswerPosted(true);
         setValue('content', '');
         trigger('content');
@@ -118,7 +119,7 @@ export const AnswerEditor = () => {
       })
       .catch((err) => {
         console.log(err);
-        alert('답변 수정에 실패했습니다...!');
+        toast.error('답변 수정에 실패했습니다...!');
       });
   };
   const onValid: SubmitHandler<FormValue> = async (data) => {
@@ -131,7 +132,7 @@ export const AnswerEditor = () => {
   };
   const onInvalid: SubmitErrorHandler<FormValue> = (data) => {
     if (isLogin) {
-      alert(data.content?.message);
+      toast.error(data.content?.message);
     } else {
       checkIsLogin();
     }

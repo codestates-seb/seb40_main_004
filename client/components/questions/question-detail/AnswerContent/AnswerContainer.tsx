@@ -5,6 +5,7 @@ import { AnswerContent, AnswerProps } from './index';
 import { useFetch } from '@libs/useFetchSWR';
 
 import { Answer } from '@type/answer';
+import { toast } from 'react-toastify';
 
 type AnswerListProps = {
   index: number;
@@ -31,7 +32,7 @@ export const AnswerList = ({ index }: AnswerListProps) => {
     isError,
   } = useFetch(`/api/articles/${articleId}/answers?page=${index}&size=5`);
   const answerData = answers?.data;
-  if (isError) alert(isError);
+  if (isError) toast.error(isError);
 
   if (!isLoading) {
     return answerData.map((answer: Answer) => (
