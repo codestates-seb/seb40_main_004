@@ -1,3 +1,5 @@
+import { SetterOrUpdater } from 'recoil';
+
 const tags = [
   { tagId: 0, name: 'JAVA' },
   { tagId: 1, name: 'C' },
@@ -21,10 +23,24 @@ const tags = [
   { tagId: 19, name: 'TYPESCRIPT' },
 ];
 
+type KeyProps = {
+  setKeyword: SetterOrUpdater<string>;
+  setTarget: React.Dispatch<React.SetStateAction<string>>;
+  keyword: string;
+};
+
 const getTagList = () => {
-  const tagList = [];
-  for (let i = 0; i < tags.length; i += 3) {
-    tagList.push(tags.slice(i, i + 3));
+  const tagList: { tagId: number; name: string }[][] = [];
+  let currentList: { tagId: number; name: string }[] = [];
+  tags.forEach((tag, index) => {
+    currentList.push(tag);
+    if ((index + 1) % 3 === 0) {
+      tagList.push(currentList);
+      currentList = [];
+    }
+  });
+  if (currentList.length > 0) {
+    tagList.push(currentList);
   }
   return tagList;
 };
@@ -33,7 +49,7 @@ export const SearchWithTagButton = ({
   setKeyword,
   setTarget,
   keyword,
-}: any) => {
+}: KeyProps) => {
   const tagList = getTagList();
   return (
     <section className="flex flex-col mt-8 justify-center space-y-6">
