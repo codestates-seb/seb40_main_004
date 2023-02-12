@@ -21,6 +21,7 @@ import { changeGradeEmoji } from '@libs/changeGradeEmoji';
 import { elapsedTime } from '@libs/elapsedTime';
 import { BtnLike } from '@components/common/BtnLike';
 import { toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =
@@ -55,18 +56,29 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
   }, [isAnswerEdit]);
 
   const onDelete = () => {
-    if (confirm('정말 답변을 삭제하시겠습니까..?')) {
-      client
-        .delete(`/api/articles/${articleId}/answers/${answer.answerId}`)
-        .then(() => {
-          toast.success('삭제가 완료되었습니다!');
-          mutate(`/api/articles/${articleId}/answers?page=1&size=5`);
-        })
-        .catch((err) => {
-          console.error(err);
-          toast.error('답변 삭제에 실패했습니다.');
-        });
-    }
+    confirmAlert({
+      message: '정말 답변을 삭제하시겠습니까?',
+      buttons: [
+        {
+          label: 'YES',
+          onClick: async () => {
+            try {
+              await client.delete(
+                `/api/articles/${articleId}/answers/${answer.answerId}`,
+              );
+              toast.success('삭제가 완료되었습니다!');
+              mutate(`/api/articles/${articleId}/answers?page=1&size=5`);
+            } catch (error) {
+              console.error(error);
+              toast.error('답변 삭제에 실패했습니다.');
+            }
+          },
+        },
+        {
+          label: 'NO',
+        },
+      ],
+    });
   };
 
   const setIsAnswerEdit = useSetRecoilState(isAnswerEditAtom);
