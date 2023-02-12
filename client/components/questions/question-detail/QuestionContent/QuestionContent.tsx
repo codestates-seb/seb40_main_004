@@ -42,7 +42,7 @@ export const QuestionContent = ({
     getLikeBookmark();
   }, []);
 
-  let currUserId: any = '';
+  let currUserId: string | null = '';
   if (typeof window !== 'undefined') {
     currUserId = localStorage.getItem('userId');
   }
@@ -54,7 +54,7 @@ export const QuestionContent = ({
       client
         .delete(`/api/articles/${articleId}`)
         .then(() => {
-          toast.success('게시글이 삭제되었습니다. 게시글 목록으로 돌아갑니다.');
+          toast.success('게시글이 삭제되었습니다.');
           router.replace(`/questions`);
         })
         .catch((err) => {
@@ -124,7 +124,7 @@ export const QuestionContent = ({
         </section>
 
         <section className="space-y-3 border-l pl-4">
-          <CommentContainer commentPreview={article.comments?.[0]} />
+          <CommentContainer />
         </section>
       </>
     </main>
