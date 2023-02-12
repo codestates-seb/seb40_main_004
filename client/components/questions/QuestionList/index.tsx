@@ -13,6 +13,9 @@ import { elapsedTime } from '@libs/elapsedTime';
 import { Pagination } from '@components/common/Pagination';
 import { Loader } from '@components/common/Loader';
 
+const className =
+  'flex justify-center items-center my-20 text-main-gray w-full h-screen text-base';
+
 export const QuestionList = ({
   response,
   isLoading,
@@ -85,14 +88,10 @@ export const QuestionList = ({
       </main>
     );
   else if (!isLoading && !response?.data.length)
-    return (
-      <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
-        검색 결과를 찾을 수 없습니다.🥲
-      </div>
-    );
+    return <div className={className}>검색 결과를 찾을 수 없습니다.🥲</div>;
   else
     return (
-      <div className="flex justify-center items-center my-20 text-main-gray w-full h-screen text-base">
+      <div className={className}>
         <Loader />
       </div>
     );
