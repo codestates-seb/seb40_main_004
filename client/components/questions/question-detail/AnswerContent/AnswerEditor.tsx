@@ -16,6 +16,7 @@ import { getFileUrl, uploadImg } from '@libs/uploadS3';
 import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
 import { useFetch } from '@libs/useFetchSWR';
 import { toast } from 'react-toastify';
+import ReactQuill from 'react-quill';
 
 type FormValue = {
   content: string;
@@ -29,7 +30,7 @@ export const AnswerEditor = () => {
   const isLogin = useRecoilValue(isLoginAtom);
   const checkIsLogin = useCheckClickIsLogin();
   const [isAnserEdit, setIsAnswerEdit] = useRecoilState(isAnswerEditAtom);
-  const [fileIdList, setFileIdList] = useState<any>([]);
+  const [fileIdList, setFileIdList] = useState<{ fileId: string }[]>([]);
   const setRenderingHeader = useSetRecoilState(renderingAtom);
 
   // 답변글 등록 후 업데이트(mutate)를 위해 캐시 데이터 요청
@@ -66,11 +67,6 @@ export const AnswerEditor = () => {
   // 화면에 출력할 사용자 입력 데이터
   const editorContent = watch('content');
   const handleChange = (value: string) => {
-    if (!isLogin) {
-      if (confirm('로그인이 필요한 서비스 입니다. 바로 로그인 하시겠어요?')) {
-        router.push('/login');
-      }
-    }
     setValue('content', value === '<p><br></p>' ? '' : value);
     trigger('content');
   };
@@ -87,14 +83,14 @@ export const AnswerEditor = () => {
     const newAnswers = response.data;
     mutate({ currAnswers, ...newAnswers }, { revalidate: false })
       .then(() => {
-        toast.success('답변이 성공적으로 등록되었습니다!');
+        toast.success('답변이 등록되었습니다!');
         isAnswerPosted(true);
         setValue('content', '');
         trigger('content');
         setFileIdList([]);
       })
       .catch((err) => {
-        toast.error('답변 등록에 실패했습니다...!');
+        toast.error('답변 등록에 실패했습니다!');
         console.log(err);
       });
   };
@@ -139,7 +135,7 @@ export const AnswerEditor = () => {
   };
 
   // Quill 에디터 & 이미지 업로드 관련 코드
-  const quillRef = useRef<any>(null);
+  const quillRef = useRef<ReactQuill>(null);
   const imageHandler = useCallback(async () => {
     // 현재 입력창에 올라올 파일에 대해 어트리뷰트를 추가해줍니다.
     const input = document.createElement('input');
@@ -165,17 +161,25 @@ export const AnswerEditor = () => {
 
         // 에디터 창에 이미지를 미리보기위한 코드입니다.0.5초 뒤 로드됩니다.
         // s3 업로드 후 딜레이가 있어서 바로 조회시 403 오류가 발생합니다.
-        const range = quillRef.current.getEditorSelection();
-        setTimeout(() => {
-          quillRef.current
-            .getEditor()
-            .insertEmbed(range.index, 'image', imageUrl);
-          quillRef.current.getEditor().setSelection(range.index + 1);
-          const myInput = document.body.querySelector(
-            ':scope > input',
-          ) as HTMLInputElement;
-          myInput.remove();
-        }, 500);
+        const range = quillRef.current?.getEditorSelection();
+        if (quillRef.current && range) {
+          if (typeof range.index === 'number')
+            setTimeout(() => {
+              const index = range.index;
+              quillRef.current
+                ?.getEditor()
+                .insertEmbed(index, 'image', imageUrl);
+              quillRef.current
+                ?.getEditor()
+                .setSelection({ index: range.index + 1, length: 0 });
+              const myInput = document.body.querySelector(
+                ':scope > input',
+              ) as HTMLInputElement;
+              myInput.remove();
+            }, 500);
+        } else {
+          console.error('Error: range is null.');
+        }
       }
     };
   }, []);
