@@ -30,18 +30,18 @@ type KeyProps = {
 };
 
 const getTagList = () => {
-  const tagList: { tagId: number; name: string }[][] = [];
+  const tagList: { tagId: number; name: string }[][] = [[]];
   let currentList: { tagId: number; name: string }[] = [];
+
   tags.forEach((tag, index) => {
     currentList.push(tag);
+    // 3개 태그가 들어갔을 때 tagList에 currentList 집어넣고
     if ((index + 1) % 3 === 0) {
       tagList.push(currentList);
-      currentList = [];
+      currentList = []; // currentList는 빈 배열로 초기화
     }
   });
-  if (currentList.length > 0) {
-    tagList.push(currentList);
-  }
+  if (currentList.length > 0) tagList.push(currentList);
   return tagList;
 };
 
