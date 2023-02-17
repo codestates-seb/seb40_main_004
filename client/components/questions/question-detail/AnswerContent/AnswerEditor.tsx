@@ -67,6 +67,10 @@ export const AnswerEditor = () => {
   // 화면에 출력할 사용자 입력 데이터
   const editorContent = watch('content');
   const handleChange = (value: string) => {
+    if (Boolean(checkIsLogin)) {
+      toast.error('로그인이 필요한 서비스입니다.');
+      router.push('/login');
+    }
     setValue('content', value === '<p><br></p>' ? '' : value);
     trigger('content');
   };
@@ -122,16 +126,11 @@ export const AnswerEditor = () => {
     if (isLogin) {
       if (isAnserEdit.isEdit) patchAnswer(data);
       else postAnswer(data);
-    } else {
-      checkIsLogin();
-    }
+    } else checkIsLogin();
   };
   const onInvalid: SubmitErrorHandler<FormValue> = (data) => {
-    if (isLogin) {
-      toast.error(data.content?.message);
-    } else {
-      checkIsLogin();
-    }
+    if (isLogin) toast.error(data.content?.message);
+    else checkIsLogin();
   };
 
   // Quill 에디터 & 이미지 업로드 관련 코드
