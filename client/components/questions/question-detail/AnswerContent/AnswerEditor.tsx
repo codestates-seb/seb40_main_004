@@ -83,7 +83,7 @@ export const AnswerEditor = () => {
     const newAnswers = response.data;
     mutate({ currAnswers, ...newAnswers }, { revalidate: false })
       .then(() => {
-        toast.success('답변이 등록되었습니다!');
+        toast.success('답변이 성공적으로 등록되었습니다!');
         isAnswerPosted(true);
         setValue('content', '');
         trigger('content');
