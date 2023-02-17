@@ -40,7 +40,7 @@ const SignUpWithEmail: NextPage = () => {
   const onClickSignUp = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     try {
-      signUpWithEmailAndKey(email, authKey, password, nickname);
+      signUpWithEmailAndKey({ email, authKey, password, nickname });
       toast.success('가입이 완료되었습니다! 로그인 페이지로 이동할게요.😉');
     } catch (error) {
       console.error('error', error);
