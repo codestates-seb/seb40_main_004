@@ -116,6 +116,8 @@ export const Editor = () => {
       const payload = {
         title,
         content,
+        // isEditing이 true일 경우 fileId를 키로 갖고 아니면 category를 키로 가짐
+        // isEditing이 true면 fileIdList를 value로 갖고 아니면 category를 value로 가짐
         [isEditing ? 'fileId' : 'category']: isEditing ? fileIdList : category,
         tags,
       };
