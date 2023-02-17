@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { makePostRequest } from './makePostRequest';
 
-export type UserCredentials = {
+type UserCredentials = {
   email: string;
   password: string;
   confirmPassword?: string;
