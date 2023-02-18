@@ -22,6 +22,7 @@ import { elapsedTime } from '@libs/elapsedTime';
 import { BtnLike } from '@components/common/BtnLike';
 import { toast } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
+import { useGetArticleId } from 'hooks/useGetArticleId';
 
 // 기본 이미지 생성 전 임시
 const tempSrc =
@@ -33,12 +34,13 @@ export type AnswerProps = {
   pageInfo: number;
 };
 
-// 답변 컴포넌트
 export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
+  const { articleId } = useGetArticleId();
   const router = useRouter();
-  const { articleId } = router.query;
 
-  const pickedAnswerClass = answer.isPicked ? 'bg-main-orange' : 'bg-main-gray';
+  // 채택된 경우 클래스
+  const pickedAnswerClass =
+    answer && answer.isPicked ? 'bg-main-orange' : 'bg-main-gray';
 
   const answerElement = useRef<null | HTMLDivElement>(null);
   const isAnswerEdit = useRecoilValue(isAnswerEditAtom);
@@ -119,7 +121,6 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
           <Link href={`/dashboard/${answer.userInfo.userId}`}>
             <span className="text-sm sm:text-xl font-bold cursor-pointer">
               {changeGradeEmoji(answer.userInfo.grade)}
-              {` `}
               {answer.userInfo.nickname}
             </span>
           </Link>
@@ -127,18 +128,18 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
             {elapsedTime(answer.createdAt)}
           </time>
         </div>
-        {!isClosed &&
-        articleAuthorId === currUserId &&
-        answer.userInfo.userId.toString() !== currUserId ? (
-          <button
-            className="text-white font-bold text-xs sm:text-base space-x-2"
-            onClick={moveToReview}
-          >
-            <FontAwesomeIcon icon={voidCheck} className={'fa-lg'} />
-            <span>답변 채택하기</span>
-          </button>
-        ) : null}
-        {answer.isPicked ? (
+        {!answer.isClosed &&
+          articleAuthorId === currUserId &&
+          answer.userInfo.userId.toString() !== currUserId && (
+            <button
+              className="text-white font-bold text-xs sm:text-base space-x-2"
+              onClick={moveToReview}
+            >
+              <FontAwesomeIcon icon={voidCheck} className={'fa-lg'} />
+              <span>답변 채택하기</span>
+            </button>
+          )}
+        {answer.isPicked && (
           <div
             className="text-white font-bold text-xs sm:text-base space-x-2"
             onClick={moveToReview}
@@ -146,27 +147,27 @@ export const AnswerContent = ({ answer, isClosed, pageInfo }: AnswerProps) => {
             <FontAwesomeIcon icon={solidCheck} className={'fa-lg'} />
             <span>채택된 답변</span>
           </div>
-        ) : null}
+        )}
       </section>
 
       <section>
         <section className="p-8 flex flex-col space-y-2">
           <AnswerMainText>{answer.content}</AnswerMainText>
-          {answer.userInfo.userId.toString() === currUserId ? (
+          {answer.userInfo.userId.toString() === currUserId && (
             <article className="space-x-2 text-sm ml-auto">
               <button onClick={onEdit}>수정</button>
               <button onClick={onDelete}>삭제</button>
             </article>
-          ) : null}
+          )}
         </section>
 
         <section className="space-y-3 pt-3 p-6">
           <div className="flex justify-between items-center border-b pb-2">
             <div className="ml-auto">
               <BtnLike
-                isLiked={answer.isLiked}
                 answerId={answer.answerId}
-                likes={answer.answerLikeCount}
+                isLikedInit={answer.isLiked}
+                likeCntInit={answer.answerLikeCount}
               />
             </div>
           </div>
