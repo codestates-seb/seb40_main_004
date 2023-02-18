@@ -309,8 +309,6 @@ export const EditProfileComponent = () => {
                 placeholder="신규 비밀번호 확인"
                 {...register('newPasswordCheck', {
                   required: '신규 비밀번호 확인은 필수 입력 사항입니다',
-                  pattern:
-                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
                   validate: (value) =>
                     value === passwordCheck.current ||
                     '비밀번호가 일치하지 않습니다.',
@@ -318,7 +316,7 @@ export const EditProfileComponent = () => {
               />
               {errors.newPasswordCheck?.type === 'validate' ? (
                 <p className="font-semibold text-red-500 text-sm text-center">
-                  비밀번호가 일치하지 않습니다.
+                  {errors.newPasswordCheck.message}
                 </p>
               ) : null}
             </div>
