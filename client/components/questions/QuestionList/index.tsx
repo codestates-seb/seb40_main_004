@@ -26,11 +26,11 @@ export const QuestionList = ({
     return (
       <main className="flex flex-col w-full divide-y min-h-screen">
         {response.data.map((article: ArticleListProps) => (
-          <Link href={`/questions/${article.articleId}`}>
-            <section
-              className="py-4 space-y-4 hover:cursor-pointer hover:bg-gray-100"
-              key={article.articleId}
-            >
+          <Link
+            href={`/questions/${article.articleId}`}
+            key={article.articleId}
+          >
+            <section className="py-4 space-y-4 hover:cursor-pointer hover:bg-gray-100">
               <article className="space-x-2">
                 {article.isClosed ? (
                   <FontAwesomeIcon
