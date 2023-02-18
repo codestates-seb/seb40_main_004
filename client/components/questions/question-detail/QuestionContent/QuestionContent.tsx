@@ -1,12 +1,9 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import { BtnBookmark } from './BtnBookmark';
 import { QuestionMainText } from './QuestionMainText';
 import { CommentContainer } from '../Comment/index';
 
-import { isArticleEditAtom } from '@atoms/articleAtom';
 import { isLoginAtom } from '@atoms/loginAtom';
 
 import { UserNickname } from '@components/common/UserNickname';
@@ -14,78 +11,30 @@ import { CreatedDate } from '@components/common/CreatedDate';
 import { BtnLike } from '@components/common/BtnLike';
 import { TagList } from '@components/common/TagList';
 
-import { ArticleDetail } from '@type/article';
-
-import { client } from '@libs/client';
 import { useFetch } from '@libs/useFetchSWR';
-import { toast } from 'react-toastify';
-import { confirmAlert } from 'react-confirm-alert';
+import { useQuestionContent } from './useQuestionContent';
 
 type QuestionContentProps = {
   articleId: string;
 };
 
 export const QuestionContent = ({ articleId }: QuestionContentProps) => {
-  const router = useRouter();
   const isLogin = useRecoilValue(isLoginAtom);
-  const setArticleEdit = useSetRecoilState(isArticleEditAtom);
+  const { handleDelete, handleToEdit } = useQuestionContent(
+    articleId as string,
+  );
 
   // 게시글 데이터
   const { data: article, isLoading } = useFetch(`/api/articles/${articleId}`);
 
-  // 좋아요, 북마크 여부 확인을 위한 데이터 요청
-  const [articleData, setArticleData] = useState<ArticleDetail>();
-  useEffect(() => {
-    async function getLikeBookmark() {
-      const data = await client.get(`/api/articles/${articleId}`);
-      setArticleData(data.data);
-    }
-    getLikeBookmark();
-  }, []);
-
   let currUserId: string | null = '';
+
   if (typeof window !== 'undefined') {
     currUserId = localStorage.getItem('userId');
   }
+
   const authorId = isLoading || article.userInfo.userId;
   const isClosed = isLoading || article.isClosed;
-
-  const onDelete = () => {
-    confirmAlert({
-      message: '게시글을 삭제하시겠습니까?',
-      buttons: [
-        {
-          label: 'YES',
-          onClick: async () => {
-            try {
-              await client.delete(`/api/articles/${articleId}`);
-              toast.success('게시글이 삭제되었습니다.');
-              router.replace(`/questions`);
-            } catch (error) {
-              console.log(error);
-              toast.error('답변 삭제에 실패했습니다.');
-            }
-          },
-        },
-        {
-          label: 'NO',
-          onClick: () => {
-            return;
-          },
-        },
-      ],
-    });
-  };
-
-  const onEdit = () => {
-    setArticleEdit({
-      isArticleEdit: true,
-      title: article.title,
-      content: article.content,
-      articleId: articleId as string,
-    });
-    router.push(`/post`);
-  };
 
   return (
     <main className="flex flex-col w-full pb-6 border-b">
@@ -110,13 +59,10 @@ export const QuestionContent = ({ articleId }: QuestionContentProps) => {
                 </article>
               </section>
               <div className="flex space-x-1">
-                {articleData && (
+                {article && (
                   <>
-                    <BtnLike
-                      isLiked={articleData.isLiked}
-                      likes={article.likes}
-                    />
-                    <BtnBookmark isBookmarked={articleData.isBookmarked} />
+                    <BtnLike />
+                    <BtnBookmark />
                   </>
                 )}
               </div>
@@ -130,22 +76,8 @@ export const QuestionContent = ({ articleId }: QuestionContentProps) => {
 
               {isLogin && !isClosed && authorId.toString() === currUserId && (
                 <article className="space-x-2 text-sm w-[80px] flex justify-end">
-                  <button onClick={onEdit}>수정</button>
-                  <button onClick={onDelete}>삭제</button>
-                </article>
-              )}
-            </div>
-          </section>
-
-          <section className="p-6">
-            <QuestionMainText>{article.content}</QuestionMainText>
-            <div className="flex justify-between items-end space-y-3 sm:space-y-0 py-4 flex-col sm:flex-row">
-              <TagList tags={article.tags} />
-
-              {isLogin && !isClosed && authorId.toString() === currUserId && (
-                <article className="space-x-2 text-sm w-[80px] flex justify-end">
-                  <button onClick={onEdit}>수정</button>
-                  <button onClick={onDelete}>삭제</button>
+                  <button onClick={handleToEdit}>수정</button>
+                  <button onClick={handleDelete}>삭제</button>
                 </article>
               )}
             </div>
