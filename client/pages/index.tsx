@@ -29,9 +29,7 @@ const Home: NextPage = () => {
         <div className="w-[1280px] py-12 flex justify-center">
           <CheerUp />
         </div>
-        <div className="w-[1163px] h-[581px] mx-auto rounded-2xl bg-white py-10 px-14">
-          <ListLately />
-        </div>
+        <ListLately />
         <div className="w-[1163px] py-12 mx-auto flex gap-14">
           <div>
             <div className="w-[732px] h-[60px] bg-main-yellow rounded-2xl mb-[22px] flex justify-center items-center">
