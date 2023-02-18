@@ -13,10 +13,12 @@ import { BtnTopDown } from '../../components/common/BtnTopDown';
 import { Loader } from '@components/common/Loader';
 
 type QuestionDetailProps = {
-  articleId: string;
+  id: string;
 };
 
-const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
+const QuestionDetailPage: NextPage<QuestionDetailProps> = ({
+  id: articleId,
+}) => {
   // 게시글 데이터
   const { data: articleData, isLoading: articleLoading } = useFetch(
     `/api/articles/${articleId}`,
@@ -28,7 +30,7 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
     isLoading,
     isError,
   } = useFetch(`/api/articles/${articleId}/answers?page=1&size=5`);
-  const answerData = !isLoading && answers.data;
+
   const answerCount = !isLoading && answers.pageInfo.totalElements;
   if (isError) console.log(isError);
 
@@ -70,10 +72,7 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
                       {answerCount} 개의 답변이 달렸습니다.
                     </h2>
                   </div>
-                  <AnswerListContainer
-                    initialAnswers={answerData}
-                    totalPages={answers.pageInfo.totalPages}
-                  />
+                  <AnswerListContainer />
                 </div>
               ) : (
                 <div className="flex justify-center my-20 text-main-gray w-full text-base">
@@ -104,15 +103,6 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({ articleId }) => {
   );
 };
 
-const Page: NextPage<{
-  id: string;
-}> = ({ id }) => {
-  return (
-    // 질문 본문에 대한 캐시 초기값 설정
-    <QuestionDetail articleId={id} />
-  );
-};
-
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const id = ctx.params?.articleId;
 
@@ -123,4 +113,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default Page;
+export default QuestionDetailPage;
