@@ -18,6 +18,7 @@ import { ArticleDetail } from '@type/article';
 
 import { client } from '@libs/client';
 import { toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
 
 type QuestionContentProps = {
   articleId: string;
@@ -50,18 +51,30 @@ export const QuestionContent = ({
   const isClosed = article.isClosed;
 
   const onDelete = () => {
-    if (confirm('게시글을 삭제하시겠습니까...?')) {
-      client
-        .delete(`/api/articles/${articleId}`)
-        .then(() => {
-          toast.success('게시글이 삭제되었습니다.');
-          router.replace(`/questions`);
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error('답변 삭제에 실패했습니다.');
-        });
-    }
+    confirmAlert({
+      message: '게시글을 삭제하시겠습니까?',
+      buttons: [
+        {
+          label: 'YES',
+          onClick: async () => {
+            try {
+              await client.delete(`/api/articles/${articleId}`);
+              toast.success('게시글이 삭제되었습니다.');
+              router.replace(`/questions`);
+            } catch (error) {
+              console.log(error);
+              toast.error('답변 삭제에 실패했습니다.');
+            }
+          },
+        },
+        {
+          label: 'NO',
+          onClick: () => {
+            return;
+          },
+        },
+      ],
+    });
   };
 
   const onEdit = () => {
