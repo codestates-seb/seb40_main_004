@@ -18,6 +18,7 @@ export const useCheckClickIsLogin = () => {
           },
           {
             label: 'NO',
+            onClick: () => router.back(),
           },
         ],
       });
