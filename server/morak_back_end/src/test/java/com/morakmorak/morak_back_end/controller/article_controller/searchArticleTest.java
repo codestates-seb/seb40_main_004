@@ -3803,7 +3803,7 @@ public class searchArticleTest {
                 .comments(List.of(commentDto))
                 .build();
 
-        given(articleService.findDetailArticle(anyLong(), any(),any(),any())).willReturn(result);
+        given(articleService.findDetailArticle(anyLong(), any(),any())).willReturn(result);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -3978,7 +3978,7 @@ public class searchArticleTest {
                 .comments(new ArrayList<>())
                 .build();
 
-        given(articleService.findDetailArticle(anyLong(), any(),any(),any())).willReturn(result);
+        given(articleService.findDetailArticle(anyLong(), any(),any())).willReturn(result);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -4131,7 +4131,7 @@ public class searchArticleTest {
                 .comments(List.of(commentDto))
                 .build();
 
-        given(articleService.findDetailArticle(anyLong(), any(),any(),any())).willReturn(result);
+        given(articleService.findDetailArticle(anyLong(), any(),any())).willReturn(result);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -4258,7 +4258,7 @@ public class searchArticleTest {
                 .comments(List.of(commentDto))
                 .build();
 
-        given(articleService.findDetailArticle(anyLong(), any(),any(),any()))
+        given(articleService.findDetailArticle(anyLong(), any(),any()))
                 .willThrow(new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
 
         //when
