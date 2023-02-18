@@ -3,38 +3,21 @@ import { faBookmark as SolidBookmark } from '@fortawesome/free-solid-svg-icons';
 import { faBookmark as VoidBookmark } from '@fortawesome/free-regular-svg-icons';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useFetch } from '@libs/useFetchSWR';
+import { useHandleClickBookmark } from './useHandleClickBookmark';
 
-import { useRecoilValue } from 'recoil';
-
-import { isLoginAtom } from '@atoms/loginAtom';
-
-import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
-import { client } from '@libs/client';
-
-type BtnBookmarkProps = {
-  isBookmarked: boolean;
-};
-export const BtnBookmark = ({ isBookmarked }: BtnBookmarkProps) => {
+export const BtnBookmark = () => {
   const router = useRouter();
   const { articleId } = router.query;
-  const isLogin = useRecoilValue(isLoginAtom);
-  const checkIsLogin = useCheckClickIsLogin();
 
-  const [isMarked, setIsMarked] = useState(isBookmarked);
+  const { data } = useFetch(`/api/articles/${articleId}`);
+  const [isMarked, setIsMarked] = useState(data.isBookmarked);
 
-  const onClickBookmark = () => {
-    if (isLogin) {
-      client.post(`/api/articles/${articleId}/bookmark`).then((res) => {
-        setIsMarked(res.data.scrappedByThisUser);
-      });
-    } else {
-      checkIsLogin();
-    }
-  };
+  const { handleClickBookmark } = useHandleClickBookmark(articleId as string);
 
   return (
     <>
-      <button onClick={onClickBookmark}>
+      <button onClick={() => handleClickBookmark(setIsMarked)}>
         {isMarked ? (
           <FontAwesomeIcon
             icon={SolidBookmark}
