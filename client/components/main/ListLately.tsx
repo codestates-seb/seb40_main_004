@@ -16,47 +16,42 @@ type ArticleCardProps = {
 
 export const ArticleCard = ({ article }: ArticleCardProps) => {
   return (
-    <div
-      className="w-[492px] h-18 border-b mb-8 hover:bg-gray-100 cursor-pointer"
-      key={article.articleId}
-    >
-      <div className="mb-4">
-        <Link href={`/questions/${article.articleId}`}>
-          <span className="text-lg font-bold hover:cursor-pointer">
-            {article.title.length > 35
-              ? `${article.title.slice(0, 35)}...`
-              : article.title}
-          </span>
-        </Link>
-      </div>
-      <div className="flex justify-between items-center mb-2">
-        <div className="flex">
-          <Link href={`/dashboard/${article.userInfo.userId}`}>
-            <div className="text-xs flex gap-2 hover:cursor-pointer">
-              <span>
-                {changeGradeEmoji(
-                  article.userInfo.grade ? article.userInfo.grade : '',
-                )}
-              </span>
-              <span>{article.userInfo.nickname}</span>
-            </div>
-          </Link>
-        </div>
-        <div className="flex gap-4">
+    <Link href={`/questions/${article.articleId}`} key={article.articleId}>
+      <div className="flex flex-col justify-between w-[492px] border-b hover:bg-gray-100 cursor-pointer p-3 space-y-5">
+        <span className="text-lg font-bold hover:cursor-pointer">
+          {article.title.length > 35
+            ? `${article.title.slice(0, 35)}...`
+            : article.title}
+        </span>
+        <div className="flex justify-between items-center mb-2">
           <div className="flex">
-            <span className="text-xs">{elapsedTime(article.createdAt)}</span>
+            <Link href={`/dashboard/${article.userInfo.userId}`}>
+              <div className="text-xs flex gap-2 hover:cursor-pointer">
+                <span>
+                  {changeGradeEmoji(
+                    article.userInfo.grade ? article.userInfo.grade : '',
+                  )}
+                </span>
+                <span>{article.userInfo.nickname}</span>
+              </div>
+            </Link>
           </div>
-          <div className="flex gap-2">
-            <FontAwesomeIcon icon={faHeart} size="xs" />
-            <span className="text-xs">{article.likes}</span>
-          </div>
-          <div className="flex gap-2">
-            <FontAwesomeIcon icon={faComment} size="xs" />
-            <span className="text-xs">{article.answerCount}</span>
+          <div className="flex gap-4">
+            <div className="flex">
+              <span className="text-xs">{elapsedTime(article.createdAt)}</span>
+            </div>
+            <div className="flex gap-2">
+              <FontAwesomeIcon icon={faHeart} size="xs" />
+              <span className="text-xs">{article.likes}</span>
+            </div>
+            <div className="flex gap-2">
+              <FontAwesomeIcon icon={faComment} size="xs" />
+              <span className="text-xs">{article.answerCount}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
@@ -67,7 +62,7 @@ export const ListLately = () => {
   const { data, isLoading } = useFetch(URL);
 
   return !isLoading ? (
-    <section className="w-[1163px] mx-auto rounded-2xl bg-white py-10 px-14 space-y-6">
+    <section className="flex flex-col max-w-[1163px] w-full mx-auto rounded-2xl bg-white py-10 px-14 space-y-6">
       <div>
         <Link href="/questions">
           <div className="text-2xl mr-2 font-bold hover:cursor-pointer hover:opacity-50 inline-block select-none">
@@ -86,7 +81,7 @@ export const ListLately = () => {
         </Link>
       </div>
       {
-        <div className="flex justify-between">
+        <div className="flex justify-between space-x-5">
           <div>
             {data.data.slice(0, 5).map((article: ArticleListProps) => (
               <ArticleCard article={article} key={article.articleId} />
