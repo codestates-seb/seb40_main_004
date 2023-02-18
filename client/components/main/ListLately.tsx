@@ -25,11 +25,11 @@ export const ListLately = () => {
 
   return (
     <>
-      <div className="mb-6">
+      <div className="mb-6 ">
         <Link href="/questions">
-          <span className="text-2xl mr-2 font-bold hover:cursor-pointer hover:opacity-50">
+          <div className="text-2xl mr-2 font-bold hover:cursor-pointer hover:opacity-50 inline-block select-none">
             ❓ 최근 질문
-          </span>
+          </div>
         </Link>
         <Link href="/questions">
           <span className="text-xs hover:cursor-pointer hover:opacity-40">
