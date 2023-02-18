@@ -72,6 +72,7 @@ export const SignUpForm = () => {
         <div className="space-y-4">
           <Input
             label="닉네임"
+            sublabel="(자음/모음 1자리 이상, 7자리 이하)"
             type="text"
             placeholder="닉네임을 입력해주세요."
             register={{
@@ -104,6 +105,7 @@ export const SignUpForm = () => {
           ) : null}
           <Input
             label="비밀번호"
+            sublabel="(8~16자, 영어 대소문자,특수문자 포함)"
             type="password"
             placeholder="비밀번호를 입력해주세요."
             register={{
