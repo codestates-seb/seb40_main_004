@@ -10,19 +10,21 @@ import { userDashboardAtom } from '@atoms/userAtom';
 import { Footer } from '@components/common/Footer';
 import { Header } from '@components/common/Header';
 import { Seo } from '@components/common/Seo';
-import { AsideBot } from '@components/dashboard/AsideBot';
-import { AsideMid } from '@components/dashboard/AsideMid';
-import { AsideTop } from '@components/dashboard/AsideTop';
 import { CarouselArticle } from '@components/dashboard/CarouselArticle';
 import { CarouselReview } from '@components/dashboard/CarouselReview';
 
 import { client } from '@libs/client';
+import { defaultAvatar, defaultUserDashboard } from './ defaultUserDashboard';
+import AsideComponent from '@components/dashboard/AsideComponent';
 
 const Dashboard: NextPage = () => {
   const rendering = useRecoilValue(renderingAtom);
   const [userDashboard, setUserDashboard] = useRecoilState(userDashboardAtom);
   const [userId, setUserId] = useState<string | string[] | undefined>('');
   const router = useRouter();
+  const setDefaultUserDashboard = () => {
+    setUserDashboard(defaultAvatar && defaultUserDashboard);
+  };
   const getUser = async () => {
     try {
       if (userId) {
@@ -30,28 +32,7 @@ const Dashboard: NextPage = () => {
         setUserDashboard(res.data);
       }
     } catch (error) {
-      setUserDashboard({
-        userId: 0,
-        email: '',
-        nickname: '탈퇴한 유저',
-        jobType: '',
-        grade: '',
-        point: 0,
-        github: '',
-        blog: '',
-        infoMessage: '',
-        rank: 0,
-        avatar: {
-          avatarId: 0,
-          filename: '',
-          remotePath: '/favicon.ico',
-        },
-        tags: [],
-        reviewBadges: [],
-        articles: [],
-        activities: [],
-        reviews: [],
-      });
+      setDefaultUserDashboard();
     }
   };
 
@@ -62,6 +43,8 @@ const Dashboard: NextPage = () => {
   useEffect(() => {
     getUser();
   }, [userId, rendering]);
+
+  const className = 'text-xl font-semibold hover:cursor-pointer';
 
   return (
     <>
@@ -74,26 +57,18 @@ const Dashboard: NextPage = () => {
       />
       <Header />
       <main className="w-[1280px] min-h-screen mx-auto flex gap-12 mb-12">
-        <div className="w-[305px]">
-          <AsideTop />
-          <AsideMid />
-          <AsideBot />
-        </div>
+        <AsideComponent />
         <div className="w-full">
           {/* <Grass /> */}
           <div className="mb-8 flex items-baseline">
             <div className="border-b-2 border-main-orange py-4 pr-6">
               <Link href={`/dashboard/${router.query.userId}`}>
-                <span className="text-xl font-semibold hover:cursor-pointer">
-                  ❓ 나의 질문
-                </span>
+                <span className={className}>❓ 나의 질문</span>
               </Link>
             </div>
             <div className="border-b-2 py-4 pr-6">
               <Link href={`/dashboard/${router.query.userId}/answers`}>
-                <span className="text-xl font-semibold hover:cursor-pointer">
-                  ❗ 나의 답변
-                </span>
+                <span className={className}>❗ 나의 답변</span>
               </Link>
             </div>
             <div className="border-b-2 py-4 pr-6">

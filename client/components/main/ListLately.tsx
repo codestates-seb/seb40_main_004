@@ -26,12 +26,18 @@ export const ListLately = () => {
   return (
     <>
       <div className="mb-6 ">
-        <span className="text-2xl mr-2 font-bold">❓ 최근 질문</span>
         <Link href="/questions">
-          <span className="text-xs hover:cursor-pointer">더보기 ＞</span>
+          <div className="text-2xl mr-2 font-bold hover:cursor-pointer hover:opacity-50 inline-block select-none">
+            ❓ 최근 질문
+          </div>
+        </Link>
+        <Link href="/questions">
+          <span className="text-xs hover:cursor-pointer hover:opacity-40">
+            더보기 ＞
+          </span>
         </Link>
         <Link href="/post">
-          <span className="text-xs ml-4 hover:cursor-pointer">
+          <span className="text-xs ml-4 hover:cursor-pointer hover:opacity-40">
             📝 질문 작성 ＞
           </span>
         </Link>
@@ -42,7 +48,7 @@ export const ListLately = () => {
             {data &&
               data.slice(0, 5).map((article) => (
                 <div
-                  className="w-[492px] h-18 border-b mb-8"
+                  className="w-[492px] h-18 border-b mb-8 hover:bg-gray-100 cursor-pointer"
                   key={article.articleId}
                 >
                   <div className="mb-4">
@@ -92,7 +98,7 @@ export const ListLately = () => {
             {data &&
               data.slice(5).map((article) => (
                 <div
-                  className="w-[492px] h-18 border-b mb-8"
+                  className="w-[492px] h-18 border-b mb-8 hover:bg-gray-100 cursor-pointer"
                   key={article.articleId}
                 >
                   <div className="mb-4">
