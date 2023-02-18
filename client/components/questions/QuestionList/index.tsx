@@ -26,8 +26,11 @@ export const QuestionList = ({
     return (
       <main className="flex flex-col w-full divide-y min-h-screen">
         {response.data.map((article: ArticleListProps) => (
-          <section className="py-4 space-y-4 " key={article.articleId}>
-            <article className="space-x-2">
+          <section
+            className="py-4 space-y-4 hover:bg-gray-100 cursor-pointer"
+            key={article.articleId}
+          >
+            <article className="space-x-2 ">
               {article.isClosed ? (
                 <FontAwesomeIcon
                   icon={solidCheck}
