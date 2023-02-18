@@ -1,6 +1,5 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState, useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 
@@ -13,6 +12,8 @@ import { inspectNicknameDuplication } from '@libs/inspectNicknameDuplication';
 
 import { UserDashboard } from '@type/dashboard';
 import { toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
+import CancelButton from './CancelButton';
 
 interface IChangePassword {
   originalPassword: string;
@@ -40,6 +41,7 @@ export const EditProfileComponent = () => {
     handleSubmit,
     setError,
     formState: { errors },
+    watch,
   } = useForm<IChangePassword>();
   const onValid: SubmitHandler<IChangePassword> = async ({
     originalPassword,
@@ -88,11 +90,13 @@ export const EditProfileComponent = () => {
       setUserData(res.data);
     }
   };
+
   useEffect(() => {
     getPathname();
     getUserId();
     getAccessToken();
   }, []);
+
   useEffect(() => {
     getUserData();
   }, [userId]);
@@ -106,53 +110,86 @@ export const EditProfileComponent = () => {
   const onSubmitEditProfile = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const reg = new RegExp('^(?=.*[a-z0-9가-힣])[a-z0-9가-힣].{0,6}$');
-    if (!reg.test(nickname)) {
-      alert('닉네임은 최소 1글자, 최대 7글자, 자음, 모음 불가입니다');
-    } else {
-      if (confirm('프로필 저장 하시겠습니까?')) {
-        try {
-          await client.patch('/api/users/profiles', {
-            nickname,
-            infoMessage,
-            github,
-            blog,
-            jobType,
-          });
-          localStorage.setItem('nickname', nickname);
-          setRenderingHeader((prev) => !prev);
-          router.push('/');
-        } catch (error) {
-          toast.error(`에러 발생 : ${error}`);
-        }
-      }
-    }
+
+    !reg.test(nickname)
+      ? alert('닉네임은 최소 1글자, 최대 7글자, 자음, 모음 불가입니다')
+      : confirmAlert({
+          message: '프로필을 저장 하시겠습니까?',
+          buttons: [
+            {
+              label: 'YES',
+              onClick: async () => {
+                try {
+                  await client.patch('/api/users/profiles', {
+                    nickname,
+                    infoMessage,
+                    github,
+                    blog,
+                    jobType,
+                  });
+                  localStorage.setItem('nickname', nickname);
+                  setRenderingHeader((prev) => !prev);
+                  router.push('/');
+                } catch (error) {
+                  toast.error(`에러 발생 : ${error}`);
+                }
+              },
+            },
+            {
+              label: 'NO',
+              onClick: () => {
+                return;
+              },
+            },
+          ],
+        });
   };
   const onSubmitMembershipWithdrawal = async (
     event: FormEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
-    const ok = confirm('회원 탈퇴 하시겠습니까?');
-    if (ok) {
-      try {
-        await client.delete('/api/auth', {
-          data: {
-            password,
+    confirmAlert({
+      message: '회원 탈퇴하시겠습니까?',
+      buttons: [
+        {
+          label: 'YES',
+          onClick: async () => {
+            try {
+              await client.delete('/api/auth', {
+                data: {
+                  password,
+                },
+              });
+              toast.success('회원 탈퇴 완료되었습니다');
+              localStorage.clear();
+              setDataHeader(null);
+              setIsLogin(false);
+              router.push('/');
+            } catch (error) {
+              toast.error(`에러 발생 : ${error}`);
+            }
           },
-        });
-        alert('회원 탈퇴 완료되었습니다');
-        localStorage.clear();
-        setDataHeader(null);
-        setIsLogin(false);
-        router.push('/');
-      } catch (error) {
-        alert(`에러 발생 : ${error}`);
-      }
-    }
+        },
+        {
+          label: 'NO',
+          onClick: () => {
+            return;
+          },
+        },
+      ],
+    });
   };
+
+  const passwordCheck = useRef({});
+
+  passwordCheck.current = watch('newPassword', '');
 
   const onBlurNickname = () => {
     inspectNicknameDuplication(userData?.nickname ?? '', nickname);
   };
+
+  const profileClassName =
+    'w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray';
   return (
     <>
       {pathname === '/edit-profile' ? (
@@ -166,7 +203,7 @@ export const EditProfileComponent = () => {
               id="nickname"
               type="text"
               placeholder="닉네임을 입력해주세요"
-              className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
+              className={profileClassName}
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
               onBlur={onBlurNickname}
@@ -176,34 +213,34 @@ export const EditProfileComponent = () => {
               id="message"
               type="text"
               placeholder="메세지를 입력해주세요"
-              className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
+              className={profileClassName}
               value={infoMessage}
-              onChange={(e) => setInfoMessage(e.target.value)}
+              onChange={(event) => setInfoMessage(event.target.value)}
             />
             <label htmlFor="github">깃허브 주소</label>
             <input
               id="github"
               type="text"
               placeholder="깃허브 주소를 입력해주세요"
-              className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
+              className={profileClassName}
               value={github}
-              onChange={(e) => setGithub(e.target.value)}
+              onChange={(event) => setGithub(event.target.value)}
             />
             <label htmlFor="blog">블로그 주소</label>
             <input
               id="blog"
               type="text"
               placeholder="블로그 주소를 입력해주세요"
-              className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
+              className={profileClassName}
               value={blog}
-              onChange={(e) => setBlog(e.target.value)}
+              onChange={(event) => setBlog(event.target.value)}
             />
             <label htmlFor="userState">직업 현황</label>
             <select
               id="userState"
               className="w-full rounded-full h-11 px-4 mt-2 mb-32 border border-main-gray"
               value={jobType}
-              onChange={(e) => setJobType(e.target.value)}
+              onChange={(event) => setJobType(event.target.value)}
             >
               <option value="JOB_SEEKER">개발자 취준생</option>
               <option value="DEVELOPER">현업 개발자</option>
@@ -215,11 +252,7 @@ export const EditProfileComponent = () => {
               <button className="w-full py-[6px] rounded-full bg-main-yellow">
                 저장
               </button>
-              <Link href="/">
-                <div className="w-full py-[6px] rounded-full bg-main-gray hover:cursor-pointer flex justify-center">
-                  <span>취소</span>
-                </div>
-              </Link>
+              <CancelButton />
             </div>
           </form>
         </>
@@ -238,19 +271,15 @@ export const EditProfileComponent = () => {
                 placeholder="기존 비밀번호 입력"
                 {...register('originalPassword', {
                   required: '기존 비밀번호는 필수 입력 사항입니다',
-                  pattern: {
-                    value:
-                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
-                    message:
-                      '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다',
-                  },
+                  pattern:
+                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
                 })}
               />
-              {errors.originalPassword && (
+              {errors.originalPassword?.type === 'pattern' ? (
                 <p className="font-semibold text-red-500 text-sm text-center">
-                  {errors.originalPassword.message}
+                  비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다.
                 </p>
-              )}
+              ) : null}
             </div>
             <div className="mt-2 mb-10">
               <label htmlFor="new-password">신규 비밀번호</label>
@@ -261,19 +290,15 @@ export const EditProfileComponent = () => {
                 placeholder="신규 비밀번호 입력"
                 {...register('newPassword', {
                   required: '신규 비밀번호는 필수 입력 사항입니다',
-                  pattern: {
-                    value:
-                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
-                    message:
-                      '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다',
-                  },
+                  pattern:
+                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
                 })}
               />
-              {errors.newPassword && (
+              {errors.newPassword?.type === 'pattern' ? (
                 <p className="font-semibold text-red-500 text-sm text-center">
-                  {errors.newPassword.message}
+                  비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다.
                 </p>
-              )}
+              ) : null}
             </div>
             <div className="mt-2 mb-10">
               <label htmlFor="new-password-check">신규 비밀번호 확인</label>
@@ -284,29 +309,24 @@ export const EditProfileComponent = () => {
                 placeholder="신규 비밀번호 확인"
                 {...register('newPasswordCheck', {
                   required: '신규 비밀번호 확인은 필수 입력 사항입니다',
-                  pattern: {
-                    value:
-                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
-                    message:
-                      '비밀번호는 8~16자, 영어 대소문자,특수문자가 포함되어야 합니다',
-                  },
+                  pattern:
+                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{8,16}$/i,
+                  validate: (value) =>
+                    value === passwordCheck.current ||
+                    '비밀번호가 일치하지 않습니다.',
                 })}
               />
-              {errors.newPasswordCheck && (
+              {errors.newPasswordCheck?.type === 'validate' ? (
                 <p className="font-semibold text-red-500 text-sm text-center">
-                  {errors.newPasswordCheck.message}
+                  비밀번호가 일치하지 않습니다.
                 </p>
-              )}
+              ) : null}
             </div>
             <div className="flex gap-8">
               <button className="w-full py-[6px] rounded-full bg-main-yellow">
                 변경
               </button>
-              <Link href="/">
-                <div className="w-full py-[6px] rounded-full bg-main-gray hover:cursor-pointer flex justify-center">
-                  <span>취소</span>
-                </div>
-              </Link>
+              <CancelButton />
             </div>
           </form>
         </>
@@ -320,19 +340,15 @@ export const EditProfileComponent = () => {
             <input
               id="password"
               type="password"
-              className="w-full rounded-full h-11 px-4 mt-2 mb-10 border border-main-gray"
+              className={profileClassName}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(event) => setPassword(event.target.value)}
             />
             <div className="flex gap-8">
               <button className="w-full py-[6px] rounded-full bg-main-yellow">
                 탈퇴
               </button>
-              <Link href="/">
-                <div className="w-full py-[6px] rounded-full bg-main-gray hover:cursor-pointer flex justify-center">
-                  <span>취소</span>
-                </div>
-              </Link>
+              <CancelButton />
             </div>
           </form>
         </>
