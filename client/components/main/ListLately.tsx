@@ -61,43 +61,47 @@ export const ListLately = () => {
 
   const { data, isLoading } = useFetch(URL);
 
-  return !isLoading ? (
+  return (
     <section className="flex flex-col max-w-[1163px] w-full mx-auto rounded-2xl bg-white py-10 px-14 space-y-6">
-      <div>
-        <Link href="/questions">
-          <div className="text-2xl mr-2 font-bold hover:cursor-pointer hover:opacity-50 inline-block select-none">
-            ❓ 최근 질문
-          </div>
-        </Link>
-        <Link href="/questions">
-          <span className="text-xs hover:cursor-pointer hover:opacity-40">
-            더보기 ＞
-          </span>
-        </Link>
-        <Link href="/post">
-          <span className="text-xs ml-4 hover:cursor-pointer hover:opacity-40">
-            📝 질문 작성 ＞
-          </span>
-        </Link>
-      </div>
-      {
-        <div className="flex justify-between space-x-5">
+      {!isLoading ? (
+        <>
           <div>
-            {data.data.slice(0, 5).map((article: ArticleListProps) => (
-              <ArticleCard article={article} key={article.articleId} />
-            ))}
+            <Link href="/questions">
+              <div className="text-2xl mr-2 font-bold hover:cursor-pointer hover:opacity-50 inline-block select-none">
+                ❓ 최근 질문
+              </div>
+            </Link>
+            <Link href="/questions">
+              <span className="text-xs hover:cursor-pointer hover:opacity-40">
+                더보기 ＞
+              </span>
+            </Link>
+            <Link href="/post">
+              <span className="text-xs ml-4 hover:cursor-pointer hover:opacity-40">
+                📝 질문 작성 ＞
+              </span>
+            </Link>
           </div>
-          <div>
-            {data.data.slice(5).map((article: ArticleListProps) => (
-              <ArticleCard article={article} key={article.articleId} />
-            ))}
-          </div>
-        </div>
-      }
-    </section>
-  ) : (
-    <section className="w-full h-full flex justify-center items-center">
-      <Loader />
+          {
+            <div className="flex justify-between space-x-5">
+              <div>
+                {data.data.slice(0, 5).map((article: ArticleListProps) => (
+                  <ArticleCard article={article} key={article.articleId} />
+                ))}
+              </div>
+              <div>
+                {data.data.slice(5).map((article: ArticleListProps) => (
+                  <ArticleCard article={article} key={article.articleId} />
+                ))}
+              </div>
+            </div>
+          }
+        </>
+      ) : (
+        <section className="w-full h-[580px] flex justify-center items-center">
+          <Loader />
+        </section>
+      )}
     </section>
   );
 };
