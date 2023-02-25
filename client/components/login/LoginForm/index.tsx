@@ -49,7 +49,9 @@ export const LoginForm = () => {
       router.push('/');
     } catch (err) {
       console.error(err);
-      toast.error('로그인에 실패했습니다! 다시 한 번 확인해주세요.🥲');
+      toast.error(
+        '로그인에 실패했습니다! 아이디 혹은 비밀번호를 다시 확인해주세요.🥲',
+      );
     } finally {
       setIsSubmitting(false);
     }

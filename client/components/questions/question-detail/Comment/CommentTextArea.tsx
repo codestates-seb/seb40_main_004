@@ -13,6 +13,7 @@ import { renderingAtom } from '@atoms/renderingAtom';
 import { useCheckClickIsLogin } from '@libs/useCheckIsLogin';
 import { client } from '@libs/client';
 import { toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
 
 type TextAreaProps = {
   answerId?: number;
@@ -33,9 +34,20 @@ export const CommentTextArea = ({ answerId }: TextAreaProps) => {
   const { register, handleSubmit, watch, setValue } = useForm<FormValue>();
 
   if (watch().content?.length >= 1 && !isLogin) {
-    if (confirm('로그인이 필요한 서비스 입니다. 바로 로그인 하시겠어요?')) {
-      router.push('/login');
-    }
+    confirmAlert({
+      message: '로그인이 필요한 서비스 입니다. 바로 로그인 하시겠어요?',
+      buttons: [
+        {
+          label: 'YES',
+          onClick: () => {
+            router.push('/login');
+          },
+        },
+        {
+          label: 'NO',
+        },
+      ],
+    });
   }
 
   // answerId 가 있는 경우 댓글 코멘트 작성 api 로 요청

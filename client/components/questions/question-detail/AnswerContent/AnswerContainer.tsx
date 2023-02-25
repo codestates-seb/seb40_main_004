@@ -1,31 +1,27 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { AnswerContent, AnswerProps } from './index';
+import { AnswerContent } from './index';
 
 import { useFetch } from '@libs/useFetchSWR';
 
 import { Answer } from '@type/answer';
 import { toast } from 'react-toastify';
+import { useGetArticleId } from 'hooks/useGetArticleId';
 
 type AnswerListProps = {
   index: number;
 };
 
-type AnswerListContainerProps = {
-  initialAnswers?: AnswerProps;
-  totalPages: number;
-};
-
 // 답변 리스트 컴포넌트
 export const AnswerList = ({ index }: AnswerListProps) => {
-  const router = useRouter();
-  const { articleId } = router.query;
+  const { articleId } = useGetArticleId();
 
+  // 게시글 데이터
   const { data: article, isLoading: articleLoading } = useFetch(
     `/api/articles/${articleId}`,
   );
   const isClosed = articleLoading || article.isClosed;
 
+  // 답변 데이터
   const {
     data: answers,
     isLoading,
@@ -49,12 +45,15 @@ export const AnswerList = ({ index }: AnswerListProps) => {
 };
 
 // 답변 리스트 + 더보기버튼
-export const AnswerListContainer = ({
-  initialAnswers,
-  totalPages,
-}: AnswerListContainerProps) => {
+export const AnswerListContainer = () => {
   const [cnt, setCnt] = useState(2);
   const pages = [];
+
+  const { articleId } = useGetArticleId();
+
+  const { data: initialAnswers } = useFetch(
+    `/api/articles/${articleId}/answers?page=1&size=5`,
+  );
 
   if (initialAnswers) {
     pages.push(<AnswerList index={1} key={1} />);
@@ -63,10 +62,11 @@ export const AnswerListContainer = ({
   for (let i = 2; i < cnt; i++) {
     pages.push(<AnswerList index={i} key={i} />);
   }
+
   return (
     <>
       {pages}
-      {totalPages + 1 === cnt ? null : (
+      {initialAnswers.pageInfo.totalPages + 1 === cnt || (
         <article className="flex justify-center text-base">
           <button onClick={() => setCnt(cnt + 1)}>더보기</button>
         </article>

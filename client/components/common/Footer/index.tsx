@@ -21,7 +21,7 @@ const developers: Developer[] = [
   {
     name: '정하승',
     github: 'https://github.com/HA-SEUNG-JEONG',
-    blog: 'https://haseungdev-3fhsrdzzv-ha-seung-jeong.vercel.app/',
+    blog: 'https://haseungdev.vercel.app/',
   },
   {
     name: '백시온',

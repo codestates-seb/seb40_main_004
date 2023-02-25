@@ -61,6 +61,7 @@ export const AsideTop = () => {
         setIsEdit(false);
         setIsClicked(false);
         setRenderingHeader((prev) => !prev);
+        toast.success('프로필이 성공적으로 변경되었습니다.');
       } catch (error) {
         toast.error('에러가 발생했습니다 다시 시도해주세요');
         console.error(error);
