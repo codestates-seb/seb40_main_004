@@ -69,8 +69,9 @@ jobs:
           webdriver.chrome.location: ${{ secrets.CHROME_DRIVER_LOCATION }}
       - name: download chrom
         run: | 
-         
-         curl -LO http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_109.0.5414.74_amd64.debapt-get install -y ./google-chrome-stable_109.0.5414.74_amd64.debrm google-chrome-stable_109.0.5414.74_amd64.deb
+         curl -LO http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_109.0.5414.74_amd64.deb
+         apt-get install -y ./google-chrome-stable_109.0.5414.74_amd64.deb
+         rm google-chrome-stable_109.0.5414.74_amd64.deb
          
 
         # [3] save build
