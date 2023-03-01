@@ -67,7 +67,11 @@ jobs:
           cloud.aws.s3.bucket: ${{ secrets.AWS_IMAGE_BUCKET_NAME }}
           
           webdriver.chrome.location: ${{ secrets.CHROME_DRIVER_LOCATION }}
-
+      - name: download chrom
+        run: | 
+         
+         curl -LO http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_109.0.5414.74_amd64.debapt-get install -y ./google-chrome-stable_109.0.5414.74_amd64.debrm google-chrome-stable_109.0.5414.74_amd64.deb
+         
 
         # [3] save build
       - name: Make zip file
