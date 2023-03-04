@@ -55,11 +55,12 @@ export const useQuestionContent = (articleId: string) => {
       toast.success('신고가 정상적으로 처리되었습니다.');
       router.replace('/questions');
     } catch (err) {
-      const typedError = err as Error;
-      return {
-        code: '',
-        err: typedError.message,
-      };
+      if (err instanceof Error) {
+        return {
+          code: '',
+          err: err.message,
+        };
+      }
     }
   };
 
