@@ -13,6 +13,8 @@ import { TagList } from '@components/common/TagList';
 
 import { useFetch } from '@libs/useFetchSWR';
 import { useQuestionContent } from './useQuestionContent';
+import { useState } from 'react';
+import { ReportModal } from './ReportModal';
 
 type QuestionContentProps = {
   articleId: string;
@@ -20,7 +22,7 @@ type QuestionContentProps = {
 
 export const QuestionContent = ({ articleId }: QuestionContentProps) => {
   const isLogin = useRecoilValue(isLoginAtom);
-  const { handleDelete, handleToEdit } = useQuestionContent(
+  const { handleDelete, handleToEdit, handleReport } = useQuestionContent(
     articleId as string,
   );
 
@@ -36,8 +38,10 @@ export const QuestionContent = ({ articleId }: QuestionContentProps) => {
   const authorId = isLoading || article.userInfo.userId;
   const isClosed = isLoading || article.isClosed;
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <main className="flex flex-col w-full pb-6 border-b">
+    <main className="flex flex-col w-full pb-6 border-b relative">
       {!isLoading && (
         <>
           <section className="flex flex-col space-y-4 border-b pb-3">
@@ -58,7 +62,7 @@ export const QuestionContent = ({ articleId }: QuestionContentProps) => {
                   <CreatedDate createdAt={article.createdAt} />
                 </article>
               </section>
-              <div className="flex space-x-1">
+              <div className="flex space-x-1 items-end">
                 {article && (
                   <>
                     <BtnLike />
@@ -75,10 +79,18 @@ export const QuestionContent = ({ articleId }: QuestionContentProps) => {
               <TagList tags={article?.tags} />
 
               {isLogin && !isClosed && authorId.toString() === currUserId && (
-                <article className="space-x-2 text-sm w-[80px] flex justify-end">
+                <article className="space-x-2 text-sm flex justify-end flex-wrap">
                   <button onClick={handleToEdit}>수정</button>
                   <button onClick={handleDelete}>삭제</button>
                 </article>
+              )}
+              {isLogin && authorId.toString() !== currUserId && (
+                <button
+                  className="text-red-500 text-xs whitespace-nowrap"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  신고
+                </button>
               )}
             </div>
           </section>
@@ -87,6 +99,12 @@ export const QuestionContent = ({ articleId }: QuestionContentProps) => {
             <CommentContainer />
           </section>
         </>
+      )}
+      {isModalOpen && (
+        <ReportModal
+          handleReport={handleReport}
+          setIsModalOpen={setIsModalOpen}
+        />
       )}
     </main>
   );
