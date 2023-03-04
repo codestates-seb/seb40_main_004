@@ -47,6 +47,7 @@ spring:
             token-uri: ${PROVIDER_TOKEN_URI}
             user-info-uri: ${PROVIDER_INFO_URI}
             user-name-attribute: id
+            
   mail:
     host: ${MAIL_HOST}
     username: ${MAIL_USERNAME}
@@ -91,3 +92,4 @@ cloud:
 webdriver:
   chrome:
     location: ${CHROME_DRIVER_LOCATION}
+    
