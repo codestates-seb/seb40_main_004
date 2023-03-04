@@ -33,8 +33,8 @@ export const BtnUser = () => {
   });
   return (
     <Link href={`/dashboard/${localStorage.getItem('userId')}`}>
-      <button className="flex items-center">
-        <div className="w-[35px] h-[35px] rounded-full overflow-hidden mr-4">
+      <button className="flex items-center mobile:flex">
+        <div className="w-[35px] h-[35px] rounded-full overflow-hidden mr-4 ">
           {isValid ? (
             <Image
               src={avatarPath ?? '/favicon.cio'}
@@ -46,9 +46,12 @@ export const BtnUser = () => {
             <Image src="/favicon.ico" width="25px" height="25px" />
           )}
         </div>
-        <span className="">{changeGradeEmoji(grade ?? '')}</span>
-        <span className="ml-2">{nickname}</span>
-        <FontAwesomeIcon icon={faChevronRight} />
+
+        <span>{changeGradeEmoji(grade ?? '')}</span>
+        <div className="space-x-2">
+          <span>{nickname}</span>
+          <FontAwesomeIcon icon={faChevronRight} />
+        </div>
       </button>
     </Link>
   );

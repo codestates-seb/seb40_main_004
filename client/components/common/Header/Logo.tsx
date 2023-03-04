@@ -3,7 +3,10 @@ import Link from 'next/link';
 export const Logo = () => {
   return (
     <Link href="/">
-      <button type="button" className="mr-6">
+      <button
+        type="button"
+        className="mr-6 mobile:flex mobile:justify-center mobile:w-32"
+      >
         <svg
           width="100"
           height="66"
