@@ -14,7 +14,10 @@ import { Header } from '@components/common/Header';
 import { Seo } from '@components/common/Seo';
 import { CarouselBookmarks } from '@components/dashboard/CarouselBookmarks';
 import { CarouselReview } from '@components/dashboard/CarouselReview';
-import { defaultAvatar, defaultUserDashboard } from './ defaultUserDashboard';
+import {
+  defaultAvatar,
+  defaultUserDashboard,
+} from '../../../libs/ defaultUserDashboard';
 import AsideComponent from '@components/dashboard/AsideComponent';
 
 const className = 'text-xl font-semibold hover:cursor-pointer';
