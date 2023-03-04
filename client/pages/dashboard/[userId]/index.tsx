@@ -14,7 +14,10 @@ import { CarouselArticle } from '@components/dashboard/CarouselArticle';
 import { CarouselReview } from '@components/dashboard/CarouselReview';
 
 import { client } from '@libs/client';
-import { defaultAvatar, defaultUserDashboard } from './ defaultUserDashboard';
+import {
+  defaultAvatar,
+  defaultUserDashboard,
+} from '../../../libs/ defaultUserDashboard';
 import AsideComponent from '@components/dashboard/AsideComponent';
 
 const Dashboard: NextPage = () => {

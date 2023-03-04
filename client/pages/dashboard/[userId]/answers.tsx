@@ -16,7 +16,10 @@ import { CarouselReview } from '@components/dashboard/CarouselReview';
 import { client } from '@libs/client';
 
 import AsideComponent from '@components/dashboard/AsideComponent';
-import { defaultAvatar, defaultUserDashboard } from './ defaultUserDashboard';
+import {
+  defaultAvatar,
+  defaultUserDashboard,
+} from '../../../libs/ defaultUserDashboard';
 
 const className = 'border-b-2 py-4 pr-6';
 const cursorClassName = 'text-xl font-semibold hover:cursor-pointer';
