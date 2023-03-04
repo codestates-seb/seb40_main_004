@@ -25,7 +25,7 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({
       <Header />
       <main className="max-w-[900px] mx-auto min-h-[80vh] bg-white  p-8 md:p-16 shadow-sm border-[1px] border-gray-200">
         <BtnTopDown />
-        <QuestionContent articleId={articleId} article={articleData} />
+        <QuestionContent articleId={articleId} />
       </main>
       <Footer />
     </>
