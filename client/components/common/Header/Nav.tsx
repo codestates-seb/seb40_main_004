@@ -8,47 +8,26 @@ export const Nav = () => {
   useEffect(() => {
     setPathname(router.pathname);
   }, []);
+
+  const CATEGORIES = ['질문 / 답변', '정보글', '채용 일정'];
+
   return (
-    <ul className="flex gap-4 items-baseline">
-      <li>
-        <Link href="/questions">
-          <button
-            className={`border-b-4 py-1 ${
-              pathname.includes('/questions')
-                ? 'border-main-yellow'
-                : 'border-background-gray'
-            }`}
-          >
-            질문/답변
-          </button>
-        </Link>
-      </li>
-      <li>
-        <Link href="/informations">
-          <button
-            className={`border-b-4 py-1 ${
-              pathname.includes('/informations')
-                ? 'border-main-yellow'
-                : 'border-background-gray'
-            }`}
-          >
-            정보글
-          </button>
-        </Link>
-      </li>
-      <li>
-        <Link href="/recruit">
-          <button
-            className={`border-b-4 py-1 ${
-              pathname.includes('/recruit')
-                ? 'border-main-yellow'
-                : 'border-background-gray'
-            }`}
-          >
-            채용 일정
-          </button>
-        </Link>
-      </li>
+    <ul className="flex items-baseline space-x-4">
+      {['/questions', '/informations', '/recruit'].map((path, idx) => (
+        <li key={path} className="">
+          <Link href={path}>
+            <button
+              className={`border-b-4 py-1 ${
+                pathname.includes(path)
+                  ? 'border-main-yellow'
+                  : 'border-background-gray'
+              }`}
+            >
+              {CATEGORIES[idx]}
+            </button>
+          </Link>
+        </li>
+      ))}
     </ul>
   );
 };
