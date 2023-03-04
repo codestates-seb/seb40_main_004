@@ -23,6 +23,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.*;
@@ -169,10 +171,11 @@ public class ArticleService {
         }).collect(Collectors.toList());
     }
 
-    public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
-        Article article = findVerifiedArticle(articleId);
-        checkArticleStatus(article);
-        Article dbArticle = article.plusClicks();
+    public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo, Cookie[] cookies, HttpServletResponse response) {
+        Article dbArticle = findVerifiedArticle(articleId);
+        checkArticleStatus(dbArticle);
+
+        verifyClickCountPlus( dbArticle, response, cookies);
 
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
@@ -204,6 +207,25 @@ public class ArticleService {
                         tags, comments, likes);
 
         return responseDetailArticle;
+    }
+
+    private void verifyClickCountPlus( Article article, HttpServletResponse response, Cookie[] cookies) {
+        String cookieValueName = "articleId_" + article.getId();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (!cookie.getValue().equals(cookieValueName)) {
+                    cookie.setValue(cookieValueName);
+                    cookie.setMaxAge(60 * 60 * 2);
+                    response.addCookie(cookie);
+                    article.plusClicks();
+                }
+            }
+        } else {
+            Cookie newCookie = new Cookie("visit_cookie", cookieValueName);
+            newCookie.setMaxAge(60 * 60 * 2);
+            response.addCookie(newCookie);
+            article.plusClicks();
+        }
     }
 
     private Article checkArticleStatus(Article verifiedArticle) {

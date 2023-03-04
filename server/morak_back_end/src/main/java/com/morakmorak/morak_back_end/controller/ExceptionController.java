@@ -4,9 +4,13 @@ import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorResponseEntity;
 import com.morakmorak.morak_back_end.security.exception.InvalidJwtTokenException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.validation.ConstraintViolationException;
 
 
 @ControllerAdvice
@@ -26,4 +30,25 @@ public class ExceptionController {
     public ResponseEntity<ErrorResponseEntity> handleValidationExceptions(InvalidJwtTokenException e) {
         return ErrorResponseEntity.toResponseEntity(e.getErrorCode());
     }
+
+    @ExceptionHandler({MissingServletRequestParameterException.class})
+    public ResponseEntity<ErrorResponseEntity> missingServletRequestParameterException(
+            MissingServletRequestParameterException missingServletRequestParameterException) {
+        return ErrorResponseEntity.toResponseEntity(missingServletRequestParameterException);
+    }
+
+    @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
+    public ResponseEntity<ErrorResponseEntity> httpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException httpRequestMethodNotSupportedException
+    ) {
+        return ErrorResponseEntity.toResponseEntity(httpRequestMethodNotSupportedException);
+    }
+
+    @ExceptionHandler({ConstraintViolationException.class})
+    public ResponseEntity<ErrorResponseEntity> constraintViolationException(
+            ConstraintViolationException constraintViolationException
+    ) {
+        return ErrorResponseEntity.toResponseEntity(constraintViolationException);
+    }
+
 }

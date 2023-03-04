@@ -3,19 +3,17 @@ package com.morakmorak.morak_back_end.controller;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
-import com.morakmorak.morak_back_end.mapper.CategoryMapper;
-import com.morakmorak.morak_back_end.mapper.FileMapper;
-import com.morakmorak.morak_back_end.mapper.TagMapper;
 import com.morakmorak.morak_back_end.security.resolver.RequestUser;
 import com.morakmorak.morak_back_end.service.ArticleService;
 import io.lettuce.core.dynamic.annotation.Param;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -69,8 +67,10 @@ public class ArticleController {
     @GetMapping("/{article-id}")
     @ResponseStatus(HttpStatus.OK)
     public ArticleDto.ResponseDetailArticle findDetailArticle(@RequestUser UserDto.UserInfo userInfo,
-                                                              @PathVariable("article-id") Long articleId) {
-        return articleService.findDetailArticle(articleId, userInfo);
+                                                              @PathVariable("article-id") Long articleId,
+                                                              HttpServletRequest request,
+                                                              HttpServletResponse response) {
+        return articleService.findDetailArticle(articleId, userInfo, request.getCookies(), response);
     }
 
     @PostMapping("/{article-id}/likes")

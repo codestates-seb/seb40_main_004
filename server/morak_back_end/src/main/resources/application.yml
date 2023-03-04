@@ -1,7 +1,4 @@
 spring:
-  config:
-    activate:
-      on-profile:
   jpa:
     hibernate:
       ddl-auto: validate # create update create-update
@@ -17,27 +14,27 @@ spring:
       max-file-size: 10MB
       max-request-size: 20MB
   datasource:
-    url: ""
-    username: ""
-    password: ""
+    url: ${RDS_URL}
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    host: ""
-    port:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
 
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: ""
-            client-secret: ""
+            client-id: ${OAUTH_GOOGLE_ID}
+            client-secret: ${OAUTH_GOOGLE_PASSWORD}
             scope:
               - email
               - profile
           kakao:
-            client-id: ""
-            redirect-uri: ""
+            client-id: ${OAUTH_KAKAO_ID}
+            redirect-uri: ${OAUTH_KAKAO_URI}
             authorization-grant-type: authorization_code
             client-authentication-method: POST
             client-name: Kakao
@@ -46,15 +43,16 @@ spring:
               - account_email
         provider:
           kakao:
-            authorization-uri: ""
-            token-uri: ""
-            user-info-uri: ""
+            authorization-uri: ${PROVIDER_AUTH_URI}
+            token-uri: ${PROVIDER_TOKEN_URI}
+            user-info-uri: ${PROVIDER_INFO_URI}
             user-name-attribute: id
+            
   mail:
-    host: ""
-    username: ""
-    password: ""
-    port:
+    host: ${MAIL_HOST}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    port: ${MAIL_PORT}
     properties:
       mail:
         smtp:
@@ -75,16 +73,16 @@ server:
       force: true
 
 jwt:
-  secretKey: ""
-  refreshKey: ""
+  secretKey: ${SECURITY_SECRET_KEY}
+  refreshKey: ${SECURITY_REFRESH_KEY}
 
 cloud:
   aws:
     credentials:
-      accessKey: ""
-      secretKey: ""
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
     s3:
-      bucket: ""
+      bucket: ${BUCKET_NAME}
       dir: image
     region:
       static: ap-northeast-2
@@ -93,4 +91,5 @@ cloud:
 
 webdriver:
   chrome:
-    location: ""
+    location: ${CHROME_DRIVER_LOCATION}
+    
