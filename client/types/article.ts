@@ -18,3 +18,8 @@ export interface ArticleListProps extends Base {
   answerCount: number;
   commentCount: number;
 }
+
+export interface ReportProps {
+  reason: string;
+  content: string;
+}

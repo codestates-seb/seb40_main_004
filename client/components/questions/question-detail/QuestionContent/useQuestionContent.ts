@@ -1,5 +1,6 @@
 import { isArticleEditAtom } from '@atoms/articleAtom';
 import { useFetch } from '@libs/useFetchSWR';
+import { ReportProps } from '@type/article';
 import { ArticleApi } from 'api/aritlceApi';
 import { useRouter } from 'next/router';
 import { confirmAlert } from 'react-confirm-alert';
@@ -48,5 +49,19 @@ export const useQuestionContent = (articleId: string) => {
     router.push(`/post`);
   };
 
-  return { handleDelete, handleToEdit };
+  const handleReport = async (reportReason: ReportProps) => {
+    try {
+      await ArticleApi.report(articleId, reportReason);
+      toast.success('신고가 정상적으로 처리되었습니다.');
+      router.replace('/questions');
+    } catch (err) {
+      const typedError = err as Error;
+      return {
+        code: '',
+        err: typedError.message,
+      };
+    }
+  };
+
+  return { handleDelete, handleToEdit, handleReport };
 };
