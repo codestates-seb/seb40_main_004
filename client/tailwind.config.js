@@ -6,8 +6,14 @@ module.exports = {
     './pages/**/*.{js,jsx,ts,tsx}',
     './components/**/*.{js,jsx,ts,tsx}',
   ],
+
   theme: {
     extend: {
+      screens: {
+        mobile: {
+          max: '500px',
+        },
+      },
       colors: {
         'main-orange': '#FF9F10',
         'main-yellow': '#FFDF6B',

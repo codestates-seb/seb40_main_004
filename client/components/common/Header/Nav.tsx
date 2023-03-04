@@ -12,7 +12,7 @@ export const Nav = () => {
   const CATEGORIES = ['질문 / 답변', '정보글', '채용 일정'];
 
   return (
-    <ul className="flex items-baseline space-x-4">
+    <ul className="flex items-baseline space-x-5 mobile:w-96 mobile:space-x-5 mobile:flex mobile:items-center mobile:justify-center">
       {['/questions', '/informations', '/recruit'].map((path, idx) => (
         <li key={path} className="">
           <Link href={path}>

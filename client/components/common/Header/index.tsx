@@ -42,24 +42,22 @@ export const Header = () => {
     getDataHeader();
   }, [rendering]);
   return (
-    <header className="flex items-center justify-between max-w-[1280px] mx-auto">
-      <div className="flex items-center w-6/12">
+    <header className="flex items-center justify-between max-w-[1280px] mx-auto mobile:flex mobile:flex-col mobile:space-y-2">
+      <div className="flex items-center w-6/12 mobile:flex mobile:flex-col mobile:items-center">
         <Logo />
         <Nav />
       </div>
-      <div className="flex items-center w-3/12 justify-end">
+      <div className="flex items-center w-3/12  mobile:w-72">
         <SearchBar />
       </div>
-      <div className="flex items-center w-3/12 justify-end">
+      <div className="flex items-center w-3/12 justify-end mobile:w-full mobile:flex  mobile:justify-center">
         {isLogin ? (
-          <div className="flex gap-6">
+          <div className="flex gap-6 mobile:flex mobile:justify-center mobile:mb-4">
             <BtnUser />
             <BtnDropdown />
           </div>
         ) : (
-          <>
-            <BtnLogin />
-          </>
+          <BtnLogin />
         )}
       </div>
     </header>
