@@ -13,6 +13,7 @@ import com.morakmorak.morak_back_end.repository.TagRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleTagRepository;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
+import com.morakmorak.morak_back_end.repository.redis.RedisRepositoryImpl;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.ArticleService;
@@ -83,7 +84,7 @@ public class ArticleGetTest {
     ArticleRepository articleRepository;
 
     @Autowired
-    RedisRepository<ArticleDto.Ip> redisRepository;
+    RedisRepositoryImpl<ArticleDto.Ip> redisRepository;
 
     @Test
     @DisplayName("게시글을 타이틀명과 카테고리로 검색 성공시 201코드와 Ok를 반환한다.")
