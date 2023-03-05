@@ -7,12 +7,12 @@ import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.*;
+import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.repository.CategoryRepository;
 import com.morakmorak.morak_back_end.repository.FileRepository;
 import com.morakmorak.morak_back_end.repository.TagRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleTagRepository;
-import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepositoryImpl;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
@@ -60,9 +60,6 @@ public class ArticleGetTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    RedisRepository<String> mailAuthRedisRepository;
-
-    @Autowired
     ArticleService articleService;
 
     @Autowired
@@ -76,6 +73,9 @@ public class ArticleGetTest {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    ArticleMapper articleMapper;
 
     @Autowired
     UserRepository userRepository;
@@ -379,6 +379,7 @@ public class ArticleGetTest {
                 get("/articles/" + article.getId())
                         .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, accessToken)
+
         );
 
         //then
