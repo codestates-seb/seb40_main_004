@@ -2,16 +2,10 @@ package com.morakmorak.morak_back_end.Integration.user;
 
 import com.morakmorak.morak_back_end.entity.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME1;
 import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME2;
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
 public class getUserRankTest extends UserTest {
     private User user;
     private User other;
