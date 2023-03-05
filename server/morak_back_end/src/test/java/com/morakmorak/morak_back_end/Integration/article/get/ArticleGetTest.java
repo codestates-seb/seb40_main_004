@@ -1,6 +1,7 @@
 package com.morakmorak.morak_back_end.Integration.article.get;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.morakmorak.morak_back_end.dto.ArticleDto;
 import com.morakmorak.morak_back_end.dto.AvatarDto;
 import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
@@ -81,6 +82,8 @@ public class ArticleGetTest {
     @Autowired
     ArticleRepository articleRepository;
 
+    @Autowired
+    RedisRepository<ArticleDto.Ip> redisRepository;
 
     @Test
     @DisplayName("게시글을 타이틀명과 카테고리로 검색 성공시 201코드와 Ok를 반환한다.")
