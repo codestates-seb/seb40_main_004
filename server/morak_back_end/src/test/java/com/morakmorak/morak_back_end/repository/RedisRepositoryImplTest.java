@@ -6,7 +6,6 @@ import com.morakmorak.morak_back_end.repository.redis.RedisRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -17,7 +16,6 @@ import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
 class RedisRepositoryImplTest extends RedisContainerTest {
     @Autowired
     RedisRepositoryImpl<User> redisRepositoryImpl;
