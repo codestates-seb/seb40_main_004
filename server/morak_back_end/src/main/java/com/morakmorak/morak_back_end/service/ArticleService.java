@@ -174,8 +174,8 @@ public class ArticleService {
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo, String ip) {
         Article dbArticle = findVerifiedArticle(articleId);
         checkArticleStatus(dbArticle);
-
-        checkExistClickIpOrElsePlus(articleId, ip, dbArticle);
+        dbArticle.plusClicks();
+//        checkExistClickIpOrElsePlus(dbArticle.getId(), ip, dbArticle);
 
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
@@ -209,29 +209,29 @@ public class ArticleService {
         return responseDetailArticle;
     }
 
-    private void checkExistClickIpOrElsePlus(Long articleId, String ip, Article dbArticle) {
-
-        if (redisRepository.getData(ip, ArticleDto.Ip.class).isPresent()) {
-            ArticleDto.Ip savedIp = redisRepository.getData(ip, ArticleDto.Ip.class).get();
-            boolean contains = savedIp
-                    .getArticleId().contains(articleId);
-            if (!contains) {
-                dbArticle.plusClicks();
-                savedIp.getArticleId().add(articleId);
-                redisRepository.saveData(ip, savedIp, (long) 24 * 36 * 100000);
-            }
-        }
-        else if (redisRepository.getData(ip, ArticleDto.Ip.class).isEmpty()) {
-            Set<Long> articleIds = new HashSet<>();
-            articleIds.add(articleId);
-            ArticleDto.Ip build = ArticleDto.Ip.builder()
-                    .ip(ip)
-                    .articleId(articleIds)
-                    .build();
-            redisRepository.saveData(ip, build, (long) 24 * 36 * 100000);
-            dbArticle.plusClicks();
-        }
-    }
+//    private void checkExistClickIpOrElsePlus(Long articleId, String ip, Article dbArticle) {
+//
+//        if (redisRepository.getData(ip, ArticleDto.Ip.class).isPresent()) {
+//            ArticleDto.Ip savedIp = redisRepository.getData(ip, ArticleDto.Ip.class).get();
+//            boolean contains = savedIp
+//                    .getArticleId().contains(articleId);
+//            if (!contains) {
+//                dbArticle.plusClicks();
+//                savedIp.getArticleId().add(articleId);
+//                redisRepository.saveData(ip, savedIp, (long) 24 * 36 * 100000);
+//            }
+//        }
+//        else if (redisRepository.getData(ip, ArticleDto.Ip.class).isEmpty()) {
+//            Set<Long> articleIds = new HashSet<>();
+//            articleIds.add(articleId);
+//            ArticleDto.Ip build = ArticleDto.Ip.builder()
+//                    .ip(ip)
+//                    .articleId(articleIds)
+//                    .build();
+//            redisRepository.saveData(ip, build, (long) 24 * 36 * 100000);
+//            dbArticle.plusClicks();
+//        }
+//    }
 
     private Article checkArticleStatus(Article verifiedArticle) {
         if (!verifiedArticle.statusIsPosting()) {
@@ -294,6 +294,14 @@ public class ArticleService {
         } else {
             throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
         }
+        Set<Long> collect = dbArticle.getReports().stream()
+                .map(report -> report.getUser().getId())
+                .collect(Collectors.toSet());
+
+        if (collect.contains(dbUser.getId())) {
+            throw new BusinessLogicException((ErrorCode.USER_EXISTS));
+        }
+
         reportArticle.injectTo(dbUser, dbArticle);
         dbArticle.getReports().add(reportArticle);
         dbUser.getReports().add(reportArticle);
