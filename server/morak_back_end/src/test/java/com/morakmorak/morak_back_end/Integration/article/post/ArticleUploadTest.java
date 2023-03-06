@@ -57,12 +57,6 @@ public class ArticleUploadTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    RedisRepository<String> mailAuthRedisRepository;
-
-    @Autowired
-    ArticleService articleService;
-
-    @Autowired
     FileRepository fileRepository;
 
     @Autowired
@@ -74,8 +68,6 @@ public class ArticleUploadTest {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    ArticleRepository articleRepository;
 
     @BeforeEach
     public void originallySavedElements() throws Exception {

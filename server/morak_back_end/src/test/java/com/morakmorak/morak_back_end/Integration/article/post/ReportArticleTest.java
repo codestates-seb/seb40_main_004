@@ -8,10 +8,8 @@ import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
-import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.service.ArticleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,21 +45,6 @@ public class ReportArticleTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
-    @Autowired
-    RedisRepository<String> mailAuthRedisRepository;
-
-    @Autowired
-    ArticleService articleService;
-
-    @Autowired
-    FileRepository fileRepository;
-
-    @Autowired
-    TagRepository tagRepository;
-
-    @Autowired
-    CategoryRepository categoryRepository;
 
     @Autowired
     UserRepository userRepository;

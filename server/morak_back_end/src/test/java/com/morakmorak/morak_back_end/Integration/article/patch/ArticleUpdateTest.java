@@ -63,12 +63,6 @@ public class ArticleUpdateTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    RedisRepository<String> mailAuthRedisRepository;
-
-    @Autowired
-    ArticleService articleService;
-
-    @Autowired
     FileRepository fileRepository;
 
     @Autowired
