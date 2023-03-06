@@ -19,7 +19,7 @@ else
 fi
 
 # jar 파일 위치로 이동
-cd $REPOSITORY/$PROJECT_NAME/build/lib
+cd $REPOSITORY/$PROJECT_NAME/build/libs
 
 echo "> JAR BUILD"
 sudo nohup java -jar morak_back_end-0.0.1-SNAPSHOT.jar >> /home/ec2-user/deploy.log 2>/home/ec2-user/deploy_err.log &
