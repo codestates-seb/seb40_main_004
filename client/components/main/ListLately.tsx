@@ -59,7 +59,15 @@ export const ListLately = () => {
   const URL =
     '/api/articles?category=QNA&keyword=null&target=null&sort=desc&page=1&size=10';
 
-  const { data, isLoading } = useFetch(URL);
+  const { data, isLoading, isError } = useFetch(URL);
+
+  if (isError) {
+    return (
+      <section className="flex flex-col max-w-[1163px] w-full mx-auto rounded-2xl bg-white py-10 px-14 space-y-6 text-center">
+        데이터 로드에 실패하였습니다.
+      </section>
+    );
+  }
 
   return (
     <section className="flex flex-col max-w-[1163px] w-full mx-auto rounded-2xl bg-white py-10 px-14 space-y-6">
