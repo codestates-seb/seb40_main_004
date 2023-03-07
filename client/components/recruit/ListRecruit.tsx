@@ -13,9 +13,17 @@ export const ListRecruit = () => {
   const {
     data: response,
     isLoading,
-  }: { data: ICalendar[]; isLoading: boolean } = useFetch(
+    isError,
+  }: { data: ICalendar[]; isLoading: boolean; isError: boolean } = useFetch(
     `/api/calendars/${year}-${month}-${day}`,
   );
+
+  if (isError)
+    return (
+      <section className="text-center h-full">
+        데이터 요청에 실패하였습니다.
+      </section>
+    );
   return (
     <>
       {!isLoading ? (
