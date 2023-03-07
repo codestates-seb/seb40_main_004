@@ -25,13 +25,26 @@ export const HallOfFame = () => {
   const [errorAvatarId, setIsErrorAvatarId] = useState<(number | undefined)[]>(
     [],
   );
+
   const getRanks = async () => {
-    const res = await client.get('/api/users/ranks?page=1&size=8');
-    setRanks(res.data.data);
+    try {
+      const res = await client.get('/api/users/ranks?page=1&size=8');
+      setRanks(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   useEffect(() => {
     getRanks();
   }, []);
+
+  if (!ranks)
+    return (
+      <section className="h-full flex justify-center items-center">
+        데이터 요청에 실패하였습니다.
+      </section>
+    );
   return (
     <>
       <div>
