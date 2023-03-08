@@ -2,6 +2,7 @@ package com.morakmorak.morak_back_end.controller;
 
 import com.morakmorak.morak_back_end.dto.AnswerDto;
 import com.morakmorak.morak_back_end.dto.ResponseMultiplePaging;
+import com.morakmorak.morak_back_end.dto.ResponsePagesWithLinks;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.File;
@@ -28,15 +29,16 @@ public class AnswerController {
 
     @PostMapping("/answers")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> postAnswer(@PathVariable("article-id") Long articleId,
-                                                                               @RequestUser UserDto.UserInfo user,
-                                                                               @RequestBody @Valid AnswerDto.RequestPostAnswer request
+    public ResponsePagesWithLinks postAnswer(@PathVariable("article-id") Long articleId,
+                                             @RequestUser UserDto.UserInfo user,
+                                             @RequestBody @Valid AnswerDto.RequestPostAnswer request
     ) throws Exception {
         Answer answerNotSaved = Answer.builder()
                 .content(request.getContent())
                 .build();
         List<File> fileList = fileService.createFileListFrom(request.getFileIdList());
-        return answerService.postAnswer(articleId, user.getId(), answerNotSaved, fileList);
+        ResponseMultiplePaging pagedData = answerService.postAnswer(articleId, user.getId(), answerNotSaved, fileList);
+        return ResponsePagesWithLinks.of(pagedData);
     }
 
     @PatchMapping("/answers/{answer-id}")
