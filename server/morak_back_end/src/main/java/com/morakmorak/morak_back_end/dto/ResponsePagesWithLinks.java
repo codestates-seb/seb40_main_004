@@ -1,5 +1,9 @@
 package com.morakmorak.morak_back_end.dto;
 
-public class ResponsePagesWithLinks extends {
+import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
+@RequiredArgsConstructor
+public class ResponsePagesWithLinks extends RepresentationModel<ResponsePagesWithLinks> {
+    private final ResponseMultiplePaging responseMultiplePaging;
 
 }
