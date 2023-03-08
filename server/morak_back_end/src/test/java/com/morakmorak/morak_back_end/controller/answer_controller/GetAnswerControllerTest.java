@@ -107,10 +107,12 @@ public class GetAnswerControllerTest {
         PageRequest pageable = PageRequest.of(0, 5, Sort.by("createdAt").descending());
         Page<Answer> answerInPage = new PageImpl<>(answers, pageable, 1);
 
-        ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> answerResponseMultiplePaging =
+        ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> pagedData =
                 new ResponseMultiplePaging<>(dtoResponseListTypeAnswer, answerInPage);
-        BDDMockito.given(answerService.readAllAnswers(anyLong(), anyInt(), anyInt())).willReturn(answerResponseMultiplePaging);
-        BDDMockito.given(answerService.readAllAnswersForUser(anyLong(), any(), anyInt(), anyInt())).willReturn(answerResponseMultiplePaging);
+//        ResponsePagesWithLinks response = ResponsePagesWithLinks.of(pagedData);
+
+        BDDMockito.given(answerService.readAllAnswers(anyLong(), anyInt(), anyInt())).willReturn(pagedData);
+        BDDMockito.given(answerService.readAllAnswersForUser(anyLong(), any(), anyInt(), anyInt())).willReturn(pagedData);
 
         //when
         ResultActions perform = mockMvc.perform(

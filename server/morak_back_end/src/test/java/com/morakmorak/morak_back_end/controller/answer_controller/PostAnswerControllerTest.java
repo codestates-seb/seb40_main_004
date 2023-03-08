@@ -32,18 +32,22 @@ import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.morakmorak.morak_back_end.util.AnswerTestConstants.VALID_ANSWER_REQUEST;
+import static com.morakmorak.morak_back_end.util.ArticleTestConstants.ARTICLE;
 import static com.morakmorak.morak_back_end.util.ArticleTestConstants.REQUEST_FILE_WITH_IDS;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.ACCESS_TOKEN;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.JWT_HEADER;
 import static com.morakmorak.morak_back_end.util.TestConstants.NOW_TIME;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -113,7 +117,6 @@ public class PostAnswerControllerTest {
     void postAnswer_success_1() throws Exception {
         //given
         AnswerDto.RequestPostAnswer request = VALID_ANSWER_REQUEST;
-
         String json = objectMapper.writeValueAsString(request);
         UserDto.ResponseSimpleUserDto dtoUserInfo =
                 UserDto.ResponseSimpleUserDto.builder().userId(1L)
@@ -122,6 +125,7 @@ public class PostAnswerControllerTest {
         AvatarDto.SimpleResponse dtoAvatar =
                 AvatarDto.SimpleResponse.builder().avatarId(1L)
                         .remotePath("remotePath").filename("fileName").build();
+
         List<AnswerDto.ResponseListTypeAnswer> dtoResponseListTypeAnswer = new ArrayList<>();
         AnswerDto.ResponseListTypeAnswer responseListTypeAnswer = AnswerDto.ResponseListTypeAnswer.builder()
                 .answerId(1L)
@@ -140,11 +144,14 @@ public class PostAnswerControllerTest {
         answers.add(Answer.builder().id(1L).build());
         PageRequest pageable = PageRequest.of(0, 1, Sort.by("answerId").descending());
         Page<Answer> answerInPage = new PageImpl<>(answers, pageable, 1L);
-        ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> answerResponseMultiplePaging =
+        ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> pagedData =
                 new ResponseMultiplePaging<>(dtoResponseListTypeAnswer, answerInPage);
-        BDDMockito.given(answerService.postAnswer(any(),any(),any(),anyList())).willReturn(answerResponseMultiplePaging);
+        ResponsePagesWithLinks response = ResponsePagesWithLinks.of(pagedData);
+
+        BDDMockito.given(answerService.postAnswer(any(),any(),any(),anyList())).willReturn(pagedData);
+        Long articleId = 1L;
         //when
-        ResultActions perform = mockMvc.perform(post("/articles/1/answers")
+        ResultActions perform = mockMvc.perform(post("/articles/{article-id}/answers",articleId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .header(JWT_HEADER, ACCESS_TOKEN)
@@ -152,7 +159,10 @@ public class PostAnswerControllerTest {
 
         //then
         perform.andExpect(status().isCreated())
-                .andDo(
+                .andExpect(jsonPath("$._links.self.href").exists());
+
+        //documentation
+        perform.andDo(
                         document(
                                 "답변 등록 성공_201",
                                 preprocessRequest(prettyPrint()),
@@ -198,7 +208,8 @@ public class PostAnswerControllerTest {
                                                 fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 숫자입니다."),
                                                 fieldWithPath("pageInfo.sort.empty").type(JsonFieldType.BOOLEAN).description("페이지가 비여있다면 true를 반환합니다."),
                                                 fieldWithPath("pageInfo.sort.unsorted").type(JsonFieldType.BOOLEAN).description("페이지가 정렬되지 않았다면 true를 반환합니다."),
-                                                fieldWithPath("pageInfo.sort.sorted").type(JsonFieldType.BOOLEAN).description("페이지가 정렬되었다면 true를 반환합니다.")
+                                                fieldWithPath("pageInfo.sort.sorted").type(JsonFieldType.BOOLEAN).description("페이지가 정렬되었다면 true를 반환합니다."),
+                                                fieldWithPath("_links.self.href").type(JsonFieldType.STRING).description("현재 POST ANSWER 요청의 url입니다.")
                                         )
                                 )
                         )
