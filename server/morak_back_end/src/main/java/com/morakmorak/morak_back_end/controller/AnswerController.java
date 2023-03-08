@@ -95,11 +95,10 @@ public class AnswerController {
     }
 
     @PostMapping("/answers/{answer-id}/likes")
-    public ResponseEntity<AnswerDto.ResponseAnswerLike> pressLikeButton(@RequestUser UserDto.UserInfo userInfo,
-                                          @PathVariable("article-id") String articleId,
-                                          @PathVariable("answer-id") Long answerId) {
-        AnswerDto.ResponseAnswerLike responseAnswerLike = answerService.pressLikeButton(answerId, userInfo);
-
-        return new ResponseEntity<>(responseAnswerLike, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public AnswerDto.ResponseAnswerLike pressLikeButton(@RequestUser UserDto.UserInfo userInfo,
+                                                        @PathVariable("article-id") String articleId,
+                                                        @PathVariable("answer-id") Long answerId) {
+        return answerService.pressLikeButton(answerId, userInfo);
     }
 }
