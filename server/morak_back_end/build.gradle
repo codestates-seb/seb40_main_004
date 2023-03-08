@@ -96,6 +96,10 @@ dependencies {
 
 	// selenium
 	implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.6.0'
+
+	// hateoas
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {

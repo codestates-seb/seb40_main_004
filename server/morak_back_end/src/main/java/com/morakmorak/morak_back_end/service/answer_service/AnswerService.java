@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.service;
+package com.morakmorak.morak_back_end.service.answer_service;
 
 import com.morakmorak.morak_back_end.domain.NotificationGenerator;
 import com.morakmorak.morak_back_end.domain.PointCalculator;
@@ -16,6 +16,7 @@ import com.morakmorak.morak_back_end.repository.answer.AnswerLikeRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerQueryRepository;
 import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
+import com.morakmorak.morak_back_end.service.ArticleService;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

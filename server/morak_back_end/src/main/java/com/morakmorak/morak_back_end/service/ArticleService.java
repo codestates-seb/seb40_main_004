@@ -17,6 +17,7 @@ import com.morakmorak.morak_back_end.repository.article.ArticleTagRepository;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
+import com.morakmorak.morak_back_end.service.file_service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

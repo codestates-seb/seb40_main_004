@@ -2,15 +2,17 @@ package com.morakmorak.morak_back_end.controller;
 
 import com.morakmorak.morak_back_end.dto.AnswerDto;
 import com.morakmorak.morak_back_end.dto.ResponseMultiplePaging;
+import com.morakmorak.morak_back_end.dto.ResponsePagesWithLinks;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.File;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.security.resolver.RequestUser;
-import com.morakmorak.morak_back_end.service.AnswerService;
-import com.morakmorak.morak_back_end.service.FileService;
+import com.morakmorak.morak_back_end.service.answer_service.AnswerService;
+import com.morakmorak.morak_back_end.service.file_service.FileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/articles/{article-id}")
@@ -28,7 +33,7 @@ public class AnswerController {
 
     @PostMapping("/answers")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> postAnswer(@PathVariable("article-id") Long articleId,
+    public ResponsePagesWithLinks<AnswerDto.ResponseListTypeAnswer> postAnswer(@PathVariable("article-id") Long articleId,
                                                                                @RequestUser UserDto.UserInfo user,
                                                                                @RequestBody @Valid AnswerDto.RequestPostAnswer request
     ) throws Exception {
@@ -36,7 +41,15 @@ public class AnswerController {
                 .content(request.getContent())
                 .build();
         List<File> fileList = fileService.createFileListFrom(request.getFileIdList());
-        return answerService.postAnswer(articleId, user.getId(), answerNotSaved, fileList);
+        ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> pagedData = answerService.postAnswer(articleId, user.getId(), answerNotSaved, fileList);
+        ResponsePagesWithLinks<AnswerDto.ResponseListTypeAnswer> response = ResponsePagesWithLinks.of(pagedData);
+
+        Link selfLink = linkTo(methodOn(AnswerController.class).postAnswer(articleId, user, request)).withSelfRel();
+        response.add(selfLink);
+        /*가장 마지막 페이지의 답변을 보여주는 링크*/
+        /*수정 링크*/
+        /*삭제 링크*/
+        return response;
     }
 
     @PatchMapping("/answers/{answer-id}")
@@ -82,11 +95,11 @@ public class AnswerController {
     }
 
     @PostMapping("/answers/{answer-id}/likes")
-    public ResponseEntity pressLikeButton(@RequestUser UserDto.UserInfo userInfo,
+    public ResponseEntity<AnswerDto.ResponseAnswerLike> pressLikeButton(@RequestUser UserDto.UserInfo userInfo,
                                           @PathVariable("article-id") String articleId,
                                           @PathVariable("answer-id") Long answerId) {
         AnswerDto.ResponseAnswerLike responseAnswerLike = answerService.pressLikeButton(answerId, userInfo);
 
-        return new ResponseEntity(responseAnswerLike, HttpStatus.OK);
+        return new ResponseEntity<>(responseAnswerLike, HttpStatus.OK);
     }
 }

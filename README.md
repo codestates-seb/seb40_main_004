@@ -203,6 +203,15 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 <br/>
 프리 프로젝트를 진행하며 모락모락 팀은 프론트와 백엔드의 기능 구성 단위가 달라 협업 과정에 문제가 발생한다는 점을 인지했습니다. 특히 API의 요청, 응답 데이터를 구성하고 기능을 구현하는 과정에서 개발 일정에 차질이 생기거나, 소통 오류가 생기는 경우가 잦았습니다. 따라서 모락모락은 백엔드의 기능별 뷰, 프론트엔드의 페이지별 뷰를 반영한 API 소통공간을 마련해 각 담당자의 상호 구체적인 합의를 거쳐 기능을 완성해나갔습니다.
 
+### 커밋 컨벤션
+
+### 사용 기술 스택
+
+### Documentation
+- https://huiyuns-organization.gitbook.io/morak-2-lab/
+- 작성과정
+https://github.com/MorakMorak/morakmorak
+
 
 ## 🎇To Be CONTINUE...
 더 따뜻한 개발문화를 만들어나가는 모락모락 랩은 앞으로도 꾸준한 리팩터링을 통해 모락모락 커뮤니티에 애정을 가지고 발전시킬 예정입니다. 모락모락이 만들어나갈 포근한 개발문화가 기대되신다면, ~~morak_admin에게 500포인트를 후원해주세요!~~ 모락모락에서 지금 함께해주세요! <br/>

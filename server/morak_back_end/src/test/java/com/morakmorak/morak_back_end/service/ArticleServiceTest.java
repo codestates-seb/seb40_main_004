@@ -12,6 +12,7 @@ import com.morakmorak.morak_back_end.repository.article.ArticleLikeRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleTagRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
+import com.morakmorak.morak_back_end.service.file_service.FileService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

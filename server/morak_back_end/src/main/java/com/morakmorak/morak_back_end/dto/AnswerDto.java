@@ -44,17 +44,6 @@ public class AnswerDto {
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
         private Integer commentCount;
-        public static SimpleResponsePostAnswer of(Answer savedAnswer) {
-            return SimpleResponsePostAnswer.builder()
-                    .answerId(savedAnswer.getId())
-                    .userInfo(UserDto.ResponseSimpleUserDto.of(savedAnswer.getUser()))
-                    .avatar(AvatarDto.SimpleResponse.of(savedAnswer.getUser().getAvatar()))
-                    .content(savedAnswer.getContent())
-                    .createdAt(savedAnswer.getCreatedAt())
-                    .lastModifiedAt(savedAnswer.getLastModifiedAt())
-                    .commentCount(savedAnswer.getComments().size())
-                    .build();
-        }
     }
 
     @Getter

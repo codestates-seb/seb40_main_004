@@ -1,11 +1,12 @@
-package com.morakmorak.morak_back_end.service;
+package com.morakmorak.morak_back_end.service.bookmark_service;
 
 import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.Bookmark;
 import com.morakmorak.morak_back_end.entity.User;
-import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.BookmarkRepository;
+import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
+import com.morakmorak.morak_back_end.service.BookmarkService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

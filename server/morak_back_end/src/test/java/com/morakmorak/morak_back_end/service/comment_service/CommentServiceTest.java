@@ -1,4 +1,4 @@
-package com.morakmorak.morak_back_end.service;
+package com.morakmorak.morak_back_end.service.comment_service;
 
 import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.entity.Article;
@@ -8,6 +8,8 @@ import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.repository.CommentRepository;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
+import com.morakmorak.morak_back_end.service.ArticleService;
+import com.morakmorak.morak_back_end.service.CommentService;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

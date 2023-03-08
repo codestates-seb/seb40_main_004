@@ -8,7 +8,7 @@ import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.DomainType;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.service.AnswerService;
+import com.morakmorak.morak_back_end.service.answer_service.AnswerService;
 import com.morakmorak.morak_back_end.service.ArticleService;
 import com.morakmorak.morak_back_end.service.NotificationService;
 import org.junit.jupiter.api.BeforeEach;
