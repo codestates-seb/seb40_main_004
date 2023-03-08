@@ -43,15 +43,6 @@ public class ArticlePressLikeButton {
     MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    RedisRepository<String> mailAuthRedisRepository;
-
-    @Autowired
-    ArticleService articleService;
-
-    @Autowired
     EntityManager em;
 
     @Autowired

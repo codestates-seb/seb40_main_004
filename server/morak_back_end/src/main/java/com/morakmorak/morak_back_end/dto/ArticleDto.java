@@ -7,11 +7,11 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ArticleDto {
 
@@ -133,5 +133,14 @@ public class ArticleDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ResponseReportArticle {
         private Long reportId;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class Ip {
+        private String ip;
+        private Set<Long> articleId;
     }
 }

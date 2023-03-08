@@ -10,6 +10,7 @@ import static org.springframework.http.HttpStatus.*;
 @AllArgsConstructor
 public enum ErrorCode {
     USER_NOT_FOUND(NOT_FOUND, "USER_NOT_FOUND"),
+    USER_EXISTS(CONFLICT, "USER_ALREADY_EXIT"),
     FILE_NOT_FOUND(NOT_FOUND, "FILE_NOT_FOUND"),
     TAG_NOT_FOUND(NOT_FOUND, "TAG_NOT_FOUND"),
     ANSWER_NOT_FOUND(NOT_FOUND, "ANSWER_NOT_FOUND"),
