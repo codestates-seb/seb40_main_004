@@ -25,7 +25,7 @@ const developers: Developer[] = [
   },
   {
     name: '백시온',
-    github: 'https://github.com/Shawn9948',
+    github: 'https://github.com/SionBackEnd',
     blog: 'https://velog.io/@zion9948',
   },
   {

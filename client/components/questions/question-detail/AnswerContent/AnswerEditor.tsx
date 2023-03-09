@@ -67,7 +67,7 @@ export const AnswerEditor = () => {
   // 화면에 출력할 사용자 입력 데이터
   const editorContent = watch('content');
   const handleChange = (value: string) => {
-    if (Boolean(checkIsLogin)) {
+    if (Boolean(!checkIsLogin)) {
       toast.error('로그인이 필요한 서비스입니다.');
       router.push('/login');
     }
