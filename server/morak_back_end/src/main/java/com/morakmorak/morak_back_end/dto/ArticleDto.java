@@ -135,12 +135,4 @@ public class ArticleDto {
         private Long reportId;
     }
 
-    @Getter
-    @Builder
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Ip {
-        private String ip;
-        private Set<Long> articleId;
-    }
 }
