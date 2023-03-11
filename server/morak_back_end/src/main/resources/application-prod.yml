@@ -1,6 +1,8 @@
 spring:
-  profiles:
-    active: prod
+  config:
+    activate:
+      on-profile: prod
+
   jpa:
     hibernate:
       ddl-auto: validate # create update create-update
