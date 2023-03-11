@@ -19,7 +19,6 @@ import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import com.morakmorak.morak_back_end.service.file_service.FileService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -48,7 +47,7 @@ public class ArticleService {
     private final FileService fileService;
     private final CategoryService categoryService;
     private final TagService tagService;
-    private final RedisRepository<ArticleDto.Ip> redisRepository;
+    private final RedisRepository<String> redisRepository;
     private final ArticleTagRepository articleTagRepository;
 
     public ArticleDto.ResponseSimpleArticle upload(Article article, UserDto.UserInfo userInfo) {
@@ -86,7 +85,7 @@ public class ArticleService {
 
         deleteOriginTagInArticle(dbArticle);
         bridgeFileToArticle(article, dbArticle);
-        bridgeTagToArticle(article,dbArticle);
+        bridgeTagToArticle(article, dbArticle);
 
         return articleMapper.articleToResponseSimpleArticle(dbArticle.getId());
     }
@@ -139,6 +138,7 @@ public class ArticleService {
         return articleRepository.findArticleRelationWithUser(articleId)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
     }
+
     private void checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
         if (!article.getUser().getId().equals(userInfo.getId())) {
             throw new BusinessLogicException(ErrorCode.INVALID_USER);
@@ -175,8 +175,7 @@ public class ArticleService {
     public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo, String ip) {
         Article dbArticle = findVerifiedArticle(articleId);
         checkArticleStatus(dbArticle);
-        dbArticle.plusClicks();
-//        checkExistClickIpOrElsePlus(dbArticle.getId(), ip, dbArticle);
+        checkExistClickIpOrElsePlus(dbArticle.getId(), ip, dbArticle);
 
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
@@ -200,7 +199,7 @@ public class ArticleService {
         if (dbArticle.getReports().size() >= 5) {
             String report = "이 글은 신고가 누적되어 더이상 확인하실 수 없습니다.";
             return articleMapper.articleToResponseBlockedArticle(dbArticle, isLiked, isBookmarked,
-                    report,new ArrayList<>(),new ArrayList<>(),likes);
+                    report, new ArrayList<>(), new ArrayList<>(), likes);
         }
 
         ArticleDto.ResponseDetailArticle responseDetailArticle =
@@ -210,29 +209,14 @@ public class ArticleService {
         return responseDetailArticle;
     }
 
-//    private void checkExistClickIpOrElsePlus(Long articleId, String ip, Article dbArticle) {
-//
-//        if (redisRepository.getData(ip, ArticleDto.Ip.class).isPresent()) {
-//            ArticleDto.Ip savedIp = redisRepository.getData(ip, ArticleDto.Ip.class).get();
-//            boolean contains = savedIp
-//                    .getArticleId().contains(articleId);
-//            if (!contains) {
-//                dbArticle.plusClicks();
-//                savedIp.getArticleId().add(articleId);
-//                redisRepository.saveData(ip, savedIp, (long) 24 * 36 * 100000);
-//            }
-//        }
-//        else if (redisRepository.getData(ip, ArticleDto.Ip.class).isEmpty()) {
-//            Set<Long> articleIds = new HashSet<>();
-//            articleIds.add(articleId);
-//            ArticleDto.Ip build = ArticleDto.Ip.builder()
-//                    .ip(ip)
-//                    .articleId(articleIds)
-//                    .build();
-//            redisRepository.saveData(ip, build, (long) 24 * 36 * 100000);
-//            dbArticle.plusClicks();
-//        }
-//    }
+    private void checkExistClickIpOrElsePlus(Long articleId, String ip, Article dbArticle) {
+        String key = articleId + ip;
+        Optional<String> data = redisRepository.getData(key, String.class);
+        if (data.isEmpty()) {
+            dbArticle.plusClicks();
+            redisRepository.saveData(key, ip, (long) 24 * 36 * 100000);
+        }
+    }
 
     private Article checkArticleStatus(Article verifiedArticle) {
         if (!verifiedArticle.statusIsPosting()) {
@@ -309,6 +293,6 @@ public class ArticleService {
 
         Report dbReport = reportRepository.save(reportArticle);
 
-       return articleMapper.reportToResponseArticle(dbReport);
+        return articleMapper.reportToResponseArticle(dbReport);
     }
 }
