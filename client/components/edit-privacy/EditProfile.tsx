@@ -48,6 +48,10 @@ export const EditProfileComponent = () => {
   const [accessToken, setAccessToken] = useState('');
   const [userData, setUserData] = useState<UserDashboard>();
   const [nickname, setNickname] = useState('');
+  const [infoMessage, setInfoMessage] = useState('');
+  const [github, setGithub] = useState('');
+  const [blog, setBlog] = useState('');
+  const [jobType, setJobType] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
   const {
@@ -129,6 +133,10 @@ export const EditProfileComponent = () => {
 
   useEffect(() => {
     userData?.nickname && setNickname(userData.nickname);
+    userData?.infoMessage && setInfoMessage(userData.infoMessage);
+    userData?.github && setGithub(userData.github);
+    userData?.blog && setBlog(userData.blog);
+    userData?.jobType && setJobType(userData.jobType);
   }, [userData]);
 
   const onSubmitEditProfile = async (event: FormEvent<HTMLFormElement>) => {
@@ -145,11 +153,11 @@ export const EditProfileComponent = () => {
               onClick: async () => {
                 try {
                   await client.patch('/api/users/profiles', {
-                    nickname: '',
-                    infoMessage: '',
-                    github: '',
-                    blog: '',
-                    jobType: '',
+                    nickname,
+                    infoMessage,
+                    github,
+                    blog,
+                    jobType,
                   });
                   localStorage.setItem('nickname', nickname);
                   setRenderingHeader((prev) => !prev);
