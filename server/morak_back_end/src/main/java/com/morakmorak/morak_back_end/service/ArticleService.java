@@ -213,12 +213,12 @@ public class ArticleService {
 
     private void checkExistClickIpOrElsePlus(Long articleId, String ip, Article dbArticle) {
         String key = articleId + ip;
-        log.info("IP Information={}", ip);
+        log.error("IP Information={}", ip);
         Optional<String> data = redisRepository.getData(key, String.class);
         if (data.isEmpty()) {
             dbArticle.plusClicks();
             redisRepository.saveData(key, ip, (long) 24 * 36 * 100000);
-        }else log.info("saved IP address={}",data.get());
+        } else log.error("saved IP address={}", data.get());
     }
 
     private Article checkArticleStatus(Article verifiedArticle) {
