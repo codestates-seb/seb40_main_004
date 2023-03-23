@@ -68,7 +68,7 @@ spring:
             protocols: TLSv1.2
 logging:
   level:
-    root: error
+    org.hibernate.type: info
 
 server:
   servlet:
