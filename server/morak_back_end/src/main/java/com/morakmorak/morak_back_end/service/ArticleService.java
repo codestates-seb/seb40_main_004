@@ -19,6 +19,7 @@ import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
 import com.morakmorak.morak_back_end.service.file_service.FileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
@@ -211,11 +213,12 @@ public class ArticleService {
 
     private void checkExistClickIpOrElsePlus(Long articleId, String ip, Article dbArticle) {
         String key = articleId + ip;
+        log.info("IP Information={}", ip);
         Optional<String> data = redisRepository.getData(key, String.class);
         if (data.isEmpty()) {
             dbArticle.plusClicks();
             redisRepository.saveData(key, ip, (long) 24 * 36 * 100000);
-        }
+        }else log.info("saved IP address={}",data.get());
     }
 
     private Article checkArticleStatus(Article verifiedArticle) {
