@@ -1,14 +1,5 @@
-<<<<<<< HEAD:client/components/haseung/SearchWithTagButton.tsx
 import { options } from '@libs/tagOptions';
-=======
->>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff:client/components/questions/SearchWithTagButton/index.tsx
 import { SetterOrUpdater } from 'recoil';
-
-type KeyProps = {
-  setKeyword: SetterOrUpdater<string>;
-  setTarget: React.Dispatch<React.SetStateAction<string>>;
-  keyword: string;
-};
 
 type KeyProps = {
   setKeyword: SetterOrUpdater<string>;

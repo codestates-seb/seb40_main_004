@@ -33,7 +33,7 @@ export const BtnUser = () => {
   });
   return (
     <Link href={`/dashboard/${localStorage.getItem('userId')}`}>
-      <button className="flex items-center mobile:flex">
+      <button className="flex items-center">
         <div className="w-[35px] h-[35px] rounded-full overflow-hidden mr-4 ">
           {isValid ? (
             <Image
