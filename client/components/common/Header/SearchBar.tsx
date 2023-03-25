@@ -23,10 +23,7 @@ export const SearchBar = () => {
     }
   };
   return (
-    <form
-      className="w-full mobile:flex mobile:justify-center"
-      onSubmit={handleSubmit(onValid)}
-    >
+    <form className="w-full" onSubmit={handleSubmit(onValid)}>
       <input
         type="text"
         className="w-[90%] border border-solid border-font-gray rounded-full pl-2"

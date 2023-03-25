@@ -3,14 +3,7 @@ import Link from 'next/link';
 export const Logo = () => {
   return (
     <Link href="/">
-<<<<<<< HEAD:client/components/yeonwoo/Logo.tsx
       <button type="button" className="mr-6">
-=======
-      <button
-        type="button"
-        className="mr-6 mobile:flex mobile:justify-center mobile:w-32"
-      >
->>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff:client/components/common/Header/Logo.tsx
         <svg
           width="100"
           height="66"
