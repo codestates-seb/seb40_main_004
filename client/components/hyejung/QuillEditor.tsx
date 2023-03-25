@@ -5,7 +5,9 @@
  */
 
 import dynamic from 'next/dynamic';
-import { Loader } from '../common/Loader';
+import { Loader } from '../Loader';
+import type { ReactQuillProps } from 'react-quill';
+import ReactQuill from 'react-quill';
 
 const formats = [
   'header',
@@ -25,17 +27,18 @@ const formats = [
   'code-block',
 ];
 
+type QuillEditorProps = ReactQuillProps & {
+  forwardRef: React.RefObject<ReactQuill>;
+};
+
 export const QuillEditor = dynamic(
   async () => {
     const { default: RQ } = await import('react-quill');
     const { default: ImageResize } = await import('quill-image-resize');
     RQ.Quill.register('modules/ImageResize', ImageResize);
-    return function comp({ forwardRef, ...props }: any) {
-      return (
-        <>
-          <RQ ref={forwardRef} formats={formats} {...props} />
-        </>
-      );
+    return function comp({ forwardRef, ...props }: QuillEditorProps) {
+      console.log(props);
+      return <RQ ref={forwardRef} formats={formats} {...props} />;
     };
   },
   {

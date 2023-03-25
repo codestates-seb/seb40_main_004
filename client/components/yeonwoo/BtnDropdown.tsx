@@ -1,9 +1,3 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-05
- */
-
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import {
   faArrowRightFromBracket,
@@ -16,7 +10,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { dataHeaderAtom, isLoginAtom } from '../../atomsYW';
+
+import { isLoginAtom } from '@atoms/loginAtom';
+import { dataHeaderAtom } from '@atoms/userAtom';
 
 export const BtnDropdown = () => {
   const [dropdown, setDropdown] = useState(false);

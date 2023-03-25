@@ -14,9 +14,8 @@ export const AuthenticationTimer = () => {
     const countDown = setTimeout(() => {
       if (seconds > 0) setSeconds(seconds - 1);
       if (seconds === 0) {
-        if (minutes === 0) {
-          clearTimeout(countDown);
-        } else {
+        if (minutes === 0) clearTimeout(countDown);
+        else {
           setMinutes(minutes - 1);
           setSeconds(59);
         }

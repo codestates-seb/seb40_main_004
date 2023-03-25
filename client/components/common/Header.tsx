@@ -1,20 +1,18 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-03
- */
-
-import { BtnUser } from '../yeonwoo/BtnUser';
-import { BtnLogin } from '../yeonwoo/BtnLogin';
-import { Logo } from '../yeonwoo/Logo';
-import { Nav } from '../yeonwoo/Nav';
-import { SearchBar } from '../yeonwoo/SearchBar';
-import { BtnDropdown } from '../yeonwoo/BtnDropdown';
+import { BtnUser } from './BtnUser';
+import { BtnLogin } from './BtnLogin';
+import { Logo } from './Logo';
+import { Nav } from './Nav';
+import { SearchBar } from './SearchBar';
+import BtnDropdown from '../common';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { dataHeaderAtom, isLoginAtom, renderingAtom } from '../../atomsYW';
 import { useEffect } from 'react';
-import { client } from '../../libs/client';
-import { IDataHeader } from '../../interfaces';
+import { client } from '@libs/client';
+
+import { isLoginAtom } from '@atoms/loginAtom';
+import { renderingAtom } from '@atoms/renderingAtom';
+import { dataHeaderAtom } from '@atoms/userAtom';
+
+import { IDataHeader } from '@type/user';
 
 export const Header = () => {
   const [isLogin, setIsLogin] = useRecoilState(isLoginAtom);
@@ -44,24 +42,22 @@ export const Header = () => {
     getDataHeader();
   }, [rendering]);
   return (
-    <header className="flex items-center justify-between max-w-[1280px] mx-auto">
-      <div className="flex items-center w-6/12">
+    <header className="flex items-center justify-between max-w-[1280px] mx-auto mobile:flex mobile:flex-col mobile:space-y-2">
+      <div className="flex items-center w-6/12 mobile:flex mobile:flex-col mobile:items-center">
         <Logo />
         <Nav />
       </div>
-      <div className="flex items-center w-3/12 justify-end">
+      <div className="flex items-center w-3/12  mobile:w-72">
         <SearchBar />
       </div>
-      <div className="flex items-center w-3/12 justify-end">
+      <div className="flex items-center w-3/12 justify-end mobile:w-full mobile:flex  mobile:justify-center">
         {isLogin ? (
-          <div className="flex gap-6">
+          <div className="flex gap-6 mobile:flex mobile:justify-center mobile:mb-4">
             <BtnUser />
             <BtnDropdown />
           </div>
         ) : (
-          <>
-            <BtnLogin />
-          </>
+          <BtnLogin />
         )}
       </div>
     </header>

@@ -1,36 +1,16 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-19
- * 최근 수정일: 2022-12-03(박혜정)
- */
+import { options } from '@libs/tagOptions';
+import { SetterOrUpdater } from 'recoil';
 
-const tags = [
-  { tagId: 0, name: 'JAVA' },
-  { tagId: 1, name: 'C' },
-  { tagId: 2, name: 'NODE' },
-  { tagId: 3, name: 'SPRING' },
-  { tagId: 4, name: 'REACT' },
-  { tagId: 5, name: 'JAVASCRIPT' },
-  { tagId: 6, name: 'CPLUSPLUS' },
-  { tagId: 7, name: 'CSHOP' },
-  { tagId: 8, name: 'NEXT' },
-  { tagId: 9, name: 'NEST' },
-  { tagId: 10, name: 'PYTHON' },
-  { tagId: 11, name: 'SWIFT' },
-  { tagId: 12, name: 'KOTLIN' },
-  { tagId: 13, name: 'CSS' },
-  { tagId: 14, name: 'HTML' },
-  { tagId: 15, name: 'AWS' },
-  { tagId: 16, name: 'REDUX' },
-  { tagId: 17, name: 'SCALA' },
-  { tagId: 18, name: 'GO' },
-  { tagId: 19, name: 'TYPESCRIPT' },
-];
+type KeyProps = {
+  setKeyword: SetterOrUpdater<string>;
+  setTarget: React.Dispatch<React.SetStateAction<string>>;
+  keyword: string;
+};
 
 const getTagList = () => {
   const tagList = [];
-  for (let i = 0; i < tags.length; i += 3) {
-    tagList.push(tags.slice(i, i + 3));
+  for (let i = 0; i < options.length; i += 3) {
+    tagList.push(options.slice(i, i + 3));
   }
   return tagList;
 };

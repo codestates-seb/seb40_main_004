@@ -33,14 +33,19 @@ export const Select = ({ multiple, tags, onChange, options }: SelectProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [highlightedIndex, setHighlightIndex] = useState(0);
 
+  // tags 배열이 option을 포함하고 있으면, option을 제거한 새로운 배열 반환,
+  // 아니면 option을 추가한 새로운 배열 반환
+  const toggleTag = (option: SelectOption, tags: SelectOption[]) => {
+    return tags?.includes(option)
+      ? tags.filter((tag) => tag !== option)
+      : [...tags, option];
+  };
+
   const selectOption = (option: SelectOption) => {
     if (multiple) {
-      if (tags?.includes(option))
-        onChange(tags.filter((tag) => tag !== option));
-      else onChange([...tags, option]);
-    } else {
-      if (option !== tags) onChange(option);
-    }
+      const updatedTags = toggleTag(option, tags);
+      onChange(updatedTags);
+    } else if (option !== tags) onChange(option);
   };
 
   const isOptionSelected = (option: SelectOption) => {

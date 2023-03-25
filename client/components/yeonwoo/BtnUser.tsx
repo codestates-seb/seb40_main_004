@@ -1,17 +1,12 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-03
- */
-
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { dataHeaderAtom } from '../../atomsYW';
-import { changeGradeEmoji } from '../../libs/changeGradeEmoji';
+
+import { dataHeaderAtom } from '@atoms/userAtom';
+import { changeGradeEmoji } from '@libs/changeGradeEmoji';
 
 export const BtnUser = () => {
   const dataHeader = useRecoilValue(dataHeaderAtom);
@@ -38,8 +33,8 @@ export const BtnUser = () => {
   });
   return (
     <Link href={`/dashboard/${localStorage.getItem('userId')}`}>
-      <button className="flex items-center">
-        <div className="w-[35px] h-[35px] rounded-full overflow-hidden mr-4">
+      <button className="flex items-center mobile:flex">
+        <div className="w-[35px] h-[35px] rounded-full overflow-hidden mr-4 ">
           {isValid ? (
             <Image
               src={avatarPath ?? '/favicon.cio'}
@@ -51,9 +46,12 @@ export const BtnUser = () => {
             <Image src="/favicon.ico" width="25px" height="25px" />
           )}
         </div>
-        <span className="">{changeGradeEmoji(grade ?? '')}</span>
-        <span className="ml-2">{nickname}</span>
-        <FontAwesomeIcon icon={faChevronRight} />
+
+        <span>{changeGradeEmoji(grade ?? '')}</span>
+        <div className="space-x-2">
+          <span>{nickname}</span>
+          <FontAwesomeIcon icon={faChevronRight} />
+        </div>
       </button>
     </Link>
   );

@@ -104,7 +104,7 @@ export const LoginForm = () => {
         <span className="text-xs cursor-pointer text-main-gray mb-6">
           계정이 없으신가요?{' '}
           <Link href="/signup">
-            <span className="text-blue-500 hover:text-blue-400">
+            <span className="text-blue-500 hover:text-blue-400 font-bold">
               → 회원가입 하러가기
             </span>
           </Link>
