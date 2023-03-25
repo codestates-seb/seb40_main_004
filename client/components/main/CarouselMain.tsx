@@ -12,7 +12,7 @@ const images = ['morak-main-1.png', 'morak-main-2.png', 'morak-main-3.png'];
 const variants = {
   enter: (direction: number) => {
     return {
-      x: direction > 0 ? 1 : -1,
+      x: direction > 0 ? 1000 : -1000,
       opacity: 0,
     };
   },
@@ -24,7 +24,7 @@ const variants = {
   exit: (direction: number) => {
     return {
       zIndex: 0,
-      x: direction < 0 ? 1 : -1,
+      x: direction < 0 ? 1000 : -1000,
       opacity: 0,
     };
   },
@@ -47,7 +47,7 @@ export const CarouselMain = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       paginate(1);
-    }, 3000);
+    }, 5000);
 
     return () => {
       clearInterval(timer);
