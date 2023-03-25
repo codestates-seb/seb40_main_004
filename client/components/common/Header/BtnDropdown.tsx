@@ -55,12 +55,12 @@ export const BtnDropdown = () => {
         <div className="relative">
           <button onClick={() => setDropdown((prev) => !prev)}>
             <FontAwesomeIcon
-              className="mobile:relative mobile:top-3 relative top-1"
+              className="relative top-1"
               icon={faChevronUp}
               size="lg"
             />
           </button>
-          <ul className="border border-solid border-black border-opacity-10 border-spacing-1 right-0 min-w-[200px] rounded-xl absolute top-8 bg-background-gray z-20 mobile:flex mobile:flex-col mobile:items-center">
+          <ul className="border border-solid border-black border-opacity-10 border-spacing-1 right-0 min-w-[200px] rounded-xl absolute top-8 bg-background-gray z-20">
             <li className="pt-4 pb-1 mx-4 flex justify-between items-center border-b border-solid">
               <span className="text-xs">나의 모락</span>
               <span className="text-sm font-semibold">{`✨ ${points} 모락`}</span>
@@ -88,11 +88,7 @@ export const BtnDropdown = () => {
         </div>
       ) : (
         <button onClick={() => setDropdown((prev) => !prev)}>
-          <FontAwesomeIcon
-            className="flex mobile:flex mobile:items-center"
-            icon={faChevronDown}
-            size="lg"
-          />
+          <FontAwesomeIcon className="flex" icon={faChevronDown} size="lg" />
         </button>
       )}
     </>
