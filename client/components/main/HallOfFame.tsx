@@ -68,11 +68,7 @@ export const HallOfFame = () => {
                         src="/favicon.ico"
                         width="45px"
                         height="45px"
-<<<<<<< HEAD:client/components/yeonwoo/HallOfFame.tsx
                         alt="avatar"
-=======
-                        alt="rank"
->>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff:client/components/main/HallOfFame.tsx
                       />
                     ) : (
                       <Image
@@ -88,7 +84,6 @@ export const HallOfFame = () => {
                             rank.avatar?.avatarId,
                           ])
                         }
-                        alt="rank"
                       />
                     )}
                   </div>
