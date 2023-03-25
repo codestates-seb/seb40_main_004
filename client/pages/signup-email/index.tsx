@@ -1,70 +1,53 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-15
- * 최근 수정일: 2022-12-01(박혜정)
- */
-
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  userAuthKey,
-  userEmailAtom,
-  userNickName,
-  userPassword,
-} from '../../atomsHS';
-import { AuthenticationTimer } from '../../components/haseung/AuthenticationTimer';
-import { Intro } from '../../components/haseung/Intro';
-import { Header } from '../../components/common/Header';
-import { Footer } from '../../components/common/Footer';
 import { GetServerSideProps, NextPage } from 'next';
-import { Seo } from '../../components/common/Seo';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-type VerificationNumber = {
-  authKey: string;
-};
+import {
+  userAuthKeyAtom,
+  userEmailAtom,
+  userNickNameAtom,
+  userPasswordAtom,
+} from '@atoms/userAtom';
+
+import { Seo } from '@components/common/Seo';
+import { Header } from '@components/common/Header';
+import { AuthenticationTimer } from '@components/signup-email/AuthenticationTimer';
+import { Footer } from '@components/common/Footer';
+import { authSetKey, signUpWithEmailAndKey } from 'api/signUpApi';
+
+type VerificationNumber = { authKey: string };
 
 const SignUpWithEmail: NextPage = () => {
   const [isOkAuthCode, setIsOkAuthCode] = useState(false);
   const { register, handleSubmit } = useForm<VerificationNumber>();
-  const [authKey, setAuthKey] = useRecoilState(userAuthKey);
+  const [authKey, setAuthKey] = useRecoilState(userAuthKeyAtom);
   const email = useRecoilValue(userEmailAtom);
-  const password = useRecoilValue(userPassword);
-  const nickname = useRecoilValue(userNickName);
+  const password = useRecoilValue(userPasswordAtom);
+  const nickname = useRecoilValue(userNickNameAtom);
   const router = useRouter();
-  const onValid = ({ authKey }: VerificationNumber) => {
-    axios
-      .put(`/api/auth/mail`, { email, authKey })
-      .then((res) => {
-        setAuthKey(res.data.authKey);
-        setIsOkAuthCode(true);
-      })
-      .catch((error) => console.error('error', error));
+  const onValid = async ({ authKey }: VerificationNumber) => {
+    try {
+      const res = await authSetKey(email, authKey);
+      setAuthKey(res.data.authKey);
+      setIsOkAuthCode(true);
+    } catch (error) {
+      console.error('error', error);
+    }
   };
-  const onClickSignUp = (e: React.MouseEvent<HTMLElement>) => {
+  const onClickSignUp = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    axios
-      .post(`/api/auth`, {
-        email,
-        authKey,
-        password,
-        nickname,
-      })
-      .then((res) => {
-        console.log('res1', res);
-        toast.success('가입이 완료되었습니다! 로그인 페이지로 이동할게요.😉');
-      })
-      .catch((error) => {
-        console.error('error', error);
-        toast.error(
-          '인증번호가 올바르지 않습니다..! 다시 한 번 확인해주세요.🥲',
-        );
-      });
-
-    router.push('/login');
+    try {
+      signUpWithEmailAndKey({ email, authKey, password, nickname });
+      toast.success('가입이 완료되었습니다! 로그인 페이지로 이동할게요.😉');
+    } catch (error) {
+      console.error('error', error);
+      toast.error('인증번호가 올바르지 않습니다..! 다시 한 번 확인해주세요.🥲');
+    } finally {
+      router.push('/login');
+    }
   };
   return (
     <>
@@ -73,7 +56,10 @@ const SignUpWithEmail: NextPage = () => {
         <Header />
         <main className="flex flex-col justify-center items-center h-[79vh] bg-white">
           <article className="text-center mt-10 flex flex-col justify-center items-center w-96">
-            <Intro />
+            <h3 className="font-bold text-2xl text-font-gray">이메일 인증</h3>
+            <h3 className="mt-4 text-font-gray">
+              따뜻한 개발 문화에 동참하세요!
+            </h3>
             <section className="text-background-gray font-semibold flex justify-center items-center bg-main-gray w-full h-20 mt-10 rounded-[20px]">
               이메일로 인증번호가 전송되었습니다!
             </section>

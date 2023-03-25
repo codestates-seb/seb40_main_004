@@ -1,27 +1,23 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-11-18
- * 최근 수정일: 2022-11-30
- * 개요
-   - 채택을 최종적으로 마무리하는 페이지입니다.
- */
-
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useRecoilValue } from 'recoil';
+
 import {
   reviewTagsAtom,
   reviewContentAtom,
   reviewPointAtom,
   reviewRequestAtom,
-} from '../../atomsHJ';
-import { ProgressBar } from '../../components/hyejung/ProgressBar';
-import { BtnBackArticle } from '../../components/hyejung/BtnBackArticle';
-import { client } from '../../libs/client';
-import { Seo } from '../../components/common/Seo';
+} from '@atoms/reviewAtom';
+
+import { ProgressBar } from '@components/review/ProgressBar';
+import { BtnBackArticle } from '@components/review/BtnBackArticle';
+import { Seo } from '@components/common/Seo';
+
+import { client } from '@libs/client';
+import { toast } from 'react-toastify';
 
 const Completion: NextPage = () => {
   const router = useRouter();
@@ -48,8 +44,8 @@ const Completion: NextPage = () => {
     client
       .post(url, payload)
       .then((res) => {
-        console.log(res.data);
-        alert('🔥후기가 전송되었습니다! 따듯한 후기 고마워요!🔥');
+        // console.log(res.data);
+        toast.success('🔥후기가 전송되었습니다! 따듯한 후기 고마워요!🔥');
         if (reviewRequest.dashboardUrl) {
           router.replace(reviewRequest.dashboardUrl);
         } else {
@@ -57,7 +53,7 @@ const Completion: NextPage = () => {
         }
       })
       .catch((err) => {
-        alert('답변 채택에 실패했습니다.🥲');
+        toast.error('답변 채택에 실패했습니다.🥲');
         console.log(err);
       });
   };

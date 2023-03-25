@@ -5,7 +5,6 @@ import com.morakmorak.morak_back_end.security.oauth.CustomOauth2Service;
 import com.morakmorak.morak_back_end.security.oauth.CustomSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -91,9 +90,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:3000/");
-        config.addAllowedOrigin("http://seb40-main-004-hyeonwooga.vercel.app/");
-        config.addAllowedOrigin("https://seb40-main-004-hyeonwooga.vercel.app/");
-        config.addAllowedOrigin("https://seb40-main-004.vercel.app/");
+        config.addAllowedOrigin("https://morakmorak.vercel.app/");
         config.addAllowedHeader("*");
         config.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH", "PUT", "OPTION"));
         source.registerCorsConfiguration("/**", config);

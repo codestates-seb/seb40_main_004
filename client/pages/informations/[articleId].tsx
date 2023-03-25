@@ -1,18 +1,14 @@
-/*
- * 책임 작성자: 박혜정
- * 최초 작성일: 2022-12-09
- * 최근 수정일: 2022-12-09
- */
-
 import { GetServerSideProps, NextPage } from 'next';
-import { Header } from '../../components/common/Header';
-import { Footer } from '../../components/common/Footer';
-import { QuestionContent } from '../../components/hyejung/QuestionContent';
-import { BtnTopDown } from '../../components/common/BtnTopDown';
-import { Seo } from '../../components/common/Seo';
 import axios from 'axios';
-import { ArticleDetail } from '../../libs/interfaces';
 import { SWRConfig } from 'swr';
+
+import { ArticleDetail } from '@type/article';
+
+import { QuestionContent } from '@components/questions/question-detail/QuestionContent/QuestionContent';
+import { Footer } from '@components/common/Footer';
+import { Seo } from '@components/common/Seo';
+import { Header } from '@components/common/Header';
+import { BtnTopDown } from '@components/common/BtnTopDown';
 
 type QuestionDetailProps = {
   articleId: string;
@@ -23,14 +19,13 @@ const QuestionDetail: NextPage<QuestionDetailProps> = ({
   articleId,
   article: articleData,
 }) => {
-  console.log(articleData);
   return (
     <>
       <Seo title={articleData.title} />
       <Header />
       <main className="max-w-[900px] mx-auto min-h-[80vh] bg-white  p-8 md:p-16 shadow-sm border-[1px] border-gray-200">
         <BtnTopDown />
-        <QuestionContent articleId={articleId} article={articleData} />
+        <QuestionContent articleId={articleId} />
       </main>
       <Footer />
     </>

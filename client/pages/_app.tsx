@@ -25,6 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         ></meta>
 
         {/* Facebook Meta Tags  */}
+<<<<<<< HEAD
         <meta property="og:url" content="morakmorak.vercel.app/"></meta>
         <meta property="og:type" content="website"></meta>
         <meta property="og:title" content="모락모락"></meta>
@@ -44,6 +45,35 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="당신 가까이, 가장 따뜻한 개발자 커뮤니티 모락모락"
         ></meta>
         <meta name="twitter:image" content="../public/morak-main-1.png"></meta>
+=======
+        <meta property="og:url" content="https://morakmorak.vercel.app/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="모락모락" />
+        <meta
+          property="og:description"
+          content="당신 가까이, 가장 따뜻한 개발자 커뮤니티 모락모락"
+        />
+        <meta
+          property="og:image"
+          content="https://morakmorak.vercel.app/morak-main-1.png"
+        />
+
+        {/* Twitter Meta Tags  */}
+        <meta
+          name="twitter:card"
+          content="https://morakmorak.vercel.app/morak-main-1.png"
+        />
+        <meta property="twitter:url" content="https://morakmorak.vercel.app/" />
+        <meta name="twitter:title" content="모락모락" />
+        <meta
+          name="twitter:description"
+          content="당신 가까이, 가장 따뜻한 개발자 커뮤니티 모락모락"
+        />
+        <meta
+          name="twitter:image"
+          content="https://morakmorak.vercel.app/morak-main-1.png"
+        />
+>>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff
       </Head>
       <RecoilRoot>
         <div className="bg-background-gray text-font-gray min-h-screen">

@@ -73,7 +73,10 @@ export const ListLately = () => {
     <section className="flex flex-col max-w-[1163px] w-full mx-auto rounded-2xl bg-white py-10 px-14 space-y-6">
       {!isLoading ? (
         <>
+<<<<<<< HEAD
           {/* Rendering the title of the section and the links to the page.  */}
+=======
+>>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff
           <div>
             <Link href="/questions">
               <div className="text-2xl mr-2 font-bold hover:cursor-pointer hover:opacity-50 inline-block select-none">
@@ -91,7 +94,10 @@ export const ListLately = () => {
               </span>
             </Link>
           </div>
+<<<<<<< HEAD
           {/* Rendering the first 5 articles and the rest of the articles. */}
+=======
+>>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff
           {
             <div className="flex justify-between space-x-5">
               <div>

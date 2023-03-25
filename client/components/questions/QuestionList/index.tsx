@@ -40,6 +40,10 @@ export const QuestionList = ({
                 ) : (
                   <FontAwesomeIcon icon={voidCheck} className="fa-lg" />
                 )}
+<<<<<<< HEAD
+=======
+
+>>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff
                 <span className="text-lg font-bold hover:cursor-pointer">
                   {article?.title?.length >= 35
                     ? `${article?.title?.slice(0, 35)}...`
@@ -50,12 +54,20 @@ export const QuestionList = ({
                 <article className="flex space-x-3">
                   <div className="flex">
                     <Link href={`/dashboard/${article?.userInfo?.userId}`}>
+<<<<<<< HEAD
                       <span className="text-sm hover:cursor-pointer">
+=======
+                      <span className="text-xs hover:cursor-pointer">
+>>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff
                         {article?.userInfo?.nickname}
                       </span>
                     </Link>
                   </div>
+<<<<<<< HEAD
                   <div className="text-sm space-x-2 font-bold">
+=======
+                  <div className="text-xs space-x-2">
+>>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff
                     {article?.tags?.map((tag, i) => (
                       <span key={i}>{i < 3 ? `#${tag.name}` : ''}</span>
                     ))}

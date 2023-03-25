@@ -1,29 +1,33 @@
-/*
- * 책임 작성자: 박연우
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-05
- */
-
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { renderingAtom, userDashboardAtom } from '../../../atomsYW';
-import { Footer } from '../../../components/common/Footer';
-import { Header } from '../../../components/common/Header';
-import { Seo } from '../../../components/common/Seo';
-import { AsideBot } from '../../../components/yeonwoo/AsideBot';
-import { AsideMid } from '../../../components/yeonwoo/AsideMid';
-import { AsideTop } from '../../../components/yeonwoo/AsideTop';
-import { CarouselBookmarks } from '../../../components/yeonwoo/CarouselBookmarks';
-import { CarouselReview } from '../../../components/yeonwoo/CarouselReview';
-import { Grass } from '../../../components/yeonwoo/Grass';
-import { client } from '../../../libs/client';
+
+import { renderingAtom } from '@atoms/renderingAtom';
+import { userDashboardAtom } from '@atoms/userAtom';
+
+import { client } from '@libs/client';
+
+import { Footer } from '@components/common/Footer';
+import { Header } from '@components/common/Header';
+import { Seo } from '@components/common/Seo';
+import { CarouselBookmarks } from '@components/dashboard/CarouselBookmarks';
+import { CarouselReview } from '@components/dashboard/CarouselReview';
+import {
+  defaultAvatar,
+  defaultUserDashboard,
+} from '../../../libs/ defaultUserDashboard';
+import AsideComponent from '@components/dashboard/AsideComponent';
+
+const className = 'text-xl font-semibold hover:cursor-pointer';
 
 const DashboardBookmarks: NextPage = () => {
   const rendering = useRecoilValue(renderingAtom);
   const [userDashboard, setUserDashboard] = useRecoilState(userDashboardAtom);
+  const setDefaultUserDashboard = () => {
+    setUserDashboard(defaultAvatar && defaultUserDashboard);
+  };
   const [userId, setUserId] = useState<string | string[] | undefined>('');
   const router = useRouter();
   const getUser = async () => {
@@ -33,28 +37,7 @@ const DashboardBookmarks: NextPage = () => {
         setUserDashboard(res.data);
       }
     } catch (error) {
-      setUserDashboard({
-        userId: 0,
-        email: '',
-        nickname: '탈퇴한 유저',
-        jobType: '',
-        grade: '',
-        point: 0,
-        github: '',
-        blog: '',
-        infoMessage: '',
-        rank: 0,
-        avatar: {
-          avatarId: 0,
-          filename: '',
-          remotePath: '/favicon.ico',
-        },
-        tags: [],
-        reviewBadges: [],
-        articles: [],
-        activities: [],
-        reviews: [],
-      });
+      setDefaultUserDashboard();
     }
   };
 
@@ -77,26 +60,18 @@ const DashboardBookmarks: NextPage = () => {
       />
       <Header />
       <main className="w-[1280px] min-h-screen mx-auto flex gap-12 mb-12">
-        <div className="w-[305px]">
-          <AsideTop />
-          <AsideMid />
-          <AsideBot />
-        </div>
+        <AsideComponent />
         <div className="w-full">
           {/* <Grass /> */}
           <div className="mb-8 flex items-baseline">
             <div className="border-b-2 py-4 pr-6">
               <Link href={`/dashboard/${router.query.userId}`}>
-                <span className="text-xl font-semibold hover:cursor-pointer">
-                  ❓ 나의 질문
-                </span>
+                <span className={className}>❓ 나의 질문</span>
               </Link>
             </div>
             <div className="border-b-2 py-4 pr-6">
               <Link href={`/dashboard/${router.query.userId}/answers`}>
-                <span className="text-xl font-semibold hover:cursor-pointer">
-                  ❗ 나의 답변
-                </span>
+                <span className={className}>❗ 나의 답변</span>
               </Link>
             </div>
             <div className="border-b-2 py-4 pr-6 border-main-orange">
