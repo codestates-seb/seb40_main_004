@@ -3,11 +3,7 @@ import { BtnLogin } from './BtnLogin';
 import { Logo } from './Logo';
 import { Nav } from './Nav';
 import { SearchBar } from './SearchBar';
-<<<<<<< HEAD:client/components/common/Header.tsx
-import BtnDropdown from '../common';
-=======
 import { BtnDropdown } from './BtnDropdown';
->>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff:client/components/common/Header/index.tsx
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useEffect } from 'react';
 import { client } from '@libs/client';
