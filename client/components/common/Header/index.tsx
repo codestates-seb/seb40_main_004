@@ -47,12 +47,12 @@ export const Header = () => {
         <Logo />
         <Nav />
       </div>
-      <div className="flex items-center w-3/12  mobile:w-72">
+      <div className="flex items-center w-3/12 mobile:w-72">
         <SearchBar />
       </div>
-      <div className="flex items-center w-3/12 justify-end mobile:w-full mobile:flex  mobile:justify-center">
+      <div className="flex items-center w-3/12 justify-end mobile:w-full mobile:flex mobile:justify-center">
         {isLogin ? (
-          <div className="flex gap-6 mobile:flex mobile:justify-center mobile:mb-4">
+          <div className="flex gap-6 mobile:flex mobile:justify-center">
             <BtnUser />
             <BtnDropdown />
           </div>

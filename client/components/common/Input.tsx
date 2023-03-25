@@ -10,8 +10,7 @@ type InputProps = {
   placeholder: string;
 };
 
-const inputClassName = 'rounded-full w-96 h-10 pl-4 border';
-const inputContainerClassName = 'flex flex-col items-start space-y-2';
+const inputClassName = 'rounded-full w-96 h-10 pl-4 border items-center';
 
 export const Input = ({
   label,
@@ -22,9 +21,9 @@ export const Input = ({
   placeholder,
 }: InputProps) => {
   return (
-    <section className={inputContainerClassName}>
+    <section className="flex flex-col items-center space-y-2">
       <label className="font-bold">
-        {label} <span className="text-sm font-normal">{sublabel}</span>
+        {label} <span className="text-xs font-semibold">{sublabel}</span>
       </label>
       <input
         {...register}

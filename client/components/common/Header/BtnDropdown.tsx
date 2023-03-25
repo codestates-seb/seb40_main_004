@@ -13,6 +13,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { isLoginAtom } from '@atoms/loginAtom';
 import { dataHeaderAtom } from '@atoms/userAtom';
+import { toast } from 'react-toastify';
 
 export const BtnDropdown = () => {
   const [dropdown, setDropdown] = useState(false);
@@ -35,7 +36,7 @@ export const BtnDropdown = () => {
         setDataHeader(null);
         router.push('/');
       } catch (error) {
-        alert('에러발생 : 다시 시도 부탁드립니다');
+        toast.error('에러발생 : 다시 시도 부탁드립니다');
       }
     }
   };
@@ -53,7 +54,11 @@ export const BtnDropdown = () => {
       {dropdown ? (
         <div className="relative">
           <button onClick={() => setDropdown((prev) => !prev)}>
-            <FontAwesomeIcon icon={faChevronUp} size="lg" />
+            <FontAwesomeIcon
+              className="relative top-1"
+              icon={faChevronUp}
+              size="lg"
+            />
           </button>
           <ul className="border border-solid border-black border-opacity-10 border-spacing-1 right-0 min-w-[200px] rounded-xl absolute top-8 bg-background-gray z-20">
             <li className="pt-4 pb-1 mx-4 flex justify-between items-center border-b border-solid">
@@ -83,7 +88,7 @@ export const BtnDropdown = () => {
         </div>
       ) : (
         <button onClick={() => setDropdown((prev) => !prev)}>
-          <FontAwesomeIcon icon={faChevronDown} size="lg" />
+          <FontAwesomeIcon className="flex" icon={faChevronDown} size="lg" />
         </button>
       )}
     </>

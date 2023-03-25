@@ -1,5 +1,5 @@
 export const getAccessToken = () => {
-  let accessToken: any = '';
+  let accessToken: string | null = '';
   if (typeof window !== 'undefined') {
     accessToken = localStorage.getItem('accessToken');
   }
@@ -8,7 +8,7 @@ export const getAccessToken = () => {
 };
 
 export const getRefreshToken = () => {
-  let accessToken: any = '';
+  let accessToken: string | null = '';
   if (typeof window !== 'undefined') {
     accessToken = localStorage.getItem('refreshToken');
   }

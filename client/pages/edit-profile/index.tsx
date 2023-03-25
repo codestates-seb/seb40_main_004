@@ -6,9 +6,10 @@ import { Footer } from '@components/common/Footer';
 import { Header } from '@components/common/Header';
 import { Seo } from '@components/common/Seo';
 import { AsideEditProfile } from '@components/edit-privacy/AsideEditProfile';
-import { EditAvatar } from '@components/edit-privacy/EditAvatar';
+
 import { EditProfileComponent } from '@components/edit-privacy/EditProfile';
 import { toast } from 'react-toastify';
+import { EditAvatar } from '@components/edit-privacy/EditAvatar';
 
 const EditProfile: NextPage = () => {
   const router = useRouter();

@@ -29,7 +29,7 @@ export const SearchBar = () => {
         className="w-[90%] border border-solid border-font-gray rounded-full pl-2"
         {...register('keyword')}
       />
-      <button>
+      <button type="submit">
         <FontAwesomeIcon
           icon={faMagnifyingGlass}
           className="relative -left-6"

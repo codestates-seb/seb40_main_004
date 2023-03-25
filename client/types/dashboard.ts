@@ -7,7 +7,7 @@ export interface UserDashboard {
   point: number;
   github: string | null;
   blog: string | null;
-  infoMessage: string | null;
+  infoMessage: string;
   rank: number;
   avatar: {
     avatarId: number;

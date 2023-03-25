@@ -68,7 +68,7 @@ export const HallOfFame = () => {
                         src="/favicon.ico"
                         width="45px"
                         height="45px"
-                        alt="rank"
+                        alt="avatar"
                       />
                     ) : (
                       <Image
@@ -77,13 +77,13 @@ export const HallOfFame = () => {
                         }
                         width="45px"
                         height="45px"
+                        alt="avatar"
                         onError={() =>
                           setIsErrorAvatarId((prev) => [
                             ...prev,
                             rank.avatar?.avatarId,
                           ])
                         }
-                        alt="rank"
                       />
                     )}
                   </div>
@@ -91,12 +91,14 @@ export const HallOfFame = () => {
                 <div>
                   <div>
                     <Link href={`/dashboard/${rank.userId}`}>
+                      {/* 닉네임에 대한 컴포넌트 */}
                       <span className="text-[15px] font-bold hover:cursor-pointer">
                         {rank.nickname}
                       </span>
                     </Link>
                   </div>
                   <div className="flex justify-between w-[273px]">
+                    {/* infoMessage 보여주는 컴포넌트 */}
                     <div>
                       <span className="text-sm">
                         {rank.infoMessage
@@ -104,6 +106,7 @@ export const HallOfFame = () => {
                           : ''}
                       </span>
                     </div>
+                    {/* 랭킹 보여주는 컴포넌트 */}
                     <div>
                       <span className="text-xs mr-2">
                         {changeGradeEmoji(rank.grade ?? '')}

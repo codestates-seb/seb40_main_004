@@ -161,7 +161,7 @@ export const EditProfileComponent = () => {
                   });
                   localStorage.setItem('nickname', nickname);
                   setRenderingHeader((prev) => !prev);
-                  router.push('/');
+                  toast.success('프로필이 성공적으로 변경되었습니다!');
                 } catch (error) {
                   toast.error(`에러 발생 : ${error}`);
                 }

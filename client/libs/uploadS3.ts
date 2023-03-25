@@ -7,15 +7,14 @@ export const getFileUrl = async () => {
   ).data;
 };
 
-export const uploadImg = async (url: string, file: any) => {
-  axios
-    .put(url, file, {
+export const uploadImg = async (url: string, file: File | null) => {
+  try {
+    await axios.put(url, file, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-    })
-    .then((res) => {
-      // console.log(res);
-    })
-    .catch((err) => console.error(err));
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
