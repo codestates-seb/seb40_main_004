@@ -5,10 +5,6 @@ class MyDocument extends Document {
     return (
       <Html lang="ko">
         <Head />
-<<<<<<< HEAD
-
-=======
->>>>>>> ce718f293ca7535492d6168f43ad435fbdfaf9ff
         <body>
           <Main />
           <NextScript />
