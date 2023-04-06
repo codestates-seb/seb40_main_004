@@ -1,7 +1,7 @@
 package com.morakmorak.morak_back_end.exception;
 
 import lombok.Getter;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Getter
 public class ErrorResponseEntity {
@@ -45,12 +46,12 @@ public class ErrorResponseEntity {
                 .body(new ErrorResponseEntity(e.getHttpStatus().value(), e.name(), e.getMessage()));
     }
 
-    public static ResponseEntity<ErrorResponseEntity> toResponseEntity(MethodArgumentNotValidException e){
+    public static ResponseEntity<ErrorResponseEntity> toResponseEntity(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
 
         e.getAllErrors()
                 .forEach(error ->
-                    errors.put(((FieldError)error).getField(), error.getDefaultMessage())
+                        errors.put(((FieldError) error).getField(), error.getDefaultMessage())
                 );
 
         return ResponseEntity
@@ -76,7 +77,7 @@ public class ErrorResponseEntity {
                 errorData.put(error.name(), "사용가능"));
 
 
-        ErrorResponseEntity responseException = new ErrorResponseEntity(400,"BadRequest", message ,errorData);
+        ErrorResponseEntity responseException = new ErrorResponseEntity(400, "BadRequest", message, errorData);
 
         return new ResponseEntity<ErrorResponseEntity>(responseException, BAD_REQUEST);
     }
@@ -94,5 +95,10 @@ public class ErrorResponseEntity {
         ErrorResponseEntity responseException = new ErrorResponseEntity(400, "BadRequest", message, errorData);
 
         return new ResponseEntity<ErrorResponseEntity>(responseException, BAD_REQUEST);
+    }
+
+    public static ResponseEntity<ErrorResponseEntity> toResponseEntity(Exception e) {
+        String message = "Please tell this Error to Server";
+        return new ResponseEntity<ErrorResponseEntity>(new ErrorResponseEntity(500, "ServerError", message), INTERNAL_SERVER_ERROR);
     }
 }
