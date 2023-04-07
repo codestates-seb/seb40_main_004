@@ -44,7 +44,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
 @Import(JpaQueryFactoryConfig.class)
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class UserRepositoryTest {
     @Autowired
     UserRepository userRepository;

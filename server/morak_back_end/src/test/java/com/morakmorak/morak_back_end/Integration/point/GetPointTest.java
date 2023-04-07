@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "jwt.secretKey=only_test_secret_Key_value_gn..rlfdlrkqnwhrgkekspdy",
         "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
 })
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class GetPointTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;

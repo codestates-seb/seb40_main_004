@@ -16,7 +16,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class RefreshTokenRepositoryTest {
     @Autowired
     RefreshTokenRepository refreshTokenRepository;

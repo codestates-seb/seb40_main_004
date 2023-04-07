@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class GetDashboardTest extends UserTest{
     @Test
     @DisplayName("시퀀스 값(User ID)을 찾을 수 없는 경우 404 반환")

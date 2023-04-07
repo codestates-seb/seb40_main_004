@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 @Transactional
 @SpringBootTest
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 class JobRepositoryTest {
     @Autowired
     JobRepository jobRepository;

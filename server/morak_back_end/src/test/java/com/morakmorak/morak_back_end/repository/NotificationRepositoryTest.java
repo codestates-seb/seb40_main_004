@@ -32,7 +32,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
 @Import(JpaQueryFactoryConfig.class)
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class NotificationRepositoryTest {
     NotificationQueryRepository notificationQueryRepository;
     @Autowired

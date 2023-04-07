@@ -17,7 +17,7 @@ import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 class RedisRepositoryImplTest extends RedisContainerTest {
     @Autowired
     RedisRepositoryImpl<User> redisRepositoryImpl;

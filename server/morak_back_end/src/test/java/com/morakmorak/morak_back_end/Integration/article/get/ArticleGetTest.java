@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 @Slf4j
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class ArticleGetTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
