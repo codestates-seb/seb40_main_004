@@ -7,6 +7,7 @@ import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.answer_service.AnswerService;
@@ -66,6 +67,8 @@ public class GetAnswerControllerTest {
     FileService fileService;
     @MockBean
     AnswerMapper answerMapper;
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
 
     UserDto.ResponseSimpleUserDto dtoUserInfo;
 

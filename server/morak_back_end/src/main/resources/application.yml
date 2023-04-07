@@ -91,5 +91,7 @@ cloud:
 
 webdriver:
   chrome:
-    location: ${CHROME_DRIVER_LOCATION}
-    
+    location: /root/chromedriver
+
+discord:
+  url: ""

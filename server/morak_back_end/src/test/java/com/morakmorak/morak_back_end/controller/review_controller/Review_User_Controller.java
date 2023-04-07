@@ -10,6 +10,7 @@ import com.morakmorak.morak_back_end.entity.Badge;
 import com.morakmorak.morak_back_end.entity.enums.BadgeName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.ReviewService;
 import org.junit.jupiter.api.DisplayName;
@@ -61,7 +62,8 @@ public class Review_User_Controller {
 
     @MockBean
     ReviewService reviewService;
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
     Badge helpful = Badge.builder().name(BadgeName.HELPFUL).build();
     Badge smart = Badge.builder().name(BadgeName.SMART).build();
     Badge wise = Badge.builder().name(BadgeName.WISE).build();

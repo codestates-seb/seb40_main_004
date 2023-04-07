@@ -11,6 +11,7 @@ import com.morakmorak.morak_back_end.entity.Category;
 import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.CategoryMapper;
 import com.morakmorak.morak_back_end.mapper.FileMapper;
@@ -85,7 +86,8 @@ class ArticleControllerTest {
 
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
     @Test
     @DisplayName("게시글을 등록할때 등록이 완전히 성공할때")
     public void uploadArticle_suc() throws Exception {

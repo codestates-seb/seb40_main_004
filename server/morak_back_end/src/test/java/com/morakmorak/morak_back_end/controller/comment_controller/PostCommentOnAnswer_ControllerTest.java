@@ -8,6 +8,7 @@ import com.morakmorak.morak_back_end.dto.AvatarDto;
 import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
@@ -57,7 +58,8 @@ class PostCommentOnAnswer_ControllerTest {
     CommentService commentService;
 
     String VALID_CONTENT = "유효한 댓글내용입니다.";
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
     @Test
     @DisplayName("답변에 댓글을 등록 시 유효하지 않은 Dto에 의해 실패하면 400을 반환한다.")
     void postCommentOnAnswer_failed_1() throws Exception {

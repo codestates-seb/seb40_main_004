@@ -26,7 +26,7 @@ public class ExceptionController {
     @ExceptionHandler(BusinessLogicException.class)
     public ResponseEntity<ErrorResponseEntity> handleBusinessLogicException(BusinessLogicException e) {
         String errorMessage = LocalDateTime.now() + " \nBusinessLogicException : " + e.getErrorCode().getHttpStatus().value() + " " + e.getErrorCode().getMessage();
-        errorNotificationGenerator.ErrorMessageInit(errorMessage).send();
+        errorNotificationGenerator.send(errorMessage);
         return ErrorResponseEntity.toResponseEntity(e.getErrorCode());
     }
 
@@ -34,14 +34,14 @@ public class ExceptionController {
     public ResponseEntity<ErrorResponseEntity> handleValidationExceptions(
             MethodArgumentNotValidException e) {
         String errorMessage = LocalDateTime.now() + "\nMethodArgumentNotValidException : " + e.getMessage();
-        errorNotificationGenerator.ErrorMessageInit(errorMessage).send();
+        errorNotificationGenerator.send(errorMessage);
         return ErrorResponseEntity.toResponseEntity(e);
     }
 
     @ExceptionHandler(InvalidJwtTokenException.class)
     public ResponseEntity<ErrorResponseEntity> handleValidationExceptions(InvalidJwtTokenException e) {
         String errorMessage = LocalDateTime.now() + "\nInvalidJwtTokenException : " + e.getMessage();
-        errorNotificationGenerator.ErrorMessageInit(errorMessage).send();
+        errorNotificationGenerator.send(errorMessage);
         return ErrorResponseEntity.toResponseEntity(e.getErrorCode());
     }
 
@@ -49,7 +49,7 @@ public class ExceptionController {
     public ResponseEntity<ErrorResponseEntity> missingServletRequestParameterException(
             MissingServletRequestParameterException e) {
         String errorMessage = LocalDateTime.now() + "\nMissingServletRequestParameterException : " + e.getMessage();
-        errorNotificationGenerator.ErrorMessageInit(errorMessage).send();
+        errorNotificationGenerator.send(errorMessage);
         return ErrorResponseEntity.toResponseEntity(e);
     }
 
@@ -58,7 +58,7 @@ public class ExceptionController {
             HttpRequestMethodNotSupportedException e
     ) {
         String errorMessage = LocalDateTime.now() + "\nHttpRequestMethodNotSupportedException : " + e.getMessage();
-        errorNotificationGenerator.ErrorMessageInit(errorMessage).send();
+        errorNotificationGenerator.send(errorMessage);
         return ErrorResponseEntity.toResponseEntity(e);
     }
 
@@ -67,14 +67,14 @@ public class ExceptionController {
             ConstraintViolationException e
     ) {
         String errorMessage = LocalDateTime.now() + "\nConstraintViolationException : " + e.getMessage();
-        errorNotificationGenerator.ErrorMessageInit(errorMessage).send();
+        errorNotificationGenerator.send(errorMessage);
         return ErrorResponseEntity.toResponseEntity(e);
     }
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ErrorResponseEntity> error(Exception e) {
         String errorMessage = LocalDateTime.now() + "\n500 Exception : " + Arrays.stream(e.getStackTrace()).findFirst();
-        errorNotificationGenerator.ErrorMessageInit(errorMessage).send();
+        errorNotificationGenerator.send(errorMessage);
         return ErrorResponseEntity.toResponseEntity(e);
     }
 }
