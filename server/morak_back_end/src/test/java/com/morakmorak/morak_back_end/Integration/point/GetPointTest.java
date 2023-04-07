@@ -4,6 +4,7 @@ import com.morakmorak.morak_back_end.controller.UserController;
 import com.morakmorak.morak_back_end.entity.Avatar;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +62,8 @@ public class GetPointTest {
     UserMapper userMapper;
     @Autowired
     UserRepository userRepository;
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
 
     @Test
     @DisplayName("유효한 조회 요청의 경우 200 반환")
