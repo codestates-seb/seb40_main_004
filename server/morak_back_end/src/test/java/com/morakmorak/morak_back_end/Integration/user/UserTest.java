@@ -3,6 +3,7 @@ package com.morakmorak.morak_back_end.Integration.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.controller.UserController;
 import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
 })
 @AutoConfigureMockMvc
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
 public class UserTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -46,6 +47,8 @@ public class UserTest {
     EntityManager entityManager;
     @Autowired
     UserRepository userRepository;
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
 
     @Test
     @DisplayName("LocalDate 형식이 유효하지 않을 경우 400 반환")

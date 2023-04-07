@@ -8,6 +8,7 @@ import com.morakmorak.morak_back_end.dto.AvatarDto;
 import com.morakmorak.morak_back_end.dto.CommentDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
@@ -55,7 +56,8 @@ class PostCommentOnArticle_ControllerTest {
     JwtArgumentResolver jwtArgumentResolver;
     @MockBean
     CommentService commentService;
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
     String VALID_CONTENT = "유효한 댓글내용입니다.";
 
     @Test

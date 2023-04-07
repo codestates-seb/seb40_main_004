@@ -6,6 +6,7 @@ import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.controller.UserController;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
@@ -66,7 +67,8 @@ public class UserControllerTest {
     PointService pointService;
 
     JwtTokenUtil jwtTokenUtil;
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
     @BeforeEach
     public void init() {
         jwtTokenUtil = new JwtTokenUtil(SECRET_KEY, REFRESH_KEY);

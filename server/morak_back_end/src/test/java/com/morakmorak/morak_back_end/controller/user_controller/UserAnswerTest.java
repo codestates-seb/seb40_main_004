@@ -12,6 +12,7 @@ import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.auth_user_service.PointService;
@@ -70,6 +71,8 @@ public class UserAnswerTest {
     PointService pointService;
     UserDto.ResponseSimpleUserDto dtoUserInfo;
     AvatarDto.SimpleResponse dtoAvatar;
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
 
     @BeforeEach
     void setup() {

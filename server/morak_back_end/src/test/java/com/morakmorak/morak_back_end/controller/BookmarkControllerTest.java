@@ -8,6 +8,7 @@ import com.morakmorak.morak_back_end.entity.Bookmark;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.BookmarkService;
 import org.junit.Before;
@@ -66,6 +67,9 @@ class BookmarkControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
 
 
     @Before

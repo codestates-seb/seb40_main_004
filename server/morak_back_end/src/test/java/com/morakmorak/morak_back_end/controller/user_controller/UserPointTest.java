@@ -9,6 +9,7 @@ import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.auth_user_service.PointService;
@@ -61,9 +62,11 @@ public class UserPointTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
 
     @Test
     @DisplayName("유저가 존재하지 않는 경우 포인트 조회 요청 시 404 반환")

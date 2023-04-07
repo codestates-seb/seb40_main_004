@@ -8,7 +8,7 @@ import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.AvatarDto;
 import com.morakmorak.morak_back_end.dto.FileDto;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
-import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.AmazonS3StorageService;
 import org.junit.jupiter.api.DisplayName;
@@ -53,6 +53,9 @@ public class AmazonS3ControllerTest {
 
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
+
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
 
 
     @Test

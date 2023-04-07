@@ -12,6 +12,7 @@ import com.morakmorak.morak_back_end.entity.enums.CategoryName;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.answer_service.AnswerService;
 import com.morakmorak.morak_back_end.service.file_service.FileService;
@@ -74,6 +75,8 @@ public class PostAnswerControllerTest {
     AnswerService answerService;
     @MockBean
     FileService fileService;
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
 
     @Test
     @DisplayName("카테고리가 question이 아닌 경우 409 예외 반환")

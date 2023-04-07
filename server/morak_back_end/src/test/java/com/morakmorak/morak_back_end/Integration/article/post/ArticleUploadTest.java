@@ -122,6 +122,7 @@ public class ArticleUploadTest {
                         .header(JWT_HEADER, accessToken)
                         .content(content)
         );
+        perform.andExpect(status().isCreated());
     }
 
 

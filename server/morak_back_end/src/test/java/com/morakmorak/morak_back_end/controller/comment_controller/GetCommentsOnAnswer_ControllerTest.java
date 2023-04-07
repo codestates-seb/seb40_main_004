@@ -13,6 +13,7 @@ import com.morakmorak.morak_back_end.entity.Comment;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.service.CommentService;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +69,8 @@ public class GetCommentsOnAnswer_ControllerTest {
     User dbUser;
     Answer dbAnswer;
     Comment dbComment;
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
     @BeforeEach
     public void setUp() throws Exception {
         String VALID_CONTENT = "유효한 댓글내용입니다.";
