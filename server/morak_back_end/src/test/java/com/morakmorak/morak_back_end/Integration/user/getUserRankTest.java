@@ -7,7 +7,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME1;
 import static com.morakmorak.morak_back_end.util.TestConstants.NICKNAME2;
 
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class getUserRankTest extends UserTest {
     private User user;
     private User other;
