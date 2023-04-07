@@ -94,4 +94,4 @@ webdriver:
     location: /root/chromedriver
 
 discord:
-  url: ""
+  url: ${DISCORD_URL}
