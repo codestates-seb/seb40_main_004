@@ -3,8 +3,9 @@ import type { UseFormRegisterReturn } from 'react-hook-form';
 
 type InputProps = {
   label: string;
+  sublabel?: string;
   register: UseFormRegisterReturn;
-  errors: string | undefined;
+  errors?: string | undefined;
   type: string;
   placeholder: string;
 };
@@ -14,6 +15,7 @@ const inputContainerClassName = 'flex flex-col items-start space-y-2';
 
 export const Input = ({
   label,
+  sublabel,
   register,
   errors,
   type,
@@ -21,7 +23,9 @@ export const Input = ({
 }: InputProps) => {
   return (
     <section className={inputContainerClassName}>
-      <label className="font-bold">{label}</label>
+      <label className="font-bold">
+        {label} <span className="text-sm font-normal">{sublabel}</span>
+      </label>
       <input
         {...register}
         className={inputClassName}

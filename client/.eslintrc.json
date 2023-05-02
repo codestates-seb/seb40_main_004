@@ -38,6 +38,7 @@
     ],
     "indent": "off",
     "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-var-requires": "off",
     "no-empty-interface": "off"
   },
   "globals": {

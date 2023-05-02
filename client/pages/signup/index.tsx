@@ -1,16 +1,9 @@
-/*
- * 책임 작성자: 정하승
- * 최초 작성일: 2022-11-14
- * 최근 수정일: 2022-12-01(박혜정)
- * 개요: 회원가입에 대한 form을 표시합니다.
- */
-
-import { Intro } from '../../components/haseung/Intro';
-import { SignUpForm } from '../../components/haseung/SignUpForm';
-import { Header } from '../../components/common/Header';
-import { Footer } from '../../components/common/Footer';
 import { GetServerSideProps, NextPage } from 'next';
-import { Seo } from '../../components/common/Seo';
+
+import { Footer } from '@components/common/Footer';
+import { Header } from '@components/common/Header';
+import { Seo } from '@components/common/Seo';
+import { SignUpForm } from '@components/signup/SignupForm';
 
 const SignUp: NextPage = () => {
   return (
@@ -20,7 +13,10 @@ const SignUp: NextPage = () => {
         <Header />
         <main className="flex flex-col justify-center items-center h-[90%] bg-white">
           <article className="text-center">
-            <Intro />
+            <h3 className="font-bold text-2xl text-font-gray">회원가입</h3>
+            <h3 className="mt-4 text-font-gray">
+              따뜻한 개발 문화에 동참하세요!
+            </h3>
             <SignUpForm />
           </article>
         </main>

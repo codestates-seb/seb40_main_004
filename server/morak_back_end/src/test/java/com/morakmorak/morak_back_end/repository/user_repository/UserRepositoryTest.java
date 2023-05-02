@@ -216,7 +216,6 @@ public class UserRepositoryTest {
         // given
         User user = User.builder().build();
         entityManager.persist(user);
-
         BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(LocalDate.now().getYear(),1,6,0,0,0)));
 
         for (int i=0; i<10; i++) {
