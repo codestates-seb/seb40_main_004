@@ -15,6 +15,7 @@ import com.morakmorak.morak_back_end.entity.Notification;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.NotificationService;
@@ -77,7 +78,8 @@ public class NotificationControllerTest {
 
     @MockBean
     NotificationService notificationService;
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
     JwtTokenUtil jwtTokenUtil;
 
     private final String BASE_URL = "localhost:8080.com";

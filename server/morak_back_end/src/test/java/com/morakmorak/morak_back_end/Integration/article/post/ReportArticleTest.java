@@ -8,10 +8,8 @@ import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.entity.enums.ReportReason;
 import com.morakmorak.morak_back_end.repository.*;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
-import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.service.ArticleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -38,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
 })
 @AutoConfigureMockMvc
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class ReportArticleTest {
 
     @Autowired
@@ -49,21 +47,6 @@ public class ReportArticleTest {
 
     @Autowired
     ObjectMapper objectMapper;
-
-    @Autowired
-    RedisRepository<String> mailAuthRedisRepository;
-
-    @Autowired
-    ArticleService articleService;
-
-    @Autowired
-    FileRepository fileRepository;
-
-    @Autowired
-    TagRepository tagRepository;
-
-    @Autowired
-    CategoryRepository categoryRepository;
 
     @Autowired
     UserRepository userRepository;

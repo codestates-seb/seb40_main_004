@@ -5,7 +5,6 @@ import com.morakmorak.morak_back_end.entity.enums.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
-import org.mockito.BDDMockito;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
@@ -15,13 +14,12 @@ import static com.morakmorak.morak_back_end.util.SecurityTestConstants.THREE;
 import static com.morakmorak.morak_back_end.util.TestConstants.*;
 import static com.morakmorak.morak_back_end.util.TestConstants.CONTENT2;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class GetDashboardTest extends UserTest{
     @Test
     @DisplayName("시퀀스 값(User ID)을 찾을 수 없는 경우 404 반환")

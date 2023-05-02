@@ -9,6 +9,7 @@ import com.morakmorak.morak_back_end.entity.Article;
 import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.CategoryMapper;
 import com.morakmorak.morak_back_end.mapper.FileMapper;
@@ -75,7 +76,8 @@ public class Delete_ArticleController {
 
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
     @Test
     @DisplayName("게시글을 삭제할때 성공 테스트")
     public void articleDelete_suc() throws Exception {

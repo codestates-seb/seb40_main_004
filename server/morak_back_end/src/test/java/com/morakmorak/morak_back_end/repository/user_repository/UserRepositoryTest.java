@@ -44,7 +44,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
 @Import(JpaQueryFactoryConfig.class)
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class UserRepositoryTest {
     @Autowired
     UserRepository userRepository;
@@ -217,7 +217,6 @@ public class UserRepositoryTest {
         User user = User.builder().build();
         entityManager.persist(user);
         BDDMockito.given(dateTimeProvider.getNow()).willReturn(Optional.of(LocalDateTime.of(LocalDate.now().getYear(),1,6,0,0,0)));
-
 
         for (int i=0; i<10; i++) {
             Article article = Article.builder().user(user).build();

@@ -1,26 +1,18 @@
 package com.morakmorak.morak_back_end.Integration.article.get;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.morakmorak.morak_back_end.dto.AvatarDto;
-import com.morakmorak.morak_back_end.dto.CommentDto;
-import com.morakmorak.morak_back_end.dto.UserDto;
 import com.morakmorak.morak_back_end.entity.*;
 import com.morakmorak.morak_back_end.entity.enums.*;
-import com.morakmorak.morak_back_end.repository.CategoryRepository;
-import com.morakmorak.morak_back_end.repository.FileRepository;
-import com.morakmorak.morak_back_end.repository.TagRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
-import com.morakmorak.morak_back_end.repository.article.ArticleTagRepository;
-import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.service.ArticleService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 @AutoConfigureMockMvc
 @Transactional
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+@Slf4j
+
 public class ArticleGetTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
@@ -55,27 +48,6 @@ public class ArticleGetTest {
 
     @Autowired
     MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    RedisRepository<String> mailAuthRedisRepository;
-
-    @Autowired
-    ArticleService articleService;
-
-    @Autowired
-    FileRepository fileRepository;
-
-    @Autowired
-    TagRepository tagRepository;
-
-    @Autowired
-    ArticleTagRepository articleTagRepository;
-
-    @Autowired
-    CategoryRepository categoryRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -289,8 +261,6 @@ public class ArticleGetTest {
     @Test
     @DisplayName("게시글 상세조회 시 삭제처리된 게시글의 경우 403 Forbidden을 보낸다.")
     public void findDetailArticle_failed() throws Exception {
-        em.flush();
-        em.clear();
         //given
         Article dbArticle = Article.builder()
                 .articleStatus(ArticleStatus.REMOVED)
@@ -307,7 +277,7 @@ public class ArticleGetTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                get("/articles/{article-id}" , dbArticle.getId())
+                get("/articles/{article-id}", dbArticle.getId())
                         .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, accessToken)
         );
@@ -319,8 +289,6 @@ public class ArticleGetTest {
     @Test
     @DisplayName("게시글 상세조회 컨트롤러 이용시 jwt토큰을 보낼시 isBookmarked와 isLiked를 확인하고 true or false를 보낸다.")
     public void findDetailArticle_suc() throws Exception {
-        em.flush();
-        em.clear();
         //given
 
         Tag C = Tag.builder().name(TagName.C).build();
@@ -374,7 +342,7 @@ public class ArticleGetTest {
 
         //when
         ResultActions perform = mockMvc.perform(
-                get("/articles/" + article.getId())
+                RestDocumentationRequestBuilders.get("/articles/{article-id}", article.getId())
                         .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, accessToken)
         );
@@ -419,8 +387,6 @@ public class ArticleGetTest {
     @Test
     @DisplayName("게시글 상세조회 컨트롤러 해당 게시글이 5번의 신고를 당했을경우.")
     public void findDetailBlockArticle_suc() throws Exception {
-        em.flush();
-        em.clear();
         //given
 
         Tag C = Tag.builder().name(TagName.C).build();
@@ -475,17 +441,12 @@ public class ArticleGetTest {
         User dbUser = userRepository.findUserByEmail(user.getEmail()).orElseThrow(() -> new RuntimeException("유저없음"));
         String accessToken = jwtTokenUtil.createAccessToken(user.getEmail(), dbUser.getId(), ROLE_USER_LIST, NICKNAME1);
 
-        Article dbArticle = articleRepository.findArticleByContent("안녕하세요 콘탠트입니다. 제발 되었으면 좋겠습니다.")
-                .orElseThrow(() -> new RuntimeException("게시글 없음"));
-
-
         //when
         ResultActions perform = mockMvc.perform(
-                get("/articles/" + article.getId())
+                RestDocumentationRequestBuilders.get("/articles/{article-id}", article.getId())
                         .header("User-Agent", "Mozilla 5.0")
                         .header(JWT_HEADER, accessToken)
         );
-
         //then
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("$.articleId").value(article.getId()))
@@ -514,8 +475,6 @@ public class ArticleGetTest {
     @Test
     @DisplayName("게시글 상세조회시 jwt 토큰을 보내지 않을시 isBookmarked와 isLiked를 flase로 보낸다.")
     public void findDetailArticle_suc2() throws Exception {
-        em.flush();
-        em.clear();
         //given
         Tag JAVA = Tag.builder().name(TagName.JAVA).build();
         em.persist(JAVA);
@@ -564,23 +523,12 @@ public class ArticleGetTest {
         em.persist(comment);
         article.getComments().add(comment);
 
-
-        CommentDto.Response commentDto = CommentDto.Response.builder().avatar(AvatarDto.SimpleResponse.of(avatar))
-                .articleId(article.getId())
-                .commentId(comment.getId())
-                .content(comment.getContent())
-                .userInfo(UserDto.ResponseSimpleUserDto.of(user))
-                .avatar(AvatarDto.SimpleResponse.of(avatar))
-                .build();
         Long id = userRepository.findUserByEmail(EMAIL1).orElseThrow().getId();
-
-        String accessToken = jwtTokenUtil.createAccessToken(EMAIL1, id, ROLE_USER_LIST, NICKNAME1);
 
         //when
         ResultActions perform = mockMvc.perform(
-                get("/articles/" + article.getId())
+                RestDocumentationRequestBuilders.get("/articles/{article-id}", article.getId())
                         .header("User-Agent", "Mozilla 5.0")
-
         );
 
         //then

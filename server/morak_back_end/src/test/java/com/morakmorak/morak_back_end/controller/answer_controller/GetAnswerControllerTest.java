@@ -7,10 +7,11 @@ import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.*;
 import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.mapper.AnswerMapper;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
-import com.morakmorak.morak_back_end.service.AnswerService;
-import com.morakmorak.morak_back_end.service.FileService;
+import com.morakmorak.morak_back_end.service.answer_service.AnswerService;
+import com.morakmorak.morak_back_end.service.file_service.FileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,6 +67,8 @@ public class GetAnswerControllerTest {
     FileService fileService;
     @MockBean
     AnswerMapper answerMapper;
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
 
     UserDto.ResponseSimpleUserDto dtoUserInfo;
 
@@ -107,10 +110,12 @@ public class GetAnswerControllerTest {
         PageRequest pageable = PageRequest.of(0, 5, Sort.by("createdAt").descending());
         Page<Answer> answerInPage = new PageImpl<>(answers, pageable, 1);
 
-        ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> answerResponseMultiplePaging =
+        ResponseMultiplePaging<AnswerDto.ResponseListTypeAnswer> pagedData =
                 new ResponseMultiplePaging<>(dtoResponseListTypeAnswer, answerInPage);
-        BDDMockito.given(answerService.readAllAnswers(anyLong(), anyInt(), anyInt())).willReturn(answerResponseMultiplePaging);
-        BDDMockito.given(answerService.readAllAnswersForUser(anyLong(), any(), anyInt(), anyInt())).willReturn(answerResponseMultiplePaging);
+//        ResponsePagesWithLinks response = ResponsePagesWithLinks.of(pagedData);
+
+        BDDMockito.given(answerService.readAllAnswers(anyLong(), anyInt(), anyInt())).willReturn(pagedData);
+        BDDMockito.given(answerService.readAllAnswersForUser(anyLong(), any(), anyInt(), anyInt())).willReturn(pagedData);
 
         //when
         ResultActions perform = mockMvc.perform(

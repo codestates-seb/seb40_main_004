@@ -8,9 +8,10 @@ import com.morakmorak.morak_back_end.entity.Answer;
 import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
-import com.morakmorak.morak_back_end.service.AnswerService;
-import com.morakmorak.morak_back_end.service.FileService;
+import com.morakmorak.morak_back_end.service.answer_service.AnswerService;
+import com.morakmorak.morak_back_end.service.file_service.FileService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -62,7 +63,8 @@ public class UpdateAnswerControllerTest {
     AnswerService answerService;
     @MockBean
     FileService fileService;
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
     @Test
     @DisplayName("유효한 수정 요청인 경우 200 반환")
     void updateAnswer_success_1() throws Exception {

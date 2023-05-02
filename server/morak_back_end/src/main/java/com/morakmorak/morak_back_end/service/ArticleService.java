@@ -15,8 +15,11 @@ import com.morakmorak.morak_back_end.repository.article.ArticleLikeRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleRepository;
 import com.morakmorak.morak_back_end.repository.article.ArticleTagRepository;
 import com.morakmorak.morak_back_end.repository.notification.NotificationRepository;
+import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.service.auth_user_service.UserService;
+import com.morakmorak.morak_back_end.service.file_service.FileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
@@ -45,7 +49,7 @@ public class ArticleService {
     private final FileService fileService;
     private final CategoryService categoryService;
     private final TagService tagService;
-
+    private final RedisRepository<String> redisRepository;
     private final ArticleTagRepository articleTagRepository;
 
     public ArticleDto.ResponseSimpleArticle upload(Article article, UserDto.UserInfo userInfo) {
@@ -59,7 +63,8 @@ public class ArticleService {
                 .user(dbUser)
                 .thumbnail(article.getThumbnail())
                 .build();
-
+        int[][] a = new int[4][3];
+        a[0] = new int[]{1, 3, 4, 5};
         dbCategory.getArticleList().add(reBuildArticle);
         dbUser.getArticles().add(reBuildArticle);
 
@@ -82,7 +87,7 @@ public class ArticleService {
 
         deleteOriginTagInArticle(dbArticle);
         bridgeFileToArticle(article, dbArticle);
-        bridgeTagToArticle(article,dbArticle);
+        bridgeTagToArticle(article, dbArticle);
 
         return articleMapper.articleToResponseSimpleArticle(dbArticle.getId());
     }
@@ -135,6 +140,7 @@ public class ArticleService {
         return articleRepository.findArticleRelationWithUser(articleId)
                 .orElseThrow(() -> new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
     }
+
     private void checkArticlePerMission(Article article, UserDto.UserInfo userInfo) {
         if (!article.getUser().getId().equals(userInfo.getId())) {
             throw new BusinessLogicException(ErrorCode.INVALID_USER);
@@ -168,10 +174,10 @@ public class ArticleService {
         }).collect(Collectors.toList());
     }
 
-    public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo) {
-        Article article = findVerifiedArticle(articleId);
-        checkArticleStatus(article);
-        Article dbArticle = article.plusClicks();
+    public ArticleDto.ResponseDetailArticle findDetailArticle(Long articleId, UserDto.UserInfo userInfo, String ip) {
+        Article dbArticle = findVerifiedArticle(articleId);
+        checkArticleStatus(dbArticle);
+        checkExistClickIpOrElsePlus(dbArticle.getId(), ip, dbArticle);
 
         Boolean isLiked = Boolean.FALSE;
         Boolean isBookmarked = Boolean.FALSE;
@@ -195,7 +201,7 @@ public class ArticleService {
         if (dbArticle.getReports().size() >= 5) {
             String report = "이 글은 신고가 누적되어 더이상 확인하실 수 없습니다.";
             return articleMapper.articleToResponseBlockedArticle(dbArticle, isLiked, isBookmarked,
-                    report,new ArrayList<>(),new ArrayList<>(),likes);
+                    report, new ArrayList<>(), new ArrayList<>(), likes);
         }
 
         ArticleDto.ResponseDetailArticle responseDetailArticle =
@@ -203,6 +209,16 @@ public class ArticleService {
                         tags, comments, likes);
 
         return responseDetailArticle;
+    }
+
+    private void checkExistClickIpOrElsePlus(Long articleId, String ip, Article dbArticle) {
+        String key = articleId + ip;
+        log.error("IP Information={}", ip);
+        Optional<String> data = redisRepository.getData(key, String.class);
+        if (data.isEmpty()) {
+            dbArticle.plusClicks();
+            redisRepository.saveData(key, ip, (long) 24 * 36 * 100000);
+        } else log.error("saved IP address={}", data.get());
     }
 
     private Article checkArticleStatus(Article verifiedArticle) {
@@ -266,12 +282,20 @@ public class ArticleService {
         } else {
             throw new BusinessLogicException(ErrorCode.USER_NOT_FOUND);
         }
+        Set<Long> collect = dbArticle.getReports().stream()
+                .map(report -> report.getUser().getId())
+                .collect(Collectors.toSet());
+
+        if (collect.contains(dbUser.getId())) {
+            throw new BusinessLogicException((ErrorCode.USER_EXISTS));
+        }
+
         reportArticle.injectTo(dbUser, dbArticle);
         dbArticle.getReports().add(reportArticle);
         dbUser.getReports().add(reportArticle);
 
         Report dbReport = reportRepository.save(reportArticle);
 
-       return articleMapper.reportToResponseArticle(dbReport);
+        return articleMapper.reportToResponseArticle(dbReport);
     }
 }

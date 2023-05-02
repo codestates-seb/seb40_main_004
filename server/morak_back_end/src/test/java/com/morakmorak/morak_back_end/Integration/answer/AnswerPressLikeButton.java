@@ -6,7 +6,7 @@ import com.morakmorak.morak_back_end.repository.answer.AnswerRepository;
 import com.morakmorak.morak_back_end.repository.redis.RedisRepository;
 import com.morakmorak.morak_back_end.repository.user.UserRepository;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
-import com.morakmorak.morak_back_end.service.AnswerService;
+import com.morakmorak.morak_back_end.service.answer_service.AnswerService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
 })
 @AutoConfigureMockMvc
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class AnswerPressLikeButton {
 
     @Autowired

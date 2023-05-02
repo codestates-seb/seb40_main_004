@@ -93,7 +93,6 @@ public class ReviewDto {
             responseDetailReview.createdAt(review.getCreatedAt());
             responseDetailReview.badges(BadgeDto.SimpleBadge.badgeDtoListFrom(review));
             return responseDetailReview.build();
-
         }
     }
 

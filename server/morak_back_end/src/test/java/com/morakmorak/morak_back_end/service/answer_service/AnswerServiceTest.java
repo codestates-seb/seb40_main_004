@@ -1,9 +1,11 @@
-package com.morakmorak.morak_back_end.service;
+package com.morakmorak.morak_back_end.service.answer_service;
 
 import com.morakmorak.morak_back_end.domain.PointCalculator;
 import com.morakmorak.morak_back_end.dto.AnswerDto;
 import com.morakmorak.morak_back_end.dto.UserDto;
-import com.morakmorak.morak_back_end.entity.*;
+import com.morakmorak.morak_back_end.entity.Answer;
+import com.morakmorak.morak_back_end.entity.AnswerLike;
+import com.morakmorak.morak_back_end.entity.User;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
 import com.morakmorak.morak_back_end.mapper.AnswerMapper;

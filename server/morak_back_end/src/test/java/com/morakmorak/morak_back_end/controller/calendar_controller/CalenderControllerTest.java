@@ -6,6 +6,7 @@ import com.morakmorak.morak_back_end.controller.BookmarkController;
 import com.morakmorak.morak_back_end.controller.CalendarController;
 import com.morakmorak.morak_back_end.controller.ExceptionController;
 import com.morakmorak.morak_back_end.dto.JobInfoDto;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.service.CalendarService;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +52,8 @@ public class CalenderControllerTest {
 
     @MockBean
     JwtTokenUtil jwtTokenUtil;
-
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
     @BeforeEach
     public void init() {
         jwtTokenUtil = new JwtTokenUtil(ACCESS_TOKEN, REFRESH_TOKEN);

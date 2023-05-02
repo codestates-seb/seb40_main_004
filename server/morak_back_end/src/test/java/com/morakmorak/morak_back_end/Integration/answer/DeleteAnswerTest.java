@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
 })
 @AutoConfigureMockMvc
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class DeleteAnswerTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;

@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "jwt.refreshKey=only_test_refresh_key_value_gn..rlfdlrkqnwhrgkekspdy"
 })
 @AutoConfigureMockMvc
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 public class ArticlePressLikeButton {
 
     @Autowired
@@ -41,15 +41,6 @@ public class ArticlePressLikeButton {
 
     @Autowired
     MockMvc mockMvc;
-
-    @Autowired
-    ObjectMapper objectMapper;
-
-    @Autowired
-    RedisRepository<String> mailAuthRedisRepository;
-
-    @Autowired
-    ArticleService articleService;
 
     @Autowired
     EntityManager em;

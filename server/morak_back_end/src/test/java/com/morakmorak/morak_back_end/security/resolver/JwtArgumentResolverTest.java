@@ -1,12 +1,12 @@
 package com.morakmorak.morak_back_end.security.resolver;
 
 import com.morakmorak.morak_back_end.controller.TestController;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.security.exception.InvalidJwtTokenException;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
 import com.morakmorak.morak_back_end.config.SecurityTestConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.util.NestedServletException;
 
 import static com.morakmorak.morak_back_end.exception.ErrorCode.*;
 import static com.morakmorak.morak_back_end.util.SecurityTestConstants.INVALID_BEARER_ACCESS_TOKEN;
@@ -31,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(SecurityTestConfig.class)
 @WebMvcTest({JwtArgumentResolver.class, TestController.class})
-@MockBean(JpaMetamodelMappingContext.class)
+@MockBean({JpaMetamodelMappingContext.class, ErrorNotificationGenerator.class})
 public class JwtArgumentResolverTest {
     @Autowired
     MockMvc mockMvc;
@@ -44,9 +43,9 @@ public class JwtArgumentResolverTest {
     public void test1() throws Exception {
         //given
         //when
+        ResultActions perform = mockMvc.perform(post("/test/resolver"));
         //then
-        Assertions.assertThatThrownBy(() -> mockMvc.perform(post("/test/resolver")))
-                .isInstanceOf(NestedServletException.class);
+        perform.andExpect(status().isInternalServerError());
     }
 
     @Test

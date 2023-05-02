@@ -11,6 +11,7 @@ import com.morakmorak.morak_back_end.entity.enums.Grade;
 import com.morakmorak.morak_back_end.entity.enums.TagName;
 import com.morakmorak.morak_back_end.exception.BusinessLogicException;
 import com.morakmorak.morak_back_end.exception.ErrorCode;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.mapper.ArticleMapper;
 import com.morakmorak.morak_back_end.mapper.CategoryMapper;
 import com.morakmorak.morak_back_end.mapper.FileMapper;
@@ -87,6 +88,8 @@ public class searchArticleTest {
 
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
+    @MockBean
+    ErrorNotificationGenerator errorNotificationGenerator;
 
     @Test
     @DisplayName("게시글을 검색할때 타이틀명으로 검색에 성공할때")
@@ -3803,7 +3806,7 @@ public class searchArticleTest {
                 .comments(List.of(commentDto))
                 .build();
 
-        given(articleService.findDetailArticle(anyLong(), any())).willReturn(result);
+        given(articleService.findDetailArticle(anyLong(), any(),any())).willReturn(result);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -3978,7 +3981,7 @@ public class searchArticleTest {
                 .comments(new ArrayList<>())
                 .build();
 
-        given(articleService.findDetailArticle(anyLong(), any())).willReturn(result);
+        given(articleService.findDetailArticle(anyLong(), any(),any())).willReturn(result);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -4131,7 +4134,7 @@ public class searchArticleTest {
                 .comments(List.of(commentDto))
                 .build();
 
-        given(articleService.findDetailArticle(anyLong(), any())).willReturn(result);
+        given(articleService.findDetailArticle(anyLong(), any(),any())).willReturn(result);
 
         //when
         ResultActions perform = mockMvc.perform(
@@ -4258,7 +4261,7 @@ public class searchArticleTest {
                 .comments(List.of(commentDto))
                 .build();
 
-        given(articleService.findDetailArticle(anyLong(), any()))
+        given(articleService.findDetailArticle(anyLong(), any(),any()))
                 .willThrow(new BusinessLogicException(ErrorCode.ARTICLE_NOT_FOUND));
 
         //when

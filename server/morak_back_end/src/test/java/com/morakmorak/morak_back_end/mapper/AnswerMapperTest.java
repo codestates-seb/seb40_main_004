@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-@EnabledIfEnvironmentVariable(named = "REDIS", matches = "redis")
+
 class AnswerMapperTest {
 
     @Autowired

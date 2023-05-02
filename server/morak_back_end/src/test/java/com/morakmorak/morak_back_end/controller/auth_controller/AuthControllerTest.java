@@ -3,6 +3,7 @@ package com.morakmorak.morak_back_end.controller.auth_controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morakmorak.morak_back_end.controller.AuthController;
 import com.morakmorak.morak_back_end.controller.ExceptionController;
+import com.morakmorak.morak_back_end.exception.webHook.ErrorNotificationGenerator;
 import com.morakmorak.morak_back_end.mapper.UserMapper;
 import com.morakmorak.morak_back_end.security.resolver.JwtArgumentResolver;
 import com.morakmorak.morak_back_end.security.util.JwtTokenUtil;
@@ -41,6 +42,9 @@ public class AuthControllerTest {
 
     @MockBean
     JwtArgumentResolver jwtArgumentResolver;
+
+    @MockBean
+    ErrorNotificationGenerator errorNotificationImpl;
 
     JwtTokenUtil jwtTokenUtil;
 

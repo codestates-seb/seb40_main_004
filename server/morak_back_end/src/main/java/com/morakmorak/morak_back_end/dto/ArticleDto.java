@@ -7,11 +7,11 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ArticleDto {
 
@@ -134,4 +134,5 @@ public class ArticleDto {
     public static class ResponseReportArticle {
         private Long reportId;
     }
+
 }

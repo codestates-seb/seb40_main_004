@@ -71,6 +71,7 @@ public class SecurityConfig {
                 .mvcMatchers(POST,"/answers/**").hasAnyRole("USER", "MANAGER", "ADMIN")
                 .mvcMatchers(PATCH,"/answers/**").hasAnyRole("USER", "MANAGER", "ADMIN")
                 .mvcMatchers(PUT,"/answers/**").hasAnyRole("USER", "MANAGER", "ADMIN")
+                .mvcMatchers(DELETE,"/answers/**").hasAnyRole("USER", "MANAGER", "ADMIN")
                 .anyRequest().denyAll()
                 .and()
                 .exceptionHandling()
