@@ -1,8 +1,5 @@
+## 가장 따뜻한 개발자 커뮤니티, 모락모락
 
-
-
-
-##  가장 따뜻한 개발자 커뮤니티, 모락모락
 ![ 모락모락](https://user-images.githubusercontent.com/102589253/205538117-219ce4e9-068c-4e9f-a373-38ce000a50f1.png)
 
 ## Version
@@ -18,7 +15,9 @@
 서툰 질문이 부끄럽고, 날선 답변이 두려우셨다면<br/>
 모락모락에서 함께해요!<br/>
 <br/>
-**배포링크** : [https://morakmorak.vercel.app/](https://morakmorak.vercel.app/)
+
+**배포링크** : [https://seb40-main-004.vercel.app](https://seb40-main-004.vercel.app/) [배포 중단]
+
 
 **깃허브** : [https://github.com/codestates-seb/seb40_main_004](https://github.com/codestates-seb/seb40_main_004)
 
@@ -26,11 +25,13 @@
 
 <br/>
 
-##  모락모락의 핵심 기능
+## 모락모락의 핵심 기능
 
-###  🎇따뜻하고 재밌는 후기를 나눠보세요
-  유저끼리 주고받는 후기와 포인트로 거리낌없이 질문하고, 속시원하게 답변을 받아보세요!
+### 🎇따뜻하고 재밌는 후기를 나눠보세요
+
+유저끼리 주고받는 후기와 포인트로 거리낌없이 질문하고, 속시원하게 답변을 받아보세요!
 ![ezgif com-gif-maker (10) (1)](https://user-images.githubusercontent.com/102589253/205721715-887bee2f-6c4a-4861-80a1-6103bb8eeca4.gif)
+
 <table>
   
   <tr>
@@ -48,12 +49,11 @@
 
 </table>
 
-
-
 ### 🎇가장 많이 받은 후기 태그를 확인하세요
 
 더 많은 답변이 채택될수록, 질문한 모락님에게 받은 뱃지가 쌓입니다!
 그중 TOP 3 뱃지를 대시보드에서 확인할 수 있어요! <br/>
+
 <table>
   <tr>
       <td align="center">
@@ -68,10 +68,11 @@
 </tr>
 </table>
 
+### 🎇따뜻함을 나눌수록 랭킹이 올라갑니다.
 
-### 🎇따뜻함을 나눌수록 랭킹이 올라갑니다. 
 🕯️ 촛불 ⇒ 🔥 성냥불 ⇒ 🎇 모닥불 ⇒ ♨️ 모락모락
-점점 성장하는 여러분의 영향력을 확인해보세요! 
+점점 성장하는 여러분의 영향력을 확인해보세요!
+
 <table>
   <tr>
       <td align="center">
@@ -86,10 +87,11 @@
 </tr>
 </table>
 
-
 ### 🎇도움받은 질문을 북마크해보세요
+
 같은 질문 반복 검색은 이제 그만! </br>
 검색하다 명쾌한 글을 보셨다면 북마크해보세요!<br/>
+
 <table>
   
   <tr>
@@ -107,49 +109,49 @@
 
 </table>
 
-
-
 ### 🎇함께 심기는 잔디는 덤!
+
 ![ezgif com-gif-maker (11)](https://user-images.githubusercontent.com/102589253/205715323-de55a96e-c475-40cd-9ba2-5718ba2692f7.gif)
 
-
 ### 🎇전체 API는 MorakMorak GitBook에서 확인해보세요!
+
 <img width="1160" alt="image" src="https://user-images.githubusercontent.com/102589253/205534052-fdc4939c-9815-462b-90b9-d782b49e3b13.png">
 
 https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 
+## 기술스택
 
-## 기술스택  
 ### Frontend
+
 ![Untitled (1)](https://user-images.githubusercontent.com/97802103/205541248-187c3f3a-ec4a-4a6b-9f1a-7c8552a88d7d.png)
 
 <br/>
-모락모락 FE 팀은 Recoil(전역 상태 관리 라이브러리) 및 SWR + axios를 활용한 커스텀 훅, React Quill 커스터마이징 등을 통해 부드러운 동작과 더 효과적인 퍼포먼스를 낼 수 있었습니다. 
+모락모락 FE 팀은 Recoil(전역 상태 관리 라이브러리) 및 SWR + axios를 활용한 커스텀 훅, React Quill 커스터마이징 등을 통해 부드러운 동작과 더 효과적인 퍼포먼스를 낼 수 있었습니다.
 
 ### Backend
+
 ![Untitled](https://user-images.githubusercontent.com/97802103/205541214-ff5ad357-41c3-4c99-b1a5-b9d9bcda7b22.png)
 <br/>
-모락모락 BE 팀은 프로젝트 전체에 TDD 도입 및 Redis를 활용한 캐시 관리, QueryDsl과 Native Query, JDBC tempate 도입 등을 통한 데이터베이스 최적화를 진행했습니다. 그 결과, 배포 이후 발생하는 에러 핸들링 시간을 효과적으로 단축하며 안정적인 서버환경을 구현할 수 있었습니다. 
+모락모락 BE 팀은 프로젝트 전체에 TDD 도입 및 Redis를 활용한 캐시 관리, QueryDsl과 Native Query, JDBC tempate 도입 등을 통한 데이터베이스 최적화를 진행했습니다. 그 결과, 배포 이후 발생하는 에러 핸들링 시간을 효과적으로 단축하며 안정적인 서버환경을 구현할 수 있었습니다.
 
 ## 아키텍처
+
 ![Web App Reference Architecture (1)](https://user-images.githubusercontent.com/97802103/205543932-bf0811dc-6126-4d05-a084-b09c17fb68a3.png)
 
-
-
 ## 업데이트 예정 기능
-- 알림 API 연동
-- 신고 API 연동
-- 기존 dto 로직 Query Projection 활용한 리팩터링
 
+-   알림 API 연동
+-   신고 API 연동
+-   기존 dto 로직 Query Projection 활용한 리팩터링
 
 ## 🎇모락모락 팀 소개
+
 </br>
 
 더 따뜻한 개발 문화를 추구하는, <br/>
 저희는 **모락모락**입니다!
 </br>
 ![스크린샷 2022-12-06 오전 10 56 56](https://user-images.githubusercontent.com/104377048/205789821-94201b67-46ec-4aeb-b936-18da736a868f.png)
-
 
 <table>
   <tr>
@@ -171,7 +173,9 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 </table>
 
 ## 🎇모락모락의 개발문화
+
 ### 💛투명한 공유, 따뜻한 피드백
+
 <table>
   
   <tr>
@@ -192,6 +196,7 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 모락모락은 첫 아이스 브레이킹을 거치며 각자 프로젝트를 통해 목표하는 점과 지향하는 협업 분위기를 공유해 팀 규칙을 정했습니다. 모두의 성향과 경험이 달랐지만, 문제를 즉시 해결하고 편하게 소통하는 분위기를 만들며 팀의 어려움을 해결해왔습니다.
 
 ### 💛프론트, 백 함께 쓰는 API 소통공간
+
 <table>
   
   <tr>
@@ -220,8 +225,8 @@ https://huiyuns-organization.gitbook.io/morak-2-lab/bookmarks
 - 작성과정
 https://github.com/MorakMorak/morakmorak
 
-
 ## 🎇To Be CONTINUE...
+
 더 따뜻한 개발문화를 만들어나가는 모락모락 랩은 앞으로도 꾸준한 리팩터링을 통해 모락모락 커뮤니티에 애정을 가지고 발전시킬 예정입니다. 모락모락이 만들어나갈 포근한 개발문화가 기대되신다면, ~~morak_admin에게 500포인트를 후원해주세요!~~ 모락모락에서 지금 함께해주세요! <br/>
 <br/>
 지금까지, 모락모락이었습니다!
